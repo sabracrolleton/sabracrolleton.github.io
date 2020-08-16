@@ -1340,9 +1340,6 @@ or you could make the layout more complicated. For example:
                                          :conversion-pattern pattern)))
            (setf (logger-log-level *root-logger*) level)
            (log-fatal :logger logger "test message")))))
-=begin
- (sabra-test-pattern "%-5p [%c] - %h %t %x %i %m%n %d{%Y-%m-%d %H:%M:%S%}")
-=bend
 
 "FATAL [ONE.TWO.THREE] - scruppy new-repl-thread  11895 test message
  2016-05-01 15:12:25"
