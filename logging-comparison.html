@@ -1,0 +1,5244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2020-08-16 Sun 12:16 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Comparison of Common Lisp Logging Libraries</title>
+<meta name="generator" content="Org mode">
+<meta name="author" content="Sabra Crolleton">
+<link rel="stylesheet" type="text/css" href="style1.css" />
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2017 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<header>
+<h1 class="title">Comparison of Common Lisp Logging Libraries</h1>
+</header><nav id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org8e520c2">1. Comparison of Common Lisp Logging Libraries</a></li>
+<li><a href="#org99fcb65">2. Comparing a-cl-logger, cl-syslog, com.ravenbrook.common-lisp-log, hu.dwim.logger, log4cl, log5, verbose, and vom</a></li>
+<li><a href="#orgbae6393">3. Libraries</a></li>
+<li><a href="#org2c2e626">4. Quick Summary</a>
+<ul>
+<li><a href="#org0151a5a">4.1. Best</a></li>
+<li><a href="#org30fe2ad">4.2. Not So Best</a></li>
+<li><a href="#org803f53e">4.3. Overall Preference</a></li>
+</ul>
+</li>
+<li><a href="#orgf9f42ba">5. Problem Space</a>
+<ul>
+<li><a href="#org033bf76">5.1. A comment about timestamps.</a></li>
+<li><a href="#orgfcaf5c0">5.2. Note to self about the logging messages</a></li>
+<li><a href="#org8d69fe6">5.3. Comparative Samples</a></li>
+</ul>
+</li>
+<li><a href="#org267eb1f">6. Glossary:</a>
+<ul>
+<li><a href="#orgd6e4e61">6.1. Loggers/ Log Managers</a></li>
+<li><a href="#orga2aa1ad">6.2. Messengers/Senders/Appenders/Faucets</a></li>
+<li><a href="#org054d969">6.3. Levels and Categories</a></li>
+</ul>
+</li>
+<li><a href="#org5d47fb8">7. Wish list</a></li>
+<li><a href="#orgd36dff0">8. Functionality Comparisons</a></li>
+<li><a href="#org863f842">9. Default Available Log Levels</a></li>
+<li><a href="#org333554c">10. Benchmarking</a>
+<ul>
+<li><a href="#org64907c8">10.1. Benchmarking with logging</a></li>
+<li><a href="#org9e04100">10.2. Benchmarking without triggering logging</a></li>
+</ul>
+</li>
+<li><a href="#org1fdc055">11. a-cl-logger</a>
+<ul>
+<li><a href="#orgcd47096">11.1. Summary</a></li>
+<li><a href="#orgc4a2ec0">11.2. Setup</a></li>
+<li><a href="#orge70c69a">11.3. Built-in Log Levels</a></li>
+<li><a href="#orgbd1e024">11.4. Logging Call with sample message and Change Log Levels</a></li>
+<li><a href="#orgbd746f9">11.5. Logging to File</a></li>
+<li><a href="#org8f0bd5b">11.6. Muting Logging to Repl</a></li>
+<li><a href="#org1c17493">11.7. Additional Features</a></li>
+</ul>
+</li>
+<li><a href="#orga2949c3">12. cl-log aka com.ravenbrook.common-lisp-log</a>
+<ul>
+<li><a href="#org2c58740">12.1. Summary</a></li>
+<li><a href="#orge02c3f8">12.2. Setup</a></li>
+<li><a href="#org21c4239">12.3. Log Levels</a></li>
+<li><a href="#orgdb82d8c">12.4. Logging Call with sample message</a></li>
+<li><a href="#org171ba6e">12.5. Logging to Ring</a></li>
+<li><a href="#orgbecea01">12.6. Muting Logging to Repl</a></li>
+<li><a href="#org2958ada">12.7. Log Rotation</a></li>
+<li><a href="#orgb9d384f">12.8. Timestamp access</a></li>
+<li><a href="#org19b955c">12.9. Loggers aka Log-managers</a></li>
+<li><a href="#orgdae7990">12.10. Messages</a></li>
+<li><a href="#org189788c">12.11. Finding a messenger</a></li>
+</ul>
+</li>
+<li><a href="#org13e121b">13. cl-syslog</a>
+<ul>
+<li><a href="#org3644034">13.1. Summary</a></li>
+<li><a href="#orgc105506">13.2. Setup</a></li>
+<li><a href="#org6bb863a">13.3. Built-in Log Levels</a></li>
+<li><a href="#org49fce5b">13.4. Logging Call with sample message</a></li>
+<li><a href="#org9e9bd8a">13.5. Changing Log Levels</a></li>
+<li><a href="#org9d7bdd0">13.6. Logging to Remote System</a></li>
+<li><a href="#org46ffa83">13.7. Log Rotation</a></li>
+</ul>
+</li>
+<li><a href="#org4bf53f4">14. hu.dwim.logger</a>
+<ul>
+<li><a href="#org3330b12">14.1. Summary</a></li>
+<li><a href="#org29d451f">14.2. Setup</a></li>
+<li><a href="#orgd3b61a2">14.3. Built-in Log Levels</a></li>
+<li><a href="#orgdde9f8a">14.4. Logging Call with sample message</a></li>
+<li><a href="#org3868824">14.5. Logging to File</a></li>
+<li><a href="#orgaed1938">14.6. Muting Logging to Repl</a></li>
+<li><a href="#org6ee9781">14.7. Log Rotation</a></li>
+<li><a href="#orge757952">14.8. Additional Features</a></li>
+<li><a href="#orgdf0bd7f">14.9. Misc</a></li>
+</ul>
+</li>
+<li><a href="#orgbc025b8">15. log4cl</a>
+<ul>
+<li><a href="#org782acac">15.1. Summary</a></li>
+<li><a href="#org7eeed03">15.2. Setup</a></li>
+<li><a href="#orged7aa65">15.3. Built-in Log Levels</a></li>
+<li><a href="#org63f69c3">15.4. Logging Call with sample message</a></li>
+<li><a href="#org45eb570">15.5. Changing Log Levels</a></li>
+<li><a href="#org6a57a36">15.6. Logging to File</a></li>
+<li><a href="#org2987a02">15.7. Muting Logging to Repl</a></li>
+<li><a href="#orgab359b8">15.8. Log Rotation</a></li>
+<li><a href="#org3543cb1">15.9. Additional Features</a></li>
+<li><a href="#org77c85d2">15.10. Problems</a></li>
+</ul>
+</li>
+<li><a href="#orgebf81da">16. log5</a>
+<ul>
+<li><a href="#org49bbadb">16.1. Summary</a></li>
+<li><a href="#orged2ddd8">16.2. Setup</a></li>
+<li><a href="#org21619b9">16.3. Built-in Log Levels</a></li>
+<li><a href="#orgb324b60">16.4. Built-in Categories</a></li>
+<li><a href="#org9218596">16.5. Logging Call with sample message</a></li>
+<li><a href="#org7b69e18">16.6. Changing Log Levels</a></li>
+<li><a href="#orgdc07c22">16.7. Logging to File</a></li>
+<li><a href="#org99d4e63">16.8. Muting Logging to Repl</a></li>
+<li><a href="#org10eb6e0">16.9. Unmuting Logging to Repl</a></li>
+<li><a href="#org913224d">16.10. Log Rotation</a></li>
+<li><a href="#orgabed747">16.11. Config File</a></li>
+</ul>
+</li>
+<li><a href="#org46a8e0c">17. verbose</a>
+<ul>
+<li><a href="#org300e992">17.1. Summary</a></li>
+<li><a href="#org9e979de">17.2. Setup</a></li>
+<li><a href="#orgdf94b4d">17.3. Built-in Log Levels</a></li>
+<li><a href="#org925d400">17.4. Logging Call with sample message</a></li>
+<li><a href="#org0180f07">17.5. Changing Log Levels</a></li>
+<li><a href="#orgf8023fe">17.6. Categories</a></li>
+<li><a href="#org7373ab5">17.7. Sharing across threads</a></li>
+<li><a href="#org673a5df">17.8. Log to File</a></li>
+<li><a href="#orgcfa004d">17.9. Log to Rotating Log File</a></li>
+<li><a href="#org2f972aa">17.10. Muting Logging to Repl</a></li>
+<li><a href="#orga5013e7">17.11. Timestamp formatting</a></li>
+<li><a href="#org5aee028">17.12. Restarting the Global Controller</a></li>
+</ul>
+</li>
+<li><a href="#orgddfe246">18. vom</a>
+<ul>
+<li><a href="#org771ff74">18.1. Summary</a></li>
+<li><a href="#orgf83c13f">18.2. Setup</a></li>
+<li><a href="#org0b24147">18.3. Built-in Log Levels</a></li>
+<li><a href="#orge2d7d50">18.4. Logging Call with sample message</a></li>
+<li><a href="#org358df14">18.5. Changing Log Levels</a></li>
+<li><a href="#org7887806">18.6. Logging to File</a></li>
+<li><a href="#org2a35cab">18.7. Setting Multiple Streams</a></li>
+<li><a href="#org87196e4">18.8. Muting Logging to Repl</a></li>
+<li><a href="#orge9e7f8c">18.9. Additional Features</a></li>
+</ul>
+</li>
+<li><a href="#org987367f">19. Function Mapping</a></li>
+<li><a href="#orgcd4ceef">20. To Do</a></li>
+</ul>
+</div>
+</nav>
+<div id="outline-container-org8e520c2" class="outline-2">
+<h2 id="org8e520c2"><span class="section-number-2">1</span> Comparison of Common Lisp Logging Libraries</h2>
+<div class="outline-text-2" id="text-1">
+<p border="2" rules="all" frame="border" org-html-table-align-individual-fields="t">
+<a id="orgc9a7805"></a>
+</p>
+</div>
+</div>
+
+<div id="outline-container-org99fcb65" class="outline-2">
+<h2 id="org99fcb65"><span class="section-number-2">2</span> Comparing a-cl-logger, cl-syslog, com.ravenbrook.common-lisp-log, hu.dwim.logger, log4cl, log5, verbose, and vom</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+ Common Lisp has several logging libraries to choose from
+(<a href="http://cliki.net/Development">http://cliki.net/Development</a>). Of course, many of us find
+ourselves throwing together an ad-hoc logging library in the middle of
+development. I decided I wanted to make an informed choice, leading up
+to this comparison article. I do want to mention that I have left out
+at least two. First, <a href="https://github.com/nallen05/logv">logv</a>, which I could not get to compile. Second,
+<a href="http://dwim.hu/darcsweb/darcsweb.cgi?r=HEAD%20hu.dwim.logger;a=summary">hu.dwim.logger</a> because I just cannot get my head around the
+idiosyncratic syntax used. I will, however, add them (or others)
+and invite anyone who is willing to fill in the
+blanks to email me at sabra.crolleton@gmail.com.
+</p>
+</div>
+</div>
+<div id="outline-container-orgbae6393" class="outline-2">
+<h2 id="orgbae6393"><span class="section-number-2">3</span> Libraries</h2>
+<div class="outline-text-2" id="text-3">
+<table border="2" rules="all" frame="border">
+<caption class="t-above"><span class="table-number">Table 1:</span> Libraries Compared</caption>
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Library</th>
+<th scope="col" class="org-left">Author</th>
+<th scope="col" class="org-left">License</th>
+<th scope="col" class="org-left">Website</th>
+<th scope="col" class="org-left">Most Recent Quicklisp Version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left"><a href="#org6d6aa66">a-cl-logger</a>  AKA a-log</td>
+<td class="org-left">Russ Tyndall,  Nathan Bird, Ryan Davis</td>
+<td class="org-left">BSD</td>
+<td class="org-left"><a href="https://github.com/AccelerationNet/a-cl-logger">https://github.com/AccelerationNet/a-cl-logger</a></td>
+<td class="org-left">April 6 2015 (1)</td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="#org31b5923">cl-syslog</a></td>
+<td class="org-left">Erik Enge, Mike Maul</td>
+<td class="org-left">MIT</td>
+<td class="org-left"><a href="https://github.com/mmaul/cl-syslog">https://github.com/mmaul/cl-syslog</a></td>
+<td class="org-left">cl-syslog-20140713</td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="#org835cf75">cl-log</a> AKA com.ravenbrook.common-lisp-log</td>
+<td class="org-left">Nick Levine</td>
+<td class="org-left">Public Domain</td>
+<td class="org-left"><a href="http://www.nicklevine.org/cl-log/">http://www.nicklevine.org/cl-log/</a></td>
+<td class="org-left">2012-05-15</td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="#orga94a9f9">hu.dwim.logger</a></td>
+<td class="org-left">Tamás Borbély,  Attila Lendvai,  Levente Mészáros</td>
+<td class="org-left">BSD</td>
+<td class="org-left"><a href="http://dwim.hu/darcsweb/darcsweb.cgi?r=HEAD%20hu.dwim.logger;a=summary">http://dwim.hu/darcsweb/darcsweb.cgi?r=HEAD%20hu.dwim.logger;a=summary</a></td>
+<td class="org-left">hu.dwim.logger-20151218</td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="#org928f95e">log4cl</a></td>
+<td class="org-left">Max Mikhanosa</td>
+<td class="org-left">Apache 2.0</td>
+<td class="org-left"><a href="https://github.com/7max/log4cl">https://github.com/7max/log4cl</a></td>
+<td class="org-left">log4cl-20141217</td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="#org05f1bbc">log5</a></td>
+<td class="org-left">Gary Warren King</td>
+<td class="org-left">MIT</td>
+<td class="org-left"><a href="https://github.com/gwkkwg/log5">https://github.com/gwkkwg/log5</a></td>
+<td class="org-left">log5-20110619</td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="#org6ee01df">verbose</a></td>
+<td class="org-left">Nicolas Hafner</td>
+<td class="org-left">Artistic</td>
+<td class="org-left"><a href="https://github.com/Shinmera/verbose">https://github.com/Shinmera/verbose</a></td>
+<td class="org-left">verbose-20160531</td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="#org2cb5101">vom</a></td>
+<td class="org-left">Andrew Danger Lyon</td>
+<td class="org-left">MIT</td>
+<td class="org-left"><a href="https://github.com/orthecreedence/vom">https://github.com/orthecreedence/vom</a></td>
+<td class="org-left">vom-20160318</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+(1)  Most recent version on github is 6 April 2015. A-cl-logger is not
+in quicklisp.
+</p>
+
+<p>
+<a href="#orgc9a7805">top</a>
+<a id="org025fb5b"></a>
+</p>
+</div>
+</div>
+<div id="outline-container-org2c2e626" class="outline-2">
+<h2 id="org2c2e626"><span class="section-number-2">4</span> Quick Summary</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+For terminology purposes, think of "loggers" as the first entry point in
+determining whether a log message embedded in the source code is
+logged and "senders" as the second stage in determining where to log
+the message. Loggers and senders may or may not have their own sets of
+filters to trigger their various actions. In general, more "loggers"
+and "senders" result in more flexibility
+for having many logging messages embedded in code, but only turning
+them on when desired and, potentially, turning on different priority
+levels in different portions of an application. It also enables
+flexibility with respect to how many messages are turned on during
+development (and where they are sent) compared to what is logged while
+an application runs unattended.
+</p>
+
+<table border="2" rules="all" frame="border">
+<caption class="t-above"><span class="table-number">Table 2:</span> Flexibility Comparison</caption>
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Library</th>
+<th scope="col" class="org-left"><a href="#org6d6aa66">a-cl-logger</a></th>
+<th scope="col" class="org-left"><a href="#org31b5923">cl-syslog</a></th>
+<th scope="col" class="org-left"><a href="#org835cf75">cl-log</a></th>
+<th scope="col" class="org-left">hu.dwim.logger</th>
+<th scope="col" class="org-left"><a href="#org928f95e">log4cl</a></th>
+<th scope="col" class="org-left"><a href="#org05f1bbc">log5</a></th>
+<th scope="col" class="org-left"><a href="#org6ee01df">verbose</a></th>
+<th scope="col" class="org-left"><a href="#org2cb5101">vom</a></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">Can Turn Logging Off</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+<td class="org-left">YES</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+</tr>
+
+<tr>
+<td class="org-left">Multiple Loggers</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+<td class="org-left">YES (1)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+</tr>
+
+<tr>
+<td class="org-left">Loggers Have Filters</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+<td class="org-left">YES</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+</tr>
+
+<tr>
+<td class="org-left">Multiple Senders per Logger</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+<td class="org-left">YES</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+</tr>
+
+<tr>
+<td class="org-left">Senders Have Filters</td>
+<td class="org-left">PRIORITY</td>
+<td class="org-left">NO</td>
+<td class="org-left">YES</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+<td class="org-left">(5)</td>
+</tr>
+
+<tr>
+<td class="org-left">Multiple Priority Levels</td>
+<td class="org-left">YES</td>
+<td class="org-left">(2)</td>
+<td class="org-left">YES</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+<td class="org-left">(5)</td>
+</tr>
+
+<tr>
+<td class="org-left">Levels and Categories are distinct</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO (3)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+</tr>
+
+<tr>
+<td class="org-left">Logger Inheritance Hierarchies (6)</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+</tr>
+
+<tr>
+<td class="org-left">Category Hierarchies</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO (4)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO (4)</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+(1) If you want to call a logger which is not the global logger, you
+need to use a slightly different logging function
+'log-manager-message' rather than 'log-message'. See <a href="#orgd43044a">cl-log-multiple-logger-setup</a>
+</p>
+
+<p>
+(2) Cl-syslog has multiple priority levels, but that is just a flag in
+the log message and is not filterable.
+</p>
+
+<p>
+(3) Categories and levels are the same types of flags in cl-log.
+</p>
+
+<p>
+(4) You can accomplish a similar result to hierarchies with
+appropriate use of 'or' and 'and' in the filters.
+</p>
+
+<p>
+(5) You can set the log level by package, but not by any finer
+granularity
+</p>
+
+<p>
+(6) Taking a-cl-logger as an example, there is a <b>root-logger</b> and
+then you can create instance of other loggers which will be children
+of the root logger. If the <b>root-logger</b> has appenders and the logging
+level of the <b>root-logger</b> and the child loggers are equal to or lower
+in priority than that specified in the log message, then both
+<b>root-logger</b> and child loggers will log the message.
+</p>
+
+<p>
+Aside from flexibility, each library seems to have one or two features that make it standout.
+That means that which one you choose comes down to whether there is a
+killer feature that you need which only happens to be in one library
+or which library just feels more comfortable to you.
+</p>
+</div>
+
+<div id="outline-container-org0151a5a" class="outline-3">
+<h3 id="org0151a5a"><span class="section-number-3">4.1</span> Best</h3>
+<div class="outline-text-3" id="text-4-1">
+<ul class="org-ul">
+<li>Simplest: <a href="#org2cb5101">vom</a>, <a href="#org31b5923">cl-syslog</a></li>
+
+<li>Best User Defined Category Handling: <a href="#org05f1bbc">log5</a> and <a href="#org6ee01df">verbose</a></li>
+
+<li>Ease in Changing Global Logging Levels: <a href="#org6ee01df">verbose</a>, <a href="#org2cb5101">vom</a>,</li>
+
+<li>Most Flexible (Separating different packages, etc): <a href="#org928f95e">log4cl</a>, <a href="#org835cf75">cl-log</a>, <a href="#org6ee01df">verbose</a></li>
+
+<li>Integration with system logs: <a href="#org31b5923">cl-syslog</a></li>
+
+<li>Ring logging: <a href="#org835cf75">cl-log</a></li>
+
+<li>Log File Rotation: <a href="#org6ee01df">verbose</a>, <a href="#org928f95e">log4cl</a></li>
+
+<li>Remote Logging: <a href="#org31b5923">cl-syslog</a></li>
+
+<li>Integration with slime: <a href="#org928f95e">log4cl</a>. Log4cl has the best integration
+with slime if you happen to be looking more for logging as an
+interactive debugger, but it is also throwing its own error in some
+functions.</li>
+
+<li>Integration with logstash: a-cl-logger</li>
+
+<li>Speed: <a href="#org05f1bbc">log5</a></li>
+
+<li>Best Automatic Context Generation: <a href="#org928f95e">log4cl</a>
+(automatically logs package and function names and time)</li>
+
+<li>Most Recent Development: <a href="#org6ee01df">verbose</a> and <a href="#org2cb5101">vom</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org30fe2ad" class="outline-3">
+<h3 id="org30fe2ad"><span class="section-number-3">4.2</span> Not So Best</h3>
+<div class="outline-text-3" id="text-4-2">
+<ul class="org-ul">
+<li>Slowest: <a href="#org6d6aa66">a-cl-logger</a>. a-cl-logger was markedly slower than all the
+other libraries. The maintainer agrees but may not have the time to
+fix the performance issue.</li>
+
+<li>Unable to turn off logging: <a href="#org31b5923">cl-syslog</a></li>
+
+<li>Changing logging levels: tie between <a href="#org835cf75">cl-log</a> and <a href="#org05f1bbc">log5</a></li>
+
+<li>Most Confusing: <a href="#org928f95e">log4cl</a> due to multiple namespaces</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-org803f53e" class="outline-3">
+<h3 id="org803f53e"><span class="section-number-3">4.3</span> Overall Preference</h3>
+<div class="outline-text-3" id="text-4-3">
+<p>
+I have two general use cases - development and logging on remotely
+running long lived programs. Based on those use cases, I have a very
+slight preference for the category and level functionality of verbose and the ability to set
+file rotation at pretty much any time interval that seems to work best
+for that application.
+ <a href="#orgc9a7805">top</a>
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-orgf9f42ba" class="outline-2">
+<h2 id="orgf9f42ba"><span class="section-number-2">5</span> Problem Space</h2>
+<div class="outline-text-2" id="text-5">
+<p>
+ <a id="org56980a2"></a>
+Logging is used for troubleshooting, auditing, profiling, alerts to
+impending danger and statistics. In a way, it is like documentation at
+runtime. As matthieum commented on reddit.com
+“Logs are like tests, you don't know if you have enough logs, you only
+know that you don't have enough when you get stumped.” Logging is
+complementary to testing. Testing is
+exercising functions under controlled conditions. Logging allows
+access to information in uncontrolled conditions. Logs help identify
+maintenance and perform and show whether new additions are creating
+more or less problems.
+</p>
+
+<p>
+At its absolute simplest, it is like putting printf statements in your
+code and being able to turn them on and off at will. Thus, a logging
+framework should provide functionality to
+generate a text message for display, processing or to save the message
+somewhere for future review. Logging frameworks can set different
+levels which will be triggered, displayed, processed or stored in
+different locations. For example, an error-level message may be
+treated differently than a debug-level message. Typically a logging
+level is set such that only certain levels of errors (or higher) are
+triggered  and logged. Thus you often have logging statements
+scattered through your code but only high level problem statements are
+actually logged unless you reset the trigger level to log more
+information. For that reason people may be interested in benchmarks
+showing a function without logging, the function with logging
+statements but below the trigger level and the function with logging
+statemente where the logging is actually triggered.
+</p>
+
+<p>
+Some people believe that a logging library should always output to the
+repl and its secondary function should be logging to a file. That
+assumes that you always have repl available as the program is
+running. That is not always true with respect to applications running remotely
+(in the cloud or wherever) which may be running unattended. As a
+result, I have a preference for being able to turn the repl logging on
+and off conveniently.
+</p>
+
+<p>
+This being common lisp, with the source being open and the licenses
+permissive, you can add functionality to any of these libraries.
+However, for purposes of this comparison, I am only comparing out of
+the box features with a caveat. cl-log does require that you define
+your categories whereas the other libraries have default categories
+that you can use.
+</p>
+</div>
+
+<div id="outline-container-org033bf76" class="outline-3">
+<h3 id="org033bf76"><span class="section-number-3">5.1</span> A comment about timestamps.</h3>
+<div class="outline-text-3" id="text-5-1">
+<p>
+Timestamps are good things. Timestamps with timezones (or using
+universal time) is almost required if you anticipate that your application is going to be
+crossing timezones.  If timing is critical, debugging occasionally requires that
+you determine if the user's timezone output is properly set.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgfcaf5c0" class="outline-3">
+<h3 id="orgfcaf5c0"><span class="section-number-3">5.2</span> Note to self about the logging messages</h3>
+<div class="outline-text-3" id="text-5-2">
+<p>
+This is a reminder to myself as much as anything. Good logging output
+often requires context and variable state. Remember who your audience
+is for each type of statement. The users can be very different.
+Consider the different needs of an application user, a help desk
+person, a system administrator or a developer. You may need very
+different error messages for the different audiences. This implies
+an advantage for the libraries providing different loggers for
+different purposes that you can turn on and off.
+</p>
+
+<p>
+You might also consider whether you need a log that is in a machine
+parseable format (json?) or human readable. Either way, consistency in
+logging message format will be extremely helpful. For machine
+paraseable formatted messages, right now you are probably going to
+have to write your own message formatting function that you pass to
+the logging statement.
+</p>
+
+<p>
+If you are internationalizing/localizing, you probably need
+centralized error codes.
+</p>
+
+<p>
+Be really careful about conditionals in logging messages. I have been
+known to insert conditionals that themselves trigger errors in the
+program - resulting in the embarrassing situation that the code was
+correct but the logging message crashed the program.
+</p>
+
+<p>
+Finally, and this is important - Never log sensitive data – e.g.
+social security numbers, credit cards, passwords etc.
+</p>
+
+<p>
+The following are some links to what some people consider best
+ practices in logging. <a href="https://www.owasp.org/index.php/Logging_Cheat_Sheet">https://www.owasp.org/index.php/Logging_Cheat_Sheet</a>
+, <a href="https://logentries.com/doc/best-practices-logs/">https://logentries.com/doc/best-practices-logs/</a>,
+ <a href="http://dev.splunk.com/view/logging-best-practices/SP-CAAADP6">http://dev.splunk.com/view/logging-best-practices/SP-CAAADP6</a>,
+ <a href="http://stackify.com/smarter-errors-logs-putting-data-work-2/">http://stackify.com/smarter-errors-logs-putting-data-work-2/</a>
+</p>
+
+<p>
+<a href="#orgc9a7805">top</a>
+<a id="org2221525"></a>
+</p>
+</div>
+</div>
+<div id="outline-container-org8d69fe6" class="outline-3">
+<h3 id="org8d69fe6"><span class="section-number-3">5.3</span> Comparative Samples</h3>
+<div class="outline-text-3" id="text-5-3">
+</div>
+<ol class="org-ol">
+<li><a id="org273d412"></a>Sample setup for the different libraries<br>
+<div class="outline-text-4" id="text-5-3-1">
+<p>
+The following are some sample calls to set up the different libraries.
+These specifically were intended to turn off any logging to the repl
+because I only wanted to log to a file.
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(<span style="color: #00ffff;">defun</span> <span style="color: #63b8ff;">setup-a-cl-logger</span> ()
+  <span style="color: #cd8162;">"setup a-cl-logger so that it logs to file but only with warning or higher categories. Drop the appenders in the root logger. </span>
+<span style="color: #cd8162;">Does the fact that we are using a child of the root logger slow down a-cl-logger? Answer: Not appreciably."</span>
+  (pop (a-cl-logger:appenders a-cl-logger:*root-logger*)) <span style="color: #cd4f39;">;get rid of</span>
+                                        <span style="color: #cd4f39;">;repl logger that is set up by</span>
+                                        <span style="color: #cd4f39;">;default in the root-logger</span>
+  (<span style="color: #00ffff;">a-cl-logger:define-logger</span> filelog2 ()
+                           <span style="color: #98fb98; font-weight: bold;">:appenders</span>
+                           (make-instance 'a-cl-logger:file-log-appender
+                                          <span style="color: #98fb98; font-weight: bold;">:log-file</span> <span style="color: #cd8162;">"/home/sabra/test/a-cl-logger-test.log"</span>
+                                          <span style="color: #98fb98; font-weight: bold;">:buffer-p</span> nil))
+  (setf (a-cl-logger:log-level (a-cl-logger:get-logger 'filelog2)) a-cl-logger:+warn+))
+
+(<span style="color: #00ffff;">defun</span> <span style="color: #63b8ff;">setup-cl-syslog</span> ()
+  <span style="color: #cd8162;">"No setup required"</span>)
+
+(<span style="color: #00ffff;">defun</span> <span style="color: #63b8ff;">setup-cl-log</span> ()
+  <span style="color: #cd8162;">"Setting up cl-log categories, creating a log-manager and starting a messenger that only logs warning or higher"</span>
+  (cl-log:defcategory <span style="color: #98fb98; font-weight: bold;">:critical</span>)
+  (cl-log:defcategory <span style="color: #98fb98; font-weight: bold;">:error</span>   (or <span style="color: #98fb98; font-weight: bold;">:error</span> <span style="color: #98fb98; font-weight: bold;">:critical</span>))
+  (cl-log:defcategory <span style="color: #98fb98; font-weight: bold;">:warning</span> (or <span style="color: #98fb98; font-weight: bold;">:warning</span> <span style="color: #98fb98; font-weight: bold;">:error</span>))
+  (cl-log:defcategory <span style="color: #98fb98; font-weight: bold;">:notice</span>  (or <span style="color: #98fb98; font-weight: bold;">:notice</span> <span style="color: #98fb98; font-weight: bold;">:warning</span>))
+  (cl-log:defcategory <span style="color: #98fb98; font-weight: bold;">:info</span>    (or <span style="color: #98fb98; font-weight: bold;">:info</span> <span style="color: #98fb98; font-weight: bold;">:notice</span>))
+  (cl-log:defcategory <span style="color: #98fb98; font-weight: bold;">:debug</span>   (or <span style="color: #98fb98; font-weight: bold;">:debug</span> <span style="color: #98fb98; font-weight: bold;">:info</span>))
+  (cl-log:defcategory <span style="color: #98fb98; font-weight: bold;">:trace</span>   (or <span style="color: #98fb98; font-weight: bold;">:trace</span> <span style="color: #98fb98; font-weight: bold;">:debug</span>))
+  (setf (cl-log:log-manager) (make-instance 'cl-log:log-manager
+                                            <span style="color: #98fb98; font-weight: bold;">:message-class</span> 'cl-log:formatted-message))
+  (cl-log:start-messenger 'cl-log:text-file-messenger <span style="color: #98fb98; font-weight: bold;">:filename</span>
+                          <span style="color: #cd8162;">"/home/sabra/test/cl-log-test.log"</span>
+                          <span style="color: #98fb98; font-weight: bold;">:filter</span> '(and <span style="color: #98fb98; font-weight: bold;">:warning</span>)))
+
+(<span style="color: #00ffff;">defun</span> <span style="color: #63b8ff;">setup-log4cl</span> ()
+  <span style="color: #cd8162;">"Set up log4cl so that it only logs to file and logs warning or higher"</span>
+  (log4cl:remove-all-appenders log4cl:*root-logger*)
+  (log:config <span style="color: #98fb98; font-weight: bold;">:daily</span> <span style="color: #cd8162;">"/home/sabra/test/log4cl-test1.log"</span> <span style="color: #98fb98; font-weight: bold;">:backup</span> nil)
+  (setf (log4cl:logger-log-level Log4cl:*root-logger*) log4cl:+log-level-warn+))
+
+(<span style="color: #00ffff;">defun</span> <span style="color: #63b8ff;">setup-log5</span> ()
+  <span style="color: #cd8162;">"Starting a sender that will only log warn, error or fatal"</span>
+  (log5:start-sender 'debug  (log5:stream-sender
+                              <span style="color: #98fb98; font-weight: bold;">:location</span> <span style="color: #cd8162;">"/home/sabra/test/log5.log"</span>)
+                     <span style="color: #98fb98; font-weight: bold;">:output-spec</span> '(time log5:category log5:message)
+                     <span style="color: #98fb98; font-weight: bold;">:category-spec</span> '(or log5:WARN log5:ERROR
+                                      log5:FATAL)))
+
+(<span style="color: #00ffff;">defun</span> <span style="color: #63b8ff;">setup-verbose</span> ()
+  <span style="color: #cd8162;">"Alternative 1 for setting up verbose: Redirecting the repl logging"</span>
+  (setf (v:repl-level) <span style="color: #98fb98; font-weight: bold;">:warn</span>)
+  (setf (v:shared-instance '*standard-output*) (open #p<span style="color: #cd8162;">"~/test/verbose.log"</span> <span style="color: #98fb98; font-weight: bold;">:direction</span> <span style="color: #98fb98; font-weight: bold;">:output</span> <span style="color: #98fb98; font-weight: bold;">:if-exists</span> <span style="color: #98fb98; font-weight: bold;">:append</span>)))
+
+(<span style="color: #00ffff;">defun</span> <span style="color: #63b8ff;">setup-verbose-1</span> ()
+  <span style="color: #cd8162;">"Alternative 1I for setting up verbose: Actually getting rid of the repl logging and only setting up a file-faucet"</span>
+  (<span style="color: #00ffff;">when</span> (&gt; (length (v::pipeline v:*global-controller*)) 0)
+    (piping:remove-segment v:*global-controller* '(0)))
+  (v:add-pipe (make-instance 'piping:predicate-filter
+                             <span style="color: #98fb98; font-weight: bold;">:predicate</span> #'(<span style="color: #00ffff;">lambda</span> (message) (verbose:message-visible message <span style="color: #98fb98; font-weight: bold;">:WARN</span>)))
+              (make-instance 'v:file-faucet <span style="color: #98fb98; font-weight: bold;">:file</span> #p<span style="color: #cd8162;">"~/test/verbose-1.log"</span>)))
+
+(<span style="color: #00ffff;">defun</span> <span style="color: #63b8ff;">setup-vom</span> ()
+  <span style="color: #cd8162;">"No setup required"</span>)
+
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="org4c4c3f8"></a>Sample logging calls embedded in your code with resulting log entries<br>
+<div class="outline-text-4" id="text-5-3-2">
+<p>
+These assume you have already done any required setup.
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(a-cl-2.dribble <span style="color: #cd8162;">"a-cl-logger enter sub-step-1 ~a"</span> x) <span style="color: #cd4f39;">;where a-cl-2 was</span>
+                                        <span style="color: #cd4f39;">;a logger you created with define-logger</span>
+
+(<span style="color: #00ffff;">a-cl-logger:do-log</span> a-cl-logger:*root-logger* a-cl-logger:+error+ <span style="color: #cd8162;">"log something here ~a"</span> 10)
+2016-05-25T21:35:49.238951-07:00  ROOT-LOGGER ERROR   log something here 10
+
+(cl-log:log-message <span style="color: #98fb98; font-weight: bold;">:critical</span> <span style="color: #cd8162;">"fun fun ~a"</span> <span style="color: #cd8162;">"fun"</span>)
+3673226771.075 CRITICAL Fun fun fun
+
+(cl-syslog:log <span style="color: #cd8162;">"myprog"</span> <span style="color: #98fb98; font-weight: bold;">:syslog</span> <span style="color: #98fb98; font-weight: bold;">:debug</span>
+               (format nil <span style="color: #cd8162;">"cl-syslog enter sub-step-1 ~a"</span> x))
+
+(log4cl:log-info  <span style="color: #cd8162;">"log4cl enter sub-step-1 ~a"</span> 10)
+ &lt;INFO&gt; [21:43:55] library-comparison () - log4cl enter sub-step-1 10
+
+(log5:log-for log5:error+ <span style="color: #cd8162;">"Log5 enter sub-step-1 ~a"</span> 10)
+3673226566 ERROR+ Log5 enter sub-step-1 10
+
+(v:info '(<span style="color: #98fb98; font-weight: bold;">:foo.library-comparison.function1</span>) <span style="color: #cd8162;">"fun fun ~a"</span> <span style="color: #cd8162;">"fun"</span>)
+LOG: 2016-05-25 21:50:04 [INFO ] &lt;FOO.LIBRARY-COMPARISON.FUNCTION1&gt;: fun fun fun
+
+(vom:emerg <span style="color: #cd8162;">"Vom enter sub-step-1 ~a"</span> 10)
+ &lt;EMERG&gt; [21:51:18] library-comparison - Vom enter sub-step-1 10
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="org3a5db22"></a>Logging messages with more complex categories<br>
+<ol class="org-ol">
+<li><a id="org74fc03d"></a>a-cl-logger<br>
+<div class="outline-text-5" id="text-5-3-3-1">
+<p>
+<a href="#org6d6aa66">a-cl-logger</a> does not really have categories. You can throw a lot of
+things into the log message. E.g.
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(<span style="color: #00ffff;">a-cl-logger:do-log</span> 'testlog a-cl-logger:+debug+
+                    <span style="color: #98fb98; font-weight: bold;">:a-plist-key</span> <span style="color: #98fb98; font-weight: bold;">:a-plist-value</span>
+                    <span style="color: #98fb98; font-weight: bold;">:some-key</span> <span style="color: #cd8162;">"some value"</span>)
+2016-05-08T19:26:02.896705-07:00      TESTLOG DEBUG    A-PLIST-KEY::A-PLIST-VALUE, SOME-KEY:some value
+</pre>
+</div>
+</div>
+</li>
+<li><a id="org78ce281"></a>cl-log<br>
+<div class="outline-text-5" id="text-5-3-3-2">
+<p>
+In <a href="#org835cf75">cl-log</a>, categories can be passed as an atom or list in the log-message or
+log-manager message. Both log-managers and messengers have filters that accept everything,
+only a single specified item or a list starting with AND, OR and NOT.
+The filter cannot be changed.
+</p>
+</div>
+</li>
+<li><a id="orgd7b77ac"></a>cl-syslog<br></li>
+<li><a id="org503eb81"></a>log4cl<br></li>
+<li><a id="org65f8f92"></a>log5<br>
+<div class="outline-text-5" id="text-5-3-3-5">
+<p>
+Start by defining categories which can be as complicated as you like.
+Then start a sender which picks up at least some of these new
+categories. Then your log-for calls are sprinkled across your source code.
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(log5:defcategory file-system)
+(log5:defcategory memory)
+(log5:defcategory process)
+(log5:defcategory application)
+(log5:defcategory operating-system
+     (and (or file-system memory process
+          (not application))))
+
+(log5:start-sender 'repl-ops  (log5:stream-sender
+                                <span style="color: #98fb98; font-weight: bold;">:location</span> *standard-output*)
+                   <span style="color: #98fb98; font-weight: bold;">:output-spec</span> '(time log5:category log5:message)
+                   <span style="color: #98fb98; font-weight: bold;">:category-spec</span> '(or operating-system log5:ERROR))
+
+(log5:log-for (and operating-system memory) <span style="color: #cd8162;">"something ~a"</span> <span style="color: #cd8162;">"warm"</span>)
+&gt;&gt; 3671731698 (AND OPERATING-SYSTEM MEMORY) something warm
+</pre>
+</div>
+</div>
+</li>
+<li><a id="org29419bf"></a>verbose<br>
+<div class="outline-text-5" id="text-5-3-3-6">
+<p>
+The following provides an example of the category tree filter for
+verbose. First we add a hierarchical category that has a wildcard.
+Since our category definition required "foo.bar.&lt;something&gt;", if we
+try a message that does not have the full required hierarchy, it does
+not get logged.
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(v:add-repl-category <span style="color: #98fb98; font-weight: bold;">:foo.bar.*</span>)
+(<span style="color: #98fb98; font-weight: bold;">:FOO.BAR.*</span>)
+
+(v:info <span style="color: #98fb98; font-weight: bold;">:foo</span> <span style="color: #cd8162;">"Foo"</span>)
+NIL
+
+(v:info <span style="color: #98fb98; font-weight: bold;">:foo.bar.1</span> <span style="color: #cd8162;">"Foo"</span>)
+NIL
+LOG: 2016-05-08 18:36:04 [INFO ] &lt;FOO.BAR.1&gt;: Foo
+
+(v:info <span style="color: #98fb98; font-weight: bold;">:foo.bar.2</span> <span style="color: #cd8162;">"Foo"</span>)
+NIL
+LOG: 2016-05-08 18:36:10 [INFO ] &lt;FOO.BAR.2&gt;: Foo
+</pre>
+</div>
+</div>
+</li>
+<li><a id="org426d2b2"></a>vom<br>
+<div class="outline-text-5" id="text-5-3-3-7">
+<p>
+<a href="#orgc9a7805">top</a>
+</p>
+</div>
+</li>
+</ol>
+</li>
+</ol>
+</div>
+</div>
+<div id="outline-container-org267eb1f" class="outline-2">
+<h2 id="org267eb1f"><span class="section-number-2">6</span> Glossary:</h2>
+<div class="outline-text-2" id="text-6">
+<p>
+<a id="org8998076"></a>
+The simplest libraries (e.g. vom) just have you configure
+what level to log and where to send the message. The more complex
+libraries add more flexibility. You may have different loggers for
+different packages or purposes, multiple messengers/appenders for each
+logger with each messenger or appender sending the messages to
+different places (e.g. the console, a file, a remote system) and each
+messenger or appender may respond to different categories, levels or filters.
+</p>
+</div>
+
+<div id="outline-container-orgd6e4e61" class="outline-3">
+<h3 id="orgd6e4e61"><span class="section-number-3">6.1</span> Loggers/ Log Managers</h3>
+<div class="outline-text-3" id="text-6-1">
+<p>
+<a id="org367d04f"></a>
+These may be called loggers (a-cl-logger, log4cl) or log-managers
+(cl-log, log5). <a href="#org928f95e">Log4cl</a> actually calls
+them categories which I think confuses things even more. Essentially
+these are class instances which allow logging. They may be set up to
+only log particular packages, source files, or whatever. There may be only a single logger or there may be
+multiple loggers subclassed off a root-logger which may or may not be
+tied into a hierarchy. Each logger will have one or more
+messengers/appenders attached to it.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orga2aa1ad" class="outline-3">
+<h3 id="orga2aa1ad"><span class="section-number-3">6.2</span> Messengers/Senders/Appenders/Faucets</h3>
+<div class="outline-text-3" id="text-6-2">
+<p>
+<a id="org22affc5"></a>
+The terminology varies from library to library - messengers (cl-log).
+senders (log5), appenders (a-cl-logger, log4cl) or faucets (verbose).
+In any case, one or more are typically owned by a logger and
+these classes define where a message will be logged (e.g. a file, a
+stream, a ring, a system-log, etc). They will have filters that accept certain
+levels/categories of messages and then will write those messages plus
+potentially other information to various streams, files, rings, or
+whatever. Generally any one messenger or appender has a single
+destination that it sends a message.
+</p>
+
+<p>
+For consistency, for the rest of this article I will refer to these as messengers.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org054d969" class="outline-3">
+<h3 id="org054d969"><span class="section-number-3">6.3</span> Levels and Categories</h3>
+<div class="outline-text-3" id="text-6-3">
+<p>
+<a id="org80a1031"></a>
+Some libraries distinguish between log levels and categories, some
+treat them the same. I personally think they are two entirely
+different concepts, but YMMV. The libraries that treat them differently use the
+log level to determine whether the message is should be logged and
+will allow you to set the log level as a priority filter at any time. Those libraries use
+categories to allow additional levels of filtering.
+</p>
+</div>
+<ol class="org-ol">
+<li><a id="org7411021"></a>Log Levels<br>
+<div class="outline-text-4" id="text-6-3-1">
+<p>
+<a id="org254d1f4"></a>
+Log levels denote the level of importance or priority. Typically log levels are
+set at a lower level during development and testing (getting more
+information) and higher levels in production. Typical log levels are:
+</p>
+
+<ul class="org-ul">
+<li>Fatal – Should only occur with something that should force the
+program to terminate.</li>
+
+<li>Critical – About to go fatal if something doesn’t happen to help.</li>
+
+<li>Error – There is a real error which needs to be logged and investigated, but it does
+not rise to the panic levels of critical and fatal. You really
+should log every error condition.</li>
+
+<li>Warn – Log all events that could potentially become an error.  For
+example, you are about to run out of resources. It could also
+include use of deprecated APIs or other almost errors.</li>
+
+<li>Notice – All significant events which are not considered errors</li>
+
+<li>Info – User driven or system specific actions. Administrators and
+advanced users should be able to understand the message.</li>
+
+<li>Debug, Trace – different levels during troubleshooting. These should
+only be logged to a file and typically are not logged to a console.
+Some people argue that even production systems should have this
+running if it doesn’t clog the system so as to help debug remote
+applications without having to walk the user through changing
+logging levels.</li>
+</ul>
+</div>
+</li>
+
+<li><a id="org72d06dd"></a>Setting all libraries' logging level to :warn<br>
+<div class="outline-text-4" id="text-6-3-2">
+<p>
+The following are sample calls to set all the libaries' global logging level to :warn.
+(This does assume that you have written the function suggested by
+cl-log to help that library and you have done any required setup.)
+Note that some libraries allow multiple loggers or senders which may
+allow you to set different levels operating simultaneously.
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(setf (v:repl-level) <span style="color: #98fb98; font-weight: bold;">:error</span>) <span style="color: #cd4f39;">; this is verbose</span>
+
+(vom:config t <span style="color: #98fb98; font-weight: bold;">:warn</span>)
+
+(setf (a-cl-logger:level (a-cl-logger:get-logger 'a-cl-2))
+      a-cl-logger:+warn+)
+
+(log:config log4cl:+LOG-LEVEL-WARN+) <span style="color: #cd4f39;">; this is log4cl</span>
+
+(setf (log-level) <span style="color: #98fb98; font-weight: bold;">:warn</span>) <span style="color: #cd4f39;">; setting log-level for cl-log. This requires a </span>
+                         <span style="color: #cd4f39;">; self written function and only applies to the root logger.</span>
+
+(log5:stop-sender 'repl-warn)
+(log5:start-sender 'repl-warn (log5:stream-sender
+                               <span style="color: #98fb98; font-weight: bold;">:location</span> *standard-output*)
+                   <span style="color: #98fb98; font-weight: bold;">:output-spec</span> '(time log5:category log5:message)
+                   <span style="color: #98fb98; font-weight: bold;">:category-spec</span> '(or log5:INFO log5:WARN log5:ERROR
+                                       log5:FATAL))
+</pre>
+</div>
+</div>
+</li>
+<li><a id="org0cc8476"></a>Getting the current logging levels<br>
+<div class="outline-text-4" id="text-6-3-3">
+<p>
+Getting the current level for when messages will actually be logged is
+obviously going to be easier if you are running only a single logger
+and only one messenger. The more filters you have running, the more
+complicated it might be to determine why something was or was not logged.
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(a-cl-logger:log-level-name-of <span style="color: #cd4f39;">; This looks ugly</span>
+  (a-cl-logger:log-level
+    (a-cl-logger:get-logger 'a-cl-2)))
+
+(get-cl-log-level-set)
+
+(log4cl:log-level-to-string
+  (log4cl:logger-log-level log4cl:*root-logger*))
+
+(log5:category-spec
+  (first (log5:senders)))
+
+(v:repl-level)
+
+vom::*config*
+</pre>
+</div>
+</div>
+</li>
+
+<li><a id="org3d85706"></a>Categories<br>
+<div class="outline-text-4" id="text-6-3-4">
+<p>
+<a id="org000c5a8"></a>
+If the library distinguishes between log levels and categories,
+categories are user defined and provide further information and often
+the filters in messengers will look at categories to decide whether to
+log the message. Categories may be individual items (e.g.
+system-error) or they might be trees (e.g. database.table.row).
+</p>
+
+<p>
+<a id="org8e72b61"></a>
+ <a href="#orgc9a7805">top</a>
+</p>
+</div>
+</li>
+</ol>
+</div>
+</div>
+<div id="outline-container-org5d47fb8" class="outline-2">
+<h2 id="org5d47fb8"><span class="section-number-2">7</span> Wish list</h2>
+<div class="outline-text-2" id="text-7">
+<p>
+<a id="orgb2a4268"></a>
+No, we do not need another logging library. If I was going to extend a
+library, some of the features I would add might be: json output for
+machine parseable logs, the ability to
+compress and/or encrypt the log files and ensuring that timestamps had timezone or
+stick to universal time which would be easier for machine parsing. Depending on the application, I might want
+support for localization.
+</p>
+
+<p>
+Maybe something like the following from
+tech.grammarly.com/blog/posts/Running-Lisp-in-Production.html
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(<span style="color: #00ffff;">defun</span> <span style="color: #63b8ff;">graylog</span> (message <span style="color: #7ccd7c;">&amp;key</span> level backtrace file line-no)
+  (<span style="color: #00ffff;">let</span> ((msg (salza2:compress-data
+              (babel:string-to-octets
+               (json:encode-json-to-string
+                #{:version <span style="color: #cd8162;">"1.0"</span>
+                <span style="color: #98fb98; font-weight: bold;">:facility</span> <span style="color: #cd8162;">"lisp"</span>
+                <span style="color: #98fb98; font-weight: bold;">:host</span> *hostname*
+                :|short_message| message
+                :|full_message| backtrace
+                <span style="color: #98fb98; font-weight: bold;">:timestamp</span> (local-time:timestamp-to-unix (local-time:now))
+                <span style="color: #98fb98; font-weight: bold;">:level</span> level))
+               <span style="color: #98fb98; font-weight: bold;">:encoding</span> <span style="color: #98fb98; font-weight: bold;">:utf-8</span>)
+              'salza2:zlib-compressor)))
+    (usocket:socket-send
+     (usocket:socket-connect
+      *graylog-host* *graylog-port*
+      <span style="color: #98fb98; font-weight: bold;">:protocol</span> <span style="color: #98fb98; font-weight: bold;">:datagram</span> <span style="color: #98fb98; font-weight: bold;">:element-type</span> '(unsigned-byte 8))
+     msg (length msg))))
+</pre>
+</div>
+
+
+<p>
+<a id="org999e405"></a>
+ <a href="#orgc9a7805">top</a>
+</p>
+</div>
+</div>
+<div id="outline-container-orgd36dff0" class="outline-2">
+<h2 id="orgd36dff0"><span class="section-number-2">8</span> Functionality Comparisons</h2>
+<div class="outline-text-2" id="text-8">
+<p>
+<a id="orga8edab6"></a>
+</p>
+<table border="2" rules="all" frame="border">
+<caption class="t-above"><span class="table-number">Table 3:</span> Additional Functionality Comparison</caption>
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Library</th>
+<th scope="col" class="org-left"><a href="#org6d6aa66">a-cl-logger</a></th>
+<th scope="col" class="org-left"><a href="#org31b5923">cl-syslog</a></th>
+<th scope="col" class="org-left"><a href="#org835cf75">cl-log</a></th>
+<th scope="col" class="org-left">hu.dwim.logger</th>
+<th scope="col" class="org-left"><a href="#org928f95e">log4cl</a></th>
+<th scope="col" class="org-left"><a href="#org05f1bbc">log5</a></th>
+<th scope="col" class="org-left"><a href="#org6ee01df">verbose</a></th>
+<th scope="col" class="org-left"><a href="#org2cb5101">vom</a></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">Can Turn Logging Off</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+<td class="org-left">YES</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+</tr>
+
+<tr>
+<td class="org-left">Multiple Loggers</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+<td class="org-left">YES (1)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+</tr>
+
+<tr>
+<td class="org-left">Loggers Have Filters</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+<td class="org-left">YES</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+</tr>
+
+<tr>
+<td class="org-left">Multiple Senders per Logger</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+<td class="org-left">YES</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+</tr>
+
+<tr>
+<td class="org-left">Senders Have Filters</td>
+<td class="org-left">PRIORITY</td>
+<td class="org-left">NO</td>
+<td class="org-left">YES</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+<td class="org-left">(5)</td>
+</tr>
+
+<tr>
+<td class="org-left">Multiple Priority Levels</td>
+<td class="org-left">YES</td>
+<td class="org-left">(2)</td>
+<td class="org-left">YES</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+<td class="org-left">(5)</td>
+</tr>
+
+<tr>
+<td class="org-left">Levels and Categories are distinct</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO (3)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+</tr>
+
+<tr>
+<td class="org-left">Logger Hierarchies</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+</tr>
+
+<tr>
+<td class="org-left">Category Hierarchies</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO (4)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES (4)</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+</tr>
+
+<tr>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Documentation?</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+<td class="org-left">Very good</td>
+<td class="org-left">YES    (look in source files)</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+</tr>
+
+<tr>
+<td class="org-left">User Defined Categories?</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">YES</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+</tr>
+
+<tr>
+<td class="org-left">Optional Config File Use?</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+</tr>
+
+<tr>
+<td class="org-left">Slime Integration?</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+</tr>
+
+<tr>
+<td class="org-left">Set trigger level globally</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+<td class="org-left">YES</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+</tr>
+
+<tr>
+<td class="org-left">Set trigger level by package</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">NO</td>
+<td class="org-left">YES</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">YES (logs package name)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">YES</td>
+</tr>
+
+<tr>
+<td class="org-left">Set trigger level by logger</td>
+<td class="org-left">YES</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Set trigger level by function</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+</tr>
+
+<tr>
+<td class="org-left">Category Filters?</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+<td class="org-left">YES</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+</tr>
+
+<tr>
+<td class="org-left">Textfile Logs?</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+</tr>
+
+<tr>
+<td class="org-left">Ring Logs?</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">YES</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+</tr>
+
+<tr>
+<td class="org-left">Stream Logs?</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+<td class="org-left">YES</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+</tr>
+
+<tr>
+<td class="org-left">Socket Logging?</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+</tr>
+
+<tr>
+<td class="org-left">SMTP or Email Logging?</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+</tr>
+
+<tr>
+<td class="org-left">SysLog Logging?</td>
+<td class="org-left">NO</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+</tr>
+
+<tr>
+<td class="org-left">Remote Logging</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">NO</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">NO</td>
+</tr>
+
+<tr>
+<td class="org-left">Binary Logs</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">NO</td>
+<td class="org-left">YES (6)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">NO</td>
+</tr>
+
+<tr>
+<td class="org-left">Logstash loggins</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+</tr>
+
+<tr>
+<td class="org-left">Output as json?</td>
+<td class="org-left">(7)</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+</tr>
+
+<tr>
+<td class="org-left">Rotate Logs?</td>
+<td class="org-left">NO</td>
+<td class="org-left">Relies on System</td>
+<td class="org-left">NO</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">Daily (8)</td>
+<td class="org-left">NO</td>
+<td class="org-left">YES As often as you want</td>
+<td class="org-left">NO</td>
+</tr>
+
+<tr>
+<td class="org-left">Compress Log Files?</td>
+<td class="org-left">NO</td>
+<td class="org-left">Relies on system</td>
+<td class="org-left">NO</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">NO  (8)</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+</tr>
+
+<tr>
+<td class="org-left">Recover from i/o failures?</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">YES</td>
+<td class="org-left">Can be set to enter debugging</td>
+<td class="org-left">?</td>
+<td class="org-left">NO</td>
+</tr>
+
+<tr>
+<td class="org-left">Different logging by user?</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+</tr>
+
+<tr>
+<td class="org-left">Multiple Loggers?</td>
+<td class="org-left">YES</td>
+<td class="org-left">2 if remote logging</td>
+<td class="org-left">YES</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+</tr>
+
+<tr>
+<td class="org-left">Multiple Streams?</td>
+<td class="org-left">YES</td>
+<td class="org-left">2 if remote-logging</td>
+<td class="org-left">YES</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+</tr>
+
+<tr>
+<td class="org-left">Mute Individual Streams?</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+<td class="org-left">YES</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+</tr>
+
+<tr>
+<td class="org-left">Hierarchical Categories</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">YES</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Variables in Messages</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+</tr>
+
+<tr>
+<td class="org-left">Configurable Messages</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+<td class="org-left">YES</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+<td class="org-left">Somewhat</td>
+<td class="org-left">NO</td>
+</tr>
+
+<tr>
+<td class="org-left">Can take function as messages</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+</tr>
+
+<tr>
+<td class="org-left">Node-Logstash Integration</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+</tr>
+
+<tr>
+<td class="org-left">Thread handling?</td>
+<td class="org-left">NO</td>
+<td class="org-left">YES</td>
+<td class="org-left">YES</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+</tr>
+
+<tr>
+<td class="org-left">Thread safe</td>
+<td class="org-left">NO</td>
+<td class="org-left">YES</td>
+<td class="org-left">?</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+</tr>
+
+<tr>
+<td class="org-left">Any Localization Support?</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+</tr>
+
+<tr>
+<td class="org-left">Multiple categories in entry</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+</tr>
+
+<tr>
+<td class="org-left">Conditions,Signals and Restarts</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+<td class="org-left">NO</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+<td class="org-left">YES</td>
+<td class="org-left">NO</td>
+</tr>
+
+<tr>
+<td class="org-left">Message Interception</td>
+<td class="org-left">YES</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Default Timestamps</td>
+<td class="org-left">YES with timezone</td>
+<td class="org-left">month-day hh:mm:ss</td>
+<td class="org-left">Universal time</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">YES</td>
+<td class="org-left">Universal time</td>
+<td class="org-left">year-month-day hh:mm:ss</td>
+<td class="org-left">hh:mm:ss</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+(1) If you want to call a logger which is not the global logger, you
+need to use a slightly different logging function
+'log-manager-message' rather than 'log-message'. See <a href="#orgd43044a">cl-log-multiple-logger-setup</a>
+</p>
+
+<p>
+(2) Cl-syslog has multiple priority levels, but that is just a flag in
+the log message and is not filterable.
+</p>
+
+<p>
+(3) Categories and levels are the same types of flags in cl-log.
+</p>
+
+<p>
+(4) You can accomplish a similar result to hierarchies with
+appropriate use of 'or' and 'and' in the filters.
+</p>
+
+<p>
+(5) You can set the log level by package, but not by any finer granularity
+</p>
+
+<p>
+(6) See <a href="http://nklein.com/2011/04/binary-logging-with-cl-log/">http://nklein.com/2011/04/binary-logging-with-cl-log/</a>
+for an explanation of binary usage.
+</p>
+
+<p>
+(7) The ability to output json seems to have begun but never finished.
+</p>
+
+<p>
+(8) You can add methods to the generic function backup-log-file that
+could compress or encrypt the backup file or change the log rotation
+from daily to weekly or whatever.
+ <a href="#orgc9a7805">top</a>
+</p>
+</div>
+</div>
+<div id="outline-container-org863f842" class="outline-2">
+<h2 id="org863f842"><span class="section-number-2">9</span> Default Available Log Levels</h2>
+<div class="outline-text-2" id="text-9">
+<p>
+<a id="orge47944b"></a>
+</p>
+<table border="2" rules="all" frame="border">
+<caption class="t-above"><span class="table-number">Table 4:</span> Default Logging Levels</caption>
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Library</th>
+<th scope="col" class="org-left">Default Levels</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left"><a href="#org6d6aa66">a-cl-logger</a></td>
+<td class="org-left">fatal error warn info debug dribble</td>
+</tr>
+
+<tr>
+<td class="org-left">cl-log</td>
+<td class="org-left">NO DEFAULT LEVELS</td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="#org31b5923">cl-syslog</a></td>
+<td class="org-left">:emerg :alert :crit :err :warning :notice :info :debug (these are just priority indicators passed in a message.  <a href="#org31b5923">cl-syslog</a> does not have the ability to turn the logging levels on or off)</td>
+</tr>
+
+<tr>
+<td class="org-left">hu.dwim.logger</td>
+<td class="org-left">\+FATAL+ \+ERROR+ \+WARN+ \+INFO \+DEBUG+ \+DRIBBLE+</td>
+</tr>
+
+<tr>
+<td class="org-left">log4cl</td>
+<td class="org-left">\+log-level-fatal+    \+log-level-error+ \+log-level-warn+ \+log-level-info+  \+log-level-debug+ \+log-level-debu1+ \+log-level-debu2+ \+log-level-debu3+ \+log-level-debu4+ \+log-level-trace+  \+log-level-debu5+ \+log-level-debu6+ \+log-level-debu7+ \+log-level-debu8+ \+log-level-debu9+</td>
+</tr>
+
+<tr>
+<td class="org-left">log5    (9)</td>
+<td class="org-left">fatal error warn info trace dribble in-development</td>
+</tr>
+
+<tr>
+<td class="org-left">verbose</td>
+<td class="org-left">:FATAL :SEVERE :ERROR :WARN :INFO :DEBUG :TRACE</td>
+</tr>
+
+<tr>
+<td class="org-left">vom</td>
+<td class="org-left">:emerg :alert :crit :error :warn :notice :info :debug :debug1 :debug2 :debug3 :debug4</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+(9) These are categories, not levels.
+ <a href="#orgc9a7805">top</a>
+</p>
+</div>
+</div>
+
+<div id="outline-container-org333554c" class="outline-2">
+<h2 id="org333554c"><span class="section-number-2">10</span> Benchmarking</h2>
+<div class="outline-text-2" id="text-10">
+<p>
+<a id="org4fdb2f0"></a> These tests are run on a linux box running a 4.4.5 kernel
+on an intel i5-4590 processor with 16gig of ram using sbcl 1.3.4.
+The functions being logged just log a simple message with a single variable. Any logging
+which has to do evaluations to insert into the message are going to
+slow down the results. The intent is merely to give a comparison between (a) the packages with logging
+installed and triggered (b) the  same function without any logging
+installed and (c) logging installed but not triggered.
+</p>
+
+<p>
+Only verbose and vom seemed to take advantage of multiple
+cores during the test in the sense that the real time is substantially
+less than the run time.
+</p>
+</div>
+
+<div id="outline-container-org64907c8" class="outline-3">
+<h3 id="org64907c8"><span class="section-number-3">10.1</span> Benchmarking with logging</h3>
+<div class="outline-text-3" id="text-10-1">
+<table>
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-right">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">Description</td>
+<td class="org-right">Base</td>
+<td class="org-left"><a href="#org6d6aa66">a-cl-logger</a> (1)</td>
+<td class="org-left"><a href="#org31b5923">cl-syslog</a></td>
+<td class="org-left"><a href="#org835cf75">cl-log</a></td>
+<td class="org-left">hu</td>
+<td class="org-left"><a href="#org928f95e">log4cl</a></td>
+<td class="org-left"><a href="#org05f1bbc">log5</a></td>
+<td class="org-left"><a href="#org6ee01df">verbose</a></td>
+<td class="org-left"><a href="#org2cb5101">vom</a></td>
+</tr>
+
+<tr>
+<td class="org-left">Real time</td>
+<td class="org-right">0.015</td>
+<td class="org-left">1.881</td>
+<td class="org-left">0.753</td>
+<td class="org-left">0.418</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">0.666</td>
+<td class="org-left">0.290</td>
+<td class="org-left">0.398</td>
+<td class="org-left">0.656</td>
+</tr>
+
+<tr>
+<td class="org-left">Run time</td>
+<td class="org-right">0.0133</td>
+<td class="org-left">1.8866</td>
+<td class="org-left">0.609999</td>
+<td class="org-left">0.416667</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">0.673334</td>
+<td class="org-left">0.293334</td>
+<td class="org-left">0.719999</td>
+<td class="org-left">1.25000</td>
+</tr>
+
+<tr>
+<td class="org-left">Processor Cycles</td>
+<td class="org-right">48,977,628</td>
+<td class="org-left">6,206,034,839</td>
+<td class="org-left">2,482,452,207</td>
+<td class="org-left">1,379,735,775</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">2,224,277,943</td>
+<td class="org-left">959,444,772</td>
+<td class="org-left">1,314,644,001</td>
+<td class="org-left">2,162,339,446</td>
+</tr>
+
+<tr>
+<td class="org-left">Bytes Consed</td>
+<td class="org-right">0</td>
+<td class="org-left">1,014,445,296</td>
+<td class="org-left">59,227,586</td>
+<td class="org-left">153,615,328</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">230,406,384</td>
+<td class="org-left">129,586,720</td>
+<td class="org-left">288,066,784</td>
+<td class="org-left">622,654,464</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div id="outline-container-org9e04100" class="outline-3">
+<h3 id="org9e04100"><span class="section-number-3">10.2</span> Benchmarking without triggering logging</h3>
+<div class="outline-text-3" id="text-10-2">
+<table>
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-right">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<tbody>
+<tr>
+<td class="org-left">Description</td>
+<td class="org-right">Base</td>
+<td class="org-left"><a href="#org6d6aa66">a-cl-logger</a></td>
+<td class="org-left"><a href="#org31b5923">cl-syslog</a></td>
+<td class="org-left"><a href="#org835cf75">cl-log</a></td>
+<td class="org-left">hu</td>
+<td class="org-left"><a href="#org928f95e">log4cl</a></td>
+<td class="org-left"><a href="#org05f1bbc">log5</a></td>
+<td class="org-left"><a href="#org6ee01df">verbose</a></td>
+<td class="org-left"><a href="#org2cb5101">vom</a></td>
+</tr>
+
+<tr>
+<td class="org-left">Run time</td>
+<td class="org-right">0.0133</td>
+<td class="org-left">0.02333</td>
+<td class="org-left">(2)</td>
+<td class="org-left">0.02666</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">0.013</td>
+<td class="org-left">0.0200</td>
+<td class="org-left">0.669</td>
+<td class="org-left">0.063</td>
+</tr>
+
+<tr>
+<td class="org-left">Processor Cycles</td>
+<td class="org-right">48,977,628</td>
+<td class="org-left">40,028,946</td>
+<td class="org-left">(2)</td>
+<td class="org-left">45,593,217</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">20,304,396</td>
+<td class="org-left">34,488,513</td>
+<td class="org-left">1,143,962,355</td>
+<td class="org-left">204,091,635</td>
+</tr>
+
+<tr>
+<td class="org-left">Bytes Consed</td>
+<td class="org-right">0</td>
+<td class="org-left">15,510,496</td>
+<td class="org-left">(2)</td>
+<td class="org-left">6,736,640</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">3,041,280</td>
+<td class="org-left">8,266,384</td>
+<td class="org-left">285,694,224</td>
+<td class="org-left">3,211,264</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+(1) I ran a-cl-logger both with the root-logger and with an inherited
+logger. There was no appreciable difference in the testing. The setup
+discussion shows setting it up with an inherited logger.
+</p>
+
+<p>
+(2) It makes no sense to test cl-syslog here because
+it has no way to choose not to log.
+</p>
+
+<p>
+<a href="#orgc9a7805">top</a>
+<a id="org6d6aa66"></a>
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org1fdc055" class="outline-2">
+<h2 id="org1fdc055"><span class="section-number-2">11</span> a-cl-logger</h2>
+<div class="outline-text-2" id="text-11">
+</div>
+<div id="outline-container-orgcd47096" class="outline-3">
+<h3 id="orgcd47096"><span class="section-number-3">11.1</span> Summary</h3>
+<div class="outline-text-3" id="text-11-1">
+<p>
+As you can tell from the benchmarking just above, a-cl-logger is much
+slower than the other libraries. In part this is because it is
+intended to do a lot with contexts and signals to augment the log
+message with information about the running environment. Russ Tyndall
+has tracked down some of the problem functions but may not have the
+time to make it more performant. It is also not currently in
+quicklisp, but may make it there in the future.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgc4a2ec0" class="outline-3">
+<h3 id="orgc4a2ec0"><span class="section-number-3">11.2</span> Setup</h3>
+<div class="outline-text-3" id="text-11-2">
+<p>
+The following will set up a new logger which will be a child of the
+\*root-logger* and will have a single messenger of its own which will
+log to the specified log-file.
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(<span style="color: #00ffff;">a-cl-logger:define-logger</span> filelog2 ()
+  <span style="color: #98fb98; font-weight: bold;">:appenders</span> (make-instance 'a-cl-logger:file-log-appender <span style="color: #98fb98; font-weight: bold;">:log-file</span> <span style="color: #cd8162;">"/home/sabra/test/a-cl-logger-test.log"</span> <span style="color: #98fb98; font-weight: bold;">:buffer-p</span> nil))
+#&lt;A-CL-LOGGER:LOGGER FILELOG2 1 {1007D90A53}&gt;
+</pre>
+</div>
+<p>
+You can get the new logger by:
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(a-cl-logger:get-logger 'filelog2)
+</pre>
+</div>
+<p>
+You can add appenders by pushing them into the appenders slot of the
+desired logger. Below we validate that there are no appenders in the
+testlog logger, then add a new console appender, validate that it is
+now there, and trigger a simple message.
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(a-cl-logger:appenders (a-cl-logger:get-logger 'testlog))
+NIL
+
+(push (make-instance 'a-cl-logger:stderr-log-appender)
+      (a-cl-logger:appenders (a-cl-logger:get-logger 'testlog)))
+(#&lt;A-CL-LOGGER:STDERR-LOG-APPENDER {1005F4DBE3}&gt;)
+
+(a-cl-logger:appenders (a-cl-logger:get-logger 'testlog))
+(#&lt;A-CL-LOGGER:STDERR-LOG-APPENDER {1005F4DBE3}&gt;)
+
+(testlog.debug <span style="color: #cd8162;">"help"</span>)
+2016-04-29T21:50:09.498509-07:00      TESTLOG DEBUG   help
+#&lt;A-CL-LOGGER:MESSAGE {10064A0D13}&gt;
+#&lt;A-CL-LOGGER:LOGGER TESTLOG 1 {1002A781F3}&gt;
+</pre>
+</div>
+<p>
+If something goes wrong, you can use the setup-logger function to
+ensure that log-level and standard debug-io-appender / file appenders
+are in place for the specified logger. In the course of testing I even
+used this to reset the <b>root-logger</b> after getting too creative.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orge70c69a" class="outline-3">
+<h3 id="orge70c69a"><span class="section-number-3">11.3</span> Built-in Log Levels</h3>
+<div class="outline-text-3" id="text-11-3">
+<p>
+The built in log-levels are: fatal error warn info debug dribble.
+These are actually numbers and the variable is prepended and
+postpended with '+' symbols.
+</p>
+
+<p>
+You can get the log-level name from the number with
+(log-level-name-of). E.g.
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">a-cl-logger:+warn+
+3
+(a-cl-logger:log-level-name-of a-cl-logger:+warn+)
+WARN
+</pre>
+</div>
+<p>
+So assuming you were using a logger with the name filelog2, you could
+find out the current logging level by name as follows:
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(a-cl-logger:log-level-name-of (a-cl-logger:log-level (a-cl-logger:get-logger 'filelog2)))
+WARN
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orgbd1e024" class="outline-3">
+<h3 id="orgbd1e024"><span class="section-number-3">11.4</span> Logging Call with sample message and Change Log Levels</h3>
+<div class="outline-text-3" id="text-11-4">
+<p>
+First, check the log level for the logger named filelog2, call it at
+info level, call it at dribble level, noting that it does not log at
+dribble. Reset the log-level for the filelog2 logger to dribble,
+demonstrate that it will now trigger, reset the log-level to warn,
+demonstrate that it will not trigger at the dribble level anymore.
+Then change the log level at the root logger and demonstrate that the
+lower tier logger filelog2 will again trigger.
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(a-cl-logger:log-level (a-cl-logger:get-logger 'filelog2))
+1
+
+(filelog2.info <span style="color: #cd8162;">"did something to ~a again"</span> <span style="color: #cd8162;">"George"</span>)
+2016-04-23T22:56:27.180490-07:00     FILELOG1 INFO    did something to George again
+#&lt;A-CL-LOGGER:MESSAGE {10090EF7B3}&gt;
+#&lt;A-CL-LOGGER:LOGGER FILELOG1 1 {1007D90A53}&gt;
+
+(setf (a-cl-logger:log-level (a-cl-logger:get-logger 'filelog2)) a-cl-logger:+dribble+)
+0
+
+(filelog2.dribble <span style="color: #cd8162;">"did something"</span>)
+#&lt;A-CL-LOGGER:MESSAGE {1009BC8743}&gt;
+#&lt;A-CL-LOGGER:LOGGER FILELOG2 0 {1003271033}&gt;
+
+(setf (a-cl-logger:log-level (a-cl-logger:get-logger 'filelog2)) a-cl-logger:+warn+)
+3
+
+(filelog2.dribble <span style="color: #cd8162;">"did something"</span>)
+NIL
+
+(setf (a-cl-logger:log-level a-cl-logger:*root-logger*) a-cl-logger:+dribble+)
+0
+
+(filelog2.dribble <span style="color: #cd8162;">"did something"</span>)
+#&lt;A-CL-LOGGER:MESSAGE {10047135B3}&gt;
+#&lt;A-CL-LOGGER:LOGGER FILELOG2 0 {1003271033}&gt;
+</pre>
+</div>
+
+<p>
+You can also set the level as a filter at the appender level as well
+as the logger level.
+</p>
+</div>
+</div>
+<div id="outline-container-orgbd746f9" class="outline-3">
+<h3 id="orgbd746f9"><span class="section-number-3">11.5</span> Logging to File</h3>
+<div class="outline-text-3" id="text-11-5">
+<p>
+Provide an appender to a logger which specifies the relevant filename.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org8f0bd5b" class="outline-3">
+<h3 id="org8f0bd5b"><span class="section-number-3">11.6</span> Muting Logging to Repl</h3>
+<div class="outline-text-3" id="text-11-6">
+<p>
+Remove any logger appenders which output to the repl. There is a mute
+level, but it is not exported for some reason.
+</p>
+</div>
+</div>
+<div id="outline-container-org1c17493" class="outline-3">
+<h3 id="org1c17493"><span class="section-number-3">11.7</span> Additional Features</h3>
+<div class="outline-text-3" id="text-11-7">
+<p>
+From the documentation:
+</p>
+
+<ul class="org-ul">
+<li>`a-log:add-signal-handler`: given a logger, a condition type and a
+function, this will allow signals to be handled.</li>
+
+<li>`get-log-fn`: given a logger and an optional level create a function
+of &amp;rest args that logs to the given logger. Useful for interacting
+with libraries providing functional logging hooks</li>
+
+<li>`with-appender`: create a dynamic scope inside which messages to
+logger will additionally be appended to this appender</li>
+
+<li>`when-log-message-generated/logged/appended`: These are macros that
+establish a dynamic context inside of which log messages will be
+intercepted at key points in their life cycle.  The first body is
+the message handler and the second is the scope.</li>
+</ul>
+
+<p>
+<a href="#orgc9a7805">top</a>
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga2949c3" class="outline-2">
+<h2 id="orga2949c3"><span class="section-number-2">12</span> cl-log aka com.ravenbrook.common-lisp-log</h2>
+<div class="outline-text-2" id="text-12">
+<p>
+<a id="org835cf75"></a>
+<a id="org062bb2c"></a>
+</p>
+</div>
+<div id="outline-container-org2c58740" class="outline-3">
+<h3 id="org2c58740"><span class="section-number-3">12.1</span> Summary</h3>
+<div class="outline-text-3" id="text-12-1">
+</div>
+<ol class="org-ol">
+<li><a id="orgf44e221"></a>Terminology<br>
+<div class="outline-text-4" id="text-12-1-1">
+<p>
+Cl-log uses the term log-manager rather
+than logger and  uses the term messenger rather than appender for what you
+attach to a log-manager. It has no logging levels that you can set and reset out of the box
+but the documentation does suggest a function that you can write to
+create this functionality). Everything is a user-defined category.  Categories can be set up
+as a single keyword or they can be set up as including other categories. E.g.
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(defcategory <span style="color: #98fb98; font-weight: bold;">:warning</span> (or <span style="color: #98fb98; font-weight: bold;">:warning</span> <span style="color: #98fb98; font-weight: bold;">:error</span>))
+</pre>
+</div>
+<p>
+You can set filters at both the log-manager and messenger level. Messengers will accept and respond to any messages unless you give
+them a filter and once instantiated, you cannot change the filter. As
+a result, you need to define categories prior to create messengers
+that might use them.
+</p>
+</div>
+</li>
+
+<li><a id="org2760f65"></a>What I liked<br>
+<div class="outline-text-4" id="text-12-1-2">
+<p>
+I really liked the ring messenger. Cl-log has the ability to do binary logs, which some may
+find handy or even necessary.
+</p>
+</div>
+</li>
+
+<li><a id="org754c21e"></a>What I didn't like<br>
+<div class="outline-text-4" id="text-12-1-3">
+<p>
+I found it clumsy to validate what categories are
+set when I had several log-managers running.
+</p>
+
+<p>
+I found it cumbersome to change logging levels compared to other
+libraries. Each appender/messenger has a filter which is specified
+when it is instantiated. They cannot be changed. As a result, to
+change what gets logged, you either have to redefine the actual
+category or use the defcategory-fn macro to reset the filters. The
+documentation suggests that you might set the filter in managers to be
+:log-level, then define a new function as follows:
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(<span style="color: #00ffff;">defun</span> (<span style="color: #63b8ff;">setf log-level</span>) (new-value)
+    (cl-log:defcategory-fn <span style="color: #98fb98; font-weight: bold;">:log-level</span> new-value))
+</pre>
+</div>
+<p>
+Then you can (setf (log-level) :warning) to have all messengers with
+:log-level to respond to warnings. You should be able to create
+similar functions with different category names, enabling messengers
+with different priority levels or categories. In testing I found it
+just as easy to manually delete messengers in a log-manager and
+creating new messengers.
+</p>
+</div>
+</li>
+</ol>
+</div>
+
+<div id="outline-container-orge02c3f8" class="outline-3">
+<h3 id="orge02c3f8"><span class="section-number-3">12.2</span> Setup</h3>
+<div class="outline-text-3" id="text-12-2">
+<p>
+As noted above, there are no built-in log levels and cl-log does not have a separate
+concept of log-level - everything is a category and you can define
+them however you choose. They must all be defined by the user
+prior to creating a appender. The following sets up categories,
+creates a log-manager that accepts formatted messages and starts a
+messenger that will log to a specific file any log messages with the
+category of warning or higher.
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">
+(cl-log:defcategory <span style="color: #98fb98; font-weight: bold;">:critical</span>)
+(cl-log:defcategory <span style="color: #98fb98; font-weight: bold;">:error</span>   (or <span style="color: #98fb98; font-weight: bold;">:error</span> <span style="color: #98fb98; font-weight: bold;">:critical</span>))
+(cl-log:defcategory <span style="color: #98fb98; font-weight: bold;">:warning</span> (or <span style="color: #98fb98; font-weight: bold;">:warning</span> <span style="color: #98fb98; font-weight: bold;">:error</span>))
+(cl-log:defcategory <span style="color: #98fb98; font-weight: bold;">:notice</span>  (or <span style="color: #98fb98; font-weight: bold;">:notice</span> <span style="color: #98fb98; font-weight: bold;">:warning</span>))
+(cl-log:defcategory <span style="color: #98fb98; font-weight: bold;">:info</span>    (or <span style="color: #98fb98; font-weight: bold;">:info</span> <span style="color: #98fb98; font-weight: bold;">:notice</span>))
+(cl-log:defcategory <span style="color: #98fb98; font-weight: bold;">:debug</span>   (or <span style="color: #98fb98; font-weight: bold;">:debug</span> <span style="color: #98fb98; font-weight: bold;">:info</span>))
+(cl-log:defcategory <span style="color: #98fb98; font-weight: bold;">:trace</span>   (or <span style="color: #98fb98; font-weight: bold;">:debug</span> <span style="color: #98fb98; font-weight: bold;">:debug</span>))
+
+(setf (cl-log:log-manager) (make-instance 'cl-log:log-manager
+      <span style="color: #98fb98; font-weight: bold;">:message-class</span> 'cl-log:formatted-message))
+
+(cl-log:start-messenger 'cl-log:text-file-messenger <span style="color: #98fb98; font-weight: bold;">:filename</span>
+        <span style="color: #cd8162;">"/home/sabra/test/cl-log-test.log"</span>
+        <span style="color: #98fb98; font-weight: bold;">:filter</span> '(and <span style="color: #98fb98; font-weight: bold;">:warning</span>))
+</pre>
+</div>
+<p>
+If you do not provide a filter, it will respond to any message.
+</p>
+
+<p>
+<a id="orgd43044a"></a>
+</p>
+</div>
+<ol class="org-ol">
+<li><a id="orge54af8b"></a>Multiple Logger Setup<br>
+<div class="outline-text-5" id="text-12-2-0-1">
+<p>
+Assume we have two packages (mypkg-1 and mypkg-2) in the application and we want to log them separately and we
+want to also log different categories as tags, with the ability to
+turn those on and off.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lisp">(<span style="color: #00ffff;">defvar</span> <span style="color: #fff68f;">*mypkg-1-categories*</span> (make-instance 'cl-log:category-set))
+(cl-log:defcategory <span style="color: #98fb98; font-weight: bold;">:mypkg-1-critical</span>  ()  *mypkg-1-categories*)
+(cl-log:defcategory <span style="color: #98fb98; font-weight: bold;">:mkpkg-1-error</span> (or <span style="color: #98fb98; font-weight: bold;">:mkpkg-1-error</span> <span style="color: #98fb98; font-weight: bold;">:mkpkg-1-critical</span>)
+  *mypkg-1-categories*)
+(cl-log:defcategory <span style="color: #98fb98; font-weight: bold;">:mkpkg-1-warning</span> (or <span style="color: #98fb98; font-weight: bold;">:mkpkg-1-warning</span> <span style="color: #98fb98; font-weight: bold;">:mkpkg-1-error</span>)
+  *mypkg-1-categories*)
+(cl-log:defcategory <span style="color: #98fb98; font-weight: bold;">:mypkg-1-notice</span> (or <span style="color: #98fb98; font-weight: bold;">:mypkg-1-notice</span> <span style="color: #98fb98; font-weight: bold;">:mkpkg-1-warning</span>)
+  *mypkg-1-categories*)
+(cl-log:defcategory <span style="color: #98fb98; font-weight: bold;">:mypkg-1-info</span> (or <span style="color: #98fb98; font-weight: bold;">:mypkg-1-info</span> <span style="color: #98fb98; font-weight: bold;">:mkpkg-1-warning</span>)
+  *mypkg-1-categories*)
+(cl-log:defcategory <span style="color: #98fb98; font-weight: bold;">:mypkg-1-debug</span> (or <span style="color: #98fb98; font-weight: bold;">:mypkg-1-debug</span> <span style="color: #98fb98; font-weight: bold;">:mkpkg-1-info</span>)
+  *mypkg-1-categories*)
+(cl-log:defcategory <span style="color: #98fb98; font-weight: bold;">:mypkg-1-trace</span> (or <span style="color: #98fb98; font-weight: bold;">:mypkg-1-trace</span> <span style="color: #98fb98; font-weight: bold;">:mkpkg-1-debug</span>)
+  *mypkg-1-categories*)
+
+(<span style="color: #00ffff;">defparameter</span> <span style="color: #fff68f;">*mypkg-1-log-manager*</span>
+  (make-instance 'cl-log:log-manager <span style="color: #98fb98; font-weight: bold;">:message-class</span> 'cl-log:formatted-message
+                                     <span style="color: #98fb98; font-weight: bold;">:categories</span> *mypkg-1-categories*))
+
+(<span style="color: #00ffff;">defvar</span> <span style="color: #fff68f;">*mypkg-2-categories*</span> (make-instance 'cl-log:category-set))
+(cl-log:defcategory <span style="color: #98fb98; font-weight: bold;">:mypkg-2-critical</span>  ()  *mypkg-2-categories*)
+(cl-log:defcategory <span style="color: #98fb98; font-weight: bold;">:mkpkg-2-error</span> (or <span style="color: #98fb98; font-weight: bold;">:mkpkg-2-error</span> <span style="color: #98fb98; font-weight: bold;">:mkpkg-2-critical</span>)
+  *mypkg-2-categories*)
+(cl-log:defcategory <span style="color: #98fb98; font-weight: bold;">:mkpkg-2-warning</span> (or <span style="color: #98fb98; font-weight: bold;">:mkpkg-2-warning</span> <span style="color: #98fb98; font-weight: bold;">:mkpkg-2-error</span>)
+  *mypkg-2-categories*)
+(cl-log:defcategory <span style="color: #98fb98; font-weight: bold;">:mypkg-2-notice</span> (or <span style="color: #98fb98; font-weight: bold;">:mypkg-2-notice</span> <span style="color: #98fb98; font-weight: bold;">:mkpkg-2-warning</span>)
+  *mypkg-2-categories*)
+(cl-log:defcategory <span style="color: #98fb98; font-weight: bold;">:mypkg-2-info</span> (or <span style="color: #98fb98; font-weight: bold;">:mypkg-2-info</span> <span style="color: #98fb98; font-weight: bold;">:mkpkg-2-warning</span>)
+  *mypkg-2-categories*)
+(cl-log:defcategory <span style="color: #98fb98; font-weight: bold;">:mypkg-2-debug</span> (or <span style="color: #98fb98; font-weight: bold;">:mypkg-2-debug</span> <span style="color: #98fb98; font-weight: bold;">:mkpkg-2-info</span>)
+  *mypkg-2-categories*)
+(cl-log:defcategory <span style="color: #98fb98; font-weight: bold;">:mypkg-2-trace</span> (or <span style="color: #98fb98; font-weight: bold;">:mypkg-2-trace</span> <span style="color: #98fb98; font-weight: bold;">:mkpkg-2-debug</span>)
+  *mypkg-2-categories*)
+
+(<span style="color: #00ffff;">defparameter</span> <span style="color: #fff68f;">*mypkg-2-log-manager*</span>
+      (make-instance 'cl-log:log-manager <span style="color: #98fb98; font-weight: bold;">:message-class</span> 'cl-log:formatted-message
+                                         <span style="color: #98fb98; font-weight: bold;">:categories</span> *mypkg-2-categories*))
+
+(cl-log:start-messenger 'cl-log:text-file-messenger
+                        <span style="color: #98fb98; font-weight: bold;">:name</span> <span style="color: #cd8162;">"mypkg-1-file-messenger"</span>
+                        <span style="color: #98fb98; font-weight: bold;">:manager</span> *mypkg-1-log-manager*
+                        <span style="color: #98fb98; font-weight: bold;">:filename</span> <span style="color: #cd8162;">"/home/sabra/test/cl-log-test1.log"</span>
+                        <span style="color: #98fb98; font-weight: bold;">:filter</span> '(or <span style="color: #98fb98; font-weight: bold;">:mypkg-1-trace</span> <span style="color: #98fb98; font-weight: bold;">:mypkg-1-debug</span> <span style="color: #98fb98; font-weight: bold;">:mypkg-1-info</span> <span style="color: #98fb98; font-weight: bold;">:mypkg-1-notice</span>
+                                     <span style="color: #98fb98; font-weight: bold;">:mypkg-1-warning</span> <span style="color: #98fb98; font-weight: bold;">:mypkg-1-eror</span> <span style="color: #98fb98; font-weight: bold;">:mypkg-1-critical</span>))
+
+(cl-log:start-messenger 'cl-log:text-file-messenger
+                        <span style="color: #98fb98; font-weight: bold;">:name</span> <span style="color: #cd8162;">"mypkg-2-file-messenger"</span>
+                        <span style="color: #98fb98; font-weight: bold;">:manager</span> *mypkg-2-log-manager*
+                        <span style="color: #98fb98; font-weight: bold;">:filename</span> <span style="color: #cd8162;">"/home/sabra/test/cl-log-test2.log"</span>
+                        <span style="color: #98fb98; font-weight: bold;">:filter</span> '(or <span style="color: #98fb98; font-weight: bold;">:critical</span> <span style="color: #98fb98; font-weight: bold;">:mypkg-2-trace</span> <span style="color: #98fb98; font-weight: bold;">:mypkg-2-debug</span> <span style="color: #98fb98; font-weight: bold;">:mypkg-2-info</span> <span style="color: #98fb98; font-weight: bold;">:mypkg-2-notice</span>
+                                     <span style="color: #98fb98; font-weight: bold;">:mypkg-2-warning</span> <span style="color: #98fb98; font-weight: bold;">:mypkg-2-eror</span> <span style="color: #98fb98; font-weight: bold;">:mypkg-2-critical</span>))
+</pre>
+</div>
+<p>
+Note: I had to list all the allowable permutations, not just rely on
+the category definition including the higher priority categories.
+</p>
+
+<p>
+You can then call messages such as:
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(cl-log:log-manager-message *mypkg-2-log-manager* <span style="color: #98fb98; font-weight: bold;">:mypkg-2-warning</span> <span style="color: #cd8162;">"George Paul Mason"</span>)
+</pre>
+</div>
+<p>
+Messages such as
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(cl-log:log-manager-message *mypkg-2-log-manager* <span style="color: #98fb98; font-weight: bold;">:warning</span> <span style="color: #cd8162;">"George Paul Mason"</span>)
+</pre>
+</div>
+<p>
+will now fall through and not be logged.
+</p>
+</div>
+</li>
+</ol>
+</div>
+
+
+<div id="outline-container-org21c4239" class="outline-3">
+<h3 id="org21c4239"><span class="section-number-3">12.3</span> Log Levels</h3>
+<div class="outline-text-3" id="text-12-3">
+<p>
+There are no built-in log levels - cl-log treats log levels as
+categories. The best way to handle changing log levels in cl-log is just kill the
+relevant messengers and create new ones.
+</p>
+</div>
+</div>
+<div id="outline-container-orgdb82d8c" class="outline-3">
+<h3 id="orgdb82d8c"><span class="section-number-3">12.4</span> Logging Call with sample message</h3>
+<div class="outline-text-3" id="text-12-4">
+<div class="org-src-container">
+<pre class="src src-lisp">(cl-log:log-message <span style="color: #98fb98; font-weight: bold;">:warning</span> <span style="color: #cd8162;">"Did I really understand what I was doing?"</span>)
+
+3670985284.923 WARNING Did I really understand what I was doing?
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org171ba6e" class="outline-3">
+<h3 id="org171ba6e"><span class="section-number-3">12.5</span> Logging to Ring</h3>
+<div class="outline-text-3" id="text-12-5">
+<div class="org-src-container">
+<pre class="src src-lisp">(cl-log:start-messenger 'cl-log:ring-messenger
+                     <span style="color: #98fb98; font-weight: bold;">:length</span> 10
+                     <span style="color: #98fb98; font-weight: bold;">:filter</span> '(and <span style="color: #98fb98; font-weight: bold;">:info</span> (not <span style="color: #98fb98; font-weight: bold;">:error</span>)))
+
+(cl-log:log-message <span style="color: #98fb98; font-weight: bold;">:warning</span> <span style="color: #cd8162;">"Logging system poorly understood"</span>)
+NIL
+(cl-log:log-message <span style="color: #98fb98; font-weight: bold;">:warning</span> <span style="color: #cd8162;">"Logging system almost understood"</span>)
+NIL
+(cl-log:log-message <span style="color: #98fb98; font-weight: bold;">:warning</span> <span style="color: #cd8162;">"Logging system now understood"</span>)
+NIL
+(cl-log:log-message <span style="color: #98fb98; font-weight: bold;">:warning</span> <span style="color: #cd8162;">"Logging system now forgotten"</span>)
+NIL
+(<span style="color: #00ffff;">loop</span> for message in (cl-log:ring-messenger-messages
+                          (car (cl-log:log-manager-messengers (cl-log:log-manager))))
+          when message collect (cl-log:message-description message))
+(<span style="color: #cd8162;">"Logging system poorly understood"</span> <span style="color: #cd8162;">"Logging system almost understood"</span>
+ <span style="color: #cd8162;">"Logging system now understood"</span> <span style="color: #cd8162;">"Logging system now forgotten"</span>)
+</pre>
+</div>
+<p>
+Note that ring logging by default does not have timestamps.
+</p>
+</div>
+</div>
+<div id="outline-container-orgbecea01" class="outline-3">
+<h3 id="orgbecea01"><span class="section-number-3">12.6</span> Muting Logging to Repl</h3>
+<div class="outline-text-3" id="text-12-6">
+<p>
+Remove any messengers that write to the <b>standard-output</b>
+</p>
+</div>
+</div>
+<div id="outline-container-org2958ada" class="outline-3">
+<h3 id="org2958ada"><span class="section-number-3">12.7</span> Log Rotation</h3>
+<div class="outline-text-3" id="text-12-7">
+<p>
+None
+</p>
+</div>
+</div>
+<div id="outline-container-orgb9d384f" class="outline-3">
+<h3 id="orgb9d384f"><span class="section-number-3">12.8</span> Timestamp access</h3>
+<div class="outline-text-3" id="text-12-8">
+<p>
+To get universal time out of the message:
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(cl-log:timestamp-universal-time
+        (cl-log:message-timestamp &lt;cl-log-message-here&gt;))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org19b955c" class="outline-3">
+<h3 id="org19b955c"><span class="section-number-3">12.9</span> Loggers aka Log-managers</h3>
+<div class="outline-text-3" id="text-12-9">
+<p>
+There is a global log manager: (cl-log:log-manager) or you can create
+multiple log-managers as described above.
+</p>
+</div>
+</div>
+<div id="outline-container-orgdae7990" class="outline-3">
+<h3 id="orgdae7990"><span class="section-number-3">12.10</span> Messages</h3>
+<div class="outline-text-3" id="text-12-10">
+<p>
+Every message has a timestamp, category, description, arguments.
+</p>
+
+<p>
+Messages can be read by the individual function calls:
+</p>
+<div class="org-src-container">
+<pre class="src src-lispmessage-timestamp">message-category
+message-description
+message-arguments
+
+or formatted to text with
+format-message
+</pre>
+</div>
+
+
+<p>
+<a id="org31b5923"></a>
+</p>
+</div>
+</div>
+<div id="outline-container-org189788c" class="outline-3">
+<h3 id="org189788c"><span class="section-number-3">12.11</span> Finding a messenger</h3>
+<div class="outline-text-3" id="text-12-11">
+<div class="org-src-container">
+<pre class="src src-lisp">(cl-log:find-messenger 'cl-log-everything)
+#&lt;COM.RAVENBROOK.COMMON-LISP-LOG:TEXT-FILE-MESSENGER CL-LOG-EVERYTHING {10054773B3}&gt;
+</pre>
+</div>
+<p>
+<a href="#orgc9a7805">top</a>
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org13e121b" class="outline-2">
+<h2 id="org13e121b"><span class="section-number-2">13</span> cl-syslog</h2>
+<div class="outline-text-2" id="text-13">
+</div>
+<div id="outline-container-org3644034" class="outline-3">
+<h3 id="org3644034"><span class="section-number-3">13.1</span> Summary</h3>
+<div class="outline-text-3" id="text-13-1">
+<p>
+Cl-syslog will append log messages to the designated system log file.
+There really is no way to turn off the logging. Using the udp-logger,
+cl-syslog allows one to log to a remote ip address.
+</p>
+</div>
+</div>
+<div id="outline-container-orgc105506" class="outline-3">
+<h3 id="orgc105506"><span class="section-number-3">13.2</span> Setup</h3>
+<div class="outline-text-3" id="text-13-2">
+<p>
+No setup is required.
+</p>
+</div>
+</div>
+<div id="outline-container-org6bb863a" class="outline-3">
+<h3 id="org6bb863a"><span class="section-number-3">13.3</span> Built-in Log Levels</h3>
+<div class="outline-text-3" id="text-13-3">
+<p>
+:emerg :alert :crit :err :warning :notice :info :debug
+</p>
+
+<p>
+If you create a log message that has an invalid log level, that will
+trigger an invalid priority error passed to the repl.
+</p>
+</div>
+</div>
+<div id="outline-container-org49fce5b" class="outline-3">
+<h3 id="org49fce5b"><span class="section-number-3">13.4</span> Logging Call with sample message</h3>
+<div class="outline-text-3" id="text-13-4">
+<div class="org-src-container">
+<pre class="src src-lisp">(syslog:log <span style="color: #cd8162;">"myprog"</span> <span style="color: #98fb98; font-weight: bold;">:user</span> <span style="color: #98fb98; font-weight: bold;">:info</span> <span style="color: #cd8162;">"message 1deesy7"</span>)
+</pre>
+</div>
+<p>
+This will log:
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">Apr 25 19:39:14 scruppy myprog[29111]: message 1deesy7
+</pre>
+</div>
+<p>
+into a system log file named user.log. On this particular linux box,
+that is found in /var/log/user.log.
+</p>
+
+<p>
+The second parameter is referred to as the facility. Possible
+facilities can be found at the unexported variable
+cl-syslog::*facilities*
+On my particular setup, the default facilities were: :kern :user :mail
+  :daemon :auth :syslog :lpr :news :uucp :cron :authpriv :ftp :local0
+  :local1 :local2 :local3 :local4 :local5 :local6 :local7
+</p>
+</div>
+</div>
+<div id="outline-container-org9e9bd8a" class="outline-3">
+<h3 id="org9e9bd8a"><span class="section-number-3">13.5</span> Changing Log Levels</h3>
+<div class="outline-text-3" id="text-13-5">
+<p>
+Not possible.
+</p>
+</div>
+</div>
+<div id="outline-container-org9d7bdd0" class="outline-3">
+<h3 id="org9d7bdd0"><span class="section-number-3">13.6</span> Logging to Remote System</h3>
+<div class="outline-text-3" id="text-13-6">
+<p>
+To log to a remote system, create a udp-logger with the ip address
+  and port and then you can create your log messages. Example:
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(syslog.udp:udp-logger <span style="color: #cd8162;">"127.0.0.1"</span> 514)
+(syslog.udp:log <span style="color: #cd8162;">"myapp"</span> <span style="color: #98fb98; font-weight: bold;">:syslog</span> <span style="color: #98fb98; font-weight: bold;">:info</span> <span style="color: #cd8162;">"Message from a bottle"</span>)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org46ffa83" class="outline-3">
+<h3 id="org46ffa83"><span class="section-number-3">13.7</span> Log Rotation</h3>
+<div class="outline-text-3" id="text-13-7">
+<p>
+Assuming your system logs rotate, then cl-syslog will be able to take advantage of that.
+</p>
+
+<p>
+<a id="orga94a9f9"></a>
+</p>
+
+<p>
+<a href="#orgc9a7805">top</a>
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org4bf53f4" class="outline-2">
+<h2 id="org4bf53f4"><span class="section-number-2">14</span> hu.dwim.logger</h2>
+<div class="outline-text-2" id="text-14">
+</div>
+<div id="outline-container-org3330b12" class="outline-3">
+<h3 id="org3330b12"><span class="section-number-3">14.1</span> Summary</h3>
+</div>
+
+<div id="outline-container-org29d451f" class="outline-3">
+<h3 id="org29d451f"><span class="section-number-3">14.2</span> Setup</h3>
+</div>
+
+<div id="outline-container-orgd3b61a2" class="outline-3">
+<h3 id="orgd3b61a2"><span class="section-number-3">14.3</span> Built-in Log Levels</h3>
+</div>
+
+<div id="outline-container-orgdde9f8a" class="outline-3">
+<h3 id="orgdde9f8a"><span class="section-number-3">14.4</span> Logging Call with sample message</h3>
+</div>
+
+<div id="outline-container-org3868824" class="outline-3">
+<h3 id="org3868824"><span class="section-number-3">14.5</span> Logging to File</h3>
+</div>
+
+<div id="outline-container-orgaed1938" class="outline-3">
+<h3 id="orgaed1938"><span class="section-number-3">14.6</span> Muting Logging to Repl</h3>
+</div>
+
+<div id="outline-container-org6ee9781" class="outline-3">
+<h3 id="org6ee9781"><span class="section-number-3">14.7</span> Log Rotation</h3>
+</div>
+
+<div id="outline-container-orge757952" class="outline-3">
+<h3 id="orge757952"><span class="section-number-3">14.8</span> Additional Features</h3>
+</div>
+
+<div id="outline-container-orgdf0bd7f" class="outline-3">
+<h3 id="orgdf0bd7f"><span class="section-number-3">14.9</span> Misc</h3>
+<div class="outline-text-3" id="text-14-9">
+<p>
+<a href="#orgc9a7805">top</a>
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-orgbc025b8" class="outline-2">
+<h2 id="orgbc025b8"><span class="section-number-2">15</span> log4cl</h2>
+<div class="outline-text-2" id="text-15">
+<p>
+<a id="org928f95e"></a>
+</p>
+</div>
+<div id="outline-container-org782acac" class="outline-3">
+<h3 id="org782acac"><span class="section-number-3">15.1</span> Summary</h3>
+<div class="outline-text-3" id="text-15-1">
+<p>
+Log4cl is the all singing, all dancing logging library. It integrates
+with slime, it has the most flexible built-in logging information. You can spend a week just
+learning all the functionality of the library. I, at least, spent the
+first day confused. log4cl re-exports a very small subset of external functions
+to 'log'. It essentially treats category interchangeably with logger.
+Log levels have several different names, some exported, some not.
+</p>
+</div>
+<ol class="org-ol">
+<li><a id="org789002a"></a>What I liked<br>
+<div class="outline-text-4" id="text-15-1-1">
+<p>
+The amount of information possible to put into a log message is
+impressive as is the ability to change log level by function.
+</p>
+</div>
+</li>
+<li><a id="orgebcfc80"></a>What I didn't like<br>
+<div class="outline-text-4" id="text-15-1-2">
+<p>
+I do find log4cl a bit confusing about whether I need to use the
+package prefix log4cl or just log. You can spend a week just learning all the functionality of the
+library. I, at least, spent the first day confused. log4cl re-exports
+a very small subset of external functions to 'log'. It essentially
+treats category interchangeably with logger. Log levels have several
+different names, some exported, some not.
+</p>
+</div>
+</li>
+</ol>
+</div>
+<div id="outline-container-org7eeed03" class="outline-3">
+<h3 id="org7eeed03"><span class="section-number-3">15.2</span> Setup</h3>
+<div class="outline-text-3" id="text-15-2">
+<p>
+The following is an example will clear all current appenders, log to a
+file which will be rotated daily and will only log messages with a
+level of warn or higher.
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(log4cl:remove-all-appenders log4cl:*root-logger*)
+(log:config <span style="color: #98fb98; font-weight: bold;">:daily</span> <span style="color: #cd8162;">"/home/sabra/test/log4cl-test1.log"</span> <span style="color: #98fb98; font-weight: bold;">:backup</span> t)
+(setf (log4cl:logger-log-level Log4cl:*root-logger*) log4cl:+log-level-warn+)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-orged7aa65" class="outline-3">
+<h3 id="orged7aa65"><span class="section-number-3">15.3</span> Built-in Log Levels</h3>
+<div class="outline-text-3" id="text-15-3">
+<p>
+You can think of the log levels for log4cl as :off :fatal error warn
+info debug debu1 debu2 debu3 debu4 debu5 debu6 debu7 debu8 debu9
+</p>
+
+<p>
+However, I find log4cl confusing in this area. There is no exported way to
+list the log-levels. If you call the internal variable
+\+log-level-symbols+, you get
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">log4cl::+log-level-symbols+
+(LOG4CL-IMPL::OFF LOG4CL-IMPL::FATAL ERROR WARN LOG4CL-IMPL::INFO DEBUG
+ LOG4CL-IMPL::DEBU1 LOG4CL-IMPL::DEBU2 LOG4CL-IMPL::DEBU3 LOG4CL-IMPL::DEBU4
+ TRACE LOG4CL-IMPL::DEBU5 LOG4CL-IMPL::DEBU6 LOG4CL-IMPL::DEBU7
+ LOG4CL-IMPL::DEBU8 LOG4CL-IMPL::DEBU9 LOG4CL-IMPL::UNSET)
+</pre>
+</div>
+<p>
+If you look for exported symbols, you discover:
+</p>
+
+<p>
+log4cl:+log-level-debu1+ 	log4cl:+log-level-debu2+
+log4cl:+log-level-debu3+ 	log4cl:+log-level-debu4+
+log4cl:+log-level-debu5+ 	log4cl:+log-level-debu6+
+log4cl:+log-level-debu7+ 	log4cl:+log-level-debu8+
+log4cl:+log-level-debu9+ 	log4cl:+log-level-debug+
+log4cl:+log-level-error+ 	log4cl:+log-level-fatal+
+log4cl:+log-level-info+ 	log4cl:+log-level-off+
+log4cl:+log-level-trace+ 	log4cl:+log-level-unset+
+log4cl:+log-level-warn+
+</p>
+
+
+<p>
+If you want to check on the current log level of the root-logger, it
+will respond with an integer. So then you go looking for the string
+name. You can then setf the level for that logger calling a keyword.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lisp">(log4cl:logger-log-level log4cl:*root-logger*)
+4
+
+(log4cl:log-level-to-string (log4cl:logger-log-level log4cl:*root-logger*))
+<span style="color: #cd8162;">"INFO"</span>
+
+(setf (log4cl:logger-log-level log4cl:*root-logger*) <span style="color: #98fb98; font-weight: bold;">:warn</span>)
+3
+
+(log4cl:log-level-to-string (log4cl:logger-log-level log4cl:*root-logger*))
+<span style="color: #cd8162;">"WARN"</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org63f69c3" class="outline-3">
+<h3 id="org63f69c3"><span class="section-number-3">15.4</span> Logging Call with sample message</h3>
+<div class="outline-text-3" id="text-15-4">
+<p>
+The log messages can vary substantially, depending on how much you
+want to put into the layout-pattern. A simple example, with a default
+layout might look like this:
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(<span style="color: #00ffff;">defun</span> <span style="color: #63b8ff;">hello</span> ()
+  (log:info <span style="color: #cd8162;">"I just ate a ~5f, feeling tired"</span> pi)
+  (<span style="color: #00ffff;">when</span> (log:debug)
+    (<span style="color: #00ffff;">dotimes</span> (sheep 3)
+      (log:debug sheep <span style="color: #cd8162;">"zzz"</span>)))
+  (log:warn <span style="color: #cd8162;">"doh fell asleep for"</span> (random 10) <span style="color: #cd8162;">"minutes"</span>))
+
+(hello)
+INFO - I just ate a 3.142, feeling tired
+DEBUG - SHEEP: 0 zzz
+DEBUG - SHEEP: 1 zzz
+DEBUG - SHEEP: 2 zzz
+WARN - doh fell asleep for (RANDOM 10): 4 minutes
+</pre>
+</div>
+<p>
+or you could make the layout more complicated. For example:
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(<span style="color: #00ffff;">defun</span> <span style="color: #63b8ff;">sabra-test-pattern</span> (pattern)
+           (<span style="color: #00ffff;">with-package-log-hierarchy</span>
+             (clear-logging-configuration)
+             (<span style="color: #00ffff;">let</span> ((level 6)
+                   (logger (make-logger '(one two three))))
+               (<span style="color: #00ffff;">with-output-to-string</span>
+                   (s)
+                 (add-appender *root-logger*
+                         (make-instance
+                          'fixed-stream-appender
+                          <span style="color: #98fb98; font-weight: bold;">:stream</span> s
+                          <span style="color: #98fb98; font-weight: bold;">:layout</span>
+                          (make-instance 'pattern-layout
+                                         <span style="color: #98fb98; font-weight: bold;">:conversion-pattern</span> pattern)))
+           (setf (logger-log-level *root-logger*) level)
+           (log-fatal <span style="color: #98fb98; font-weight: bold;">:logger</span> logger <span style="color: #cd8162;">"test message"</span>)))))
+
+(sabra-test-pattern <span style="color: #cd8162;">"%-5p [%c] - %h %t %x %i %m%n %d{%Y-%m-%d %H:%M:%S}"</span>)
+
+
+<span style="color: #cd8162;">"FATAL [ONE.TWO.THREE] - scruppy new-repl-thread  11895 test message</span>
+<span style="color: #cd8162;"> 2016-05-01 15:12:25"</span>
+</pre>
+</div>
+<p>
+In the above example, the layout pattern has:
+</p>
+
+<ul class="org-ul">
+<li>%-5p : the log level</li>
+
+<li>[%c] : the category name for the logger</li>
+
+<li>%h : hostname</li>
+
+<li>%t : current thread-name</li>
+
+<li>%i : process id of the the lisp process</li>
+
+<li>%m : message with a newline</li>
+
+<li>%d : the data and time in UTC with its own format code.</li>
+</ul>
+
+<p>
+Now check the log level for the logger named <b>root-level</b>, call it at
+warn level, call it at info level, noting that it does not log at
+info. Reset the log-level for the blah logger to info,
+demonstrate that it will now trigger, reset the log-level to warn,
+demonstrate that it will not trigger at the info level anymore.
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(log4cl:logger-log-level log4cl:*root-logger*)
+3
+
+(log:warn <span style="color: #cd8162;">"stuff"</span>)
+WARN - stuff
+
+(log:info <span style="color: #cd8162;">"stuff"</span>)
+
+(setf (log4cl:logger-log-level log4cl:*root-logger*) log4cl:+log-level-info+)
+4
+
+(log:info <span style="color: #cd8162;">"stuff"</span>)
+INFO - stuff
+
+(setf (log4cl:logger-log-level log4cl:*root-logger*) log4cl:+log-level-warn+)
+3
+
+(log:info <span style="color: #cd8162;">"stuff"</span>)
+
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org45eb570" class="outline-3">
+<h3 id="org45eb570"><span class="section-number-3">15.5</span> Changing Log Levels</h3>
+<div class="outline-text-3" id="text-15-5">
+<p>
+To change log levels, setf the logger-log-level for the logger you are
+dealing with. For example, the following would set the log level to debug:
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(setf (log4cl:logger-log-level Log4cl:*root-logger*) log4cl:+log-level-debug+)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org6a57a36" class="outline-3">
+<h3 id="org6a57a36"><span class="section-number-3">15.6</span> Logging to File</h3>
+<div class="outline-text-3" id="text-15-6">
+<p>
+The following example logs the appropriately leveled messages to a
+file, but does not rotate the file because :backup is set to nil.
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(log:config <span style="color: #98fb98; font-weight: bold;">:daily</span> <span style="color: #cd8162;">"/home/sabra/test/log4cl-test1.log"</span> <span style="color: #98fb98; font-weight: bold;">:backup</span> nil)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org2987a02" class="outline-3">
+<h3 id="org2987a02"><span class="section-number-3">15.7</span> Muting Logging to Repl</h3>
+<div class="outline-text-3" id="text-15-7">
+<p>
+I had some difficulty muting the logging to the repl. I ended up
+calling
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(log4cl:remove-all-appenders log4cl:*root-logger*)
+</pre>
+</div>
+<p>
+and then adding the appender I wanted by calling
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(log:config <span style="color: #98fb98; font-weight: bold;">:daily</span> <span style="color: #cd8162;">"/home/sabra/test/log4cl-test1.log"</span> <span style="color: #98fb98; font-weight: bold;">:backup</span> nil)
+</pre>
+</div>
+<p>
+Note the different package prefixes required.
+</p>
+</div>
+</div>
+<div id="outline-container-orgab359b8" class="outline-3">
+<h3 id="orgab359b8"><span class="section-number-3">15.8</span> Log Rotation</h3>
+<div class="outline-text-3" id="text-15-8">
+<p>
+The above call to log:config with the keyword :daily generates daily
+log rotation. Just set :backup to T or leave it out completely as the
+default is T.
+</p>
+</div>
+</div>
+<div id="outline-container-org3543cb1" class="outline-3">
+<h3 id="org3543cb1"><span class="section-number-3">15.9</span> Additional Features</h3>
+<div class="outline-text-3" id="text-15-9">
+<p>
+log4cl with its companion package log4slime integrate quite well into
+slime and make logging much more like a debugger. Please see the
+documentation at <a href="https://github.com/7max/log4cl">https://github.com/7max/log4cl</a>
+</p>
+</div>
+</div>
+<div id="outline-container-org77c85d2" class="outline-3">
+<h3 id="org77c85d2"><span class="section-number-3">15.10</span> Problems</h3>
+<div class="outline-text-3" id="text-15-10">
+<p>
+There are some issues listed in the github location that are
+occassionally resolved by users. It does not
+appear that the library is under active development.
+ <a href="#orgc9a7805">top</a>
+ <a id="org05f1bbc"></a>
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-orgebf81da" class="outline-2">
+<h2 id="orgebf81da"><span class="section-number-2">16</span> log5</h2>
+<div class="outline-text-2" id="text-16">
+</div>
+<div id="outline-container-org49bbadb" class="outline-3">
+<h3 id="org49bbadb"><span class="section-number-3">16.1</span> Summary</h3>
+<div class="outline-text-3" id="text-16-1">
+</div>
+<ol class="org-ol">
+<li><a id="orgf337b47"></a>Terminology<br>
+<div class="outline-text-4" id="text-16-1-1">
+<p>
+Log5 uses the term log-manager rather than logger and has a single
+log-manager. It also uses the term sender rather than messenger or appender for what you
+attach to a log-manager. It has no logging levels that you can set and reset out of the box
+but uses categories as tags, some of which are supplied as defaults.  Categories can be set up
+as a single keyword or they can be set up as including other categories. E.g.
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(defcategory <span style="color: #98fb98; font-weight: bold;">:warning</span> (or <span style="color: #98fb98; font-weight: bold;">:warning</span> <span style="color: #98fb98; font-weight: bold;">:error</span>))
+</pre>
+</div>
+<p>
+Messengers will accept and respond to any messages unless you give
+them a filter and once instantiated, you cannot change the filter. As
+a result, you need to define categories prior to create messengers
+that might use them.
+</p>
+</div>
+</li>
+
+<li><a id="orgbd66610"></a>What I liked<br>
+<div class="outline-text-4" id="text-16-1-2">
+<p>
+It is the fastest; it is easy to define categories and I also liked the built-in ring
+logging.
+</p>
+</div>
+</li>
+<li><a id="org0c8d909"></a>What I didn't like<br>
+<div class="outline-text-4" id="text-16-1-3">
+<p>
+I would prefer to have the ability to just change sender logging levels rather than
+killing the senders.
+</p>
+</div>
+</li>
+<li><a id="org728b8e2"></a>Overview<br>
+<div class="outline-text-4" id="text-16-1-4">
+<p>
+The following is from the overview description in the source files:
+</p>
+
+<p>
+the bird's eye view looks like this: You define <b>categories</b> for your application. These might look like
+</p>
+
+<p>
+(defcategory motion)
+</p>
+
+<p>
+(defcategory energy)
+</p>
+
+<p>
+(defcategory physics (or energy motion))
+</p>
+
+<p>
+(defcategory planner)
+</p>
+
+<p>
+and so forth. Categories are sort of like Lisp `*features*` with
+names. They can be simple (like `motion`) or boolean combinations
+(like `physics`). When you write a typical log <b>message</b>, you use a
+combination of categories to describe it:
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(log-for (and physics (not file-system) trace)
+       <span style="color: #cd8162;">"starting widget simulation"</span>)
+</pre>
+</div>
+
+<p>
+or
+</p>
+
+<p>
+(log-for (or planner motion) "Planning path for agent ~a" (name agent))
+</p>
+
+<p>
+You start a <b>sender</b> using `start-sender` (surprise!). You specify
+what kind of sender it is (e.g., a stream sender or a database sender
+or an HTML sender or whatever) and pass along whatever arguments are
+needed to create it. You also specify the categories and the <b>outputs</b>
+the sender will send. Categories were discussed above; a sender's
+outputs are a list of named properties defined with defoutput. For
+example:
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(defoutput time (get-universal-time))
+
+(defoutput virtual-memory (os-get-virtual-memory))
+
+(defoutput current-database (name *db*)))
+</pre>
+</div>
+
+<p>
+Outputs can compute anything that makes sense for your program (though
+they ought to compute it quickly if you don't want logging to kill
+performance!). Some outputs are special and predefined. For example,
+the output `message` refers to the string created by the log message
+statement (e.g., the `log-for` examples above). The output `context`
+refers to the current <b>context</b> (the last of our five players).
+</p>
+
+<p>
+The context is a carry-all you can use to specify whatever important
+is happening in the global environment. If you're writing a
+web-application; the context might track the current session ID; A
+planner might track the current agent and so forth. Information from
+the context is added to the end of each log message sent and so
+functions as a variable portion in contrast to the fixed structure of
+the sender's output.
+</p>
+
+<p>
+### Debugging with log5
+</p>
+
+<p>
+You can also use log5 in debugging. The [log-manager][] includes a
+debug console to which log messages can be sent. Use [debugging][] and
+[undebugging][] to tell log5 which categories you want to see. Let's
+use this code for to explain:
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(log5:defcategory dribble)
+(log5:defcategory trace)
+(log5:defcategory info)
+(log5:defcategory warn)
+
+(<span style="color: #00ffff;">defun</span> <span style="color: #63b8ff;">sub-step-1</span> ()
+  (log5:log-for dribble <span style="color: #cd8162;">"enter sub-step-1"</span>)
+  (log5:log-for dribble <span style="color: #cd8162;">"exit sub-step-1"</span>))
+
+(<span style="color: #00ffff;">defun</span> <span style="color: #63b8ff;">step-1</span> ()
+      (log5:log-for trace <span style="color: #cd8162;">"enter step-1"</span>)
+      (sub-step-1)
+      (log5:log-for trace <span style="color: #cd8162;">"exit step-1"</span>))
+
+(<span style="color: #00ffff;">defun</span> <span style="color: #63b8ff;">log5-run-program</span> ()
+      (log5:log-for info <span style="color: #cd8162;">"enter run"</span>)
+      (step-1)
+      (log5:log-for info <span style="color: #cd8162;">"exit run"</span>))
+
+(log5-run-program)
+</pre>
+</div>
+<p>
+If I just evaluate `(log5-run-program)`, then I'll see no output. Suppose
+that I decide to debug at the lowest level of detail: `dribble`:
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">&gt; (debugging 'dribble+)
+(or dribble+)
+
+&gt; (run-program)
+<span style="color: #cd8162;">"enter run"</span>
+<span style="color: #cd8162;">"enter step-1"</span>
+<span style="color: #cd8162;">"enter sub-step-1"</span>
+<span style="color: #cd8162;">"exit sub-step-1"</span>
+<span style="color: #cd8162;">"exit step-1"</span>
+<span style="color: #cd8162;">"exit run"</span>
+</pre>
+</div>
+
+
+<p>
+If I just want to see the high-level structure, I could debug at the
+`info` level. I can also change the `output-spec` used by the console.
+For example, I might want to see the time when each event occurs:
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">&gt; (debugging 'info+ <span style="color: #98fb98; font-weight: bold;">:reset?</span> t <span style="color: #98fb98; font-weight: bold;">:output-spec</span> 'time)
+(or info+)
+
+&gt; (run-program)
+3452689957 <span style="color: #cd8162;">"enter run"</span>
+3452689957 <span style="color: #cd8162;">"exit run"</span>
+</pre>
+</div>
+</div>
+</li>
+</ol>
+</div>
+
+
+<div id="outline-container-orged2ddd8" class="outline-3">
+<h3 id="orged2ddd8"><span class="section-number-3">16.2</span> Setup</h3>
+<div class="outline-text-3" id="text-16-2">
+<p>
+Log5 requires that you be fairly specific with respect to what you
+want to do. For example, the following will create a sender that logs messages to a file and
+another sender that sends log messages to the repl. Note that you need
+to specify what output you want, what categories, etc. The category
+spec is the filter which determines what categories will be logged by
+that sender. You can write a output function using (defoutput) to
+perform as much computation as you want to insert into the log message.
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(log5:start-sender 'debug  (log5:stream-sender
+                            <span style="color: #98fb98; font-weight: bold;">:location</span> <span style="color: #cd8162;">"/home/sabra/test/log5.log"</span>)
+                   <span style="color: #98fb98; font-weight: bold;">:output-spec</span> '(time log5:category log5:message)
+                   <span style="color: #98fb98; font-weight: bold;">:category-spec</span> '(or log5:INFO log5:WARN log5:ERROR
+                                       log5:FATAL))
+
+(log5:start-sender 'repl-warn  (log5:stream-sender
+                                <span style="color: #98fb98; font-weight: bold;">:location</span> *standard-output*)
+                   <span style="color: #98fb98; font-weight: bold;">:output-spec</span> '(time log5:category log5:message)
+                   <span style="color: #98fb98; font-weight: bold;">:category-spec</span> '(or log5:INFO log5:WARN log5:ERROR
+                                       log5:FATAL))
+#&lt;LOG5:STREAM-SENDER REPL-WARN {1004A79553}&gt;
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org21619b9" class="outline-3">
+<h3 id="org21619b9"><span class="section-number-3">16.3</span> Built-in Log Levels</h3>
+<div class="outline-text-3" id="text-16-3">
+<p>
+None
+</p>
+</div>
+</div>
+<div id="outline-container-orgb324b60" class="outline-3">
+<h3 id="orgb324b60"><span class="section-number-3">16.4</span> Built-in Categories</h3>
+<div class="outline-text-3" id="text-16-4">
+<p>
+Per the documentation, "categories are just a way to organize log
+messages; you can make them hierarchical if that works for you or you
+can make them more flexible. Note that log5 comes with the standard
+set of category levels:"
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lisp">(log5:category-specs)
+(#&lt;category 0: FATAL&gt; #&lt;category 1: ERROR&gt;
+ #&lt;category 2: ERROR+ -&gt; (OR ERROR FATAL)&gt; #&lt;category 3: WARN&gt;
+ #&lt;category 4: WARN+ -&gt; (OR WARN ERROR+)&gt; #&lt;category 5: INFO&gt;
+ #&lt;category 6: INFO+ -&gt; (OR INFO WARN+)&gt; #&lt;category 7: TRACE&gt;
+ #&lt;category 8: TRACE+ -&gt; (OR TRACE INFO+)&gt; #&lt;category 9: DRIBBLE&gt;
+ #&lt;category 10: DRIBBLE+ -&gt; (OR DRIBBLE TRACE+)&gt; #&lt;category 11: IN-DEVELOPMENT&gt;
+ #&lt;category 12: (OR ERROR) -&gt; (<span style="color: #cd5c5c; font-weight: bold;">ERROR</span>)&gt; #&lt;category 13: (OR WARN) -&gt; (<span style="color: #cd5c5c; font-weight: bold;">WARN</span>)&gt;)
+</pre>
+</div>
+<p>
+When creating a sender, you specify the categories being captured for
+logging by the :category-spec slot (see above).
+</p>
+</div>
+</div>
+<div id="outline-container-org9218596" class="outline-3">
+<h3 id="org9218596"><span class="section-number-3">16.5</span> Logging Call with sample message</h3>
+<div class="outline-text-3" id="text-16-5">
+<div class="org-src-container">
+<pre class="src src-lisp">(log5:log-for (log5:warn) <span style="color: #cd8162;">"Anything that can be destroyed by the truth ~a."</span> <span style="color: #cd8162;">"should be"</span>)
+3670967360 (<span style="color: #cd5c5c; font-weight: bold;">WARN</span>) Anything that can be destroyed by the truth should be.
+</pre>
+</div>
+<p>
+Note the use of the log5:warn category rather than just 'warn'. In the
+resulting log message, the first part is the universal time, the
+second is the category, then the formatted message, just as specified
+in the :output-spec when we started the repl-warn sender.
+</p>
+</div>
+</div>
+<div id="outline-container-org7b69e18" class="outline-3">
+<h3 id="org7b69e18"><span class="section-number-3">16.6</span> Changing Log Levels</h3>
+<div class="outline-text-3" id="text-16-6">
+<p>
+The log levels in log5 are kept in the category-spec slot
+in the sender. Because this slot only has a reader, you may consider
+it easier to delete the sender and create a new sender than to go into
+the externals tyring to change the log level.
+</p>
+</div>
+</div>
+<div id="outline-container-orgdc07c22" class="outline-3">
+<h3 id="orgdc07c22"><span class="section-number-3">16.7</span> Logging to File</h3>
+<div class="outline-text-3" id="text-16-7">
+<div class="org-src-container">
+<pre class="src src-lisp">(log5:start-sender 'debug  (log5:stream-sender
+                            <span style="color: #98fb98; font-weight: bold;">:location</span> <span style="color: #cd8162;">"/home/sabra/test/log5.log"</span>)
+                   <span style="color: #98fb98; font-weight: bold;">:output-spec</span> '(time log5:category log5:message)
+                   <span style="color: #98fb98; font-weight: bold;">:category-spec</span> '(or log5:INFO log5:WARN log5:ERROR
+                                       log5:FATAL))
+#&lt;LOG5:STREAM-SENDER DEBUG {1005C23243}&gt;
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org99d4e63" class="outline-3">
+<h3 id="org99d4e63"><span class="section-number-3">16.8</span> Muting Logging to Repl</h3>
+<div class="outline-text-3" id="text-16-8">
+<p>
+If you have a sender which is logging to the repl, you can use the
+stop-sender function so long as you know the name of the sender. This
+actually deletes the sender rather than muting it.
+</p>
+</div>
+</div>
+<div id="outline-container-org10eb6e0" class="outline-3">
+<h3 id="org10eb6e0"><span class="section-number-3">16.9</span> Unmuting Logging to Repl</h3>
+<div class="outline-text-3" id="text-16-9">
+<p>
+If you have deleted a sender, you need to actually recreate it from scratch.
+</p>
+</div>
+</div>
+<div id="outline-container-org913224d" class="outline-3">
+<h3 id="org913224d"><span class="section-number-3">16.10</span> Log Rotation</h3>
+<div class="outline-text-3" id="text-16-10">
+<p>
+There are no functions in the library to automatically rotate logs.
+</p>
+</div>
+</div>
+<div id="outline-container-orgabed747" class="outline-3">
+<h3 id="orgabed747"><span class="section-number-3">16.11</span> Config File</h3>
+<div class="outline-text-3" id="text-16-11">
+<p>
+You can create a config file for log5. It will look initially in the
+directory specified by <b>default-pathname-defaults</b> for a file named .
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(start-sender 'warnings-and-worse (stream-sender <span style="color: #98fb98; font-weight: bold;">:location</span>
+              *error-output*)
+              <span style="color: #98fb98; font-weight: bold;">:category-spec</span> '(warn+) <span style="color: #98fb98; font-weight: bold;">:output-spec</span> '(time message context))
+
+(log5:category-specs )
+(#&lt;category 0: FATAL&gt; #&lt;category 1: ERROR&gt; #&lt;category 2: ERROR+ -&gt; (OR ERROR FATAL)&gt; #&lt;category 3: WARN&gt; #&lt;category 4: WARN+ -&gt; (OR WARN ERROR+)&gt;
+ #&lt;category 5: INFO&gt; #&lt;category 6: INFO+ -&gt; (OR INFO WARN+)&gt; #&lt;category 7: TRACE&gt; #&lt;category 8: TRACE+ -&gt; (OR TRACE INFO+)&gt; #&lt;category 9: DRIBBLE&gt;
+ #&lt;category 10: DRIBBLE+ -&gt; (OR DRIBBLE TRACE+)&gt; #&lt;category 11: IN-DEVELOPMENT&gt;)
+
+</pre>
+</div>
+
+<p>
+<a href="#orgc9a7805">top</a>
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org46a8e0c" class="outline-2">
+<h2 id="org46a8e0c"><span class="section-number-2">17</span> verbose</h2>
+<div class="outline-text-2" id="text-17">
+<p>
+<a id="org6ee01df"></a>
+</p>
+</div>
+<div id="outline-container-org300e992" class="outline-3">
+<h3 id="org300e992"><span class="section-number-3">17.1</span> Summary</h3>
+<div class="outline-text-3" id="text-17-1">
+<p>
+Verbose uses a slightly different terminology, with messages going to
+pipelines (which have filters) and messages which successfully go
+through the filtering process are handed to faucets, which direct the
+output to specified locations. Pipelines can be strung together for
+multiple filtering processes. In effect, verbose has a single root logger, like log5 with multiple faucets (aka
+senders/messengers/appenders). It has a preference to always output
+messages to the repl even if they are also routed elsewhere, so it is
+a little more work to mute the repl logging for unattended applications.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org9e979de" class="outline-3">
+<h3 id="org9e979de"><span class="section-number-3">17.2</span> Setup</h3>
+<div class="outline-text-3" id="text-17-2">
+<p>
+Out of the box, verbose starts a separate thread with a global
+controller assigned to the variable <b>global-controller</b>. Immediately,
+you can make calls without having to set up a messenger or appender.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgdf94b4d" class="outline-3">
+<h3 id="orgdf94b4d"><span class="section-number-3">17.3</span> Built-in Log Levels</h3>
+<div class="outline-text-3" id="text-17-3">
+<p>
+The default log levels are: :FATAL :SEVERE :ERROR :WARN :INFO :DEBUG :TRACE
+</p>
+
+<p>
+We can check to see what logging level is set:
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(v:repl-level)
+<span style="color: #98fb98; font-weight: bold;">:INFO</span>
+</pre>
+</div>
+
+<p>
+To prove that it only logs to the repl-level
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">  (<span style="color: #00ffff;">defparameter</span> <span style="color: #fff68f;">*v-levels*</span> '(v:fatal v:severe v:error v:warn v:info
+  v:debug v:trace))
+
+  (<span style="color: #00ffff;">loop</span> for x in *v-levels* do (funcall x <span style="color: #98fb98; font-weight: bold;">:test</span> <span style="color: #cd8162;">"Hello World ~a"</span> <span style="color: #cd8162;">"Ringo"</span>))
+NIL
+LOG: 2016-04-26 20:21:55 [FATAL] &lt;TEST&gt;: Hello World Ringo
+LOG: 2016-04-26 20:21:55 [SEVERE] &lt;TEST&gt;: Hello World Ringo
+LOG: 2016-04-26 20:21:55 [ERROR] &lt;TEST&gt;: Hello World Ringo
+LOG: 2016-04-26 20:21:55 [WARN ] &lt;TEST&gt;: Hello World Ringo
+LOG: 2016-04-26 20:21:55 [INFO ] &lt;TEST&gt;: Hello World Ringo
+</pre>
+</div>
+<p>
+Because "debug" and "trace" were below the repl-level, they did not
+  trigger a log message. Now if we setf repl-level to trace, they
+  should all show.
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(setf (v:repl-level) <span style="color: #98fb98; font-weight: bold;">:trace</span>)
+<span style="color: #98fb98; font-weight: bold;">:TRACE</span>
+LIBRARY-COMPARISON&gt; (<span style="color: #00ffff;">loop</span> for x in *v-levels* do (funcall x <span style="color: #98fb98; font-weight: bold;">:test</span> <span style="color: #cd8162;">"Hello World"</span>))
+NIL
+LOG: 2016-04-26 20:15:39 [FATAL] &lt;TEST&gt;: Hello World
+LOG: 2016-04-26 20:15:39 [SEVERE] &lt;TEST&gt;: Hello World
+LOG: 2016-04-26 20:15:39 [ERROR] &lt;TEST&gt;: Hello World
+LOG: 2016-04-26 20:15:39 [WARN ] &lt;TEST&gt;: Hello World
+LOG: 2016-04-26 20:15:39 [INFO ] &lt;TEST&gt;: Hello World
+LOG: 2016-04-26 20:15:39 [DEBUG] &lt;TEST&gt;: Hello World
+LOG: 2016-04-26 20:15:39 [TRACE] &lt;TEST&gt;: Hello World
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org925d400" class="outline-3">
+<h3 id="org925d400"><span class="section-number-3">17.4</span> Logging Call with sample message</h3>
+<div class="outline-text-3" id="text-17-4">
+<div class="org-src-container">
+<pre class="src src-lisp">(v:log <span style="color: #98fb98; font-weight: bold;">:info</span> <span style="color: #98fb98; font-weight: bold;">:test</span> <span style="color: #cd8162;">"message here format variable : ~a"</span> <span style="color: #cd8162;">"insert here"</span>)
+NIL
+LOG: 2016-04-29 18:08:10 [INFO ] &lt;TEST&gt;: message here format variable : insert here
+</pre>
+</div>
+<p>
+You can actually short cut this by treating the logging level itself
+  as a function. By default, the levels
+  are :fatal :severe :error :warn :info :debug :trace with the default
+  level set at start at info. So, e.g.:
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(v:warn <span style="color: #98fb98; font-weight: bold;">:test</span> <span style="color: #cd8162;">"Hello World ~a"</span> <span style="color: #cd8162;">"Ringo"</span>)
+NIL
+LOG: 2016-04-26 20:06:22 [WARN ] &lt;TEST&gt;: Hello World Ringo
+</pre>
+</div>
+<p>
+Looking at the call itself, we have the level, the category and a
+  datum followed by datum-args. The data can be a string, symbol or
+  function. So the simplest and most typical logging would be a string
+   with format ~a parameters embedded as above, followed by the values
+  to insert into the strng. But as noted, you could pass a function or
+  merely a symbol as well. Looking at the logging statement result, we have date, time, the level,
+  the category and the message. You can p
+</p>
+</div>
+</div>
+<div id="outline-container-org0180f07" class="outline-3">
+<h3 id="org0180f07"><span class="section-number-3">17.5</span> Changing Log Levels</h3>
+<div class="outline-text-3" id="text-17-5">
+<p>
+You can change the global log level easily if you are looking at
+logging to the repl.
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(setf (v:repl-level) <span style="color: #98fb98; font-weight: bold;">:DEBUG</span>)
+</pre>
+</div>
+<p>
+You can use this method if you are redirecting the repl output to a
+file stream
+</p>
+
+<p>
+Logging to other faucets such as a file-faucet requires that you change
+the filter that is in place in the pipeline prior to the faucet. When
+you do this, you may or may not see a slowdown in logging performance. I noticed it
+inconsistently in this comparison and have been unable to reproduce it
+consistently.
+</p>
+</div>
+</div>
+<div id="outline-container-orgf8023fe" class="outline-3">
+<h3 id="orgf8023fe"><span class="section-number-3">17.6</span> Categories</h3>
+<div class="outline-text-3" id="text-17-6">
+<p>
+What are categories in verbose? It may be implicit above, but categories are required to
+    be keywords. Without further setup, there are no
+  set categories and no filters for the categories.
+You can pass multiple categories in the same statement. As
+  the documentation states, this means that categories are more like tags.
+    Thus:
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(v:info '(<span style="color: #98fb98; font-weight: bold;">:system</span> <span style="color: #98fb98; font-weight: bold;">:server</span>) <span style="color: #cd8162;">"Starting up!"</span>)
+NIL
+LOG: 2016-04-26 20:31:53 [INFO ] &lt;SYSTEM&gt;&lt;SERVER&gt;: Starting up!
+</pre>
+</div>
+<p>
+Verbose starts to add power when you start specifying
+categories because that gives the filters something to work with.
+Look at the categories that the libraries thinks it uses without
+any setup:
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">LIBRARY-COMPARISON&gt; (v:repl-categories)
+T
+</pre>
+</div>
+<p>
+At this point, it will accept anything you throw at it as a
+  category. Now consider the following where we add a hierarchical
+  tree category (notice the wild card in the final position) and see the results:
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(v:add-repl-category <span style="color: #98fb98; font-weight: bold;">:foo.bar.*</span>)
+(<span style="color: #98fb98; font-weight: bold;">:FOO.BAR.*</span>)
+
+(v:info <span style="color: #98fb98; font-weight: bold;">:foo</span> <span style="color: #cd8162;">"foo stuff here"</span>)
+ NIL
+
+(v:info <span style="color: #98fb98; font-weight: bold;">:foo.bar</span> <span style="color: #cd8162;">"foo stuff here"</span>)
+ NIL
+
+(v:info <span style="color: #98fb98; font-weight: bold;">:foo.bar.part-three</span> <span style="color: #cd8162;">"foo stuff here"</span>)
+ NIL
+ LOG: 2016-04-26 20:37:57 [INFO ] &lt;FOO.BAR.PART-THREE&gt;: foo stuff here
+
+  (v:info '(<span style="color: #98fb98; font-weight: bold;">:system</span> <span style="color: #98fb98; font-weight: bold;">:server</span>) <span style="color: #cd8162;">"Starting up!"</span>)
+  NIL
+</pre>
+</div>
+<p>
+What happened in that last call? Once we explicitly added a
+category, we can only use categories that have been added.
+Checking on what categories the system will recognize, we now get
+the following:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lisp">(v:repl-categories)
+(<span style="color: #98fb98; font-weight: bold;">:FOO.BAR.*</span>)
+</pre>
+</div>
+<p>
+As previously noted, we can still pass multiple categories in the
+  same statement.
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(v:info '(<span style="color: #98fb98; font-weight: bold;">:foo.bar.part-three</span> <span style="color: #98fb98; font-weight: bold;">:foo.bar.part-two</span>) <span style="color: #cd8162;">"foo stuff here"</span>)
+NIL
+LOG: 2016-04-26 20:46:43 [INFO ] &lt;FOO.BAR.PART-THREE&gt;&lt;FOO.BAR.PART-TWO&gt;: foo stuff here
+</pre>
+</div>
+<p>
+Add our simple category :test to the repl-category
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(v:add-repl-category <span style="color: #98fb98; font-weight: bold;">:test</span>)
+(<span style="color: #98fb98; font-weight: bold;">:TEST</span> <span style="color: #98fb98; font-weight: bold;">:FOO.BAR.*</span>)
+</pre>
+</div>
+<p>
+Now we are going to try to muffle some categories in the logging call
+  and see what comes out in the statement.
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(<span style="color: #00ffff;">v:with-muffled-logging</span> (<span style="color: #98fb98; font-weight: bold;">:test</span>)
+    (v:info <span style="color: #98fb98; font-weight: bold;">:foo.bar.part-three</span> <span style="color: #cd8162;">"A"</span>)
+    (v:info <span style="color: #98fb98; font-weight: bold;">:test</span> <span style="color: #cd8162;">"B"</span>)
+    (v:info <span style="color: #98fb98; font-weight: bold;">:something.or.other</span> <span style="color: #cd8162;">"C"</span>))
+NIL
+LOG: 2016-04-26 21:03:29 [INFO ] &lt;FOO.BAR.PART-THREE&gt;: A
+</pre>
+</div>
+<p>
+As we might expect, the explicitly muffled :test category was
+not logged, nor was the :something.or.other category which had not
+been added to the repl-category, and the unmuffled
+:foo.bar.part-three was allowed through. But remember that
+:foo.bar.* was a tree with three segments. What happens if we put
+  partials as parameters into the with-muffled-logging call?
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lisp">(<span style="color: #00ffff;">v:with-muffled-logging</span> (<span style="color: #98fb98; font-weight: bold;">:foo.bar</span>)
+    (v:info '(<span style="color: #98fb98; font-weight: bold;">:foo</span> <span style="color: #98fb98; font-weight: bold;">:foo.bar.part-three</span> <span style="color: #98fb98; font-weight: bold;">:foo.bar</span> <span style="color: #98fb98; font-weight: bold;">:foo</span>)
+            <span style="color: #cd8162;">"Did we manage to hide some things and keep others?"</span>))
+NIL
+</pre>
+</div>
+<p>
+What happened? The parameter passed to (with-muffled-logging)
+muffled everything lower in the tree.
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(<span style="color: #00ffff;">v:with-muffled-logging</span> (<span style="color: #98fb98; font-weight: bold;">:foo.bar.part-two</span>)
+    (v:info '(<span style="color: #98fb98; font-weight: bold;">:foo.bar</span> <span style="color: #98fb98; font-weight: bold;">:foo</span> <span style="color: #98fb98; font-weight: bold;">:foo.bar.part-two</span> <span style="color: #98fb98; font-weight: bold;">:foo.bar.part-three</span>)
+            <span style="color: #cd8162;">"Did we manage to hide some parts and keep others?"</span>))
+NIL
+</pre>
+</div>
+
+<p>
+You can remove a category with (remove-repl-category). Thus:
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(v:repl-categories)
+(<span style="color: #98fb98; font-weight: bold;">:FOO.BAR.*</span> <span style="color: #98fb98; font-weight: bold;">:TEST</span>)
+
+(v:remove-repl-category <span style="color: #98fb98; font-weight: bold;">:test</span>)
+(<span style="color: #98fb98; font-weight: bold;">:FOO.BAR.*</span>)
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org7373ab5" class="outline-3">
+<h3 id="org7373ab5"><span class="section-number-3">17.7</span> Sharing across threads</h3>
+<div class="outline-text-3" id="text-17-7">
+<p>
+As noted in the documentation, "Log message passing through the
+  pipeline happens in a separate thread. If you create new pipe
+  segments for your logging pipeline that need to access some form of
+  shared variable, you can use share, which is SETFable. One share
+  that is most likely of interest to everyone is saved under the
+  symbol <b>standard-output</b>. Setting this anew is useful if you start a
+  new REPL session and need to redirect logging to it."
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lisp">(setf (v:shared-instance '*standard-output*) *standard-output*)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org673a5df" class="outline-3">
+<h3 id="org673a5df"><span class="section-number-3">17.8</span> Log to File</h3>
+<div class="outline-text-3" id="text-17-8">
+<p>
+There are a couple of ways to do this. First, you can redirect the
+normal repl output to a file:
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(setf (v:shared-instance '*standard-output*) (open #p<span style="color: #cd8162;">"~/verbose.log"</span> <span style="color: #98fb98; font-weight: bold;">:direction</span> <span style="color: #98fb98; font-weight: bold;">:output</span> <span style="color: #98fb98; font-weight: bold;">:if-exists</span> <span style="color: #98fb98; font-weight: bold;">:append</span>))
+</pre>
+</div>
+<p>
+Second, you could use a single file, adding a pipe with a file-faucet:
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(v:add-pipe (make-instance 'v:file-faucet
+                           <span style="color: #98fb98; font-weight: bold;">:file</span> #p <span style="color: #cd8162;">"~/test/verbose-single.log"</span>))
+</pre>
+</div>
+<p>
+Note that this was added in April, 2016.
+</p>
+
+<p>
+Third, you could using a rotating log faucet, see the next section.
+</p>
+</div>
+</div>
+<div id="outline-container-orgcfa004d" class="outline-3">
+<h3 id="orgcfa004d"><span class="section-number-3">17.9</span> Log to Rotating Log File</h3>
+<div class="outline-text-3" id="text-17-9">
+<p>
+Verbose is one of two libraries that provide the default ability to
+rotate log files (the other being log4cl) and the only library that
+allows you to set the rotation interval for anything other than daily.
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">  (v:add-pipe (make-instance 'v:rotating-log-faucet
+                             <span style="color: #98fb98; font-weight: bold;">:file</span> #p<span style="color: #cd8162;">"~/verbose.log"</span>
+                             <span style="color: #98fb98; font-weight: bold;">:interval</span> (v:make-cron-interval <span style="color: #cd8162;">"* * * * *"</span>)))
+#(&gt;&gt;ROTATE(#&lt;CRON-SCHEDULE {1005C829E3}&gt;))
+LIBRARY-COMPARISON&gt; (<span style="color: #00ffff;">let</span> ((<span style="color: #cd5c5c; font-weight: bold;">error</span> <span style="color: #cd8162;">"george"</span>)) (v:error <span style="color: #98fb98; font-weight: bold;">:test</span> <span style="color: #cd8162;">"hello world ~a"</span> error))
+NIL
+LOG: 2016-04-23 16:26:35 [ERROR] &lt;TEST&gt;: hello world george
+</pre>
+</div>
+<p>
+will log to a file "2016-04-23 16:26:28-verbose.log" in my home directory.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org2f972aa" class="outline-3">
+<h3 id="org2f972aa"><span class="section-number-3">17.10</span> Muting Logging to Repl</h3>
+<div class="outline-text-3" id="text-17-10">
+<p>
+You could set the repl-categories to nil:
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(setf (v:repl-categories) nil)
+</pre>
+</div>
+<p>
+Obviously unmuting is as simple as:
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(setf (v:repl-categories) t)
+</pre>
+</div>
+<p>
+or you could completely remove the segment that sends to the repl:
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(piping:remove-segment v:*global-controller* '(0))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-orga5013e7" class="outline-3">
+<h3 id="orga5013e7"><span class="section-number-3">17.11</span> Timestamp formatting</h3>
+<div class="outline-text-3" id="text-17-11">
+<p>
+The timestamp format pattern is in the variable
+<b>repl-faucet-timestamp</b>, so you should be able to modify the timestamp
+pattern. By default the pattern looks like:
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">((<span style="color: #98fb98; font-weight: bold;">:YEAR</span> 4) #\- (<span style="color: #98fb98; font-weight: bold;">:MONTH</span> 2) #\- (<span style="color: #98fb98; font-weight: bold;">:DAY</span> 2) #\  (<span style="color: #98fb98; font-weight: bold;">:HOUR</span> 2) #\: (<span style="color: #98fb98; font-weight: bold;">:MIN</span> 2)
+    #\: (<span style="color: #98fb98; font-weight: bold;">:SEC</span> 2))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org5aee028" class="outline-3">
+<h3 id="org5aee028"><span class="section-number-3">17.12</span> Restarting the Global Controller</h3>
+<div class="outline-text-3" id="text-17-12">
+<div class="org-src-container">
+<pre class="src src-lisp">(v:restart-global-controller)
+#&lt;VERBOSE:CONTROLLER <span style="color: #98fb98; font-weight: bold;">:threaded</span> <span style="color: #98fb98; font-weight: bold;">:running</span> <span style="color: #98fb98; font-weight: bold;">:queue-size</span> 0&gt;
+</pre>
+</div>
+
+<p>
+<a href="#orgc9a7805">top</a>
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-orgddfe246" class="outline-2">
+<h2 id="orgddfe246"><span class="section-number-2">18</span> vom</h2>
+<div class="outline-text-2" id="text-18">
+<p>
+<a id="org2cb5101"></a>
+</p>
+</div>
+<div id="outline-container-org771ff74" class="outline-3">
+<h3 id="org771ff74"><span class="section-number-3">18.1</span> Summary</h3>
+<div class="outline-text-3" id="text-18-1">
+<p>
+Vom is small and simple. You can turn logging on and off by package.
+</p>
+</div>
+</div>
+<div id="outline-container-orgf83c13f" class="outline-3">
+<h3 id="orgf83c13f"><span class="section-number-3">18.2</span> Setup</h3>
+<div class="outline-text-3" id="text-18-2">
+<p>
+You can use a single stream (the default  being  <b>log-stream</b> )
+  or multiple streams. Vom can set the logging level either on a global basis:
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(vom:config t <span style="color: #98fb98; font-weight: bold;">:error</span>)
+</pre>
+</div>
+<p>
+or per package
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(vom:config <span style="color: #98fb98; font-weight: bold;">:my-package</span> <span style="color: #98fb98; font-weight: bold;">:notice</span>)
+</pre>
+</div>
+<p>
+As a default, config is set to warn, so any events with a level less
+significant than warn will not be logged.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org0b24147" class="outline-3">
+<h3 id="org0b24147"><span class="section-number-3">18.3</span> Built-in Log Levels</h3>
+<div class="outline-text-3" id="text-18-3">
+<p>
+:emerg :alert :crit :error :warn :notice :info :debug :debug1 :debug2 :debug3 :debug4
+</p>
+</div>
+</div>
+<div id="outline-container-orge2d7d50" class="outline-3">
+<h3 id="orge2d7d50"><span class="section-number-3">18.4</span> Logging Call with sample message</h3>
+<div class="outline-text-3" id="text-18-4">
+<div class="org-src-container">
+<pre class="src src-lisp">Sample use:
+(<span style="color: #00ffff;">let</span> ((<span style="color: #cd5c5c; font-weight: bold;">error</span> <span style="color: #cd8162;">"some-error"</span>))
+     (vom:error <span style="color: #cd8162;">"there was a problem in setting up the datbase ~a"</span> error))
+ &lt;ERROR&gt; [15:49:31] library-comparison - there was a problem in setting up the datbase some-error
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org358df14" class="outline-3">
+<h3 id="org358df14"><span class="section-number-3">18.5</span> Changing Log Levels</h3>
+<div class="outline-text-3" id="text-18-5">
+<p>
+Use the config function to change logging levels.
+</p>
+</div>
+</div>
+<div id="outline-container-org7887806" class="outline-3">
+<h3 id="org7887806"><span class="section-number-3">18.6</span> Logging to File</h3>
+<div class="outline-text-3" id="text-18-6">
+<p>
+Logging to a file does require you to explicitly open a file for vom. E.g.:
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(<span style="color: #00ffff;">with-open-file</span>
+ (vom-s <span style="color: #cd8162;">"/home/sabra/test/vom-logging.log"</span>
+        <span style="color: #98fb98; font-weight: bold;">:direction</span> <span style="color: #98fb98; font-weight: bold;">:output</span> <span style="color: #98fb98; font-weight: bold;">:if-exists</span> <span style="color: #98fb98; font-weight: bold;">:append</span> <span style="color: #98fb98; font-weight: bold;">:if-does-not-exist</span> <span style="color: #98fb98; font-weight: bold;">:create</span>)
+ (setf vom:*log-stream* vom-s)
+ (vom:error <span style="color: #cd8162;">"there was a problem in setting up the database ~a"</span> <span style="color: #cd8162;">"some additional error note"</span>))
+</pre>
+</div>
+</div>
+</div>
+<div id="outline-container-org2a35cab" class="outline-3">
+<h3 id="org2a35cab"><span class="section-number-3">18.7</span> Setting Multiple Streams</h3>
+<div class="outline-text-3" id="text-18-7">
+<p>
+To trigger multiple streams, set <b>log-hook</b>
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp"><span style="color: #cd4f39;">;; </span><span style="color: #cd4f39;">example: this hook logs the request to multiple streams if we're getting a</span>
+<span style="color: #cd4f39;">;; </span><span style="color: #cd4f39;">log entry from the "particle-accelerator" package</span>
+(setf vom:*log-hook*
+  (<span style="color: #00ffff;">lambda</span> (level package package-level)
+    (<span style="color: #00ffff;">declare</span> (ignore level package-level))
+    (<span style="color: #00ffff;">if</span> (eq package <span style="color: #98fb98; font-weight: bold;">:particle-accelerator</span>)
+        (values t *my-file-log-stream* *another-stream*)
+        t)))
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-org87196e4" class="outline-3">
+<h3 id="org87196e4"><span class="section-number-3">18.8</span> Muting Logging to Repl</h3>
+<div class="outline-text-3" id="text-18-8">
+<p>
+By setting vom:*log-stream* to an open file without using the multiple
+stream vom:*log-hook* method above, you will be redirecting the
+logging which would have otherwise gone to the repl to the open file.
+</p>
+</div>
+</div>
+<div id="outline-container-orge9e7f8c" class="outline-3">
+<h3 id="orge9e7f8c"><span class="section-number-3">18.9</span> Additional Features</h3>
+<div class="outline-text-3" id="text-18-9">
+<p>
+As noted above, vom can be set on a per-package basis.
+</p>
+
+<p>
+<a href="#orgc9a7805">top</a>
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-org987367f" class="outline-2">
+<h2 id="org987367f"><span class="section-number-2">19</span> Function Mapping</h2>
+<div class="outline-text-2" id="text-19">
+<p>
+<a id="org73e7cf9"></a>
+</p>
+<table border="2" rules="all" frame="border">
+<caption class="t-above"><span class="table-number">Table 5:</span> Function Mapping</caption>
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Library</th>
+<th scope="col" class="org-left"><a href="#org6d6aa66">a-cl-logger</a></th>
+<th scope="col" class="org-left"><a href="#org31b5923">cl-syslog</a></th>
+<th scope="col" class="org-left"><a href="#org835cf75">cl-log</a></th>
+<th scope="col" class="org-left">hu</th>
+<th scope="col" class="org-left"><a href="#org928f95e">log4cl</a></th>
+<th scope="col" class="org-left"><a href="#org05f1bbc">log5</a></th>
+<th scope="col" class="org-left"><a href="#org6ee01df">verbose</a></th>
+<th scope="col" class="org-left"><a href="#org2cb5101">vom</a></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">Logging function for your source code</td>
+<td class="org-left">(do-log) (do-logging) or (&lt;name-of-logger&gt;.&lt;error-level&gt;</td>
+<td class="org-left">(log)</td>
+<td class="org-left">(log-message :error text-message)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(log:&lt;error-level&gt;</td>
+<td class="org-left">(log5:log-for)</td>
+<td class="org-left">(log), (log-message) v:&lt;level&gt;)</td>
+<td class="org-left">(error)</td>
+</tr>
+
+<tr>
+<td class="org-left">Default log level</td>
+<td class="org-left">:debug</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">:info</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">:info</td>
+<td class="org-left">:warn</td>
+</tr>
+
+<tr>
+<td class="org-left">List available levels</td>
+<td class="org-left">\*log-level-names*</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">v:*levels*</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Root or global logger/log manager</td>
+<td class="org-left">\*root-logger*</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(log-manager)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">\*root-logger*</td>
+<td class="org-left">(log-manager)</td>
+<td class="org-left">\*global-controller*</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Set log level at global level</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(log:config &lt;error-level&gt;)</td>
+<td class="org-left">(debugging), (undebugging)</td>
+<td class="org-left">(setf (v:repl-level) desired-level)</td>
+<td class="org-left">(config t :error)</td>
+</tr>
+
+<tr>
+<td class="org-left">Set log level at package level</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">[use log4slime]</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(config :my-package :error)</td>
+</tr>
+
+<tr>
+<td class="org-left">Set log level at the function level</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">[use log4slime]</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Set log level at log manager</td>
+<td class="org-left">(setf (level &lt;logger-name&gt;) desired-level), (setf log-level)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(set-log-level)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Get logger's log level</td>
+<td class="org-left">(log-level) (10)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(logger-log-level) (10)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Get log level as string</td>
+<td class="org-left">(log-level-name-of)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(log-level-to-string)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">List levels handled by a log manager</td>
+<td class="org-left">(level &lt;logger-name&gt;) (10)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(repl-level)</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Get logger's effective log level (inheriting parent's)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(effective-log-level)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Add level</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(make-log-level)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Creating a new logger</td>
+<td class="org-left">(setup-logger) or (define-logger)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(make-logger)(%get-logger)</td>
+<td class="org-left">(start-sender)</td>
+<td class="org-left">(make-standard-global-controller)</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">list loggers</td>
+<td class="org-left">(children <b>root-logger</b>)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(logger-children),(logger-descendants)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Get a log manager by name</td>
+<td class="org-left">(get-logger name) or (get-log-fn)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Get name of a log manager</td>
+<td class="org-left">(name &lt;logger&gt;)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(logger-name)</td>
+<td class="org-left">(name)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Inherited parents of a logger</td>
+<td class="org-left">(parents)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(logger-parent)(logger-ancestors)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Stop logger</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(stop-controller)</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Delete global logger</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(remove-global-controller)</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Restarting the global logger</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(restart-global-controller)</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">List all categories</td>
+<td class="org-left">\*log-level-names*</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(category-specs)</td>
+<td class="org-left">(repl-categories)</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Change categories handled by a log manager</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Change categories handled by a log messenger</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Add category</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(defcategory)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(defcategory)</td>
+<td class="org-left">(add-repl-category)</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Defining a new category</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(defcategory), (defcategory-fn)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(defcategory)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Remove a category</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(undefcategory-fn)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(remove-repl-category)</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Clearing all categories</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(clear-categories)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(clear-logging-configuration)</td>
+<td class="org-left">(log5::reset-categories)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">category id to category instance</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(id-&gt;category)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Set global stream for logging destination</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(setf vom:*log-stream* &lt;stream name&gt;</td>
+</tr>
+
+<tr>
+<td class="org-left">Set multiple streams for logging destination</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(setf vom:*log-hook* &#x2026;see below)</td>
+</tr>
+
+<tr>
+<td class="org-left">Redirect output</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(output-here)</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Suppress logging (all or a level)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(with-muffled-logging)</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Disable logging</td>
+<td class="org-left">(remove-appender), (abort)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(logging-disabled)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(stop-all-senders)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Restart logging</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(logging-disabled)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">List all messengers</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(senders)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">List all messengers for a log manager</td>
+<td class="org-left">(appenders logger)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(log-manager-messengers)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(all-appenders)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Get the message class handled by a particular log manager</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(log-manager-message-class)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Start a messenger</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(start-messenger)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(start-sender)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Stop a particular messenger</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(stop-messenger)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(stop-sender)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Add a messenger</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(add-appender)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(add-pipe)</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Temporarily add a messenger</td>
+<td class="org-left">(with-appender)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Delete a messenger</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(remove-appender)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Delete all messengers</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(remove-all-appenders)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Flush a messenger</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(flush-appender)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Flush all messengers</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(flush-all-appenders)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Find a named messenger</td>
+<td class="org-left">(find-appender)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(find-messenger)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Get the log-manager for a particular messenger</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(messenger-manager)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Get the name for a particular messenger</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(messenger-name)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">List the categories handled by a particular messenger</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(messenger-category)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(category-spec)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">List the filter for a particular messenger</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(messenger-filter)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Get text file name for a particular messenger</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(text-file-messenger-file)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(appender-filename)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Get stream name for a particular messenger</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(text-stream-messenger-stream)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(appender-stream)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Get logger for a particular messenger</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(messenger-manager)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Get Destination for a particular messenger</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(location)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Put a message somewhere</td>
+<td class="org-left">(append-message)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Get ring messages</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(ring-messenger-messages)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Formatted message</td>
+<td class="org-left">(format-message)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(format-message)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Unformatted message</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(message-description)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Get message timestamp</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(message-timestamp)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(message-time)</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Get message category</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(message-category)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(message-category), (message-categories)</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Get message level</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(message-level)</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Get message text</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(message-text)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(message-content)</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Get message thread</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(message-thread)</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Add signal handler</td>
+<td class="org-left">(add-signal-handler)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Message with conditions</td>
+<td class="org-left">(appending-message), (generating-message), (logging-message)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(log-if)</td>
+<td class="org-left">(log-condition),(message-condition)</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Conditions</td>
+<td class="org-left">(log-serious-conditions)(log-errors)</td>
+<td class="org-left">invalid-facility, invalid-priority</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(log4cl-error)(pattern-layout-error)(property-parser-error)(handle-appender-error)</td>
+<td class="org-left">error</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Starting message condition</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Dynamic message helpers</td>
+<td class="org-left">(when-log-message-appended)(when-log-message-generated)(push-into-message)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Logging hook helpers</td>
+<td class="org-left">(get-log-fn)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">access context</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(context)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">add context</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(push-context)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">subtract context</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(pop-context)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">other context management</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(with-context)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Define output</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(defoutput)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Layout and format functions</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(output-spec)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Rotate Log</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(backup-log-file)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(rotate-log)</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Stop Rotation</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(stop-rotation)</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Change Rotation Intervals</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(update-interval)</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Parse Cron Intervals</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(make-cron-interval)</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Save Configuration</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(save)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Restore Configuration to a previous configuration</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(restore)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Reset Configuration to default</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(reset-logging-configuration)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(restart-global-controller)</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Clear logging configuration</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(clear-logging-configuration)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Configure from file</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(configure-from-file)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Ignore errors or go to debugging</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">(ignore-errors-p)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left">Json functions</td>
+<td class="org-left">(alist-as-json)(plist-as-json) (11)</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+(10) Returns an integer
+(11) Personally I would have used one of the specialy json libraries
+</p>
+
+<p>
+<a id="org7cfeb52"></a>
+ <a href="#orgc9a7805">top</a>
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgcd4ceef" class="outline-2">
+<h2 id="orgcd4ceef"><span class="section-number-2">20</span> To Do</h2>
+<div class="outline-text-2" id="text-20">
+<p>
+More discussion on filters E.g. log4cl automatically gives you function, package. Does that preclude
+the ability to filter on those? Demo how that would work in each
+package.
+</p>
+
+<p>
+What happens when you generate an executable?
+</p>
+
+<p>
+How do you track separate threads? Does the library provide a built-in
+call or do you have to write your own?
+</p>
+</div>
+</div>
+</div>
+</body>
+</html>
