@@ -1341,7 +1341,7 @@ or you could make the layout more complicated. For example:
            (setf (logger-log-level *root-logger*) level)
            (log-fatal :logger logger "test message")))))
 
-(sabra-test-pattern "%-5p [%c] - %h %t %x %i %m%n %d{%Y-%m-%d %H:%M:%S}")
+(sabra-test-pattern "%-5p [%c] - %h %t %x %i %m%n %d{%Y-%m-%d %H:%M:%S%}")
 
 
 "FATAL [ONE.TWO.THREE] - scruppy new-repl-thread  11895 test message
