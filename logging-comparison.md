@@ -1,6 +1,6 @@
 ---
 layout: default
-title: Comparison of Common Lisp Logging Libraries (2016)
+title: Comparison of Common Lisp Logging Libraries
 ---
 - [Comparison of Common Lisp Logging Libraries](#org4f9eb78)
 - [Comparing a-cl-logger, cl-syslog, com.ravenbrook.common-lisp-log, hu.dwim.logger, log4cl, log5, verbose, and vom](#org050713d)
