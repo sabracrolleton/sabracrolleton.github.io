@@ -1,0 +1,677 @@
+#+TITLE: Common Lisp Testing Frameworks Benchmarks
+ #+AUTHOR:      Sabra Crolleton
+ #+DATE:        2021-05-28
+ #+EMAIL:       sabra.crolleton!gmail.com
+ #+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
+ #+LANGUAGE:    en
+ #+OPTIONS:     H:2 num:t toc:t n:nil ::t |:t ^:t f:t tex:t html-style:nil  ...
+ #+ORG_HTML-DOCTYPE: "html5"
+ #+CAPTION: This is a table with lines around and between cells
+ #+ATTR_HTML: :border 2 :rules all :frame border :org-html-table-align-individual-fields t
+ #+ATTR_LaTeX: align=|c|c|c|
+ #+ATTR_LATEX: :environment longtable :align l|lp{3cm}r|l
+ #+ATTR_LATEX: :float multicolumn :width
+<<top>>
+* Introduction
+* Testing Libraries Considered
+** Testing Frameworks
+#+CAPTION: Libraries Considered
+#+ATTR_HTML: :border 2 :rules all :frame border
+#+ATTR_LATEX: :float multicolumn
+| Library                        | Homepage | Author                                          | License           | Last Update |
+|--------------------------------+----------+-------------------------------------------------+-------------------+-------------|
+| [[1am][1am]]                            | [[https://github.com/lmj/1am][homepage]] | James Lawrence                                  | MIT               |        2014 |
+| [[2am][2am]] (not in quicklisp)         | [[https://gitlab.common-lisp.net/dkochmanski/2am][homepage]] | Daniel Kochmański                               | MIT               |        2016 |
+| [[cacau][cacau]]                          | [[https://github.com/noloop/cacau][homepage]] | Noloop                                          | GPL3              |        2020 |
+| [[cardiogram][cardiogram]] (e)                 | [[https://gitlab.com/a.aguilar/cardiogram][homepage]] | Abraham Aguilar                                 | MIT               |        2020 |
+| [[clunit][clunit]]                         | [[http://tgutu.github.io/clunit/][homepage]] | Tapiwa Gutu                                     | BSD               |        2017 |
+| [[clunit2][clunit2]]                        | [[https://notabug.org/cage/clunit2][homepage]] | Cage (fork of clunit)                           | BSD               |        2020 |
+| [[com.gigamonkeys.test-framework][com.gigamonkeys.test-framework]] | [[https://github.com/gigamonkey/monkeylib-test-framework][homepage]] | Peter Seibel                                    | BSD               |        2010 |
+| [[fiasco][fiasco]] (b)                     | [[https://github.com/joaotavora/fiasco][homepage]] | João Távora                                     | BSD 2 Clause      |        2020 |
+| [[fiveam][fiveam]]                         | [[https://github.com/lispci/fiveam][homepage]] | Edward Marco Baringer                           | BSD               |        2020 |
+| [[kaputt][kaputt]]                         | [[https://github.com/foretspaisibles/cl-kaputt][homepage]] | Michaël Le Barbier                              | MIT               |        2020 |
+| [[lift][lift]]                           | [[https://github.com/gwkkwg/lift][homepage]] | Gary Warren King                                | MIT               |    2019 (c) |
+| [[lisp-unit][lisp-unit]]                      | [[https://github.com/OdonataResearchLLC/lisp-unit][homepage]] | Thomas M. Hermann                               | MIT               |        2017 |
+| [[lisp-unit2][lisp-unit2]]                     | [[https://github.com/AccelerationNet/lisp-unit2][homepage]] | Russ Tyndall                                    | MIT               |        2018 |
+| [[nst][nst]]                            | [[https://github.com/jphmrst/cl-nst][homepage]] | John Maraist                                    | LLGPL3 latest     |        2021 |
+| [[parachute][parachute]]                      | [[https://github.com/Shinmera/parachute][homepage]] | Nicolas Hafner                                  | zlib              |        2021 |
+| [[prove][prove]]                          | [[https://github.com/fukamachi/prove][homepage]] | Eitaro Fukamachi                                | MIT               |        2020 |
+| [[ptester][ptester]]                        | [[http://git.kpe.io/?p=ptester.git;a=summary][homepage]] | Kevin Layer                                     | LLGPL             |        2016 |
+| [[rove][rove]]                           | [[https://github.com/fukamachi/rove][homepage]] | Eitaro Fukamachi                                | BSD 3 Clause      |        2020 |
+| [[rt][rt]]                             |          | Kevin M. Rosenberg                              | MIT               |        2010 |
+| [[should-test][should-test]]                    | [[https://github.com/vseloved/should-test][homepage]] | Vsevolod Dyomkin                                | MIT               |        2019 |
+| [[simplet][simplet]]                        | [[https://github.com/noloop/simplet][homepage]] | Noloop                                          | GPLv3             |        2019 |
+| stefil (f)                     | [[http://dwim.hu/darcsweb/darcsweb.cgi?r=HEAD%20hu.dwim.stefil;a=summary][homepage]] | Attila Lendvai, Tamas Borbely, Levente Meszaros | BSD/Public Domain |        2018 |
+| [[tap-unit-test][tap-unit-test]] (d)              | [[https://github.com/jhanley634/tap-unit-test][homepage]] | Christopher K. Riesbeck, John Hanley            | MIT               |        2017 |
+| [[unit-test][unit-test]]                      | [[https://github.com/hanshuebner/unit-test][homepage]] | Manuel Odendahl, Alain Picard                   | MIT               |        2012 |
+| [[xlunit][xlunit]]                         | [[http://git.kpe.io/?p=xlunit.git;a=tree][homepage]] | Kevin RosenBerg                                 | BSD               |        2015 |
+| [[xptest][xptest]]                         |          | Craig Brozensky                                 | Public Domain     |        2015 |
+
+- (a) Looking for new maintainer. Has been forked to clunit2
+- (b) Fork of stefil
+- (c) Port to Clasp, otherwise 2015
+- (d) Tap-Unit-Test is a version of lisp-unit with [[http://en.wikipedia.org/wiki/Test_Anything_Protocol][TAP]] formatted reporting.
+- (e) Cannot get it to work.
+- (f) The authors have specified it as obsolete, so it will not be further considered.
+
+* Benchmarking
+<<benchmarks>>
+
+[[top][top]]
+This is really simple benchmarking using sbcl version 2.1.4 and ccl version 1.12 LinuxX8664. I used each framework and applied them to uax-15 which has 16 tests and 338760 assertions (and they all pass). The tests were stripped to the minimum. No diagnostic strings were used and for the frameworks which allowed it, the test was set to no progress reporting and overall summary only. All of the assertions pass, so any real world test with failing assertions generating failure reports will be different.
+
+Based on this one application, from a speed perspective, there was a host of frameworks in a pack, with Rove and Prove at the back, then NST and Clunit not even on the same continent. (Strangely enough, while the other frameworks were slower under cc, Clunit and NST improved.) Fiveam is in the pack so long as it runs in a terminal or some non-emacs editor. If running in emacs it runs into an emacs issue with long lines. You will see the difference in the fiveam report.
+
+Your context will be important as to whether these benchmarks are at all meaningful to you.
+<<stacked-ranking-benchmarks>>
+** Stack Ranking
+What immediately jumps out is the vast majority are grouped together, then there are a few outliers that are just way worse than the pack. For consistency, every benchmark was done on sbcl 2.1.4 in a terminal (to avoid emacs issues) except as noted to show the emacs effect.
+
+#+CAPTION: Order by Benchmark Runtime (lower is better)
+#+ATTR_HTML: :border 2 :rules all :frame border
+#+ATTR_LATEX: :float multicolumn
+| Library                        | SBCL RunTime | CCL Runtime |
+|--------------------------------+--------------+-------------|
+| [[xptest][xptest]]                         |       6.5151 |      11.397 |
+| [[xlunit][xlunit]]                         |       6.5840 |      11.618 |
+| [[lift][lift]]                           |       6.6040 |      11.605 |
+| [[2am][2am]] (not in quicklisp)         |       6.8468 |      12.905 |
+| [[1am][1am]]                            |       6.8821 |      12.870 |
+| [[cacau][cacau]]                          |       7.0334 |      11.609 |
+| [[rt][rt]]                             |       7.0450 |      11.663 |
+| [[unit-test][unit-test]]                      |       7.5560 |      17.880 |
+| [[lisp-unit][lisp-unit]]                      |       7.8594 |      13.345 |
+| [[kaputt][kaputt]]                         |       7.9049 |      15.731 |
+| [[tap-unit-test][tap-unit-test]]                  |       7.9746 |      13.095 |
+| [[should-test][should-test]]                    |       8.1620 |      24.667 |
+| [[com.gigamonkeys.test-framework][com.gigamonkeys.test-framework]] |       8.5220 |      30.627 |
+| [[ptester][ptester]]                        |       9.0088 |      22.307 |
+| [[fiasco][fiasco]]                         |       9.6013 |      28.807 |
+| [[lisp-unit2][lisp-unit2]]                     |      10.7883 |         (a) |
+| [[fiveam][fiveam]]                         |      11.4339 |      19.292 |
+| [[parachute][parachute]]                      |      11.7699 |      35.020 |
+| [[rove][rove]]                           |      18.2223 |      41.800 |
+| [[prove][prove]]                          |      31.2611 |     116.864 |
+| [[nst][nst]]                            |     522.5623 |     490.843 |
+| [[clunit][clunit]]                         |     601.0652 |     272.858 |
+| [[clunit2][clunit2]]                        |     601.0652 |             |
+(a) CCL decided it was not friends with Lisp-Unit2 and did not compile it.
+
+#+CAPTION: Order by Benchmark Bytes Consed (lower is better)
+#+ATTR_HTML: :border 2 :rules all :frame border
+#+ATTR_LATEX: :float multicolumn
+| Library                        | Bytes Consed |
+|--------------------------------+--------------|
+| [[2am][2am]] (not in quicklisp)         |   3541592704 |
+| [[1am][1am]]                            |   3541621392 |
+| [[xptest][xptest]]                         |   3545190064 |
+| [[xlunit][xlunit]]                         |   3547926336 |
+| [[cacau][cacau]]                          |   3559494400 |
+| [[lift][lift]]                           |   3662570128 |
+| [[rt][rt]]                             |   3781963056 |
+| [[unit-test][unit-test]]                      |   3842573536 |
+| [[should-test][should-test]]                    |   4033912496 |
+| [[kaputt][kaputt]]                         |   4034319280 |
+| [[fiasco][fiasco]]                         |   4249190656 |
+| [[tap-unit-test][tap-unit-test]]                  |   4406207680 |
+| [[lisp-unit][lisp-unit]]                      |   4411139200 |
+| [[fiveam][fiveam]]                         |   4680267008 |
+| [[com.gigamonkeys.test-framework][com.gigamonkeys.test-framework]] |   4950815168 |
+| [[lisp-unit2][lisp-unit2]]                     |   5127796976 |
+| [[ptester][ptester]]                        |   5195902592 |
+| [[clunit][clunit]]                         |   5262303120 |
+| [[clunit2][clunit2]]                        |   5262303120 |
+| [[parachute][parachute]]                      |   5357258016 |
+| [[rove][rove]]                           |   8960510816 |
+| [[prove][prove]]                          |  14124826480 |
+| [[nst][nst]]                            | 319321472704 |
+
+#+CAPTION: Order by Benchmark Eval calls (lower is better)
+#+ATTR_HTML: :border 2 :rules all :frame border
+#+ATTR_LATEX: :float multicolumn
+| Library                        | Eval Calls |
+|--------------------------------+------------|
+| [[1am][1am]]                            |          0 |
+| [[cacau][cacau]]                          |          0 |
+| [[com.gigamonkeys.test-framework][com.gigamonkeys.test-framework]] |          0 |
+| [[fiveam][fiveam]]                         |          0 |
+| [[kaputt][kaputt]]                         |          0 |
+| [[lift][lift]]                           |          0 |
+| [[lisp-unit2][lisp-unit2]]                     |          0 |
+| [[parachute][parachute]]                      |          0 |
+| [[prove][prove]]                          |          0 |
+| [[ptester][ptester]]                        |          0 |
+| [[rove][rove]]                           |          0 |
+| [[should-test][should-test]]                    |          0 |
+| [[unit-test][unit-test]]                      |          0 |
+| [[xlunit][xlunit]]                         |          0 |
+| [[xptest][xptest]]                         |          0 |
+| [[2am][2am]] (not in quicklisp)         |         10 |
+| [[fiasco][fiasco]]                         |         10 |
+| [[lisp-unit][lisp-unit]]                      |         10 |
+| [[tap-unit-test][tap-unit-test]]                  |        160 |
+| [[clunit][clunit]]                         |        320 |
+| [[clunit2][clunit2]]                        |        320 |
+| [[rt][rt]]                             |        480 |
+| [[nst][nst]]                            |    6768780 |
+
+Now the detailed report.
+** [[1am][1am]]
+1am seems to have no way to turn off the progress reports. The benchmark below was done running in a terminal window. The same test running in a emacs REPL took roughly six times longer due to how emacs mishandles long lines. YMMV with other editors.
+#+begin_src lisp
+  (benchmark:with-timing (10) (uax-15-1am-tests::run))
+
+  Success: 16 tests, 338760 checks.
+  -                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
+  REAL-TIME        10       10.889917   1.013326   1.153324   1.076658   1.088992     0.042165
+  RUN-TIME         10       9.661734    0.942873   0.983157   0.966447   0.966173     0.014798
+  USER-RUN-TIME    10       9.262606    0.909559   0.950976   0.922516   0.926261     0.012376
+  SYSTEM-RUN-TIME  10       0.399142    0.026377   0.050109   0.039822   0.039914     0.007806
+  PAGE-FAULTS      10       0           0          0          0          0            0.0
+  GC-RUN-TIME      10       974.403     82.634     111.238    96.93      97.4403      9.298019
+  BYTES-CONSED     10       4870658256  487053200  487078096  487066720  487065820.0  7454.81
+  EVAL-CALLS       10       0           0          0          0          0            0.0
+#+end_src
+The ccl version:
+#+begin_src lisp
+-          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
+REAL-TIME  10       12.877645  1.277734  1.307823  1.285777  1.287764  0.00831
+RUN-TIME   10       12.870041  1.276389  1.306837  1.285161  1.287004  0.008351
+#+end_src
+** [[2am][2am]]
+2am seems to have no way to turn off the progress reports. As with the 1am benchmark, the benchmark below was done running in a terminal window. The same test running in a emacs REPL took roughly six times longer due to how emacs mishandles long lines.
+#+begin_src lisp
+  (benchmark:with-timing (10) (uax-15-2am-tests::run))
+  Did 16 tests (0 crashed), 338760 checks.
+  Pass: 338760 (100%)
+  Fail: 0 ( 0%)
+  -                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
+  REAL-TIME        10       8.389924    0.729993   0.906659   0.839992   0.838992     0.049081
+  RUN-TIME         10       6.846887    0.674877   0.730084   0.680101   0.684689     0.015464
+  USER-RUN-TIME    10       6.79029     0.664879   0.713442   0.675069   0.679029     0.012428
+  SYSTEM-RUN-TIME  10       0.056611    0          0.016639   0.006661   0.005661     0.005376
+  PAGE-FAULTS      10       0           0          0          0          0            0.0
+  GC-RUN-TIME      10       272.862     20.824     65.941     24.247     27.2862      13.023412
+  BYTES-CONSED     10       3541592704  354158208  354162800  354158736  354159260.0  1253.5916
+  EVAL-CALLS       10       0           0          0          0          0            0.0
+#+end_src
+The ccl version
+#+begin_src lisp
+-          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
+REAL-TIME  10       12.906069  1.278402  1.332574  1.28587   1.290607  0.014833
+RUN-TIME   10       12.905263  1.278475  1.334017  1.281963  1.290526  0.015472
+#+end_src
+** [[cacau][cacua]]
+Since Cacau does not run tests unless they are recompiled, we have simply multiplied a single run by 10 to get some kind of comparable here. Running at the minimum reporting.
+#+begin_src lisp
+    (benchmark:with-timing (10) (uax-15-cacau-tests::run :reporter :min))
+-                SAMPLES  TOTAL(10x)      MINIMUM   MAXIMUM    MEDIAN    AVERAGE   DEVIATION
+REAL-TIME        10       7.03327    0         0.703327   0         0.070333  0.210998
+RUN-TIME         10       7.03341    0.000018  0.703049   0.000021  0.070334  0.210905
+USER-RUN-TIME    10       6.86598    0.000017  0.686321   0.000021  0.06866   0.205887
+SYSTEM-RUN-TIME  10       0.16734    0.000001  0.016721   0.000001  0.001673  0.005016
+PAGE-FAULTS      10       0          0         0          0         0         0.0
+GC-RUN-TIME      10       572.44     0         57.244     0         5.7244    17.1732
+BYTES-CONSED     10       3576325600 0         357534400  0         35763256  107257040.0
+EVAL-CALLS       10       0          0         0          0         0         0.0
+#+end_src
+The ccl version (total multiplied by 10 get try to get a comparable)
+#+begin_src lisp
+-          SAMPLES  TOTAL     MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
+REAL-TIME  1        11.63139  1.163139  1.163139  1.163139  1.163139  0
+RUN-TIME   1        11.6093   1.16093   1.16093   1.16093   1.16093   0
+#+end_src
+** [[clunit][clunit]]
+Clunit and Clunit2 have always had a concern about performance. Running this benchmark with them was painful. Unlike fiveam, which should not be run in a REPL in emacs on tests with lots of assertions because of emacs' issues with long lines, clunit has no one to blame but itself. But look at the ccl results compared to the sbcl results. Clunit was the only framework faster under ccl than sbcl. Still unacceptably slow, but ...
+Wwith sbcl in a terminal.
+#+begin_src lisp
+  Passed: 338760/338760 all tests passed
+  -                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE    DEVIATION
+  REAL-TIME        10       601.4108    57.19953   64.00593   59.65935   60.141087  2.303678
+  RUN-TIME         10       601.0652    57.161556  63.96824   59.62751   60.106518  2.301759
+  USER-RUN-TIME    10       600.65216   57.108273  63.941593  59.587543  60.06522   2.305383
+  SYSTEM-RUN-TIME  10       0.413016    0.019989   0.059948   0.043303   0.041302   0.011839
+  PAGE-FAULTS      10       0           0          0          0          0          0.0
+  GC-RUN-TIME      10       1158.426    87.246     145.034    115.57     115.8426   17.674866
+  BYTES-CONSED     10       5262303120  526034656  527650448  526069408  526230312  473977.47
+  EVAL-CALLS       10       320         32         32         32         32         0.0
+  NIL
+#+end_src
+The ccl result
+#+begin_src lisp
+-          SAMPLES  TOTAL     MINIMUM    MAXIMUM    MEDIAN    AVERAGE    DEVIATION
+REAL-TIME  10       272.9831  27.003325  27.478271  27.37946  27.298307  0.179919
+RUN-TIME   10       272.8588  26.99254   27.466413  27.36916  27.28588   0.179731
+#+end_src
+** [[clunit2][clunit2]]
+Clunit and Clunit2 have always had a concern about performance. Running this benchmark with them was painful. Refer to the clunit benchmark.
+** [[fiasco][fiasco]]
+With progress reporting turned off
+#+begin_src lisp
+(setf *print-test-run-progress* nil)
+(in-package :uax-15-fiasco-suite)
+(benchmark:with-timing (10) (run-package-tests))
+-                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
+REAL-TIME        10       9.606572    0.913324   1.026656   0.939991   0.960657     0.041225
+RUN-TIME         10       9.601316    0.911867   1.025575   0.939456   0.960132     0.040784
+USER-RUN-TIME    10       9.234909    0.88525    0.992281   0.902122   0.923491     0.036895
+SYSTEM-RUN-TIME  10       0.366417    0.023392   0.053293   0.033323   0.036642     0.009047
+PAGE-FAULTS      10       0           0          0          0          0            0.0
+GC-RUN-TIME      10       1397.089    97.043     213.176    120.03     139.7089     38.06595
+BYTES-CONSED     10       4249190656  424657984  426455728  424685488  424919070.0  545014.2
+EVAL-CALLS       10       10          1          1          1          1            0.0
+NIL
+#+end_src
+The ccl version:
+#+begin_src lisp
+-          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
+REAL-TIME  10       28.8267    2.806652  2.952852  2.882208  2.88267   0.043738
+RUN-TIME   10       28.806755  2.809196  2.948668  2.878305  2.880676  0.041971
+#+end_src
+** [[fiveam][fiveam]]
+You cannot turn off progress reporting in fiveam. (At least I cannot figure it out). Besides wasting a huge amount of screen space and time, it creates interesting issues based on what you are running fiveam on. Emacs has known problems with long lines and fiveam's progress reporting in a benchmark like this creates lots of long line. It gets even worse if you set the =run= keyword parameter =:print-names= to nil.
+
+Rule of thumb for big test systems and fiveam. Run it from a terminal, not an emacs REPL.
+
+First, this is sbcl running in a terminal:
+#+begin_src lisps
+(benchmark:with-timing (10) (run 'uax-15-fiveam))
+-                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
+REAL-TIME        10       11.683272   1.106661   1.26666    1.13666    1.168327     0.050315
+RUN-TIME         10       11.433937   1.096922   1.217642   1.132014   1.143394     0.035098
+USER-RUN-TIME    10       11.09766    1.073696   1.167503   1.098376   1.109766     0.025922
+SYSTEM-RUN-TIME  10       0.336295    0.00979    0.050139   0.036583   0.03363      0.011926
+PAGE-FAULTS      10       0           0          0          0          0            0.0
+GC-RUN-TIME      10       1364.435    103.005    181.628    128.838    136.4435     26.518356
+BYTES-CONSED     10       4680267008  468008608  468062224  468021680  468026700.0  14802.947
+EVAL-CALLS       10       0           0          0          0          0            0.0
+
+NIL
+#+end_src
+The ccl version
+#+begin_src lisp
+-          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
+REAL-TIME  10       19.297316  1.917268  1.957064  1.926189  1.929732  0.01028
+RUN-TIME   10       19.291763  1.917065  1.958334  1.92539   1.929176  0.010841
+#+end_src
+Now look at the run using sbcl in emacs base case:
+#+begin_src lisp
+(benchmark:with-timing (10) (run 'uax-15-fiveam))
+
+-                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE    DEVIATION
+REAL-TIME        10       46.182957   1.386656   12.649892  1.473321   4.618296   4.85889
+RUN-TIME         10       14.597167   1.404305   1.512524   1.453036   1.459717   0.032735
+USER-RUN-TIME    10       14.132159   1.355067   1.462705   1.408331   1.413216   0.0275
+SYSTEM-RUN-TIME  10       0.465011    0.009331   0.083569   0.046587   0.046501   0.020562
+PAGE-FAULTS      10       0           0          0          0          0          0.0
+GC-RUN-TIME      10       1565.843    98.467     248.256    145.087    156.5843   48.0745
+BYTES-CONSED     10       6191647200  619003152  619415568  619130784  619164720  108128.414
+EVAL-CALLS       10       0           0          0          0          0          0.0
+#+end_src
+While setting the =run= keyword parameter =:print-names= to nil is supposed to help performance, it seems to actually make the emacs long line problem worse. See, eg. this result:
+#+begin_src lisp
+(benchmark:with-timing (10) (run 'uax-15-fiveam :print-names nil))
+
+-                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
+REAL-TIME        10       2252.024    1.399989   1121.9193  1.47332    225.2024     377.6827
+RUN-TIME         10       14.941372   1.409806   1.746217   1.479273   1.494137     0.090286
+USER-RUN-TIME    10       14.448811   1.389841   1.64304    1.422158   1.444881     0.069076
+SYSTEM-RUN-TIME  10       0.492585    0.009959   0.103179   0.046558   0.049258     0.024733
+PAGE-FAULTS      10       0           0          0          0          0            0.0
+GC-RUN-TIME      10       1904.724    115.29     417.308    179.123    190.4724     80.48869
+BYTES-CONSED     10       6191383968  619016352  619290080  619130000  619138370.0  80104.17
+#+end_src
+** [[gigamonkeys][gigamonkeys]]
+Gigamonkeys does not do progress reporting
+#+begin_src lisp
+  (benchmark:with-timing (10) (test-package))
+
+-                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
+REAL-TIME        10       8.509921    0.846659   0.856659   0.849992   0.850992     0.003
+RUN-TIME         10       8.522091    0.848863   0.860674   0.850513   0.852209     0.003309
+USER-RUN-TIME    10       8.502139    0.846733   0.854092   0.849976   0.850214     0.002381
+SYSTEM-RUN-TIME  10       0.019971    0          0.006631   0.000002   0.001997     0.002203
+PAGE-FAULTS      10       0           0          0          0          0            0.0
+GC-RUN-TIME      10       330.405     31.881     35.916     32.204     33.0405      1.41741
+BYTES-CONSED     10       4950815168  495054096  495089584  495087440  495081500.0  13706.401
+EVAL-CALLS       10       0           0          0          0          0            0.0
+#+end_src
+The ccl version
+#+begin_src lisp
+-          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
+REAL-TIME  10       30.610546  3.024176  3.284612  3.033481  3.061055  0.075138
+RUN-TIME   10       30.627195  3.026633  3.285767  3.035477  3.06272   0.074814
+
+#+end_src
+** [[kaputt][kaputt]]
+Kaputt has no built in capability for running all the tests in a suite or package, so this is based on creating a function that just runs all the tests for uax-15-kaputt-tests.
+
+There is no way to turn off the progress report.
+#+begin_src lisp
+(benchmark:with-timing (10) (uax-15-kaputt-tests:run-all-tests))
+-                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE    DEVIATION
+REAL-TIME        10       7.906594    0.776659   0.856658   0.783326   0.790659   0.022548
+RUN-TIME         10       7.904968    0.777959   0.857393   0.782869   0.790497   0.022549
+USER-RUN-TIME    10       7.795143    0.761309   0.82076    0.774808   0.779514   0.015074
+SYSTEM-RUN-TIME  10       0.10984     0          0.036632   0.006663   0.010984   0.010646
+PAGE-FAULTS      10       0           0          0          0          0          0.0
+GC-RUN-TIME      10       411.1       31.975     98.302     36.429     41.11      19.192804
+BYTES-CONSED     10       4034319280  403009904  407150416  403012320  403431928  1239563.6
+EVAL-CALLS       10       0           0          0          0          0          0.0
+#+end_src
+The ccl version:
+#+begin_src lisp
+-          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
+REAL-TIME  10       15.73      1.551425  1.603039  1.561077  1.573     0.019737
+RUN-TIME   10       15.730825  1.551544  1.602959  1.561094  1.573082  0.019757
+#+end_src
+** [[lift][lift]]
+Lift says that there were 16 successful tests, but does not specify the number of successful assertions, so no progress reports..
+#+begin_src lisp
+(benchmark:with-timing (10) (run-tests :suite 'uax-lift-15))
+-                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
+REAL-TIME        10       6.60661     0.653326   0.693328   0.656661   0.660661     0.011136
+RUN-TIME         10       6.604042    0.652423   0.693389   0.657587   0.660404     0.011164
+USER-RUN-TIME    10       6.590675    0.652425   0.683388   0.657588   0.659068     0.008398
+SYSTEM-RUN-TIME  10       0.01338     0          0.01       0          0.001338     0.003049
+PAGE-FAULTS      10       0           0          0          0          0            0.0
+GC-RUN-TIME      10       278.852     23.49      40.71      27.184     27.8852      4.50024
+BYTES-CONSED     10       3662570128  365002000  377114400  365003264  366257020.0  3620682.0
+EVAL-CALLS       10       0           0          0          0          0            0.0
+#+end_src
+The ccl version of the benchmark resulted in this:
+#+begin_src lisp
+  (benchmark:with-timing (10) (run-tests :suite 'uax-lift-15))
+
+-          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
+REAL-TIME  10       11.619499  1.15895   1.172787  1.159915  1.16195   0.003887
+RUN-TIME   10       11.604948  1.156783  1.170432  1.158835  1.160495  0.003818
+#+end_src
+** [[lisp-unit][lisp-unit]]
+No progress reports
+#+begin_src lisp
+(benchmark:with-timing (10) (run-tests))
+-                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE    DEVIATION
+REAL-TIME        10       7.866596    0.769993   0.816659   0.776658   0.78666    0.016124
+RUN-TIME         10       7.859482    0.771481   0.813944   0.77546    0.785948   0.015153
+USER-RUN-TIME    10       7.762971    0.765489   0.797356   0.772805   0.776297   0.008726
+SYSTEM-RUN-TIME  10       0.096526    0          0.026643   0.009915   0.009653   0.009454
+PAGE-FAULTS      10       0           0          0          0          0          0.0
+GC-RUN-TIME      10       444.581     35.22      63.385     37.716     44.4581    10.282556
+BYTES-CONSED     10       4411139200  440744928  444310816  440759072  441113920  1065665.8
+EVAL-CALLS       10       160         16         16         16         16         0.0
+#+end_src
+Now the ccl version:
+#+begin_src lisp
+-          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
+REAL-TIME  10       13.336789  1.326142  1.349726  1.330619  1.333679  0.007343
+RUN-TIME   10       13.344638  1.323655  1.347442  1.330136  1.334464  0.008201
+NIL
+#+end_src
+** [[lisp-unit2][list-unit2]]
+No progress reports
+#+begin_src lisp
+  (benchmark:with-timing (10) (run-tests))
+  -                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
+  REAL-TIME        10       10.796587   1.036659   1.369989   1.043326   1.079659     0.097198
+  RUN-TIME         10       10.788351   1.033685   1.36925    1.04422    1.078835     0.097286
+  USER-RUN-TIME    10       10.555075   1.017118   1.282673   1.026415   1.055508     0.076476
+  SYSTEM-RUN-TIME  10       0.23329     0.010035   0.086577   0.013448   0.023329     0.021721
+  PAGE-FAULTS      10       0           0          0          0          0            0.0
+  GC-RUN-TIME      10       1076.758    66.774     399.308    75.839     107.6758     97.46117
+  BYTES-CONSED     10       5127796976  512756560  512800544  512778608  512779700.0  13773.206
+  EVAL-CALLS       10       0           0          0          0          0            0.0
+#+end_src
+No ccl version because ccl decide not to compile lisp-unit2.
+** [[nst][nst]]
+NST's results were surprisingly bad. I ran tests with and without :cache being set on each fixture and it did not seem to make much of a difference.
+#+begin_src lisp
+(benchmark:with-timing (10) (nst-cmd :run :uax-15-nst))
+-                SAMPLES  TOTAL         MINIMUM      MAXIMUM      MEDIAN       AVERAGE        DEVIATION
+REAL-TIME        10       522.56226     52.202904    52.3729      52.24624     52.25623       0.048742
+RUN-TIME         10       522.1588      52.14377     52.32057     52.210835    52.215885      0.047927
+USER-RUN-TIME    10       520.0237      51.92075     52.0908      51.99614     52.00237       0.046089
+SYSTEM-RUN-TIME  10       2.135158      0.186492     0.236569     0.209909     0.213516       0.01544
+PAGE-FAULTS      10       0             0            0            0            0              0.0
+GC-RUN-TIME      10       16532.35      1629.216     1679.521     1656.667     1653.2349      17.045515
+BYTES-CONSED     10       319321472704  31931030448  31942032624  31931048176  31932148000.0  3295139.8
+EVAL-CALLS       10       6768780       676878       676878       676878       676878         0.0
+#+end_src
+The ccl version:
+#+begin_src lisp
+-          SAMPLES  TOTAL      MINIMUM   MAXIMUM    MEDIAN     AVERAGE    DEVIATION
+REAL-TIME  10       490.6759   48.98529  49.147766  49.05929   49.067593  0.040534
+RUN-TIME   10       490.84375  49.00008  49.194897  49.082294  49.084373  0.048305
+#+end_src
+** [[parachute][parachute]]
+Progress reporting turned off by using the quiet report.
+#+begin_src lisp
+  (benchmark:with-timing (10) (test 'suite :report 'quiet))
+
+  SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
+  REAL-TIME        10       11.783255   1.133325   1.303324   1.149992   1.178326     0.056906
+  RUN-TIME         10       11.76993    1.133041   1.300795   1.147235   1.176993     0.05646
+  USER-RUN-TIME    10       11.237235   1.079734   1.240937   1.098715   1.123724     0.047878
+  SYSTEM-RUN-TIME  10       0.532717    0.029905   0.086578   0.049991   0.053272     0.016382
+  PAGE-FAULTS      10       0           0          0          0          0            0.0
+  GC-RUN-TIME      10       2197.263    187.204    323.411    198.264    219.7263     38.07161
+  BYTES-CONSED     10       5357258016  528976624  596222960  529004640  535725800.0  20165728.0
+  EVAL-CALLS       10       0           0          0          0          0            0.0
+#+end_src
+The same benchmark with ccl:
+#+begin_src lisp
+-          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
+REAL-TIME  10       35.034126  3.446474  3.589289  3.496444  3.503413  0.038255
+RUN-TIME   10       35.019848  3.44557   3.593415  3.491784  3.501985  0.040734
+NIL
+#+end_src
+** [[prove][prove]]
+The prove tests were done with the =*default-reporter*= set to =:dot= because there is no way to turn off the progress reporting. The times were surprisingly slow (not clunit slow, but roughly five times longer than the other frameworks), with no real difference between running in a terminal window or in an emacs REPL.
+#+begin_src lisp
+(benchmark:with-timing (10) (run-all-uax-15))
+                SAMPLES  TOTAL        MINIMUM     MAXIMUM     MEDIAN      AVERAGE     DEVIATION
+REAL-TIME        10       53.35967     4.923303    5.596632    5.359966    5.335967    0.191425
+RUN-TIME         10       31.261152    3.050384    3.377765    3.100676    3.126115    0.091643
+USER-RUN-TIME    10       30.215063    2.950801    3.197486    2.983159    3.021506    0.070946
+SYSTEM-RUN-TIME  10       1.046104     0.075742    0.180281    0.093283    0.10461     0.029117
+PAGE-FAULTS      10       0            0           0           0           0           0.0
+GC-RUN-TIME      10       2573.17      169.012     522.004     217.099     257.317     96.44223
+BYTES-CONSED     10       14124826480  1405710432  1439239664  1405725840  1412482648  10476879.0
+EVAL-CALLS       10       0            0           0           0           0           0.0
+#+end_src
+The ccl version:
+#+begin_src lisp
+-          SAMPLES  TOTAL      MINIMUM    MAXIMUM    MEDIAN     AVERAGE    DEVIATION
+REAL-TIME  10       116.92284  11.292191  12.127493  11.640758  11.692284  0.26381
+RUN-TIME   10       116.86357  11.283448  12.121286  11.633533  11.686357  0.264158
+#+end_src
+** [[ptester][ptester]]
+The benchmarking was done with a single function (ptester-tests) that called all the tests. Progess reporting cannot be turned off.
+#+begin_src lisp
+-                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
+REAL-TIME        10       9.003254    0.879991   0.919993   0.899992   0.900325     0.015738
+RUN-TIME         10       9.0088      0.879493   0.92187    0.898636   0.90088      0.015573
+USER-RUN-TIME    10       8.855853    0.876179   0.899495   0.881767   0.885585     0.007137
+SYSTEM-RUN-TIME  10       0.152978    0.000027   0.043389   0.003385   0.015298     0.014619
+PAGE-FAULTS      10       0           0          0          0          0            0.0
+GC-RUN-TIME      10       339.523     19.892     53.051     29.351     33.9523      10.742064
+BYTES-CONSED     10       5195902592  519572448  519605984  519591104  519590270.0  12074.577
+EVAL-CALLS       10       0           0          0          0          0            0.0
+#+end_src
+The ccl version:
+#+begin_src lisp
+-          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
+REAL-TIME  10       22.3047    2.07826   2.369612  2.307167  2.23047   0.118142
+RUN-TIME   10       22.307024  2.072661  2.370712  2.302883  2.230702  0.118646
+#+end_src
+** [[rove][rove]]
+I ran into an as yet unidentified issue with rove and sbcl. Several attempts to run the benchmark on sbcl triggered heap exhaustion during garbage collection (even on a clean sbcl instance). Below are the results for the one clean run of 10 iterations that I did get.
+
+#+begin_src lisp
+(benchmark:with-timing (10) (run :uax-15-rove-tests :style :none))
+
+-                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
+REAL-TIME        10       18.219845   1.536653   2.41998    1.69332    1.821984     0.266849
+RUN-TIME         10       18.222372   1.536997   2.420086   1.693447   1.822237     0.266392
+USER-RUN-TIME    10       16.82601    1.466989   2.123462   1.60346    1.682601     0.193403
+SYSTEM-RUN-TIME  10       1.396386    0.049999   0.296627   0.10344    0.139639     0.074402
+PAGE-FAULTS      10       0           0          0          0          0            0.0
+GC-RUN-TIME      10       6424.622    381.013    1233.202   516.577    642.4622     253.83493
+BYTES-CONSED     10       8960510816  895972464  896586032  895994096  896051100.0  178432.86
+EVAL-CALLS       10       130         13         13         13         13           0.0
+#+end_src
+I did not have the same problem running the same benchmark test with ccl, but obviously apples and oranges. Here is the ccl benchmark.
+#+begin_src lisp
+    (benchmark:with-timing (10) (run :uax-15-rove-tests :style :none))
+-          SAMPLES  TOTAL      MINIMUM  MAXIMUM   MEDIAN    AVERAGE   DEVIATION
+REAL-TIME  10       41.76701   3.8768   4.341102  4.16477   4.176701  0.132818
+RUN-TIME   10       41.799763  3.87051  4.346589  4.170243  4.179976  0.135506
+#+end_src
+** [[rt][rt]]
+Rt reports only the tests, not the assertions.
+#+begin_src lisp
+(benchmark:with-timing (10) (do-tests))
+  -                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
+  REAL-TIME        10       7.053279    0.696661   0.739993   0.699995   0.705328     0.01284
+  RUN-TIME         10       7.045017    0.695458   0.737783   0.698051   0.704502     0.012506
+  USER-RUN-TIME    10       6.97191     0.684028   0.73121    0.695708   0.697191     0.012348
+  SYSTEM-RUN-TIME  10       0.073117    0          0.026694   0.003303   0.007312     0.0084
+  PAGE-FAULTS      10       0           0          0          0          0            0.0
+  GC-RUN-TIME      10       287.186     23.124     55.806     24.106     28.7186      9.336387
+  BYTES-CONSED     10       3781963056  378147840  378340736  378182688  378196300.0  50474.535
+  EVAL-CALLS       10       480         48         48         48         48           0.0
+#+end_src
+Now ccl version:
+#+begin_src lisp
+-          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
+REAL-TIME  10       11.663611  1.155944  1.180289  1.166971  1.166361  0.006513
+RUN-TIME   10       11.68608   1.157109  1.18317   1.169409  1.168608  0.006879
+#+end_src
+** [[should-test][should-test]]
+Should-test prints out the name of each test with OK.
+#+begin_src lisp
+  (benchmark:with-timing (10) (test))
+-                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
+REAL-TIME        10       8.156594    0.803326   0.896659   0.806659   0.815659     0.027082
+RUN-TIME         10       8.16205     0.802968   0.897908   0.808052   0.816205     0.02732
+USER-RUN-TIME    10       8.122097    0.798071   0.877938   0.80472    0.81221      0.022233
+SYSTEM-RUN-TIME  10       0.039968    0          0.019971   0.000005   0.003997     0.006101
+PAGE-FAULTS      10       0           0          0          0          0            0.0
+GC-RUN-TIME      10       440.966     33.525     112.947    38.192     44.0966      23.066162
+BYTES-CONSED     10       4033912496  403038928  406439808  403043248  403391230.0  1016250.75
+EVAL-CALLS       10       0           0          0          0          0            0.0
+#+end_src
+The ccl version
+#+begin_src lisp
+-          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
+REAL-TIME  10       24.659025  2.453905  2.483674  2.463236  2.465902  0.008501
+RUN-TIME   10       24.66664   2.456116  2.481225  2.466268  2.466664  0.007466
+#+end_src
+** [[tap-unit-test][tap-unit-test]]
+No progress reporting.
+#+begin_src lisp
+  (benchmark:with-timing (10) (run-tests))
+                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE    DEVIATION
+REAL-TIME        10       7.973262    0.776659   0.929992   0.779994   0.797326   0.044442
+RUN-TIME         10       7.974663    0.77693    0.932383   0.781873   0.797466   0.045228
+USER-RUN-TIME    10       7.891431    0.761086   0.909074   0.775958   0.789143   0.040629
+SYSTEM-RUN-TIME  10       0.083247    0          0.033295   0.003331   0.008325   0.010865
+PAGE-FAULTS      10       0           0          0          0          0          0.0
+GC-RUN-TIME      10       484.082     33.188     154.321    35.693     48.4082    35.405758
+BYTES-CONSED     10       4406207680  440607680  440635344  440620080  440620768  8083.716
+EVAL-CALLS       10       160         16         16         16         16         0.0
+#+end_src
+The ccl version:
+#+begin_src lisp
+-          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
+REAL-TIME  10       13.113791  1.305049  1.321753  1.310286  1.311379  0.005856
+RUN-TIME   10       13.095441  1.304772  1.315464  1.30753   1.309544  0.003755
+#+end_src
+** [[unit-test][unit-test]]
+Progress reporting on tests, not assertions
+#+begin_src lisp
+(benchmark:with-timing (10) (run-all-tests))
+-                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
+REAL-TIME        10       7.549933    0.71666    0.856659   0.729994   0.754993     0.047004
+RUN-TIME         10       7.556039    0.717151   0.857157   0.73066    0.755604     0.047087
+USER-RUN-TIME    10       7.37959     0.706391   0.821589   0.717151   0.737959     0.039426
+SYSTEM-RUN-TIME  10       0.176461    0.000002   0.049935   0.013322   0.017646     0.013324
+PAGE-FAULTS      10       0           0          0          0          0            0.0
+GC-RUN-TIME      10       850.624     52.211     190.571    63.007     85.0624      41.03387
+BYTES-CONSED     10       3842573536  381252624  411219072  381259776  384257340.0  8987242.0
+EVAL-CALLS       10       0           0          0          0          0            0.0
+#+end_src
+The ccl version:
+#+begin_src lisp
+-          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
+REAL-TIME  10       17.873028  1.676715  2.000257  1.68315   1.787303  0.129952
+RUN-TIME   10       17.880577  1.6739    2.00028   1.686198  1.788058  0.129957
+#+end_src
+** [[xlunit][xlunit]]
+Xlunit does progress reports only on the tests, not the assertions.
+#+begin_src lisp
+(benchmark:with-timing (10) (xlunit:textui-test-run (xlunit:get-suite uax-15)))
+-                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
+REAL-TIME        10       6.579943    0.649994   0.693328   0.653327   0.657994     0.012311
+RUN-TIME         10       6.584024    0.651812   0.693726   0.653186   0.658402     0.012139
+USER-RUN-TIME    10       6.547395    0.642397   0.670408   0.653116   0.65474      0.007082
+SYSTEM-RUN-TIME  10       0.03665     0          0.023319   0.000003   0.003665     0.007213
+PAGE-FAULTS      10       0           0          0          0          0            0.0
+GC-RUN-TIME      10       246.993     19.932     50.002     23.138     24.6993      8.570283
+BYTES-CONSED     10       3547926336  354158256  359179296  354160208  354792640.0  1513466.4
+EVAL-CALLS       10       0           0          0          0          0            0.0
+#+end_src
+The ccl version:
+#+begin_src lisp
+-          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
+REAL-TIME  10       11.600723  1.148456  1.19076   1.156022  1.160072  0.011422
+RUN-TIME   10       11.617545  1.148918  1.190917  1.159512  1.161754  0.011414
+#+end_src
+** [[xptest][xptest]]
+#+begin_src lisp
+(benchmark:with-timing (10) (report-result (run-test *uax-15-suite*)))
+
+ -                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
+REAL-TIME        10       6.513276    0.643327   0.689994   0.646661   0.651328     0.013098
+RUN-TIME         10       6.515137    0.643435   0.689399   0.647958   0.651514     0.012776
+USER-RUN-TIME    10       6.49848     0.640105   0.679408   0.647958   0.649848     0.010321
+SYSTEM-RUN-TIME  10       0.01668     0          0.009991   0.000003   0.001668     0.00307
+PAGE-FAULTS      10       0           0          0          0          0            0.0
+GC-RUN-TIME      10       253.887     20.3       51.813     23.71      25.3887      8.99575
+BYTES-CONSED     10       3545190064  354157152  357744240  354158784  354519000.0  1075096.0
+EVAL-CALLS       10       0           0          0          0          0            0.0
+#+end_src
+The ccl version:
+#+begin_src lisp
+-          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
+REAL-TIME  10       11.375671  1.133088  1.148804  1.136425  1.137567  0.004255
+RUN-TIME   10       11.397292  1.133247  1.151431  1.139366  1.139729  0.004538
+#+end_src
+[[top][top]]
+<<1am>>
+<<2am>>
+<<fiveam>>
+<<cacau>>
+<<cardiogram>>
+<<clunit>>
+<<clunit2>>
+<<fiasco>>
+<<fiveam>>
+<<com.gigamonkeys.test-framework>>
+<<gigamonkeys>>
+<<kaputt>>
+<<lift>>
+<<lisp-unit>>
+<<lisp-unit2>>
+<<nst>>
+<<parachute>>
+<<prove>>
+<<ptester>>
+<<rove>>
+<<rt>>
+<<should-test>>
+<<simplet>>
+<<tap-unit-test>>
+<<unit-test>>
+<<xlunit>>
+<<xptest>>
