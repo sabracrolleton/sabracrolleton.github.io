@@ -1,4 +1,4 @@
-#+TITLE: Comparison of Common Lisp Testing Frameworks
+#+TITLE: Comparison of Common Lisp Testing Frameworks (31 May 2021 Edition)
  #+AUTHOR:      Sabra Crolleton
  #+DATE:        2021-05-28
  #+EMAIL:       sabra.crolleton!gmail.com
