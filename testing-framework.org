@@ -373,10 +373,10 @@ I am not including a pie chart describing which library has market share because
 | [[unit-test][unit-test]]              | N              | N                      |
 | [[xlunit][xlunit]]                 | T(2)           | N                      |
 | [[xptest][xptest]]                 | N              | N                      |
-A means assertions run on compile, T means tests run on compile
-(1) if compiled at REPL
-(2) Optional by test, specified at definition: =(def-test-method t1 ((test tf-xlunit) :run nil) body)=
-(3) =*run-test-when-defined*= controls this option
+- A means assertions run on compile, T means tests run on compile
+- (1) if compiled at REPL
+- (2) Optional by test, specified at definition: =(def-test-method t1 ((test tf-xlunit) :run nil) body)=
+- (3) =*run-test-when-defined*= controls this option
 
 ** Fixtures
 <<fixtures>>
@@ -4006,7 +4006,7 @@ Obviously with its market share there is a lot to like. It does report all the a
 
 From a speed standpoint, it is either middle of the pack or, on a big test package and running in an emacs repl, vying with clunit for painfully slow. In such a case, if you are deciding between more tests with fewer assertions or fewer tests with more assertions, go with more tests and fewer assertions (but this is an emacs problem more than a fiveam problem). I do not know what using other editors would be like.
 
-My wishlist for Fiveam is the ability to turn off the progress report, better fixture capability, the edge case ability to handle value expressions and variables declared in closures surrounding the test and get rid of all those blank lines in the failure reports.
+My wishlist for Fiveam is better fixture capability, the edge case ability to handle value expressions and variables declared in closures surrounding the test and get rid of all those blank lines in the failure reports.
 
 ** Assertion Functions
 |is | is-false| finishes| signals| fail| pass| skip|
@@ -4018,6 +4018,12 @@ Fiveam will default to a reporting format. The format you get will depend on whe
 
 - =run= provides a progress report using the typical dot/f/e format and which returns a list of the assertion result objects.
 - =run!= provides the progress report, more details on failure and does not return a list of the passing assertion result objects.
+
+The following will allow you to turn off the progress report:
+#+begin_src lisp
+  (let ((fiveam:*test-dribble* (make-broadcast-stream)))
+    (fiveam:run! …))
+#+end_src
 
 To demonstrate the difference in the reports assume the following test that has a couple of passes and a couple of failures. We will insert a diagnostic string in the second assertion with a couple of variables to use in the string.
 #+begin_src lisp
