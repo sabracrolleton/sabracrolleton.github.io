@@ -1607,7 +1607,7 @@ I am not including a pie chart describing which library has market share because
 
 <tr>
 <td class="org-left"><a href="#org2a3bae4">fiveam</a></td>
-<td class="org-left">N</td>
+<td class="org-left">Optional (3)</td>
 <td class="org-left">N</td>
 </tr>
 
@@ -1708,11 +1708,10 @@ I am not including a pie chart describing which library has market share because
 </tr>
 </tbody>
 </table>
-<p>
-A means assertions run on compile, T means tests run on compile
-(1) if compiled at REPL
-(2) Optional by test, specified at definition: <code>(def-test-method t1 ((test tf-xlunit) :run nil) body)</code>
-</p>
+<div>A means assertions run on compile, T means tests run on compile</div>
+<div>(1) if compiled at REPL</div>
+<div>(2) Optional by test, specified at definition: <code>(def-test-method t1 ((test tf-xlunit) :run nil) body)</code></div>
+<div>(3) <code>*run-test-when-defined*</code> controls this option</div>
 </div>
 </div>
 
@@ -2362,7 +2361,7 @@ Does the framework provide a progress report, is it optional, and does it run ju
 
 <tr>
 <td class="org-left"><a href="#org2a3bae4">fiveam</a></td>
-<td class="org-left">Every assert</td>
+<td class="org-left">optional (1)</td>
 </tr>
 
 <tr>
@@ -2446,7 +2445,11 @@ Does the framework provide a progress report, is it optional, and does it run ju
 </tr>
 </tbody>
 </table>
-
+<p> (1) The following will allow fiveam to run without output
+  <pre class="src src-lisp">
+    (let ((fiveam:*test-dribble* (make-broadcast-stream)))
+      (fiveam:run! …)) </pre>
+</p>
 <p>
 <a href="#org54747f4">top</a>
 </p>
@@ -10845,9 +10848,9 @@ To demonstrate the difference in the reports assume the following test that has 
 </p>
 <div class="org-src-container">
 <pre class="src src-lisp">(test t1-fail
-    <span style="color: #23d7d7;">:documenation</span> <span style="color: #e67128;">"describe t1-fail"</span>
-    (<span style="color: #ffad29; font-weight: bold;">let</span> ((x 1) (y 2))
-      (is (eql 1 2))
+  <span style="color: #e67128;">"describe t1-fail"</span>
+  (<span style="color: #ffad29; font-weight: bold;">let</span> ((x 1) (y 2))
+    (is (eql 1 2))
     (is (equal x y)
         <span style="color: #e67128;">"We deliberately ensured that the first parameters ~a is not equal to the second parameter ~a"</span> x y)
     (is-false (eq 'b 'b))

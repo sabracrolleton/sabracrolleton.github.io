@@ -356,7 +356,7 @@ I am not including a pie chart describing which library has market share because
 | [[clunit][clunit]]                 | A              | N                      |
 | [[clunit2][clunit2]]                | A              | N                      |
 | [[fiasco][fiasco]]                 | A              | Y                      |
-| [[fiveam][fiveam]]                 | N              | N                      |
+| [[fiveam][fiveam]]                 | Optional       | N                      |
 | [[gigamonkeys][gigamonkeys]]            | N              | N                      |
 | [[kaputt][kaputt]]                 | N              | Y                      |
 | [[lift][lift]]                   | A, T(1)        | N                      |
@@ -376,6 +376,7 @@ I am not including a pie chart describing which library has market share because
 A means assertions run on compile, T means tests run on compile
 (1) if compiled at REPL
 (2) Optional by test, specified at definition: =(def-test-method t1 ((test tf-xlunit) :run nil) body)=
+(3) =*run-test-when-defined*= controls this option
 
 ** Fixtures
 <<fixtures>>
@@ -495,7 +496,7 @@ Does the framework provide a progress report, is it optional, and does it run ju
 | [[clunit2][clunit2]]       | optional                    |
 | [[gigamonkeys][gigamonkeys]]   | never                       |
 | [[fiasco][fiasco]]        | optional                    |
-| [[fiveam][fiveam]]        | Every assert                |
+| [[fiveam][fiveam]]        | optional (1)                |
 | [[kaputt][kaputt]]        | Every assert                |
 | [[lift][lift]]          | never                       |
 | [[lisp-unit][lisp-unit]]     | never                       |
@@ -512,7 +513,12 @@ Does the framework provide a progress report, is it optional, and does it run ju
 | [[unit-test][unit-test]]     | Every test                  |
 | [[xlunit][xlunit]]        | never                       |
 | [[xptest][xptest]]        | never                       |
-
+(1) The following will allow fiveam to run without output
+#+begin_src lisp
+  (let ((fiveam:*test-dribble*
+          (make-broadcast-stream)))
+    (fiveam:run! …))
+#+end_src
 [[top][top]]
 
 ** Skipping, Shuffling and Re-running
@@ -4015,17 +4021,17 @@ Fiveam will default to a reporting format. The format you get will depend on whe
 
 To demonstrate the difference in the reports assume the following test that has a couple of passes and a couple of failures. We will insert a diagnostic string in the second assertion with a couple of variables to use in the string.
 #+begin_src lisp
-(test t1-fail
-    :documenation "describe t1-fail"
+  (test t1-fail
+    "describe t1-fail"
     (let ((x 1) (y 2))
       (is (eql 1 2))
-    (is (equal x y)
-        "We deliberately ensured that the first parameters ~a is not equal to the second parameter ~a" x y)
-    (is-false (eq 'b 'b))
-    (pass "I do not want to run this test of ~a but will say it passes anyway" '(= 1 1))
-    (skip "Skip the next test because reasons")
-    (finishes (+ 1 2))
-    (signals division-by-zero (error 'floating-point-overflow))))
+      (is (equal x y)
+          "We deliberately ensured that the first parameters ~a is not equal to the second parameter ~a" x y)
+      (is-false (eq 'b 'b))
+      (pass "I do not want to run this test of ~a but will say it passes anyway" '(= 1 1))
+      (skip "Skip the next test because reasons")
+      (finishes (+ 1 2))
+      (signals division-by-zero (error 'floating-point-overflow))))
 #+end_src
 Now using the simple =run=, we get:
 #+begin_src lisp
@@ -4053,7 +4059,7 @@ Running test T1-FAIL fff.ss.X
 
  Failure Details:
  --------------------------------
- T1-FAIL in S0 []:
+ T1-FAIL in S0 [describe t1-fail]:
 
 2
 
