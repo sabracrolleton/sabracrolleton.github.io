@@ -865,7 +865,7 @@ What immediately jumps out is the vast majority are grouped together, then there
 | [[ptester][ptester]]                        |       9.0088 |      22.307 |
 | [[fiasco][fiasco]]                         |       9.6013 |      28.807 |
 | [[lisp-unit2][lisp-unit2]] (a)                 |      10.7883 |             |
-| [[fiveam][fiveam]]                         |      11.4339 |      19.292 |
+| [[fiveam][fiveam]]                         |      11.1790 |      18.647 |
 | [[parachute][parachute]]                      |      11.7699 |      35.020 |
 | [[rove][rove]]                           |      18.2223 |      41.800 |
 | [[prove][prove]]                          |      31.2611 |     116.864 |
@@ -892,7 +892,7 @@ What immediately jumps out is the vast majority are grouped together, then there
 | [[fiasco][fiasco]]                         |   4249190656 |
 | [[tap-unit-test][tap-unit-test]]                  |   4406207680 |
 | [[lisp-unit][lisp-unit]]                      |   4411139200 |
-| [[fiveam][fiveam]]                         |   4680267008 |
+| [[fiveam][fiveam]]                         |   4680219840 |
 | [[com.gigamonkeys.test-framework][com.gigamonkeys.test-framework]] |   4950815168 |
 | [[lisp-unit2][lisp-unit2]]                     |   5127796976 |
 | [[ptester][ptester]]                        |   5195902592 |
@@ -1046,11 +1046,27 @@ REAL-TIME  10       28.8267    2.806652  2.952852  2.882208  2.88267   0.043738
 RUN-TIME   10       28.806755  2.809196  2.948668  2.878305  2.880676  0.041971
 #+end_src
 ** [[fiveam][fiveam]]
-You cannot turn off progress reporting in fiveam. (At least I cannot figure it out). Besides wasting a huge amount of screen space and time, it creates interesting issues based on what you are running fiveam on. Emacs has known problems with long lines and fiveam's progress reporting in a benchmark like this creates lots of long line. It gets even worse if you set the =run= keyword parameter =:print-names= to nil.
+With progress reporting turned off:
+#+begin_src lisp
+(benchmark:with-timing (10)
+ (let ((fiveam:*test-dribble* (make-broadcast-stream)))
+      (run 'uax-15-fiveam)))
+-                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE    DEVIATION
+REAL-TIME        10       11.189935   1.069995   1.169993   1.109993   1.118994   0.030038
+RUN-TIME         10       11.179056   1.069764   1.170402   1.107926   1.117906   0.029854
+USER-RUN-TIME    10       10.824186   1.029703   1.114896   1.081201   1.082419   0.025603
+SYSTEM-RUN-TIME  10       0.354886    0.023378   0.060391   0.027252   0.035489   0.011385
+PAGE-FAULTS      10       0           0          0          0          0          0.0
+GC-RUN-TIME      10       1477.345    99.423     203.254    134.299    147.7345   30.82203
+BYTES-CONSED     10       4680219840  467997648  468051088  468022496  468021984  14806.843
+EVAL-CALLS       10       0           0          0          0          0          0.0
+#+end_src
+
+If you do not have progress reporting turned off, besides wasting a huge amount of screen space and time, it creates interesting issues based on what you are running fiveam on. Emacs has known problems with long lines and fiveam's progress reporting in a benchmark like this creates lots of long line. It gets even worse if you set the =run= keyword parameter =:print-names= to nil.
 
 Rule of thumb for big test systems and fiveam. Run it from a terminal, not an emacs REPL.
 
-First, this is sbcl running in a terminal:
+First, this is sbcl running in a terminal with progress reporting on:
 #+begin_src lisps
 (benchmark:with-timing (10) (run 'uax-15-fiveam))
 -                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
