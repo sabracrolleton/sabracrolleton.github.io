@@ -12,6 +12,9 @@
  #+ATTR_LATEX: :environment longtable :align l|lp{3cm}r|l
  #+ATTR_LATEX: :float multicolumn :width
 <<top>>
+* Changelog
+9 June - Updated clunit2 on new ability to compare multiple values in values expressions. Also noted that performance is being worked on and benchmarks will be redone when that is complete.
+
 * Introduction
 
 What testing framework should I use? The response should not be X or Y because it is "battle tested" or "extensible" or "has color coding". That is just content free advertising buzz words. Some of the webpages out there mentioning different common lisp unit tests frameworks merely parrot comments from library authors without validating whether they are true. Others like the [[https://lispcookbook.github.io/cl-cookbook/testing.html][lispcookbook]] do silly things like advising to start with FiveAm, but then only gives examples for Prove. The real response should be asking back - "how do you code"? But even armed with that information, how do you match a testing framework to their needs - Common Lisp has a ridiculous number of testing framework libraries.
