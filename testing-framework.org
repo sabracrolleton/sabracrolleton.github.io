@@ -1,4 +1,4 @@
-#+TITLE: Comparison of Common Lisp Testing Frameworks (31 May 2021 Edition)
+#+TITLE: Comparison of Common Lisp Testing Frameworks (9 June 2021 Edition)
  #+AUTHOR:      Sabra Crolleton
  #+DATE:        2021-05-28
  #+EMAIL:       sabra.crolleton!gmail.com
@@ -65,7 +65,7 @@ In any event, yes, I will state my opinions, but what you think is important wil
 | [[cacau][cacau]]                          | [[https://github.com/noloop/cacau][homepage]] | Noloop                                          | GPL3              |        2020 |
 | [[cardiogram][cardiogram]] (e)                 | [[https://gitlab.com/a.aguilar/cardiogram][homepage]] | Abraham Aguilar                                 | MIT               |        2020 |
 | [[clunit][clunit]]                         | [[http://tgutu.github.io/clunit/][homepage]] | Tapiwa Gutu                                     | BSD               |        2017 |
-| [[clunit2][clunit2]]                        | [[https://notabug.org/cage/clunit2][homepage]] | Cage (fork of clunit)                           | BSD               |        2020 |
+| [[clunit2][clunit2]]                        | [[https://notabug.org/cage/clunit2][homepage]] | Cage (fork of clunit)                           | BSD               |        2021 |
 | [[com.gigamonkeys.test-framework][com.gigamonkeys.test-framework]] | [[https://github.com/gigamonkey/monkeylib-test-framework][homepage]] | Peter Seibel                                    | BSD               |        2010 |
 | [[fiasco][fiasco]] (b)                     | [[https://github.com/joaotavora/fiasco][homepage]] | João Távora                                     | BSD 2 Clause      |        2020 |
 | [[fiveam][fiveam]]                         | [[https://github.com/lispci/fiveam][homepage]] | Edward Marco Baringer                           | BSD               |        2020 |
@@ -190,7 +190,7 @@ For those who want the opinionated quick summary. So, the awards are:
 - Favorite Hierarchy Setup (nestable suites): *Parachute* (Everything is a test and its :parents all the way up, can easily specify parents at the child level). Also *2am and Lift*
 
 - Assertions that take diagnostic comments with variables: *Parachute, Fiasco, 2am, Fiveam, Lift, Clunit2* This is something that I like for debugging purposes along with whatever reporting comes built in with the framework. See [[error-reporting][error-reporting]]
-- Values expression testing: *Lisp-Unit2, Lisp-Unit, Parachute*
+- Values expression testing: *Lisp-Unit2, Lisp-Unit, Parachute*, (*Update* *Clunit2* as well)
 - I want to track if my functions changed results: *Checkl*
 - Tests that specify suite or tags (does not rely on location in file): *Parachute, Lisp-Unit (tags), Lisp-Unit2(tags), Lift*
 - Heavy duty complex fixtures: *NST* (but there are trade-offs in the shape of the learning curve and performance)
@@ -231,7 +231,7 @@ For those who want the opinionated quick summary. So, the awards are:
   - Signal and condition testing or at least be able to validate that the right condition was signalled. (Kaputt, did you forget something?)
 	- Definable assertions/criteria (can you easily define additional assertions?)
   - Do assertions or tests [[run-on-compile][run on compilation]] (C-c C-c in the source file)?
-  - Do the assertions handle [[values-expressions][values expressions]]? Most frameworks accept a values expression but compare just the first value. Fiveam complains about getting a values expression and throws an error. Parachute and NST will compare a single values expression against multiple individual values. Prove will compare a values expression against a list. Lisp-Unit and Lisp-Unit2 will actually compare two values expressions value by value.
+  - Do the assertions handle [[values-expressions][values expressions]]? Most frameworks accept a values expression but compare just the first value. Fiveam complains about getting a values expression and throws an error. Parachute and NST will compare a single values expression against multiple individual values. Prove will compare a values expression against a list. Lisp-Unit and Lisp-Unit2 (*Update* Clunit2) will actually compare two values expressions value by value.
 
 - Easy to set up understandable suites and hierarchies or tags. Many frameworks automatically add tests to the last test suite that was defined. That it makes things easy if you work very linearly or just in files for regression testing. If you are working in the REPL and switching between multiple test sub-suites that can create unexpected behavior. I like to able to specify the suite (or tags) when defining the test, but that creates more unecessary typing if you work differently.
 
@@ -837,12 +837,13 @@ Assertions also accept diagnostic strings but no variables
 
 This is really simple benchmarking using sbcl version 2.1.4 on a linux server and ccl version 1.12 LinuxX8664. I used each framework and applied them to uax-15 which has 16 tests and 338760 assertions (and they all pass). The tests were stripped to the minimum. No diagnostic strings were used and for the frameworks which allowed it, the test was set to no progress reporting and overall summary only. All of the assertions pass, so any real world test with failing assertions generating failure reports will be different.
 
-Based on this one application, from a speed perspective, there was a host of frameworks in a pack, with Rove and Prove at the back, then NST and Clunit not even on the same continent. (Strangely enough, while the other frameworks were slower under cc, Clunit and NST improved.) Fiveam is in the pack so long as it runs in a terminal or some non-emacs editor. If running in emacs it runs into an emacs issue with long lines. You will see the difference in the fiveam report.
+Based on this one application, from a speed perspective, there was a host of frameworks in a pack, with Rove and Prove at the back, then NST and Clunit not even on the same continent. (*Update:* Work is being done on Clunit2 with respect to performance, but not yet released as of this date.)  (Strangely enough, while the other frameworks were slower under cc, Clunit and NST improved.) Fiveam is in the pack so long as it runs in a terminal or some non-emacs editor. If running in emacs it runs into an emacs issue with long lines. You will see the difference in the fiveam report.
 
 Your context will be important as to whether these benchmarks are at all meaningful to you.
 <<stacked-ranking-benchmarks>>
 ** Stack Ranking
 What immediately jumps out is the vast majority are grouped together, then there are a few outliers that are just way worse than the pack. For consistency, every benchmark was done on sbcl 2.1.4 in a terminal (to avoid emacs issues) except as noted to show the emacs effect.
+
 
 #+CAPTION: Order by Benchmark Runtime (lower is better)
 #+ATTR_HTML: :border 2 :rules all :frame border
@@ -871,8 +872,9 @@ What immediately jumps out is the vast majority are grouped together, then there
 | [[prove][prove]]                          |      31.2611 |     116.864 |
 | [[nst][nst]]                            |     522.5623 |     490.843 |
 | [[clunit][clunit]]                         |     601.0652 |     272.858 |
-| [[clunit2][clunit2]]                        |     601.0652 |             |
+| [[clunit2][clunit2]] (b)                    |     601.0652 |             |
 (a) CCL decided it was not friends with Lisp-Unit2 and did not compile it.
+(b) I have seen some very favorable indications coming out of the clunit2 development branch but I understand there is still work to do.
 
 #+CAPTION: Order by Benchmark Bytes Consed (lower is better)
 #+ATTR_HTML: :border 2 :rules all :frame border
@@ -1021,7 +1023,7 @@ REAL-TIME  10       272.9831  27.003325  27.478271  27.37946  27.298307  0.17991
 RUN-TIME   10       272.8588  26.99254   27.466413  27.36916  27.28588   0.179731
 #+end_src
 ** [[clunit2][clunit2]]
-Clunit and Clunit2 have always had a concern about performance. Running this benchmark with them was painful. Refer to the clunit benchmark.
+I have seen some very favorable indications coming out of the clunit2 development branch but I understand there is still work to do and the fixes have not yet been released.
 ** [[fiasco][fiasco]]
 With progress reporting turned off
 #+begin_src lisp
@@ -1465,14 +1467,14 @@ I expect all libraries to have the equivalent of is, signals and maybe finishes.
 | [[lift][lift]]          | Y               | ensure      | ensure-condition  |              |
 | [[lisp-unit][lisp-unit]]     | Y               | assert-true | assert-error      |              |
 | [[lisp-unit2][lisp-unit2]]    | Y               | assert-true | assert-error      |              |
-  | [[nst][nst]]           | N               | :true       | :err              |              |
-  | [[parachute][parachute]]     | Y (P)           | is          | fail              | finish       |
+| [[nst][nst]]           | N               | :true       | :err              |              |
+| [[parachute][parachute]]     | Y (P)           | is          | fail              | finish       |
 | [[prove][prove]]         | Y               | is, ok      | is-error          |              |
-  | [[ptester][ptester]]  (2)  |                 | test        | test-error        |              |
+| [[ptester][ptester]]  (2)  |                 | test        | test-error        |              |
 | [[rove][rove]]          | Y               | ok          | signals           |              |
 | [[rt][rt]]       (2)  |                 |             |                   |              |
 | [[should-test][should-test]]   | Y               | be          | signals           |              |
-  | [[simplet][simplet]]  (2)  |                 |             |                   |              |
+| [[simplet][simplet]]  (2)  |                 |             |                   |              |
 | [[tap-unit-test][tap-unit-test]] | Y               | assert-true | assert-error      |              |
 | [[unit-test][unit-test]]     | Y               | test-assert | test-condition    |              |
 | [[xlunit][xlunit]]        | Y               | assert-true | assert-condition  |              |
@@ -1900,7 +1902,7 @@ Check and see if you have to manually recompile a test when a function being tes
     "describe t2"
     (is (= 1 1))
     (is (= 2 2))
-    (is (= (values 1 2) (values 1 2))))
+    (is (= (values 1 2) (values 1 3))))
 
   (let ((l1 '(#\a #\B #\z))
         (l2 '(97 66 122)))
@@ -3225,7 +3227,7 @@ Clunit2 is a fork of Clunit with only a few additions at this point. For package
 
 Clunit2 does report all failing assertions within a test, has the option to turn off progress reporting and accepts user provided diagnostic strings with variables in the assertions. Going interactive with debugging is optional, fixtures are available as are suites and the ability to rerun failed tests. You can specify that a test that depends on other tests passing will be skipped if those prior tests fail.
 
-Where it falls down is speed and how it handles some of the edge cases compared to other frameworks. As you can tell from the benchmarks section, clunit2 is very slow when faced with something with a lot of assertions. Your context may be very different, but concerns have been voiced with respect to the speed of clunit/clunit2 before. With respect to the edge cases, Clunit fails to accept variables declared in closures surrounding the test and does not have the ability some other frameworks have to deal with values expressions.
+Where it falls down is speed and how it handles some of the edge cases compared to other frameworks. As you can tell from the benchmarks section, clunit2 is very slow when faced with something with a lot of assertions. Your context may be very different, but concerns have been voiced with respect to the speed of clunit/clunit2 before. With respect to the edge cases, Clunit2 fails to accept variables declared in closures surrounding the test and does not have the ability some other frameworks have to deal with values expressions. (*Update* I am hearing favorable indications on development from the author, so we will redo the benchmarks when those go mainline.)
 
 ** Assertion Functions
 Clunit2's assertion functions are:
@@ -3359,7 +3361,7 @@ With respect to the values expression, we can see that it passed, proving clunit
 
 You do not have to manually recompile a test after a tested function has been modified.
 *** Edge Cases: Values expressions, loops, closures and calling other tests
-Clunit2 has no special functionality for dealing with values expressions. It accepts them but merely looks at the intial value provided by each expression. The following passes.
+(*Update* Clunit2 as of the date of this update report will compare all the values from two values expressions. The following now properly fails.)
 #+begin_src lisp
   (deftest t2-values-expressions ()
     (assert-equal (values 1 2)
