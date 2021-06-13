@@ -1,4 +1,4 @@
-#+TITLE: Comparison of Common Lisp Testing Frameworks (9 June 2021 Edition)
+#+TITLE: Comparison of Common Lisp Testing Frameworks (13 June 2021 Edition)
  #+AUTHOR:      Sabra Crolleton
  #+DATE:        2021-05-28
  #+EMAIL:       sabra.crolleton!gmail.com
@@ -13,7 +13,7 @@
  #+ATTR_LATEX: :float multicolumn :width
 <<top>>
 * Changelog
-13 June - Updated clunit2 on huge improvement update and new ability to compare multiple values in values expressions. Clunit2 is now substantially differentiated from clunit.
+13 June 2021 - Updated clunit2 on huge improvement update and new ability to compare multiple values in values expressions. Clunit2 is now substantially differentiated from clunit.
 
 * Introduction
 
