@@ -13,7 +13,7 @@
  #+ATTR_LATEX: :float multicolumn :width
 <<top>>
 * Changelog
-13 June 2021 - Updated clunit2 on huge improvement update and new edge case abilities to compare multiple values in values expressions and handle variables declared in closures. Clunit2 is now substantially differentiated from clunit.
+13 June 2021 - Updated clunit2 on its huge performance improvement update and new edge case abilities to compare multiple values in values expressions and handle variables declared in closures. Clunit2 is now substantially differentiated from clunit.
 
 * Introduction
 
@@ -226,7 +226,7 @@ For those who want the opinionated quick summary. So, the awards are:
   - Tests can call other tests (This is not the same as funcallable tests. To be useful this does require a minimum level of test labeling in the reporting.)
 
 - Assertions (aka [[assertion-functions][Assertion Functions]])
-  - There are frameworks with only a few assertion test functions. There are frameworks with so many assertions that you wonder if you have to learn them all. The advantage of specialized assertions is that less typing, faster performance and possibly relevant [[error-reporting][built-in error messages]]. You have to decide for yourself how much weight to put on extra assertions like having =assert-symbolp= instead of =(is (symbolp x))=.
+  - There are frameworks with only a few assertion test functions. There are frameworks with so many assertions that you wonder if you have to learn them all. The advantage of specialized assertions is less typing, possibly faster (or slower) performance and possibly relevant [[error-reporting][built-in error messages]]. You will have to check for yourself whether performance is positively or negatively impacted. You have to decide for yourself how much weight to put on extra assertions like having =assert-symbolp= instead of =(is (symbolp x))=.
   - Assertions that either automatically explain why the the test failed or [[diagnostic-messages][allow a diagnostic string]] that describes the assertion and what failed. (Have you ever seen a test fail but the report of what it should have been and what the result was look exactly the same? Maybe the test required EQL and you thought it was EQUALP? These might or might not help)
   - Can assertions can access [[closures][variables in a closure containing the test]]? (Most frameworks can, but Clunit, Clunit2, Lisp-Unit, Lisp-Unit2 and NST cannot).
   - Do the assertions have [[assert-expands][macroexpand assertion functions]]? (Clunit, Clunit2, Lisp-Unit, Lisp-Unit2, Prove, Rove and Tap-Unit-Test have this)
@@ -869,17 +869,19 @@ What immediately jumps out is the vast majority are grouped together, then there
 | [[com.gigamonkeys.test-framework][com.gigamonkeys.test-framework]] |       8.5220 |      30.627 |
 | [[ptester][ptester]]                        |       9.0088 |      22.307 |
 | [[fiasco][fiasco]]                         |       9.6013 |      28.807 |
+| [[clunit2][clunit2]] (b1)                   |      10.3766 |      26.347 |
 | [[lisp-unit2][lisp-unit2]] (a)                 |      10.7883 |             |
 | [[fiveam][fiveam]]                         |      11.1790 |      18.647 |
 | [[parachute][parachute]]                      |      11.7699 |      35.020 |
-| [[clunit2][clunit2]] (b)                    |      13.3833 |      32.582 |
+| [[clunit2][clunit2]] (b2)                   |      13.3833 |      32.582 |
 | [[rove][rove]]                           |      18.2223 |      41.800 |
 | [[prove][prove]]                          |      31.2611 |     116.864 |
 | [[nst][nst]]                            |     522.5623 |     490.843 |
 | [[clunit][clunit]]                         |     601.0652 |     272.858 |
 
 (a) CCL decided it was not friends with Lisp-Unit2 and did not compile it.
-(b) 13 June 2021 Update
+(b1) 13 June 2021 Update - testing using assert-true
+(b2) 13 June 2021 Update - testing using assert-equal
 
 #+CAPTION: Order by Benchmark Bytes Consed (lower is better)
 #+ATTR_HTML: :border 2 :rules all :frame border
@@ -906,11 +908,12 @@ What immediately jumps out is the vast majority are grouped together, then there
 | [[clunit][clunit]]                         |   5262303120 |
 | [[parachute][parachute]]                      |   5357258016 |
 | [[rove][rove]]                           |   8960510816 |
+| [[clunit2][clunit2]] (a)                    |  13401972672 |
 | [[prove][prove]]                          |  14124826480 |
-| [[clunit2][clunit2]] (a)                    |  15377667616 |
+| [[clunit2][clunit2]] (b)                    |  15377667616 |
 | [[nst][nst]]                            | 319321472704 |
-(a) 13 June 2021 Update
-
+(a) 13 June 2021 Update using assert-true
+(b) 13 June 2021 Update using assert-equal
 
 #+CAPTION: Order by Benchmark Eval calls (lower is better)
 #+ATTR_HTML: :border 2 :rules all :frame border
@@ -1033,6 +1036,29 @@ RUN-TIME   10       272.8588  26.99254   27.466413  27.36916  27.28588   0.17973
 #+end_src
 ** [[clunit2][clunit2]]
 *Update 13 June 2021:* Clunit2 has had a huge performance increase, most of it apparently involving moving from using lists to using arrays. Clunit2 should now be considered a member of the pack from a performance standpoint.
+
+I ran the new improved clunit2 two ways and there is a performance difference to be considered here.
+
+First I let CL equal do the comparision and then clunit2 just checked whether the assertion was true (assert-true) which was how all the other frameworks were also tested.
+
+#+begin_src lisp
+-                SAMPLES  TOTAL        MINIMUM     MAXIMUM     MEDIAN      AVERAGE       DEVIATION
+REAL-TIME        10       10.376591    1.023326    1.066659    1.029992    1.037659      0.015279
+RUN-TIME         10       10.367396    1.022475    1.065339    1.028659    1.03674       0.015162
+USER-RUN-TIME    10       10.057592    0.995536    1.019138    1.002031    1.005759      0.008744
+SYSTEM-RUN-TIME  10       0.309821     0.016781    0.046708    0.029969    0.030982      0.008953
+PAGE-FAULTS      10       0            0           0           0           0             0.0
+GC-RUN-TIME      10       999.48       91.007      122.793     92.142      99.948        12.148087
+BYTES-CONSED     10       13401972672  1340051456  1340265440  1340209264  1340197200.0  65795.266
+EVAL-CALLS       10       0            0           0           0           0             0.0
+#+end_src
+The ccl version:
+#+begin_src lisp
+-          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
+REAL-TIME  10       26.267895  2.592513  2.656461  2.627074  2.626789  0.015478
+RUN-TIME   10       26.34661   2.602268  2.665974  2.631869  2.634661  0.015835
+#+end_src
+I then speculated whether using assert-equal would increase performance on the ground that you are only testing once - =assert-equal= replaces both the CL =equal= function and the clunit2 =assert-true= function). Interestingly that actually slowed things down slightly.
 #+begin_src lisp
 -                SAMPLES  TOTAL        MINIMUM     MAXIMUM     MEDIAN      AVERAGE       DEVIATION
 REAL-TIME        10       13.389882    1.309988    1.483321    1.313322    1.338988      0.051165
@@ -1049,7 +1075,6 @@ The ccl version:
 -          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
 REAL-TIME  10       32.504135  3.207461  3.299608  3.244852  3.250414  0.0254
 RUN-TIME   10       32.58276   3.221215  3.292748  3.254175  3.258276  0.021464
-
 #+end_src
 ** [[fiasco][fiasco]]
 With progress reporting turned off
