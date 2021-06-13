@@ -13,7 +13,7 @@
  #+ATTR_LATEX: :float multicolumn :width
 <<top>>
 * Changelog
-9 June - Updated clunit2 on new ability to compare multiple values in values expressions. Also noted that performance is being worked on and benchmarks will be redone when that is complete.
+13 June - Updated clunit2 on huge improvement update and new ability to compare multiple values in values expressions. Clunit2 is now substantially differentiated from clunit.
 
 * Introduction
 
@@ -67,7 +67,7 @@ In any event, yes, I will state my opinions, but what you think is important wil
 | [[2am][2am]] (not in quicklisp)         | [[https://gitlab.common-lisp.net/dkochmanski/2am][homepage]] | Daniel Kochmański                               | MIT               |        2016 |
 | [[cacau][cacau]]                          | [[https://github.com/noloop/cacau][homepage]] | Noloop                                          | GPL3              |        2020 |
 | [[cardiogram][cardiogram]] (e)                 | [[https://gitlab.com/a.aguilar/cardiogram][homepage]] | Abraham Aguilar                                 | MIT               |        2020 |
-| [[clunit][clunit]]                         | [[http://tgutu.github.io/clunit/][homepage]] | Tapiwa Gutu                                     | BSD               |        2017 |
+| [[clunit][clunit]] (a)                     | [[http://tgutu.github.io/clunit/][homepage]] | Tapiwa Gutu                                     | BSD               |        2017 |
 | [[clunit2][clunit2]]                        | [[https://notabug.org/cage/clunit2][homepage]] | Cage (fork of clunit)                           | BSD               |        2021 |
 | [[com.gigamonkeys.test-framework][com.gigamonkeys.test-framework]] | [[https://github.com/gigamonkey/monkeylib-test-framework][homepage]] | Peter Seibel                                    | BSD               |        2010 |
 | [[fiasco][fiasco]] (b)                     | [[https://github.com/joaotavora/fiasco][homepage]] | João Távora                                     | BSD 2 Clause      |        2020 |
@@ -90,7 +90,7 @@ In any event, yes, I will state my opinions, but what you think is important wil
 | [[xlunit][xlunit]]                         | [[http://git.kpe.io/?p=xlunit.git;a=tree][homepage]] | Kevin RosenBerg                                 | BSD               |        2015 |
 | [[xptest][xptest]]                         | none     | Craig Brozensky                                 | Public Domain     |        2015 |
 
-- (a) Looking for new maintainer. Has been forked to clunit2
+- (a) Looking for new maintainer. Has been forked to clunit2 and you should only consider clunit2.
 - (b) Fork of stefil
 - (c) Port to Clasp, otherwise 2015
 - (d) Tap-Unit-Test is a version of lisp-unit with [[http://en.wikipedia.org/wiki/Test_Anything_Protocol][TAP]] formatted reporting.
@@ -226,7 +226,7 @@ For those who want the opinionated quick summary. So, the awards are:
   - Tests can call other tests (This is not the same as funcallable tests. To be useful this does require a minimum level of test labeling in the reporting.)
 
 - Assertions (aka [[assertion-functions][Assertion Functions]])
-  - There are frameworks with only a few assertion test functions. There are frameworks with so many assertions that you wonder if you have to learn them all. The advantage of specialized assertions is that less typing and possibly relevant [[error-reporting][built-in error messages]]. You have to decide for yourself how much weight to put on extra assertions like having =assert-symbolp= instead of =(is (symbolp x))=.
+  - There are frameworks with only a few assertion test functions. There are frameworks with so many assertions that you wonder if you have to learn them all. The advantage of specialized assertions is that less typing, faster performance and possibly relevant [[error-reporting][built-in error messages]]. You have to decide for yourself how much weight to put on extra assertions like having =assert-symbolp= instead of =(is (symbolp x))=.
   - Assertions that either automatically explain why the the test failed or [[diagnostic-messages][allow a diagnostic string]] that describes the assertion and what failed. (Have you ever seen a test fail but the report of what it should have been and what the result was look exactly the same? Maybe the test required EQL and you thought it was EQUALP? These might or might not help)
   - Can assertions can access [[closures][variables in a closure containing the test]]? (Most frameworks can, but Clunit, Clunit2, Lisp-Unit, Lisp-Unit2 and NST cannot).
   - Do the assertions have [[assert-expands][macroexpand assertion functions]]? (Clunit, Clunit2, Lisp-Unit, Lisp-Unit2, Prove, Rove and Tap-Unit-Test have this)
@@ -271,7 +271,7 @@ For those who want the opinionated quick summary. So, the awards are:
   - Skip based on implementations
   - also skip tests that exceed a certain time period
 
-- [[benchmarks][Benchmarks]] There were a few surprises here. I tested each framework on uax-15 which has 16 tests and 338760 assertions (all passing) and ran trivial-benchmark with 10 iterations on both the latest sbcl and ccl. Obviously the smaller the code base, the less important speed matters. If speed is important to you, stay away from clunit, clunit2 and nst.
+- [[benchmarks][Benchmarks]] There were a few surprises here. I tested each framework on uax-15 which has 16 tests and 338760 assertions (all passing) and ran trivial-benchmark with 10 iterations on both the latest sbcl and ccl. Obviously the smaller the code base, the less important speed matters. If speed is important to you, stay away from clunit and nst. (*Note:* 13 June 2021 Update - removing clunit2 from this caveat)
 
 - Asynchronous and parallel testing (not tested in this report)
 - Case safety (Max Mikhanosha asked for this an an exchange with Tapiwa in 2013. Not tested in this report)
@@ -634,7 +634,7 @@ This table is looking at whether the framework provides [[bounded-equality][floa
 | [[2am][2am]]           |             | First value only          | Y                     |
 | [[cacau][cacau]]         |             | First value only          | Y                     |
 | [[clunit][clunit]]        |             | First value only          | N                     |
-| [[clunit2][clunit2]]       |             | First value only          | N                     |
+| [[clunit2][clunit2]] (a)   |             | Y                         | N                     |
 | [[fiasco][fiasco]]        |             | First value only          | Y                     |
 | [[fiveam][fiveam]]        |             | N                         | N                     |
 | [[gigamonkeys][gigamonkeys]]   |             | First value only          | Y                     |
@@ -651,8 +651,9 @@ This table is looking at whether the framework provides [[bounded-equality][floa
 | [[should-test][should-test]]   |             | First value only          | N                     |
 | [[tap-unit-test][tap-unit-test]] |             | Y                         | N                     |
 | [[unit-test][unit-test]]     |             | First value only          | Y                     |
-| [[xlunit][xlunit]]        |             | First value only          |  Y                    |
-| [[xptest][xptest]]        |             | relies on CL predicates   |  Y                    |
+| [[xlunit][xlunit]]        |             | First value only          | Y                     |
+| [[xptest][xptest]]        |             | relies on CL predicates   | Y                     |
+(a) Updated 13 June 2021
 
 [[top][top]]
 
@@ -840,7 +841,7 @@ Assertions also accept diagnostic strings but no variables
 
 This is really simple benchmarking using sbcl version 2.1.4 on a linux server and ccl version 1.12 LinuxX8664. I used each framework and applied them to uax-15 which has 16 tests and 338760 assertions (and they all pass). The tests were stripped to the minimum. No diagnostic strings were used and for the frameworks which allowed it, the test was set to no progress reporting and overall summary only. All of the assertions pass, so any real world test with failing assertions generating failure reports will be different.
 
-Based on this one application, from a speed perspective, there was a host of frameworks in a pack, with Rove and Prove at the back, then NST and Clunit not even on the same continent. (*Update:* Work is being done on Clunit2 with respect to performance, but not yet released as of this date.)  (Strangely enough, while the other frameworks were slower under cc, Clunit and NST improved.) Fiveam is in the pack so long as it runs in a terminal or some non-emacs editor. If running in emacs it runs into an emacs issue with long lines. You will see the difference in the fiveam report.
+Based on this one application, from a speed perspective, there was a host of frameworks in a pack, with Rove and Prove at the back, then NST and Clunit not even on the same continent. (*13 June 2021 Update:* Clunit2 has resolved clunit's performance deficit.)  (Strangely enough, while the other frameworks were slower under cc, Clunit and NST improved.) Fiveam is in the pack so long as it runs in a terminal or some non-emacs editor. If running in emacs it runs into an emacs issue with long lines. You will see the difference in the fiveam report.
 
 Your context will be important as to whether these benchmarks are at all meaningful to you.
 <<stacked-ranking-benchmarks>>
@@ -871,13 +872,14 @@ What immediately jumps out is the vast majority are grouped together, then there
 | [[lisp-unit2][lisp-unit2]] (a)                 |      10.7883 |             |
 | [[fiveam][fiveam]]                         |      11.1790 |      18.647 |
 | [[parachute][parachute]]                      |      11.7699 |      35.020 |
+| [[clunit2][clunit2]] (b)                    |      13.3833 |      32.582 |
 | [[rove][rove]]                           |      18.2223 |      41.800 |
 | [[prove][prove]]                          |      31.2611 |     116.864 |
 | [[nst][nst]]                            |     522.5623 |     490.843 |
 | [[clunit][clunit]]                         |     601.0652 |     272.858 |
-| [[clunit2][clunit2]] (b)                    |     601.0652 |             |
+
 (a) CCL decided it was not friends with Lisp-Unit2 and did not compile it.
-(b) I have seen some very favorable indications coming out of the clunit2 development branch but I understand there is still work to do.
+(b) 13 June 2021 Update
 
 #+CAPTION: Order by Benchmark Bytes Consed (lower is better)
 #+ATTR_HTML: :border 2 :rules all :frame border
@@ -902,11 +904,13 @@ What immediately jumps out is the vast majority are grouped together, then there
 | [[lisp-unit2][lisp-unit2]]                     |   5127796976 |
 | [[ptester][ptester]]                        |   5195902592 |
 | [[clunit][clunit]]                         |   5262303120 |
-| [[clunit2][clunit2]]                        |   5262303120 |
 | [[parachute][parachute]]                      |   5357258016 |
 | [[rove][rove]]                           |   8960510816 |
 | [[prove][prove]]                          |  14124826480 |
+| [[clunit2][clunit2]] (a)                    |  15377667616 |
 | [[nst][nst]]                            | 319321472704 |
+(a) 13 June 2021 Update
+
 
 #+CAPTION: Order by Benchmark Eval calls (lower is better)
 #+ATTR_HTML: :border 2 :rules all :frame border
@@ -928,14 +932,16 @@ What immediately jumps out is the vast majority are grouped together, then there
 | [[unit-test][unit-test]]                      |          0 |
 | [[xlunit][xlunit]]                         |          0 |
 | [[xptest][xptest]]                         |          0 |
+| [[clunit2][clunit2]]  (a)                   |          0 |
 | [[2am][2am]] (not in quicklisp)         |         10 |
 | [[fiasco][fiasco]]                         |         10 |
 | [[lisp-unit][lisp-unit]]                      |         10 |
 | [[tap-unit-test][tap-unit-test]]                  |        160 |
 | [[clunit][clunit]]                         |        320 |
-| [[clunit2][clunit2]]                        |        320 |
 | [[rt][rt]]                             |        480 |
 | [[nst][nst]]                            |    6768780 |
+(a) 13 June 2021 Update
+
 
 Now the detailed report.
 ** [[1am][1am]]
@@ -1004,7 +1010,7 @@ REAL-TIME  1        11.63139  1.163139  1.163139  1.163139  1.163139  0
 RUN-TIME   1        11.6093   1.16093   1.16093   1.16093   1.16093   0
 #+end_src
 ** [[clunit][clunit]]
-Clunit and Clunit2 have always had a concern about performance. Running this benchmark with them was painful. Unlike fiveam, which should not be run in a REPL in emacs on tests with lots of assertions because of emacs' issues with long lines, clunit has no one to blame but itself. But look at the ccl results compared to the sbcl results. Clunit was the only framework faster under ccl than sbcl. Still unacceptably slow, but ...
+Clunit has always had a concern about performance. Running this benchmark was painful. Unlike fiveam, which should not be run in a REPL in emacs on tests with lots of assertions because of emacs' issues with long lines, clunit has no one to blame but itself. But look at the ccl results compared to the sbcl results. Clunit was the only framework faster under ccl than sbcl. Still unacceptably slow, but ...
 Wwith sbcl in a terminal.
 #+begin_src lisp
   Passed: 338760/338760 all tests passed
@@ -1026,7 +1032,19 @@ REAL-TIME  10       272.9831  27.003325  27.478271  27.37946  27.298307  0.17991
 RUN-TIME   10       272.8588  26.99254   27.466413  27.36916  27.28588   0.179731
 #+end_src
 ** [[clunit2][clunit2]]
-I have seen some very favorable indications coming out of the clunit2 development branch but I understand there is still work to do and the fixes have not yet been released.
+*Update 13 June 2021:* Clunit2 has had a huge performance increase, most of it apparently involving moving from using lists to using arrays. Clunit2 should now be considered a member of the pack from a performance standpoint.
+#+begin_src lisp
+-                SAMPLES  TOTAL        MINIMUM     MAXIMUM     MEDIAN      AVERAGE       DEVIATION
+REAL-TIME        10       13.389882    1.309988    1.483321    1.313322    1.338988      0.051165
+RUN-TIME         10       13.383314    1.31106     1.481517    1.315183    1.338331      0.050361
+USER-RUN-TIME    10       13.023996    1.27605     1.415059    1.288964    1.3024        0.038748
+SYSTEM-RUN-TIME  10       0.359333     0.013431    0.066453    0.023397    0.035933      0.017299
+PAGE-FAULTS      10       0            0           0           0           0             0.0
+GC-RUN-TIME      10       1186.3       93.469      256.883     97.418      118.63        47.99955
+BYTES-CONSED     10       15377667616  1537414496  1540026832  1537518864  1537766800.0  755227.9
+EVAL-CALLS       10       0            0           0           0           0             0.0
+#+end_src
+
 ** [[fiasco][fiasco]]
 With progress reporting turned off
 #+begin_src lisp
@@ -2843,7 +2861,15 @@ NIL
 ** Summary
  | [[http://tgutu.github.io/clunit/][homepage]] | Tapiwa Gutu | BSD | 2017 |
 
-Based on unresolved issues showing at github, as well as my inability to reach the author, This does appear to be maintained and subject to bitrot. You should probably look at clunit2 instead. The difference between clunit2 and clunit is clunit2's ability to redirect reporting output, suite signaling capability and the fact that it has a maintainer. Both of them are very slow if faced with a lot of assertions.
+*Updated 13 June 2021*
+Based on unresolved issues showing at github, as well as my inability to reach the author, This does not appear to be maintained and subject to bitrot. You should look at clunit2 instead. The difference between clunit2 and clunit is
+
+- clunit2's ability to redirect reporting output,
+- clunit2's huge performance increase (clunit is painfully slow on any sized testing target)
+- clunit2' ability to test multiple value expressions
+- clunit2's suite signaling capability and
+- the fact that clunit2 has a maintainer.
+
 ** Assertion Functions
 Clunit's assertion functions are:
 
@@ -3226,11 +3252,19 @@ The difference between clunit2 and clunit is clunit2's ability to redirect repor
 [[top][top]]
 ** Summary
  | [[https://notabug.org/cage/clunit2][homepage]] | Cage (fork of clunit) | BSD | 2020 |
-Clunit2 is a fork of Clunit with only a few additions at this point. For package naming purposes it is clunit, not clunit2. The difference between clunit2 and clunit is clunit2's ability to redirect reporting output, suite signaling capability and the fact that it has a maintainer.
+*Update 13 June 2021*
+Clunit2 is a fork of Clunit. For quicklisp system loading purposes, it is clunit2, for package naming purposes it is clunit, not clunit2.
+The difference between clunit2 and clunit is:
+
+- clunit2's ability to redirect reporting output,
+- clunit2's huge performance increase (clunit is painfully slow on any sized testing target)
+- clunit2' ability to test multiple value expressions
+- clunit2's suite signaling capability and
+- the fact that clunit2 has a maintainer.
 
 Clunit2 does report all failing assertions within a test, has the option to turn off progress reporting and accepts user provided diagnostic strings with variables in the assertions. Going interactive with debugging is optional, fixtures are available as are suites and the ability to rerun failed tests. You can specify that a test that depends on other tests passing will be skipped if those prior tests fail.
 
-Where it falls down is speed and how it handles some of the edge cases compared to other frameworks. As you can tell from the benchmarks section, clunit2 is very slow when faced with something with a lot of assertions. Your context may be very different, but concerns have been voiced with respect to the speed of clunit/clunit2 before. With respect to the edge cases, Clunit2 fails to accept variables declared in closures surrounding the test and does not have the ability some other frameworks have to deal with values expressions. (*Update* I am hearing favorable indications on development from the author, so we will redo the benchmarks when those go mainline.)
+With respect to the edge cases, as of the 13 June 2021 update, Clunit2 will accept variables declared in closures surrounding the test and does have the ability completely test all the values returned from a values expression.
 
 ** Assertion Functions
 Clunit2's assertion functions are:
@@ -3364,14 +3398,14 @@ With respect to the values expression, we can see that it passed, proving clunit
 
 You do not have to manually recompile a test after a tested function has been modified.
 *** Edge Cases: Values expressions, loops, closures and calling other tests
-(*Update* Clunit2 as of the date of this update report will compare all the values from two values expressions. The following now properly fails.)
+*Update 13 June 2021* Clunit2 as of the date of this update report will compare all the values from two values expressions. The following now properly fails.
 #+begin_src lisp
   (deftest t2-values-expressions ()
     (assert-equal (values 1 2)
                   (values 1 3)))
 #+end_src
 **** Looping and closures.
-will a test accept looping through assertions with lexical variables from a closure? NO. Clunit complains that the variables l1 and l2 are never defined.
+*Update 13 June 2021* Clunit2 will accept variables declared in a closure surrounding the test. The following passes.
 #+begin_src lisp
   (let ((l1 '(#\a #\B #\z))
         (l2 '(97 66 122)))
@@ -3379,7 +3413,7 @@ will a test accept looping through assertions with lexical variables from a clos
     (loop for x in l1 for y in l2 do
       (assert-equal (char-code x) y))))
 #+end_src
-Clunit is quite happy to loop if the variables are defined within the test:
+Clunits is quite happy to loop if the variables are defined within the test:
 #+begin_src lisp
 	(deftest t2-loop ()
 		(let ((l1 '(#\a #\B #\z))
@@ -3387,7 +3421,7 @@ Clunit is quite happy to loop if the variables are defined within the test:
 			(loop for x in l1 for y in l2 do
 				(assert-equal (char-code x) y))))
 #+end_src
-CLunit has no assertions that will handle checking more than two values in a single assertion, so you will have to use =assert-true= with the usual CL functions.
+
 **** Calling another test from a test
 We will call the second version of test t2 which has failures.
 #+begin_src lisp
@@ -3455,7 +3489,7 @@ The following fails as expected.
 
 *** Suites, tags and other multiple test abilities
 **** Lists of tests
-clunit will not run lists of tests. You can run tests which run other tests. But otherwise you will need to set up suites.
+clunit2 will not run lists of tests. You can run tests which run other tests. But otherwise you will need to set up suites.
 **** Suites
 Tests can be associated with multiple suites. The execution of tests within a suite are unordered by default, but you can specify that a test depends on other tests passing. If those tests are not passed, then this test will be skipped. This test is put in a queue unti its dependencies are satisfied. Both suite specifications and test dependencies are set in the first parameter form that we left nil in the above tests.
 
@@ -3597,18 +3631,18 @@ SUMMARY:
 
 *** Removing tests
 #+begin_src lisp
-(clunit:undeftest t1)
-(clunit:undeffixture fixture-name)
-(clunit:undefsuite suite-name)
+(undeftest t1)
+(undeffixture fixture-name)
+(undefsuite suite-name)
 #+end_src
 *** Sequencing, Random and Failure Only
 The execution of tests within a suite are unordered by default, but you can specify that a test depends on other tests passing. If those tests are not passed, then this test will be skipped. Clunit2 has a function =rerun-failed-tests= to rerun failed tests.
 *** Skip Capability
 Other than the dependency abilities previously mentioned, clunit2 has no additional skipping capability.
 *** Random Data Generators
-Clunit has no built in data generators.
+Clunit2 has no built in data generators.
 ** Discussion
-The difference between clunit2 and clunit is clunit2's ability to redirect reporting output, the suite signaling capability and the fact that it has a maintainer.
+Clunit2 is a substantial step forward from clunit and should be considered the successor.
 
 ** Who Uses
 [[https://github.com/bendudson/array-operations][array-operations]], [[https://notabug.org/cage/cl-colors2/][cl-colors2]], [[https://github.com/lisp-mirror/nodgui][nodgui]], [[https://notabug.org/cage/orizuru-orm][rizuru-orm]]
