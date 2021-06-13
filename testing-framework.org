@@ -13,7 +13,7 @@
  #+ATTR_LATEX: :float multicolumn :width
 <<top>>
 * Changelog
-13 June 2021 - Updated clunit2 on huge improvement update and new ability to compare multiple values in values expressions. Clunit2 is now substantially differentiated from clunit.
+13 June 2021 - Updated clunit2 on huge improvement update and new edge case abilities to compare multiple values in values expressions and handle variables declared in closures. Clunit2 is now substantially differentiated from clunit.
 
 * Introduction
 
@@ -1044,7 +1044,13 @@ GC-RUN-TIME      10       1186.3       93.469      256.883     97.418      118.6
 BYTES-CONSED     10       15377667616  1537414496  1540026832  1537518864  1537766800.0  755227.9
 EVAL-CALLS       10       0            0           0           0           0             0.0
 #+end_src
+The ccl version:
+#+begin_src lisp
+-          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
+REAL-TIME  10       32.504135  3.207461  3.299608  3.244852  3.250414  0.0254
+RUN-TIME   10       32.58276   3.221215  3.292748  3.254175  3.258276  0.021464
 
+#+end_src
 ** [[fiasco][fiasco]]
 With progress reporting turned off
 #+begin_src lisp
