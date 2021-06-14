@@ -182,20 +182,20 @@ Assert-p, assertion-error, check-it, cl-fuzz, cl-quickcheck, cover, hamcrest, pr
 ** Opinionated Awards
 
 For those who want the opinionated quick summary. So, the awards are:
-- Best General Purpose: *Parachute* (It hits almost everything on my wish list - optionality on progress reports and debugging, good suite setup and reporting, good default error reporting and the ability to provide diagnostic strings with variables, the ability to skip failing test dependencies and set time limits on tests (and reports the time for each test and decent fixture capability. It does not have the built-in ability to re-run just the last failing tests, but that is a relatively easy add-on. The bigger limitation is that while fixtures are easy to setup, fixtures at a parent test level (suite level) do not apply to nested child tests. While it is not the fastest, it is in the pack as opposed to the also-rans.) My second pick would be *Fiasco*, but I like Parachute's fixture capability and suite setup better. My third choice would be *Lisp-Unit2*.
+- Best General Purpose: *Parachute* (It hits almost everything on my wish list - optionality on progress reports and debugging, good suite setup and reporting, good default error reporting and the ability to provide diagnostic strings with variables, the ability to skip failing test dependencies and set time limits on tests (and reports the time for each test and decent fixture capability. It does not have the built-in ability to re-run just the last failing tests, but that is a relatively easy add-on. The bigger limitation is that while fixtures are easy to setup, fixtures at a parent test level (suite level) do not apply to nested child tests. While it is not the fastest, it is in the pack as opposed to the also-rans.) My second pick would be *Fiasco*, but I like Parachute's fixture capability and suite setup better. My third choice would be *Lisp-Unit2*. *(Update 13 June 2021 - based on the latest update of Clunit2, it needs to be included for consideration as well)*
 
 - If Only Award: *Lift* If only it reported all failing assertions and did not stop at the first one. Why? Why can't I change this?
 - If you only care about speed: *Lift and 2am* [[benchmarking][Go to Benchmarking]]
 - Best General Purpose Fixtures (Suite/Tag and test level): *Lisp-Unit2 and Lift*
 - Ability to reuse tests in multiple suites: *Lisp-Unit2* (because of composable tags)
 - If you need tests to take parameters: *Fiasco*
-- If you need progress reporting optionality: *Parachute or Fiasco*
+- If you need progress reporting optionality: *Parachute or Fiasco or Clunit2*
 - Favorite Hierarchy Setup (nestable suites): *Parachute* (Everything is a test and its :parents all the way up, can easily specify parents at the child level). Also *2am and Lift*
 
 - Assertions that take diagnostic comments with variables: *Parachute, Fiasco, 2am, Fiveam, Lift, Clunit2* This is something that I like for debugging purposes along with whatever reporting comes built in with the framework. See [[error-reporting][error-reporting]]
 - Values expression testing: *Lisp-Unit2, Lisp-Unit, Parachute*, (*Update* *Clunit2* as well)
 - I want to track if my functions changed results: *Checkl*
-- Tests that specify suite or tags (does not rely on location in file): *Parachute, Lisp-Unit (tags), Lisp-Unit2(tags), Lift*
+- Tests that specify suite or tags (does not rely on location in file): *Parachute, Lisp-Unit (tags), Lisp-Unit2(tags), Lift, Clunit2*
 - Heavy duty complex fixtures: *NST* (but there are trade-offs in the shape of the learning curve and performance)
 - Ability to define new assertions: *NST, Kaputt* (but they have their issues in other areas)
 - Ability to rerun failures only: *Fiasco, Lisp-Unit2* (you can extend Parachute and Fiveam to get this, but it is not there now)
