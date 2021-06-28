@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- 2021-06-28 Mon 14:26 -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Schema Migration Considerations</title>
+<meta name="generator" content="Org mode">
+<meta name="author" content="Sabra Crolleton">
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/htmlize.css"/>
+<link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/readtheorg.css"/>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/lib/js/jquery.stickytableheaders.min.js"></script>
+<script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/js/readtheorg.js"></script>
+<script type="text/javascript">
+// @license magnet:?xt=urn:btih:e95b018ef3580986a04669f1b5879592219e2a7a&dn=public-domain.txt Public Domain
+<!--/*--><![CDATA[/*><!--*/
+     function CodeHighlightOn(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.add("code-highlighted");
+         target.classList.add("code-highlighted");
+       }
+     }
+     function CodeHighlightOff(elem, id)
+     {
+       var target = document.getElementById(id);
+       if(null != target) {
+         elem.classList.remove("code-highlighted");
+         target.classList.remove("code-highlighted");
+       }
+     }
+    /*]]>*///-->
+// @license-end
+</script>
+</head>
+<body>
+<div id="content">
+<header>
+<h1 class="title">Schema Migration Considerations</h1>
+</header><nav id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org018e3b0">1. Introduction</a>
+<ul>
+<li><a href="#orga03e3e4">1.1. In Development, No Data</a></li>
+<li><a href="#org33f4dac">1.2. In Development, With Data</a></li>
+<li><a href="#orgc5bbe9f">1.3. Live Environment With Data and Limited Time Window</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</nav>
+<p border="2" rules="all" frame="border" org-html-table-align-individual-fields="t">
+<a id="orga60e2c2"></a>
+</p>
+
+<div id="outline-container-org018e3b0" class="outline-2">
+<h2 id="org018e3b0"><span class="section-number-2">1</span> Introduction</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+Since I have now been asked a few times about schema migrations, I thought I should make a few comments. Every time I have been asked, the question has come from someone using dao-classes that represent all the columns of a single table and they are thinking in terms of adding and deleting slots in their dao and they just want to keep the database schema in sync with their dao-classes. From that standpoint it makes sense to have something that tracks changes in their dao classes and automatically drops database columns that no longer exist and adds columns that are new.
+</p>
+
+<p>
+I thought I would lay out some of the things that need to be considered to do it right.
+</p>
+
+<p>
+Lets take the canonical example of renaming a column from "users" to "participants" in a table named "myapp". A naive tool would say "users" no longer exists, so database drop "users" and create new column "participants". A few questions immediately come to mind.
+</p>
+
+<ul class="org-ul">
+<li>If there was data in that column, it is now gone</li>
+<li>If that column was indexed, you now need to recreate the index</li>
+<li>If that column was a foreign key for some other table, Postgresql will not let you drop the column unless you handle that foreign key situation first</li>
+<li>etc</li>
+</ul>
+
+<p>
+We can touch on three contexts in order of complexity: In Development with No Data, In Development with Test Data or In a Live Environment.
+</p>
+</div>
+
+<div id="outline-container-orga03e3e4" class="outline-3">
+<h3 id="orga03e3e4"><span class="section-number-3">1.1</span> In Development, No Data</h3>
+<div class="outline-text-3" id="text-1-1">
+<ul class="org-ul">
+<li>Migrations without DAO classes</li>
+<li>Migrations with DAO classes</li>
+</ul>
+
+<p>
+If you do not use dao-classes, just log your alter table commands and you are done. If you use dao-classes and there are no index or foreign key situations, it is probably easier to just have a function that drops the table and recreates it from the modified dao class. By the way, if you decide to loop through all your dao-classes and do this, remember you can have dao-classes that are subsets of a table. Make sure you do not include those in your loop.
+</p>
+</div>
+</div>
+
+<div id="outline-container-org33f4dac" class="outline-3">
+<h3 id="org33f4dac"><span class="section-number-3">1.2</span> In Development, With Data</h3>
+<div class="outline-text-3" id="text-1-2">
+<ul class="org-ul">
+<li>Migrations without DAO classes</li>
+<li>Migrations with DAO classes</li>
+</ul>
+
+<p>
+There is a reason why SQL has a rename command which makes all these issues go away. Postmodern can do this three ways (sql, s-sql and the utility function <code>rename-column</code>.:
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(query <span style="color: #e67128;">"alter table myapp rename column users to participants"</span>)
+
+(query (<span style="color: #23d7d7;">:alter-table</span> 'myapp <span style="color: #23d7d7;">:rename-column</span> 'users 'participants))
+
+(rename-column 'myapp 'users 'participants)
+</pre>
+</div>
+<p>
+If someone can suggest how to add this to renaming a dao-class slot or modifying the col-table parameter, I am interesting in hearing it.
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgc5bbe9f" class="outline-3">
+<h3 id="orgc5bbe9f"><span class="section-number-3">1.3</span> Live Environment With Data and Limited Time Window</h3>
+<div class="outline-text-3" id="text-1-3">
+<ul class="org-ul">
+<li>Migrations without DAO classes</li>
+<li>Migrations with DAO classes</li>
+</ul>
+
+<p>
+In a live environment you need to worry about locks and what to do about live queries while everything is changing.
+</p>
+
+<p>
+All of this gets trickier in a live environment. The reasons is that application code changes and database schema changes cannot happen together atomically, so your database schema must support both old and new versions of the app while the code changeover happens.
+</p>
+
+<p>
+The typical steps in a live environment would be:
+</p>
+
+<ol class="org-ol">
+<li>Add new column "participants". Postgresql version prior to version 11 have locking issues with default values so if you are in that situation, add the column without default values first.</li>
+<li>If you are in the default value situation with a Postgresql version prior to v.11, now alter the column to have the default value.</li>
+<li>Add code to copy data from "users" to "participants"</li>
+<li>Add code such that any new data gets written to both "users" and "participants".</li>
+<li>Actually copy the old data to "participants" doing this in batches with each batch in a single transaction. (If you copied everything in a single transaction and you have significant data, you would likely lock the table for an unacceptable period of time.) Batches need to be re-entrant so that if a batch transaction fails, you know how to re-run that batch.</li>
+<li>Index the participants column if necessary. Assuming your version of Postgresql is v9.6 or newer, use CREATE INDEX CONCURRENTLY. It takes longer to index, but does not lock up the table. You might still have issues with indexing unique values.</li>
+<li>Change the application code to apply to "participants" rather than "users". Reads should now look to "participants" and writes now go only to "participants"</li>
+<li>Now you can delete column "users"</li>
+</ol>
+
+<p>
+You did do this by script and test it before running it in your live environment right? You also made sure you had a tested backup of your data, right?
+</p>
+
+<p>
+You might consider ensuring that Postgresql configuration setting statement<sub>timeout</sub> is set to some number (e.g. 2 minutes) to prevent something going wrong and locking your live environment for an unacceptable period of time. See <a href="https://www.postgresql.org/docs/current/runtime-config-client.html">https://www.postgresql.org/docs/current/runtime-config-client.html</a>
+</p>
+
+<p>
+There are people who swear that you need backward migrations and there are people who swear that backward migration is not safely possible if data exists in the database.
+</p>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>
