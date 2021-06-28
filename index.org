@@ -1,0 +1,19 @@
+#+TITLE: Sabra's Occasional Comments
+ #+AUTHOR:      Sabra Crolleton
+ #+DATE:        2021-06-28
+ #+EMAIL:       sabra.crolleton!gmail.com
+ #+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
+#+LANGUAGE:    en
+ #+OPTIONS:     H:2 num:t toc:t n:nil ::t |:t ^:t f:t tex:t html-style:nil  ...
+ #+ORG_HTML-DOCTYPE: "html5"
+ #+CAPTION: This is a table with lines around and between cells
+ #+ATTR_HTML: :border 2 :rules all :frame border :org-html-table-align-individual-fields t
+ #+ATTR_LaTeX: align=|c|c|c|
+ #+ATTR_LATEX: :environment longtable :align l|lp{3cm}r|l
+ #+ATTR_LATEX: :float multicolumn :width
+#+HTML_HEAD: <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
+<<top>>
+
+-  [[https://sabracrolleton.github.io/short-descriptions][Common Lisp Packages with Short Descriptions]]
+-  [[https://sabracrolleton.github.io/testing-framework][Common Lisp Testing Frameworks]]
+-  [[https://sabracrolleton.github.io/migrations][Postgresql Schema Migration Considerations]]

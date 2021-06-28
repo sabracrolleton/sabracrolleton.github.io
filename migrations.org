@@ -1,0 +1,73 @@
+#+TITLE: Schema Migration Considerations
+ #+AUTHOR:      Sabra Crolleton
+ #+DATE:        2021-06-24
+ #+EMAIL:       sabra.crolleton!gmail.com
+ #+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
+ #+LANGUAGE:    en
+ #+OPTIONS:     H:2 num:t toc:t n:nil ::t |:t ^:t f:t tex:t html-style:nil  ...
+ #+ORG_HTML-DOCTYPE: "html5"
+ #+CAPTION: This is a table with lines around and between cells
+ #+ATTR_HTML: :border 2 :rules all :frame border :org-html-table-align-individual-fields t
+ #+ATTR_LaTeX: align=|c|c|c|
+ #+ATTR_LATEX: :environment longtable :align l|lp{3cm}r|l
+ #+ATTR_LATEX: :float multicolumn :width
+<<top>>
+
+* Introduction
+Since I have now been asked a few times about schema migrations, I thought I should make a few comments. Every time I have been asked, the question has come from someone using dao-classes that represent all the columns of a single table and they are thinking in terms of adding and deleting slots in their dao and they just want to keep the database schema in sync with their dao-classes. From that standpoint it makes sense to have something that tracks changes in their dao classes and automatically drops database columns that no longer exist and adds columns that are new.
+
+I thought I would lay out some of the things that need to be considered to do it right.
+
+Lets take the canonical example of renaming a column from "users" to "participants" in a table named "myapp". A naive tool would say "users" no longer exists, so database drop "users" and create new column "participants". A few questions immediately come to mind.
+
+- If there was data in that column, it is now gone
+- If that column was indexed, you now need to recreate the index
+- If that column was a foreign key for some other table, Postgresql will not let you drop the column unless you handle that foreign key situation first
+- etc
+
+We can touch on three contexts in order of complexity: In Development with No Data, In Development with Test Data or In a Live Environment.
+
+** In Development, No Data
+  - Migrations without DAO classes
+  - Migrations with DAO classes
+
+If you do not use dao-classes, just log your alter table commands and you are done. If you use dao-classes and there are no index or foreign key situations, it is probably easier to just have a function that drops the table and recreates it from the modified dao class. By the way, if you decide to loop through all your dao-classes and do this, remember you can have dao-classes that are subsets of a table. Make sure you do not include those in your loop.
+
+** In Development, With Data
+  - Migrations without DAO classes
+  - Migrations with DAO classes
+
+There is a reason why SQL has a rename command which makes all these issues go away. Postmodern can do this three ways (sql, s-sql and the utility function =rename-column=.:
+#+begin_src lisp
+  (query "alter table myapp rename column users to participants")
+
+  (query (:alter-table 'myapp :rename-column 'users 'participants))
+
+  (rename-column 'myapp 'users 'participants)
+#+end_src
+If someone can suggest how to add this to renaming a dao-class slot or modifying the col-table parameter, I am interesting in hearing it.
+
+** Live Environment With Data and Limited Time Window
+  - Migrations without DAO classes
+  - Migrations with DAO classes
+
+In a live environment you need to worry about locks and what to do about live queries while everything is changing.
+
+All of this gets trickier in a live environment. The reasons is that application code changes and database schema changes cannot happen together atomically, so your database schema must support both old and new versions of the app while the code changeover happens.
+
+The typical steps in a live environment would be:
+
+1. Add new column "participants". Postgresql version prior to version 11 have locking issues with default values so if you are in that situation, add the column without default values first.
+2. If you are in the default value situation with a Postgresql version prior to v.11, now alter the column to have the default value.
+3. Add code to copy data from "users" to "participants"
+4. Add code such that any new data gets written to both "users" and "participants".
+5. Actually copy the old data to "participants" doing this in batches with each batch in a single transaction. (If you copied everything in a single transaction and you have significant data, you would likely lock the table for an unacceptable period of time.) Batches need to be re-entrant so that if a batch transaction fails, you know how to re-run that batch.
+6. Index the participants column if necessary. Assuming your version of Postgresql is v9.6 or newer, use CREATE INDEX CONCURRENTLY. It takes longer to index, but does not lock up the table. You might still have issues with indexing unique values.
+7. Change the application code to apply to "participants" rather than "users". Reads should now look to "participants" and writes now go only to "participants"
+8. Now you can delete column "users"
+
+You did do this by script and test it before running it in your live environment right? You also made sure you had a tested backup of your data, right?
+
+You might consider ensuring that Postgresql configuration setting =statement_timeout= is set to some number (e.g. 2 minutes) to prevent something going wrong and locking your live environment for an unacceptable period of time. See [[https://www.postgresql.org/docs/current/runtime-config-client.html]]
+
+By the way, while there are people who swear that you need backward migrations, there are also people who swear that backward migration is not safely possible if data exists in the database.

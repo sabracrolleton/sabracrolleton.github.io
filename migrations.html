@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-06-28 Mon 14:26 -->
+<!-- 2021-06-28 Mon 14:37 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Schema Migration Considerations</title>
@@ -44,22 +44,22 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org018e3b0">1. Introduction</a>
+<li><a href="#orga3db1b3">1. Introduction</a>
 <ul>
-<li><a href="#orga03e3e4">1.1. In Development, No Data</a></li>
-<li><a href="#org33f4dac">1.2. In Development, With Data</a></li>
-<li><a href="#orgc5bbe9f">1.3. Live Environment With Data and Limited Time Window</a></li>
+<li><a href="#org7971f28">1.1. In Development, No Data</a></li>
+<li><a href="#org601aa94">1.2. In Development, With Data</a></li>
+<li><a href="#orgaec2bd5">1.3. Live Environment With Data and Limited Time Window</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </nav>
 <p border="2" rules="all" frame="border" org-html-table-align-individual-fields="t">
-<a id="orga60e2c2"></a>
+<a id="org7e43f76"></a>
 </p>
 
-<div id="outline-container-org018e3b0" class="outline-2">
-<h2 id="org018e3b0"><span class="section-number-2">1</span> Introduction</h2>
+<div id="outline-container-orga3db1b3" class="outline-2">
+<h2 id="orga3db1b3"><span class="section-number-2">1</span> Introduction</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Since I have now been asked a few times about schema migrations, I thought I should make a few comments. Every time I have been asked, the question has come from someone using dao-classes that represent all the columns of a single table and they are thinking in terms of adding and deleting slots in their dao and they just want to keep the database schema in sync with their dao-classes. From that standpoint it makes sense to have something that tracks changes in their dao classes and automatically drops database columns that no longer exist and adds columns that are new.
@@ -85,8 +85,8 @@ We can touch on three contexts in order of complexity: In Development with No Da
 </p>
 </div>
 
-<div id="outline-container-orga03e3e4" class="outline-3">
-<h3 id="orga03e3e4"><span class="section-number-3">1.1</span> In Development, No Data</h3>
+<div id="outline-container-org7971f28" class="outline-3">
+<h3 id="org7971f28"><span class="section-number-3">1.1</span> In Development, No Data</h3>
 <div class="outline-text-3" id="text-1-1">
 <ul class="org-ul">
 <li>Migrations without DAO classes</li>
@@ -99,8 +99,8 @@ If you do not use dao-classes, just log your alter table commands and you are do
 </div>
 </div>
 
-<div id="outline-container-org33f4dac" class="outline-3">
-<h3 id="org33f4dac"><span class="section-number-3">1.2</span> In Development, With Data</h3>
+<div id="outline-container-org601aa94" class="outline-3">
+<h3 id="org601aa94"><span class="section-number-3">1.2</span> In Development, With Data</h3>
 <div class="outline-text-3" id="text-1-2">
 <ul class="org-ul">
 <li>Migrations without DAO classes</li>
@@ -124,8 +124,8 @@ If someone can suggest how to add this to renaming a dao-class slot or modifying
 </div>
 </div>
 
-<div id="outline-container-orgc5bbe9f" class="outline-3">
-<h3 id="orgc5bbe9f"><span class="section-number-3">1.3</span> Live Environment With Data and Limited Time Window</h3>
+<div id="outline-container-orgaec2bd5" class="outline-3">
+<h3 id="orgaec2bd5"><span class="section-number-3">1.3</span> Live Environment With Data and Limited Time Window</h3>
 <div class="outline-text-3" id="text-1-3">
 <ul class="org-ul">
 <li>Migrations without DAO classes</li>
@@ -160,11 +160,11 @@ You did do this by script and test it before running it in your live environment
 </p>
 
 <p>
-You might consider ensuring that Postgresql configuration setting statement<sub>timeout</sub> is set to some number (e.g. 2 minutes) to prevent something going wrong and locking your live environment for an unacceptable period of time. See <a href="https://www.postgresql.org/docs/current/runtime-config-client.html">https://www.postgresql.org/docs/current/runtime-config-client.html</a>
+You might consider ensuring that Postgresql configuration setting <code>statement_timeout</code> is set to some number (e.g. 2 minutes) to prevent something going wrong and locking your live environment for an unacceptable period of time. See <a href="https://www.postgresql.org/docs/current/runtime-config-client.html">https://www.postgresql.org/docs/current/runtime-config-client.html</a>
 </p>
 
 <p>
-There are people who swear that you need backward migrations and there are people who swear that backward migration is not safely possible if data exists in the database.
+By the way, while there are people who swear that you need backward migrations, there are also people who swear that backward migration is not safely possible if data exists in the database.
 </p>
 </div>
 </div>
