@@ -17,25 +17,25 @@
 | [[https://github.com/lmj/1am][1am]] | A minimal testing framework. |
 | [[https://github.com/3b/3b-bmfont][3b-bmfont]] | BMFont file format readers/writers |
 | [[https://github.com/3b/3b-hdr][3b-hdr]] | reader and writer for radiance HDR files |
-| 3b-swf-swc | Partial hacks for extracting data from flash .swc files. |
+| [[https://github.com/3b/3b-swf][3b-swf-swc]] | Partial hacks for extracting data from flash .swc files. |
 | [[https://github.com/3b/3b-swf][3b-swf]] | Common Lisp .swf file manipulation library |
 | [[https://github.com/3b/3bgl-shader][3bgl-shader]] | CL-hosted CL-like DSL for generating GLSL |
 | 3bmd-ext-code-blocks | extension to 3bmd implementing github style ``` delimited code blocks, with support for syntax highlighting using colorize, pygments, or chroma |
-| 3bmd-ext-definition-lists | extension to 3bmd implementing 'PHP Markdown Extra' style definition lists |
-| 3bmd-ext-math | An extension for 3bmd for handling math markup |
-| 3bmd-ext-tables | Extension to 3bmd implementing PHP Markdown Extra style tables |
-| 3bmd-ext-wiki-links | example extension to 3bmd implementing simple wiki-style links |
-| 3bmd-youtube | An extension for 3bmd for embedding YouTube videos |
+| [[https://github.com/3b/3bmd][3bmd-ext-definition-lists]] | extension to 3bmd implementing 'PHP Markdown Extra' style definition lists |
+| [[https://github.com/3b/3bmd][3bmd-ext-math]] | An extension for 3bmd for handling math markup |
+| [[https://github.com/3b/3bmd][3bmd-ext-tables]] | Extension to 3bmd implementing PHP Markdown Extra style tables |
+| [[https://github.com/3b/3bmd][3bmd-ext-wiki-links]] | example extension to 3bmd implementing simple wiki-style links |
+| [[https://github.com/3b/3bmd][3bmd-youtube]] | An extension for 3bmd for embedding YouTube videos |
 | [[https://github.com/3b/3bmd][3bmd]] | markdown processor in CL using esrap parser. |
 | [[https://github.com/3b/3bz][3bz]] | deflate decompressor |
 | [[https://github.com/Shinmera/3d-matrices][3d-matrices]] | A utility library implementing 2x2, 3x3, 4x4, and NxN matrix functionality. |
 | [[https://github.com/Shinmera/3d-vectors][3d-vectors]] | A utility library implementing 2D, 3D, and 4D vector functionality. |
-| 40ants-doc-full | Documentation generator for 40ANTS-DOC (based on MGL-PAX). You will need to load this system, to build documentation for a library which uses 40ANTS-DOC system. |
+| [[https://github.com/40ants/doc][40ants-doc-full]] | Documentation generator for 40ANTS-DOC (based on MGL-PAX). You will need to load this system, to build documentation for a library which uses 40ANTS-DOC system. |
 | [[https://github.com/40ants/doc][40ants-doc]] | Documentation generator, based on MGL-PAX. Allows to put documentation inside lisp files and cross-reference between different entities. |
-| a-cl-logger-logstash | Load the logstash appender for a-cl-logger |
+| [[https://github.com/AccelerationNet/a-cl-logger][a-cl-logger-logstash]] | Load the logstash appender for a-cl-logger |
 | [[https://github.com/AccelerationNet/a-cl-logger][a-cl-logger]] | A logger that sends to multiple destinations in multiple formats. Based on arnesi logger |
 | [[https://github.com/dherring/able][able]] | A Common Lisp editor |
-| abnf | ABNF Parser Generator, per RFC2234 |
+| [[https://github.com/dimitri/cl-abnf][abnf]] | ABNF Parser Generator, per RFC2234 |
 | [[https://github.com/sharplispers/access][access]] | A library providing functions that unify data-structure access for Common Lisp:access and (setf access). Comments by 40ants [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/03/0007-access.org][here]]. |
 | [[https://github.com/robert-strandh/Acclimation][acclimation]] | Library supporting internationalization |
 | [[https://gitlab.com/daewok/adopt-subcommands][adopt-subcommands]] | Extend the Adopt command line processing library to handle nested subcommands. |
@@ -45,7 +45,7 @@
 | adw-charting-vecto | Charting package to make pretty graphs and charts using Vecto |
 | [[https://common-lisp.net/project/adw-charting/adw-charting.tar.gz][adw-charting]] | Charting package to make pretty graphs and charts |
 | [[https://github.com/dtqec/aether][aether]] | A DSL for emulating an actor-based distributed system, housed on a family of emulated devices. |
-| agnostic-lizard-debugger-prototype | A portable debugger prototype that injects debugger hooks into code |
+| [[https://gitlab.common-lisp.net/mraskin/agnostic-lizard][agnostic-lizard-debugger-prototype]] | A portable debugger prototype that injects debugger hooks into code |
 | [[https://gitlab.common-lisp.net/mraskin/agnostic-lizard][agnostic-lizard]] | A portable code walker that makes a best effort to be correct in most cases |
 | [[https://github.com/alex-gutev/agutil][agutil]] | A collection of utility functions not found in other utility libraries. |
 | [[https://github.com/rigetti/alexa][alexa]] | A lexical analyzer generator. |
@@ -59,13 +59,13 @@
 | [[https://github.com/pve1/apply-argv][apply-argv]] | Apply-argv is a library for parsing command line arguments. |
 | [[https://github.com/g000001/arc-compat][arc-compat]] | Arc compatible package for CL |
 | [[https://github.com/scymtym/architecture.builder-protocol][architecture.builder-protocol]] | Protocol and framework for building parse results and other object graphs. |
-| architecture.builder-protocol.json | Serialize node trees into JSON documents. |
-| architecture.builder-protocol.universal-builder | Builder and un-builder for standard-object instances. |
-| architecture.builder-protocol.xpath | Query node trees using XPath expressions. |
-| architecture.service-provider-and-hooks | Run hooks when service providers change. |
+| [[https://github.com/scymtym/architecture.builder-protocol][architecture.builder-protocol.json]] | Serialize node trees into JSON documents. |
+| [[https://github.com/scymtym/architecture.builder-protocol][architecture.builder-protocol.universal-builder]] | Builder and un-builder for standard-object instances. |
+| [[https://github.com/scymtym/architecture.builder-protocol][architecture.builder-protocol.xpath]] | Query node trees using XPath expressions. |
+| [[https://github.com/scymtym/architecture.builder-protocol][architecture.service-provider-and-hooks]] | Run hooks when service providers change. |
 | [[https://github.com/scymtym/architecture.service-provider][architecture.service-provider]] | Provides a framework for registering and finding services and providers of these. |
 | [[https://github.com/sharplispers/archive][archive]] | A package for reading and writing archive (tar, cpio, etc.) files. Comments by 40ants [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/03/0019-archive.org][here]]. |
-| [[https://github.com/K1D77A/arithmetic-operators-as-words][arithmetic-operators-as-words]] | Just simple macros that expand to the normal arithmetic operators. I personally hate using the symbols.. |
+| [[https://github.com/K1D77A/arithmetic-operators-as-words][arithmetic-operators-as-words]] | Just simple macros that expand to the normal arithmetic operators.                                      |
 | [[https://github.com/AccelerationNet/arnesi][arnesi]] | A bag-of-tools utilities library used to aid in implementing the bese.it toolkit |
 | [[https://github.com/bendudson/array-operations][array-operations]] | Simple array operations library for Common Lisp. |
 | [[https://github.com/Shinmera/array-utils][array-utils]] | A few utilities for working with arrays. |
@@ -91,7 +91,7 @@
 | [[https://github.com/stablecross/aws-foundation][aws-foundation]] | Amazon AWS low-level utilities |
 | [[https://github.com/rotatef/aws-sign4][aws-sign4]] | A library for Amazon Web Services signing version 4 |
 | [[https://github.com/aarvid/ayah-captcha][ayah-captcha]] | A simple interface to the API of the play-thru captcha of areYouAHuman.com |
-| babel-streams | Some useful streams based on Babel's encoding code |
+| [[https://github.com/cl-babel/babel][babel-streams]] | Some useful streams based on Babel's encoding code |
 | [[https://github.com/cl-babel/babel][babel]] | Babel, a charset conversion library. |
 | [[https://github.com/borodust/base-blobs][base-blobs]] | Base system foreign library collection |
 | [[https://github.com/massung/base64][base64]] | Base64 encoding and decoding for Common Lisp. |
@@ -103,7 +103,7 @@
 | [[https://github.com/flambard/cl-bert][bert]] | BERT serializer. Comments by 40ants [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/03/0015-cl-bert.org][here]]. |
 | [[https://github.com/mkoeppe/cl-bibtex][bibtex]] | Compatible re-implementation of the BibTeX program, with a BST-to-CL compiler. |
 | [[https://bitbucket.org/tarballs_are_good/big-string][big-string]] | Big strings, similar to Java's StringBuilder. |
-| bike-internals | Common Lisp .Net Core Interop Internals |
+| [[https://github.com/Lovesan/bike][bike-internals]] | Common Lisp .Net Core Interop Internals |
 | [[https://github.com/Lovesan/bike][bike]] | Common Lisp .Net Core Interop |
 | [[https://github.com/mgi/binary-io][binary-io]] | Library for reading and writing binary data. |
 | [[https://github.com/Ferada/binary-types][binary-types]] | A library for reading and writing binary records. |
@@ -149,10 +149,10 @@
 | [[https://tarballs.hexstreamsoft.com/libraries/latest/bubble-operator-upwards_latest.tar.gz][bubble-operator-upwards]] | bubble-operator-upwards is a function that bubbles an operator upwards in a form, demultiplexing all alternative branches by way of cartesian product. This operation is notably useful for easy implementation of certain kinds of shorthand notations in macros. A cartesian-product function is also exported, as it's needed to implement the main function. Comments by 40ants [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/03/0022-bubble-operator-upwards.org][here]]                                           |
 | [[https://www.xach.com/lisp/buildapp.tgz][buildapp]] | Buildapp is an application for SBCL and CCL that  configures and saves an executable Common Lisp image or  non-executable core. |
 | buildnode-excel | Tool for building up an xml dom of an excel spreadsheet nicely.  Uses this XML format:  http://msdn.microsoft.com/en-us/library/aa140066%28office.10%29.aspx   |
-| buildnode-html5 | Tool for building up an xml dom of an html5 document |
-| buildnode-kml | Tool for building up an xml dom of an KML. |
-| buildnode-xhtml | Tool for building up an xml dom of an excel spreadsheet nicely. |
-| buildnode-xul | Tool for building up an xml dom of a Mozilla xul document |
+| [[https://github.com/AccelerationNet/buildnode][buildnode-html5]] | Tool for building up an xml dom of an html5 document |
+| [[https://github.com/AccelerationNet/buildnode][buildnode-kml]] | Tool for building up an xml dom of an KML. |
+| [[https://github.com/AccelerationNet/buildnode][buildnode-xhtml]] | Tool for building up an xml dom of an excel spreadsheet nicely. |
+| [[https://github.com/AccelerationNet/buildnode][buildnode-xul]] | Tool for building up an xml dom of a Mozilla xul document |
 | [[https://github.com/AccelerationNet/buildnode][buildnode]] | Tool for building up an xml dom nicely. Comments by 40ants [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/04/0032-buildnode.org][here]]. |
 | [[https://github.com/pinterface/burgled-batteries][burgled-batteries]] | Lisp-Python interface |
 | [[https://github.com/mmontone/burgled-batteries.syntax][burgled-batteries.syntax]] | Embedded Python syntax for burgled-batteries |
@@ -203,29 +203,29 @@
 | [[https://hg.stevelosh.com/chancery][chancery]] | A library for procedurally generating text, inspired by Tracery. |
 | [[https://github.com/WarrenWilkinson/changed-stream][changed-stream]] | A library for non-destructive changes to character streams. |
 | [[https://github.com/zkat/chanl][chanl]] | Communicating Sequential Process support for Common Lisp |
-| chatlog | Frontend for Colleen's chatlog-pg module. |
-| chatlog-backport | Backporting functions to insert logs from a log file. |
+| [[https://github.com/Shirakumo/chatlog][chatlog]] | Frontend for Colleen's chatlog-pg module. |
+| [[https://github.com/Shirakumo/chatlog][chatlog-backport]] | Backporting functions to insert logs from a log file. |
 | [[https://github.com/mbrezu/Cheat-JS][cheat-js]] | Macros for JavaScript. Kinda. |
 | [[https://github.com/hyotang666/check-bnf][check-bnf]] | Macro arguments checker. |
 | [[https://github.com/DalekBaldwin/check-it][check-it]] | A randomized property-based testing tool for Common Lisp. |
 | [[https://github.com/rpav/CheckL][checkl]] | CheckL: Dynamic testing for Common Lisp |
 | [[https://common-lisp.net/project/chemboy/chemical-compounds-latest.tar.gz][chemical-compounds]] | parsing, pretty-printing, and formula weights of chemical compounds. |
 | [[https://github.com/zkat/chillax][chillax]] | CouchDB abstraction layer - Easy-load system with sane defaults |
-| chillax.core | CouchDB abstraction layer - core API and protocols. |
-| chillax.jsown | CouchDB abstraction layer - Implementation of protocols using JSOWN. |
-| chillax.view-server | View server for CouchDB |
-| chillax.yason | CouchDB abstraction layer - Implementation of protocols using Yason. |
+| [[https://github.com/zkat/chillax][chillax.core]] | CouchDB abstraction layer - core API and protocols. |
+| [[https://github.com/zkat/chillax][chillax.jsown]] | CouchDB abstraction layer - Implementation of protocols using JSOWN. |
+| [[https://github.com/zkat/chillax][chillax.view-server]] | View server for CouchDB |
+| [[https://github.com/zkat/chillax][chillax.yason]] | CouchDB abstraction layer - Implementation of protocols using Yason. |
 | [[https://github.com/borodust/chipmunk-blob][chipmunk-blob]] | Chipmunk physics foreign library collection |
 | [[https://github.com/sharplispers/chipz][chipz]] | A library for decompressing deflate, zlib, and gzip data |
-| chirp-core | Core component of the chirp twitter client, excluding the backend. |
-| chirp-dexador | Chirp Twitter client using Dexador as backend. |
-| chirp-drakma | Chirp Twitter client using Drakma as backend. |
+| [[https://github.com/Shinmera/chirp][chirp-core]] | Core component of the chirp twitter client, excluding the backend. |
+| [[https://github.com/Shinmera/chirp][chirp-dexador]] | Chirp Twitter client using Dexador as backend. |
+| [[https://github.com/Shinmera/chirp][chirp-drakma]] | Chirp Twitter client using Drakma as backend. |
 | [[https://github.com/Shinmera/chirp][chirp]] | Chirp Twitter client featuring full API coverage. |
 | [[https://github.com/Ralt/chrome-native-messaging][chrome-native-messaging]] | A package to communicate with a Chrome extension as the native application |
 | [[https://github.com/chaitanyagupta/chronicity][chronicity]] | A natural language date and time parser for Common Lisp. Comments by 40ants [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/03/0024-chronicity.org][here]]. |
 | [[https://github.com/eslick/chtml-matcher][chtml-matcher]] | A unifying template matcher based on closure-html for web scraping and extraction |
 | [[https://github.com/edicl/chunga][chunga]] | Portable chunked streams for Common Lisp |
-| ci-utils-features | An internal system that loads the features before loading the rest of the systems |
+| [[https://github.com/neil-lindquist/ci-utils][ci-utils-features]] | An internal system that loads the features before loading the rest of the systems |
 | [[https://github.com/neil-lindquist/ci-utils][ci-utils]] | A set of tools for using CI platforms |
 | [[https://github.com/fukamachi/circular-streams][circular-streams]] | Circularly readable streams for Common Lisp |
 | [[https://github.com/brown/city-hash][city-hash]] | CityHash hash functions |
@@ -251,8 +251,8 @@
 | [[https://github.com/diogoalexandrefranco/cl-association-rules][cl-association-rules]] | An implementation of the apriori algorithm to mine association rules in Common Lisp. |
 | [[https://github.com/j3pic/cl-async-await][cl-async-await]] | An implementation of async/await for Common Lisp |
 | [[https://github.com/orthecreedence/cl-async-future][cl-async-future]] | A futures implementation for Common Lisp. Plugs in nicely to cl-async. |
-| cl-async-repl | REPL integration for CL-ASYNC. |
-| cl-async-ssl | SSL Wrapper around cl-async socket implementation. |
+| [[https://github.com/orthecreedence/cl-async][cl-async-repl]] | REPL integration for CL-ASYNC. |
+| [[https://github.com/orthecreedence/cl-async][cl-async-ssl]] | SSL Wrapper around cl-async socket implementation. |
 | [[https://github.com/orthecreedence/cl-async][cl-async]] | Base system for cl-async. |
 | [[https://github.com/Lautaro-Garcia/cl-aubio][cl-aubio]] | Aubio bindings for Common Lisp |
 | [[https://github.com/billstclair/cl-autorepo][cl-autorepo]] | A simple mechanism to auto-load ASDF systems from repositories. |
@@ -270,17 +270,17 @@
 | [[https://github.com/K1D77A/cl-bloggy][cl-bloggy]] | A simple extendable blogging system to use with Hunchentoot |
 | [[https://github.com/ruricolist/cl-bloom][cl-bloom]] | Simple Bloom filters with efficient hashing. |
 | [[https://github.com/diasbruno/cl-bnf][cl-bnf]] | A simple BNF parser. |
-| cl-bootstrap-demo | Twitter Bootstrap widget library for Common Lisp |
+| [[https://github.com/rajasegar/cl-bootstrap][cl-bootstrap-demo]] | Twitter Bootstrap widget library for Common Lisp |
 | [[https://github.com/rajasegar/cl-bootstrap][cl-bootstrap]] | Twitter Bootstrap widget library for Common Lisp. Comments by 40ants [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/03/0018-cl-bootstrap.org][here]]. |
 | [[https://github.com/ebobby/cl-bplustree][cl-bplustree]] | In-memory B+ tree |
 | [[https://github.com/EuAndreh/cl-bson][cl-bson]] | BSON encoder/decoder for Common Lisp. |
 | [[https://github.com/jmbr/cl-buchberger][cl-buchberger]] | cl-buchberger: A Common Lisp implementation of Buchberger's algorithm. |
 | [[https://github.com/lukasepple/cl-ca][cl-ca]] | cellular automaton library |
 | [[https://github.com/diogoalexandrefranco/cl-cache-tables][cl-cache-tables]] | A wrapper around native hash-tables to facilitate                        in-process caching of common lisp data structures. |
-| a-cl-cairo2-loader |  |
-| cl-cairo2-demos | Demos for cl-cairo2 |
-| cl-cairo2-gtk2 | Cairo 1.8 bindings, GTK context. |
-| cl-cairo2-xlib | Cairo 1.8 bindings, xlib surface and GTK extension |
+| [[https://github.com/rpav/cl-cairo2][a-cl-cairo2-loader]] |  |
+| [[https://github.com/rpav/cl-cairo2][cl-cairo2-demos]] | Demos for cl-cairo2 |
+| [[https://github.com/rpav/cl-cairo2][cl-cairo2-gtk2]] | Cairo 1.8 bindings, GTK context. |
+| [[https://github.com/rpav/cl-cairo2][cl-cairo2-xlib]] | Cairo 1.8 bindings, xlib surface and GTK extension |
 | [[https://github.com/rpav/cl-cairo2][cl-cairo2]] | Cairo bindings |
 | [[https://github.com/ichimal/cl-case-control][cl-case-control]] | Supporting case-controlling |
 | [[https://github.com/Jach/cl-catmull-rom-spline][cl-catmull-rom-spline]] | Catmull-Rom Spline |
@@ -306,15 +306,15 @@
 | [[https://github.com/dnaeon/cl-covid19][cl-covid19]] | Common Lisp library and utilities for inspecting COVID-19 data |
 | [[https://github.com/muyinliu/cl-cpus][cl-cpus]] | Get number of CPUs |
 | [[https://github.com/RobBlackwell/cl-crc64][cl-crc64]] | Computes 64-bit cyclic redundancy checks |
-| cl-authorize-net | library for talking with authorize.net credit card processors. |
+| [[https://github.com/AccelerationNet/cl-creditcard][cl-authorize-net]] | library for talking with authorize.net credit card processors. |
 | [[https://github.com/AccelerationNet/cl-creditcard][cl-creditcard]] | Generic interace library for talking with credit card processors. |
 | [[https://bitbucket.org/mackram/cl-cron][cl-cron]] | A simple tool that provides cron like facilities directly inside of common lisp. For this to work properly note that your lisp implementation should have support for threads. Comments by 40ants [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/06/0087-cl-cron.org][here]]. |
 | [[https://github.com/Inaimathi/cl-css][cl-css]] | Simple inline CSS generator |
-| cl-csv-clsql | Facilities for reading and writing CSV format files (and importing and exporting csvs from databases) |
-| cl-csv-data-table | Facilities for converting CSV data to data-tables |
+| [[https://github.com/AccelerationNet/cl-csv][cl-csv-clsql]] | Facilities for reading and writing CSV format files (and importing and exporting csvs from databases) |
+| [[https://github.com/AccelerationNet/cl-csv][cl-csv-data-table]] | Facilities for converting CSV data to data-tables |
 | [[https://github.com/AccelerationNet/cl-csv][cl-csv]] | Facilities for reading and writing CSV format files |
-| cl-cuda-interop | Cl-cuda with OpenGL interoperability. |
-| cl-cuda-misc |  |
+| [[https://github.com/takagi/cl-cuda][cl-cuda-interop]] | Cl-cuda with OpenGL interoperability. |
+| [[https://github.com/takagi/cl-cuda][cl-cuda-misc]] |  |
 | [[https://github.com/takagi/cl-cuda][cl-cuda]] | Cl-cuda is a library to use NVIDIA CUDA in Common Lisp programs. |
 | [[https://github.com/metawilm/cl-custom-hash-table][cl-custom-hash-table]] | Provides custom ways to test key equality in a hash table. Comments by 40ants [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/03/0002-cl-custom-hash-table.org][here]]. |
 | [[https://github.com/cromachina/cl-cut][cl-cut]] | Macros for partial application of expressions in the spirit of SRFI 26. |
@@ -326,7 +326,7 @@
 | [[https://github.com/billstclair/cl-diceware][cl-diceware]] | Diceware in Lisp |
 | [[https://github.com/wiseman/cl-difflib][cl-difflib]] | A Lisp library for computing differences between sequences. Comments by 40ants [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/07/0142-cl-difflib.org][here]].  |
 | [[https://hg.stevelosh.com/cl-digraph/][cl-digraph]] | Simple directed graphs for Common Lisp. |
-| cl-digraph.dot | cl-dot support for cl-digraph |
+| [[https://github.com/sjl/cl-digraph/][cl-digraph.dot]] | cl-dot support for cl-digraph |
 | [[https://github.com/muyinliu/cl-diskspace][cl-diskspace]] | List disks, get disk total/free/usable space information. |
 | [[https://github.com/CodyReichert/cl-disque][cl-disque]] | A Disque client for Common Lisp |
 | [[https://github.com/michaelw/cl-dot][cl-dot]] | Generate Dot Output from Arbitrary Lisp Data |
@@ -358,16 +358,16 @@
 | [[https://github.com/borodust/cl-flow][cl-flow]] | Data-flow driven concurrency model for Common Lisp. Comments by 40ants [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/07/0141-cl-flow.org][here]] |
 | [[https://github.com/mmaul/cl-flowd][cl-flowd]] | Native Lisp interface to Netflow data stores created by the Netflow collect flowd (http://www.mindrot.org/projects/flowd/)                |
 | [[https://github.com/fukamachi/cl-fluent-logger][cl-fluent-logger]] | A structured logger for Fluentd |
-| cl-fluiddb | Library to access the Fluidinfo database / storage and search platform |
+| [[https://github.com/hdurer/cl-fluiddb][cl-fluiddb]] | Library to access the Fluidinfo database / storage and search platform |
 | [[https://github.com/hdurer/cl-fluiddb][cl-fluidinfo]] | Library to access the Fluidinfo database / storage and search platform |
 | [[https://github.com/Shirakumo/cl-fond][cl-fond]] | Bindings to libfond, a simple text rendering engine for OpenGL |
 | [[https://github.com/alex-gutev/cl-form-types][cl-form-types]] | Library for determining types of Common Lisp forms. |
 | [[https://github.com/mmontone/cl-forms][cl-forms]] | A web forms handling library |
-| cl-forms.demo | CL-FORM demo application |
-| cl-forms.djula | CL-FORMS Djula backend |
-| cl-forms.peppol | Some extra form fields (country, currency, amount) using PEPPOL billing code lists |
-| cl-forms.who | CL-FORMS CL-WHO backend |
-| cl-forms.who.bootstrap | Bootstrap theme for CL-FORMS via CL-WHO renderer |
+| [[https://github.com/mmontone/cl-forms][cl-forms.demo]] | CL-FORM demo application |
+| [[https://github.com/mmontone/cl-forms][cl-forms.djula]] | CL-FORMS Djula backend |
+| [[https://github.com/mmontone/cl-forms][cl-forms.peppol]] | Some extra form fields (country, currency, amount) using PEPPOL billing code lists |
+| [[https://github.com/mmontone/cl-forms][cl-forms.who]] | CL-FORMS CL-WHO backend |
+| [[https://github.com/mmontone/cl-forms][cl-forms.who.bootstrap]] | Bootstrap theme for CL-FORMS via CL-WHO renderer |
 | [[https://github.com/BradWBeer/cl-freeimage][cl-freeimage]] | Bindings to the freeimage library. |
 | [[https://github.com/rpav/cl-freetype2][cl-freetype2]] | Wrapper for the Freetype2 library |
 | [[https://github.com/howeyc/cl-fsnotify][cl-fsnotify]] | File system notifications |
@@ -552,14 +552,14 @@
 | [[https://github.com/rudolfochrist/cl-ohm][cl-ohm]] | An object-hash mapping for Redis in Common Lisp |
 | [[http://logand.com/git/cl-olefs][cl-olefs]] | OLE File System tools for Common Lisp |
 | [[https://github.com/bhyde/cl-one-time-passwords][cl-one-time-passwords]] | One time passwords (hotp rfc4226, totp rfc6238) as used in two factor authentication systems such as Google's. |
-| cl-oneliner | Given a piece of text, summarize it with a one-liner |
+| [[https://github.com/mck-/oneliner][cl-oneliner]] | Given a piece of text, summarize it with a one-liner |
 | [[https://github.com/masatoi/cl-online-learning][cl-online-learning]] | Online Machine Learning for Common Lisp |
-| cl-alc | CFFI bindings for OpenAL's ALC API. |
-| cl-alut | CFFI bindings for OpenAL's ALUT API. |
+| [[https://github.com/zkat/cl-openal][cl-alc]] | CFFI bindings for OpenAL's ALC API. |
+| [[https://github.com/zkat/cl-openal][cl-alut]] | CFFI bindings for OpenAL's ALUT API. |
 | [[https://github.com/zkat/cl-openal][cl-openal]] | CFFI bindings for OpenAL sound system. |
 | [[https://github.com/ghollisjr/cl-opencl][cl-opencl]] | CFFI for OpenCL and Lisp wrapper API |
-| cl-glu | Common Lisp bindings to the GLU API v1.3 |
-| cl-glut | Common Lisp bindings to Freeglut. |
+| [[https://github.com/3b/cl-opengl][cl-glu]] | Common Lisp bindings to the GLU API v1.3 |
+| [[https://github.com/3b/cl-opengl][cl-glut]] | Common Lisp bindings to Freeglut. |
 | [[https://github.com/3b/cl-opengl][cl-opengl]] | Common Lisp bindings to OpenGL. |
 | [[https://opendev.org/x/cl-openstack-client][cl-openstack-client]] | OpenStack client libraries |
 | [[https://gitlab.common-lisp.net/cl-org-mode/cl-org-mode][cl-org-mode]] | This library contains a parser for Emacs org-mode and a primitive tool for doing Literate Programming. Comments by 40ants [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/03/0017-cl-org-mode.org][here]]. |
@@ -574,14 +574,14 @@
 | [[https://github.com/a0-prw/cl-paymill][cl-paymill]] | CL-PAYMILL is a common lisp interface to the Paymill payment service API.  See https://www.paymill.com/ |
 | [[https://github.com/standin000/cl-paypal][cl-paypal]] | A paypal express checkout API in Common Lisp. |
 | [[https://hg.stevelosh.com/cl-pcg][cl-pcg]] | A bare-bones Permuted Congruential Generator implementation in pure Common Lisp. |
-| cl-pdf-parser | PDF parser |
+| [[https://github.com/mbattyani/cl-pdf][cl-pdf-parser]] | PDF parser |
 | [[https://github.com/mbattyani/cl-pdf][cl-pdf]] | Common Lisp PDF Generation Library. Comments by 40ants [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/10/0209-cl-pdf.org][here]] |
 | [[https://github.com/ichimal/cl-performance-tuning-helper][cl-performance-tuning-helper]] | A simple performance tuning helper tool box for Common Lisp |
 | [[https://github.com/tarballs-are-good/cl-permutation][cl-permutation]] | A library for operating on permutations and permutation groups. |
 | [[http://git.kpe.io/?p=cl-photo.git][cl-photo]] | Lisp Markup Language |
 | [[https://github.com/smithzvk/cl-plumbing][cl-plumbing]] | A few (at least seemingly) missing stream operations in Common Lisp. |
 | [[https://github.com/rpav/cl-autowrap][cl-autowrap]] | Import c2ffi specs and generate CFFI wrappers |
-| cl-plus-c | Convenience and alternative mechanic for C/autowrap |
+| [[https://github.com/rpav/cl-autowrap][cl-plus-c]] | Convenience and alternative mechanic for C/autowrap |
 | [[https://github.com/takagi/cl-ply][cl-ply]] | Cl-ply is a library to handle PLY format which is also known as the Stanford Triangle Format. |
 | [[https://github.com/jperson/cl-poker-eval][cl-poker-eval]] | 7-card hand poker evaluator |
 | [[https://common-lisp.net/project/cl-pop/cl-pop.tar.gz][cl-pop]] |CL-POP is a lisp networking library that provides a POP mail client based on RFC 1939.  |
@@ -2409,5 +2409,10 @@
 #+begin_export html
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
-<script> $("table").DataTable(); </script>
+
+<script> $(document).ready(function() {
+    $('table').DataTable( {
+        "lengthMenu": [25, 50, 100]
+    } );
+} );</script>
 #+end_export
