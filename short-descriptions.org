@@ -83,6 +83,7 @@
 | [[https://github.com/fukamachi/assoc-utils][assoc-utils]] | Utilities for manipulating association lists |
 | [[https://github.com/stacksmith/asteroids][asteroids]] | An improved asteroids game with sounds |
 | [[https://gitlab.com/TheLostLambda/astonish][astonish]] | A small library for querying and manipulating Lisp ASTs |
+| [[http://www.lichteblau.com/git/atdoc][atdoc]] | Documentation builder. See 40ants [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/12/0218-atdoc.org][comments]] |
 | [[https://github.com/shinmera/atomics][atomics]] | Portability layer for atomic operations like compare-and-swap (CAS). |
 | [[https://github.com/C-Entropy/audio-tag][audio-tag]] | tool to deal with audio tags. read, view and write |
 | [[https://github.com/kkazuo/authenticated-encryption][authenticated-encryption]] | Authenticated-Encryption functions |
@@ -119,7 +120,6 @@
 | [[https://github.com/vy/bk-tree][bk-tree]] |  |
 | [[https://gitlab.com/aerique/black-tie][black-tie]] | Noise library for Common Lisp. |
 | [[https://github.com/orthecreedence/blackbird][blackbird]] | A promise implementation for Common Lisp. |
-| [[http://www.lichteblau.com/git/atdoc][atdoc]] |  |
 | [[https://github.com/hyotang666/bnf][bnf]] | BNF example generator. Useful for testing parser. |
 | [[https://hg.stevelosh.com/bobbin][bobbin]] | Simple (word) wrapping utilities for strings. |
 | [[https://github.com/borodust/bodge-blobs-support][bodge-blobs-support]] | Common utilities for loading/distributing foreign libraries |
@@ -300,7 +300,7 @@
 | [[https://notabug.org/cage/cl-colors2][cl-colors2]] | Simple color library for Common Lisp |
 | [[http://github.com/own-pt/cl-conllu][cl-conllu]] | Common Lisp library for dealing with CoNLL-U files |
 | [[https://github.com/conspack/cl-conspack][cl-conspack]] | CONSPACK implementation for Common Lisp |
-| [[https://gitlab.common-lisp.net/cl-cont/cl-cont][cl-cont]] | A library that implements continuations by  transforming Common Lisp code to continuation passing style. |
+| [[https://gitlab.common-lisp.net/cl-cont/cl-cont][cl-cont]] | A library that implements continuations by  transforming Common Lisp code to continuation passing style. See 40ants comments [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/10/0202-cl-cont.org][here]]. |
 | [[https://github.com/gwkkwg/cl-containers][cl-containers]] | A generic container library for Common Lisp |
 | [[https://github.com/fukamachi/cl-cookie][cl-cookie]] | HTTP cookie manager |
 | [[https://github.com/takagi/cl-coroutine][cl-coroutine]] |  |
@@ -383,7 +383,7 @@
 | [[https://github.com/edicl/cl-gd][cl-gd]] | Interface to the GD graphics library |
 | [[https://github.com/lokedhs/cl-gdata][cl-gdata]] | Common Lisp interface to the Google GData API's |
 | [[https://github.com/taksatou/cl-gearman][cl-gearman]] | Common Lisp Library for the Gearman distributed job system. |
-| [[https://github.com/rpav/cl-gendoc][cl-gendoc]] | cl-gendoc: Simple component-based documentation generator |
+| [[https://github.com/rpav/cl-gendoc][cl-gendoc]] | cl-gendoc: Simple component-based documentation generator. See 40ants comments [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/12/0215-cl-gendoc.org][here]] |
 | [[https://github.com/TheDarkTrumpet/cl-gene-searcher][cl-gene-searcher]] | A simple interface to a SQLite database for querying information for genes, and DGV Tracks. |
 | [[https://github.com/ukari/cl-generator][cl-generator]] | cl-generator, a generator implementation for common lisp |
 | [[https://github.com/e40/cl-geocode][cl-geocode]] |  |
@@ -790,7 +790,6 @@
 | [[https://github.com/BradWBeer/CLinch][clinch]] | An OpenGL Game Engine. |
 | [[https://github.com/jasom/clinenoise][clinenoise]] | A trivial line-input library for VT-like terminals |
 | [[https://github.com/Shinmera/clip][clip]] | An HTML templating engine using Plump. |
-| [[https://github.com/Shinmera/clip][clip]] | An HTML templating engine using Plump. |
 | [[https://github.com/Rudolph-Miller/clipper][clipper]] | File attachment library. |
 | [[https://github.com/lispy-stuff/clite][clite]] | Lite weight testing framework |
 | [[https://github.com/inaimathi/clj][clj]] | Some clojure conveniences for Common Lisp |
@@ -834,7 +833,7 @@
 | [[https://github.com/rigetticomputing/cmu-infix][cmu-infix]] | Mathematical infix notation for Common Lisp. |
 | [[https://github.com/ralph-schleicher/codata-recommended-values][codata-recommended-values]] | CODATA recommended values of physical constants. |
 | codex-templates | Templates for Codex. |
-| [[https://github.com/CommonDoc/codex][codex]] | A documentation system for Common Lisp. |
+| [[https://github.com/CommonDoc/codex][codex]] | A documentation system for Common Lisp. See 40ants comments [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/12/0214-codex.org][here]]|
 | [[https://github.com/AccelerationNet/collectors][collectors]] | A library providing various collector type macros   pulled from arnesi into its own library and stripped of dependencies |
 | [[https://github.com/Shinmera/colleen][colleen]] | IRC bot with a modular framework. |
 | [[https://github.com/Shinmera/colored][colored]] | System for colour representation, conversion, and operation. |
@@ -869,6 +868,7 @@
 | [[https://github.com/CommonDoc/common-html][common-html]] | An HTML parser/emitter for CommonDoc. |
 | [[https://github.com/yitzchak/common-lisp-jupyter][common-lisp-jupyter]] | A Common Lisp kernel for Jupyter along with a library for building Jupyter kernels. |
 | [[https://tarballs.hexstreamsoft.com/libraries/latest/compatible-metaclasses_latest.tar.gz][compatible-metaclasses]] | Validates superclasses according to a simple substitution model, thereby greatly simplifying the definition of class mixins. |
+| [[https://github.com/robert-strandh/Concrete-Syntax-Tree][concrete-syntax-tree]] | Library for parsing Common Lisp code into a concrete syntax tree. |
 | [[https://github.com/noloop/conf][conf]] | Simple configuration file manipulator for projects. |
 | [[https://github.com/sharplispers/conium][conium]] |  |
 | [[https://github.com/spwhitton/consfigurator][consfigurator]] | Lisp declarative configuration management system |
@@ -993,7 +993,7 @@
 | [[https://github.com/death/dweet][dweet]] | A dweet.io client for Common Lisp |
 | [[https://github.com/gwkkwg/dynamic-classes][dynamic-classes]] |  |
 | [[https://bitbucket.org/tarballs_are_good/dynamic-collect][dynamic-collect]] | A library for dynamic, continuable, and abortable collection. |
-| [[https://github.com/rpav/dynamic-mixins][dynamic-mixins]] | Simple dynamic class mixing without manual permutations |
+| [[https://github.com/rpav/dynamic-mixins][dynamic-mixins]] | Simple dynamic class mixing without manual permutations. See 40ants comments [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/10/0199-dynamic-mixins.org][here]] |
 | [[https://github.com/pcostanza/contextl][contextl]] | ContextL is a CLOS extension for Context-oriented Programming (COP). |
 | dynamic-wind | The dynamic-wind part of ContextL as a separate independent system definition. |
 | [[http://common-lisp.net/project/eager-future/repository/eager-future/][eager-future]] |  |
@@ -1112,7 +1112,7 @@
 | folio2-series | operations on (possibly unbounded) series of values |
 | folio2-taps | tools for treating objects as streams of values |
 | [[https://github.com/mikelevins/folio2][folio2]] | the folio2 umbrella system |
-| [[https://github.com/shinmera/font-discovery][font-discovery]] | Find system font files matching a font spec. |
+| [[https://github.com/shinmera/font-discovery][font-discovery]] | Find system font files matching a font spec. See 40ants comments [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/10/0204-font-discovery.org][here]] |
 | [[https://github.com/Shinmera/for][for]] | An extensible iteration macro library. |
 | [[https://github.com/Shinmera/form-fiddle][form-fiddle]] | A collection of utilities to destructure lambda forms. |
 | [[https://github.com/fiddlerwoaroof/format-string-builder][format-string-builder]] | A DSL wrapping cl:format's syntax with something more lispy. |
@@ -1415,7 +1415,7 @@
 | [[https://github.com/lmj/lfarm][lfarm-server]] | Server component of lfarm, a library for distributing work across machines. |
 | [[https://github.com/lmj/lfarm][lfarm-ssl]] | SSL support for lfarm |
 | [[https://github.com/mrc/lhstats][lhstats]] | Statistical functions by Larry Hunter and Jeff Shrager. |
-| [[https://github.com/antimer/liblmdb][liblmdb]] | Low-level LMDB bindings. |
+| [[https://github.com/antimer/liblmdb][liblmdb]] | Low-level LMDB bindings. See 40ants comments [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/10/0201-lmdb.org][here]]|
 | [[https://github.com/alxchk/cl-libssh2][libssh2]] | Trivial libssh2 bindings |
 | [[https://github.com/soemraws/cl-libusb][cl-libusb]] | Lispified bindings to libusb-0.1. |
 | [[https://github.com/soemraws/cl-libusb][libusb-ffi]] | Common Lisp FFI bindings to libusb-0.1. |
@@ -1452,12 +1452,12 @@
 | [[https://gitlab.common-lisp.net/asdf/asdf-finalizers][asdf-finalizers]] | Enforced calling of finalizers for Lisp code |
 | [[https://gitlab.common-lisp.net/asdf/asdf-finalizers][list-of]] | magic list-of deftype |
 | [[https://github.com/blindglobe/listoflist][listoflist]] | makes listoflist an xarray'able data structure. |
-| [[https://github.com/stefandevai/litterae][litterae]] | Beautiful documentation generation. |
+| [[https://github.com/stefandevai/litterae][litterae]] | Beautiful documentation generation. See 40ants comments [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2021/03/0220-litterae.org][here]]|
 | [[https://github.com/cbaggers/livesupport][livesupport]] | Some helpers that make livecoding with slime/sly a little easier |
 | [[https://github.com/tpapp/lla][lla]] | Lisp Linear Algebra |
 | [[http://git.kpe.io/?p=lml.git][lml]] | Lisp Markup Language |
 | [[http://git.kpe.io/?p=lml2.git][lml2]] | Lisp Markup Language |
-| [[https://github.com/avodonosov/local-package-aliases][local-package-aliases]] | Allows to define inside of a package aliases to refer other packages.Provides a reader macro $ to use the aliases (active only in packages havingalias mapping, and does not affect other code).Portable. |
+| [[https://github.com/avodonosov/local-package-aliases][local-package-aliases]] | Allows to define inside of a package aliases to refer other packages. Provides a reader macro $ to use the aliases (active only in packages having alias mapping, and does not affect other code). Portable. |
 | [[https://github.com/enaeher/local-time-duration][cl-postgres+local-time-duration]] | cl-postgres integration for local-time-duration |
 | [[https://github.com/enaeher/local-time-duration][local-time-duration]] | local-time-duration: Simple duration functionality on top of local-time |
 | [[https://github.com/dlowe-net/local-time][cl-postgres+local-time]] | Integration between cl-postgres and local-time |
@@ -1524,7 +1524,7 @@
 | [[https://github.com/Gnuxie/method-hooks][method-hooks]] | simple qualifiable hooks defined like methods with the option to modify the dispatch method and how dispatch happens |
 | [[http://nklein.com/wp-content/uploads/2011/05/method-versions_0.1.2011.05.18.tar.gz][method-versions]] | method-versions: package for creating versioned methods |
 | [[https://github.com/tmccombs/mexpr][mexpr]] | Macro for infix math expressions. |
-| [[https://github.com/melisgl/mgl-pax][mgl-pax]] | Exploratory programming tool and documentation  generator. |
+| [[https://github.com/melisgl/mgl-pax][mgl-pax]] | Exploratory programming tool and documentation  generator. See 40ants comments [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/11/0213-mgl-pax.org][here]]|
 | [[https://github.com/glv2/mgrs][mgrs]] | Convert coordinates between Latitude/Longitude and MGRS. |
 | [[https://github.com/melisgl/micmac][micmac]] | Micmac is mainly a library of graph search algorithms  such as alpha-beta, UCT and beam search, but it also has some MCMC  and other slightly unrelated stuff. |
 | [[http://www.doc.gold.ac.uk/isms/lisp/midi/midi-20070618.tar.gz][midi]] | A library for MIDI and Midifiles. |
@@ -1596,7 +1596,7 @@
 | [[https://gitlab.com/ralt/nbd][nbd]] | Network Block Device server library. |
 | [[http://ftp.linux.org.uk/pub/lisp/cclan/net-telent-date.tar.gz][net-telent-date]] |  |
 | [[https://github.com/didierverna/asdf-flv][net.didierverna.asdf-flv]] | ASDF extension to provide support for file-local variables. |
-| [[https://www.lrde.epita.fr/~didier/software/lisp/declt/latest.tar.gz][net.didierverna.declt]] | A reference manual generator for Common Lisp libraries |
+| [[https://www.lrde.epita.fr/~didier/software/lisp/declt/latest.tar.gz][net.didierverna.declt]] | A reference manual generator for Common Lisp libraries. See 40ants comments [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2021/01/0219-declt.org][here]] |
 | [[https://github.com/didierverna/focus][net.didierverna.focus]] | Customizable format strings and directives |
 | [[https://github.com/ralt/network-addresses][network-addresses]] | A network addresses manipulation library. |
 | [[https://github.com/shamazmazum/neural-classifier][neural-classifier]] | Classification of samples based on neural network. |
@@ -1680,6 +1680,7 @@
 | [[https://tarballs.hexstreamsoft.com/libraries/latest/parse-number-range_latest.tar.gz][parse-number-range]] | Parses LOOP's convenient \ |
 | [[https://github.com/sharplispers/parse-number][parse-number]] | Number parsing library |
 | [[https://github.com/VincentToups/parseltongue][parseltongue]] | Parseltongue |
+| [[https://github.com/mrossini-ethz/parseq][parseq]]| A library for parsing sequences such as strings and lists using parsing expression grammars. See 40ants comments [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/10/0207-parseq.org][here]] |
 | [[https://github.com/Ramarren/cl-parser-combinators][parser-combinators-cl-ppcre]] | An implementation of parser combinators for Common Lisp |
 | [[https://github.com/Ramarren/cl-parser-combinators][parser-combinators-debug]] | A debug extension for PARSER-COMBINATORS |
 | [[https://github.com/Ramarren/cl-parser-combinators][parser-combinators]] | An implementation of parser combinators for Common Lisp |
@@ -1687,6 +1688,7 @@
 | parser.common-rules.operators | Provides macros for defining grammar rules for infix operators. |
 | [[https://github.com/scymtym/parser.ini][parser.ini]] | Provides parsing of Ini expressions. |
 | [[https://git.mfiano.net/mfiano/patchwork][patchwork]] | A spritesheet packer for games. |
+| [[https://github.com/shinmera/pathname-utils][pathname-utils]] | A collection of utilities for pathname manipulation. |
 | [[https://github.com/eudoxia0/path-parse][path-parse]] | Parse the PATH environment variable, portably. |
 | [[https://github.com/wemeetagain/path-string][path-string]] | A path utility library |
 | [[https://github.com/vy/patron][patron]] | A compact thread pool implementation. |
@@ -1785,7 +1787,7 @@
 | [[https://github.com/bendudson/py4cl][py4cl]] | Call Python libraries from Common Lisp |
 | [[https://github.com/digikar99/py4cl2][py4cl2]] | Some improvements over py4cl. py4cl is a library for interfacing with python libraries from common lisp, using streams to communicate with the python process.Report the issues at https://github.com/digikar99/py4cl2/issues (More) Documentation is available at https://digikar99.github.io/py4cl2/ |
 | [[https://github.com/smithzvk/pythonic-string-reader][pythonic-string-reader]] | A simple and unintrusive read table modification that allows forsimple string literal definition that doesn't require escaping characters. |
-| [[https://github.com/orivej/pzmq][pzmq]] | ZeroMQ 3.2+ bindings. |
+| [[https://github.com/orivej/pzmq][pzmq]] | ZeroMQ 3.2+ bindings. See 40ants comments [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/10/0206-pzmq.org][here]] |
 | [[https://github.com/chaitanyagupta/qbase64][qbase64]] | Fast and flexible base64 encoder and decoder |
 | [[https://gitlab.common-lisp.net/bese/qbook][qbook]] |  |
 | [[https://github.com/roswell/ql-checkout][ql-checkout]] |  |
@@ -2055,6 +2057,11 @@
 | [[https://github.com/g000001/srfi-23][srfi-23]] | SRFI 23: Error reporting mechanism |
 | [[https://github.com/g000001/srfi-6][srfi-6]] | SRFI-6: Basic String Ports |
 | [[https://github.com/g000001/srfi-98][srfi-98]] | SRFI 98: get-environment-variable |
+| [[https://shinmera.github.io/staple/][staple]] | A tool to generate documentation about Lisp projects through an HTML template. See 40ants comments [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/11/0212-staple.org][here]]                            |
+| [[https://shinmera.github.io/staple/][staple-markdown]] |Markdown processing support for Staple|
+| [[https://shinmera.github.io/staple/][staple-markless]] |Markdown processing support for Staple|
+| [[https://shinmera.github.io/staple/][staple-restructured-text]] |Markdown processing support for Staple|
+| [[https://shinmera.github.io/staple/][staple-package-recording]] |Collects information about packages being defined with an ASDF system.|
 | [[https://github.com/marijnh/ST-JSON][st-json]] | JSON in- and output |
 | [[https://github.com/tonyg/cl-match][cl-match]] |  |
 | standard-cl |  |
@@ -2144,7 +2151,7 @@
 | [[https://github.com/hanshuebner/temporary-file][temporary-file]] | Temporary file creation library |
 | [[https://github.com/npatrick04/terminfo][terminfo]] | Terminfo database front-end. |
 | [[https://github.com/Shirakumo/terrable][terrable]] | Terragen TER file format reader |
-| [[https://github.com/egao1980/tesseract-capi][tesseract-capi]] | Tesseract C API wrapper |
+| [[https://github.com/egao1980/tesseract-capi][tesseract-capi]] | Tesseract C API wrapper. See 40ants comments [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/10/0203-tesseract-capi.org][here]] |
 | [[https://github.com/BnMcGn/paren6][paren6]] | Paren6 is a set of ES6 macros for Parenscript |
 | [[https://gitlab.common-lisp.net/xcvb/asdf-dependency-grovel][asdf-dependency-grovel]] | Analyse the dependencies in an ASDF system |
 | [[https://gitlab.common-lisp.net/vsedach/eager-future2][eager-future2]] | Parallel programming library providing the futures/promises synchronization mechanism |
@@ -2252,7 +2259,7 @@
 | [[https://github.com/eudoxia0/trivial-ssh][trivial-ssh]] | An abstraction layer over cl-libssh2. |
 | [[https://github.com/stacksmith/trivial-swank][trivial-swank]] | swank server communications |
 | [[https://github.com/rmoritz/trivial-tco][trivial-tco]] | A library to assist in ensuring certain code is executed with tail call optimizations enabled. |
-| [[https://github.com/Shinmera/trivial-thumbnail][trivial-thumbnail]] | Tiny library to create image thumbnails with imagemagick. |
+| [[https://github.com/Shinmera/trivial-thumbnail][trivial-thumbnail]] | Tiny library to create image thumbnails with imagemagick. See 40ants comments [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/10/0200-trivial-thumbnail.org][here]] |
 | [[https://github.com/gwkkwg/trivial-timeout][trivial-timeout]] | OS and Implementation independent access to timeouts |
 | [[http://releases.unknownlamer.org/trivial-timers/trivial-timers_latest.tar.gz][trivial-timers]] | Trivial timer library |
 | [[https://github.com/m2ym/trivial-types][trivial-types]] | Trivial type definitions |
