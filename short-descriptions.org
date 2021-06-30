@@ -1,6 +1,6 @@
-#+TITLE: Quicklisp Projects with Short Descriptions From Their ASD files (27 June 2021 Edition)
+#+TITLE: Quicklisp Projects with Short Descriptions From Their ASD files (30 June 2021 Edition)
  #+AUTHOR:      Sabra Crolleton
- #+DATE:        2021-06-28
+ #+DATE:        2021-06-30
  #+EMAIL:       sabra.crolleton!gmail.com
  #+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
  #+LANGUAGE:    en
@@ -277,7 +277,7 @@
 | [[https://github.com/jmbr/cl-buchberger][cl-buchberger]] | cl-buchberger: A Common Lisp implementation of Buchberger's algorithm. |
 | [[https://github.com/lukasepple/cl-ca][cl-ca]] | cellular automaton library |
 | [[https://github.com/diogoalexandrefranco/cl-cache-tables][cl-cache-tables]] | A wrapper around native hash-tables to facilitate                        in-process caching of common lisp data structures. |
-| [[https://github.com/rpav/cl-cairo2][a-cl-cairo2-loader]] |  |
+| [[https://github.com/rpav/cl-cairo2][a-cl-cairo2-loader]] | Cairo bindings for common lisp |
 | [[https://github.com/rpav/cl-cairo2][cl-cairo2-demos]] | Demos for cl-cairo2 |
 | [[https://github.com/rpav/cl-cairo2][cl-cairo2-gtk2]] | Cairo 1.8 bindings, GTK context. |
 | [[https://github.com/rpav/cl-cairo2][cl-cairo2-xlib]] | Cairo 1.8 bindings, xlib surface and GTK extension |
@@ -286,8 +286,8 @@
 | [[https://github.com/Jach/cl-catmull-rom-spline][cl-catmull-rom-spline]] | Catmull-Rom Spline |
 | [[https://github.com/ghollisjr/cl-cerf][cl-cerf]] | Lisp wrapper to libcerf |
 | [[https://github.com/rudolfochrist/cl-change-case][cl-change-case]] | Convert strings between camelCase, param-case, PascalCase and more. Comments by 40ants [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/05/0076-cl-change-case.org][here]]. |
-| cl-charms-paint | A simple ASCII art paint program for cl-charms. |
-| cl-charms-timer | Timer example for cl-charms. |
+| [[https://github.com/HiTECNOLOGYs/cl-charms][cl-charms-paint]] | A simple ASCII art paint program for cl-charms. |
+| [[https://github.com/HiTECNOLOGYs/cl-charms][cl-charms-timer]] | Timer example for cl-charms. |
 | [[https://github.com/HiTECNOLOGYs/cl-charms][cl-charms]] | CFFI bindings for curses. Comments by 40ants [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/05/0061-cl-charms.org][here]]. |
 | [[https://github.com/mentel/cl-cheshire-cat][cl-cheshire-cat]] | Cheshire Cat HTTP Redirection Server |
 | [[https://github.com/gos-k/cl-clblas][cl-clblas]] | clBLAS binding |
@@ -2406,6 +2406,118 @@
 | [[https://github.com/marijnh/Postmodern][postmodern]] | PostgreSQL programming API |
 | [[https://github.com/marijnh/Postmodern][s-sql]] | Lispy DSL for SQL |
 | [[https://github.com/marijnh/Postmodern][simple-date]] | Simple date library that can be used with postmodern |
+| [[https://gitlab.common-lisp.net/asdf/asdf-package-system][asdf-package-system]] | Backward-compatible stub for ASDF 3.1's package-inferred-system feature |
+| [[https://github.com/cl-rabbit/cl-amqp][cl-amqp]] | AMQP 0.9.1 with RabbitMQ extensions in Common Lisp |
+| [[https://github.com/cl-rabbit/cl-bunny][cl-bunny]] | Common Lisp RabbitMQ client based on IOLib |
+| [[https://github.com/mdbergmann/cl-gserver][cl-gserver]] | Actor framework featuring actors and agents for easy access to state and asynchronous operations. |
+| [[https://github.com/resttime/cl-liballegro][cl-liballegro]] | Allegro 5 game programming library bindings for Common Lisp |
+| [[https://gitlab.com/lockie/cl-liballegro-nuklear][cl-liballegro-nuklear]] | CFFI wrapper for the Nuklear IM GUI library with liballegro backend, to be used with cl-liballegro. |
+| [[https://github.com/turtle-bazon/cl-maxminddb][cl-maxminddb]] | CL MaxMind DB |
+| [[https://github.com/Shirakumo/cl-mixed][cl-mixed]] | Bindings to libmixed, a sound mixing and processing library. |
+| [[https://github.com/Ferada/cl-mock][cl-mock]] | Mocking library |
+| [[https://github.com/inaimathi/cl-notebook][cl-notebook]] | A notebook-style in-browser editor for Common Lisp |
+| [[https://github.com/tpapp/cl-num-utils][cl-num-utils]] | Numerical utilities for Common Lisp |
+| [[https://github.com/defaultxr/cl-patterns][cl-patterns]] | Pattern library for algorithmic music composition and performance in Common Lisp |
+| [[https://github.com/dnaeon/cl-rfc4251][cl-rfc4251]] | Common Lisp library for encoding and decoding data in RFC 4251 compliant format |
+| [[https://github.com/GrammaTech/cl-smt-lib][cl-smt-lib]] | SMT object supporting SMT-LIB communication over input and output streams |
+| [[https://github.com/dnaeon/cl-ssh-keys][cl-ssh-keys]] | Common Lisp system for generating and parsing of OpenSSH keys |
+| [[https://github.com/shinmera/cl-steamworks][cl-steamworks]] | A wrapper for the Valve SteamWorks API. |
+| [[https://github.com/Zulu-Inuoe/cl-tiled][cl-tiled]] | Tiled (http://www.mapeditor.org/) Loader |
+| [[https://github.com/joachifm/cl-webkit][cl-webkit]] | cl-webkit is a binding to [WebKitGTK+] for Common Lisp, currently targeting WebKit version 2.  The WebKitGTK+ library adds web browsing capabilities to an application, leveraging the full power of the WebKit browsing engine. |
+| [[https://github.com/BnMcGn/clath][clath]] | Clath is single sign-on middleware for Clack. It allows basic login with OAuth1.0a, OAuth2 and OpenID Connect. |
+| [[https://github.com/mmontone/clavier][clavier]] | Clavier: A Common Lisp validation library |
+| [[https://github.com/jlahd/clods-export][clods-export]] | Common Lisp OpenDocument spreadsheet export library |
+| [[https://github.com/coleslaw-org/coleslaw][coleslaw]] | Flexible Lisp Blogware |
+| [[https://github.com/tarballs-are-good/computable-reals][computable-reals]] | Computable real numbers. |
+| [[https://github.com/scymtym/configuration.options][configuration.options]] | An extensible configuration system that supports multiple option sources. |
+| [[https://github.com/McParen/croatoan][croatoan]] | High-level Lisp CLOS bindings for the ncurses terminal library. |
+| [[https://github.com/Islam0mar/CL-CXX-JIT][cl-cxx-jit]] | This library provides an interface to C++ from lisp. It compiles C++ code, then loads it into lisp. |
+| [[https://github.com/Shinmera/definitions][definitions]] | General definitions reflection library. |
+| [[https://tarballs.hexstreamsoft.com/libraries/latest/definitions-systems_latest.tar.gz][definitions-systems]] | Provides a simple unified extensible way of processing named definitions. |
+| [[https://github.com/Shinmera/deploy][deploy]] | Tools to aid in the deployment of a fully standalone application. |
+| [[https://github.com/agrostis/diff-match-patch][diff-match-patch]] | A Common Lisp port of Neil Fraser's library of the same name |
+| [[https://github.com/Shinmera/dns-client][dns-client]] | A client for the DNS protocol. |
+| [[https://github.com/mmontone/duologue][duologue]] | High-level user interaction library for Common Lisp |
+| [[https://github.com/guicho271828/eazy-documentation][eazy-documentation]] | One-shot solution to the CL documentation generator. |
+| [[https://gitlab.com/DataLinkDroid/omer-count][omer-count]] | A small Common Lisp script to aid in the counting of the days and weeks from Pesach to Shavuot. |
+| [[https://github.com/mmontone/erudite][erudite]] | Literate Programming System for Common Lisp |
+| [[https://github.com/Shinmera/file-attributes][file-attributes]] | Access to file attributes (uid, gid, atime, mtime, mod) |
+| [[https://git.mfiano.net/mfiano/flac-metadata][flac-metadata]] | A utility for reading metadata embedded in FLAC audio files. |
+| [[https://github.com/Shinmera/flare][flare]] | Easy particle systems with fine grained control. |
+| [[https://github.com/mmontone/fmt][fmt]] | Extensible format-like facility |
+| [[https://github.com/grammatech/gtirb-functions][gtirb-functions]] | Function objects over GTIRB |
+| [[https://github.com/cbeo/gtwiwtg][gtwiwtg]] | Lazy-ish iterators |
+| [[https://github.com/Shirakumo/harmony][harmony]] | A common lisp sound server and sound processing library. |
+| helambdap   | The HELambdaP System. |
+| [[https://github.com/hu-dwim/hu.dwim.bluez][hu.dwim.bluez]] | Common Lisp FFI wrapper for libbluetooth, aka Bluez, which is a Linux Bluetooth stack. |
+| [[http://dwim.hu/live/hu.dwim.presentation/][hu.dwim.presentation]] | A component based GUI framework with a backend to present it using HTML and JavaScript. |
+| [[https://github.com/hu-dwim/hu.dwim.sdl][hu.dwim.sdl]] | Common Lisp FFI wrapper for libSDL2. |
+| [[https://github.com/capitaomorte/hunchensocket][hunchensocket]] | WebSockets for Hunchentoot |
+| [[https://github.com/mmontone/hunchentoot-errors][hunchentoot-errors]] | Augments Hunchentoot error pages and logs with request and session information |
+| [[https://github.com/cosmos72/hyperluminal-mem][hyperluminal-mem]] | High-performance serialization library, designed for untrusted data |
+| [[https://github.com/tokenrove/imago][imago]] | Image manipulation library |
+| [[https://github.com/gschjetne/json-mop][json-mop]] | A metaclass for bridging CLOS and JSON |
+| [[https://github.com/yitzchak/kekule-clj][kekule-clj]] | A Kekule widget for Common Lisp Jupyter |
+| [[https://github.com/takagi/lake][lake]] | Lake is a GNU make like build utility in Common Lisp. |
+| [[https://github.com/Shirakumo/lichat-protocol][lichat-protocol]] | The independent protocol part of Lichat. |
+| [[https://gitlab.com/ralt/linux-packaging][linux-packaging]] | ASDF extension to generate linux packages. |
+| [[https://github.com/heegaiximephoomeeghahyaiseekh/lisp-binary][lisp-binary]] | Declare binary formats as structs and then read and write them. |
+| [[https://github.com/Dimercel/listopia][listopia]] | List manipulation library |
+| [[https://github.com/antimer/lmdb][lmdb]] | Bindings to LMDB, the Lightning Memory-mapped Database. |
+| [[https://github.com/Shirakumo/maiden][maiden]] | A modern and extensible chat bot framework. |
+| [[https://github.com/moderninterpreters/markup][markup]] | markup provides a reader-macro to read HTML/XML tags inside of Common Lisp code |
+| [[https://github.com/mnasoft/math][math]] | Math is a math library, implementing some algorithms:- linear algebra - operations with matrices - statistical functions - linear and bilinear interpolation - finding approximating polynomials,implemented in Common Lisp |
+| [[https://github.com/Shinmera/messagebox][messagebox]] | A library to show a native message box dialog. |
+| [[https://github.com/Shinmera/modularize-hooks][modularize-hooks]] | Generic hooks and triggers extension for modularize. |
+| [[https://github.com/Shinmera/modularize-interfaces][modularize-interfaces]] | Programmatical interfaces extension for Modularize |
+| [[https://github.com/Shinmera/modularize][modularize]] | A modularization framework |
+| [[https://github.com/Shinmera/multiposter][multiposter]] | A small application to post to multiple services at once. |
+| [[https://github.com/defaultxr/mutility][mutility]] | modula's utilities |
+| [[https://github.com/didierverna/tfm][tfm]] | TFM (for TeX Font Metrics) is the standard font description format used by TeX. The TFM library parses and decodes TFM files into an abstract datastructure, providing easy access to the corresponding font information in Common Lisp. |
+| [[http://www.femlisp.org/][femlisp]]                         | Femlisp is a FEM (finite element method) framework for the solution of partial differential equations.  It is written entirely in Common Lisp which allows for interactive use and a very high flexibility. |
+| [[https://notabug.org/cage/nodgui][nodgui]] | Lisp bindings for the Tk toolkit |
+| [[http://github.com/Shinmera/north][north]] | oAuth 1.0a server and client implementation, the successor to South. |
+| [[https://github.com/tfeb/tfeb-lisp-hax][tfeb-lisp-hax]] | Collection of lisp hacks |
+| [[https://github.com/tfeb/tfeb-lisp-tools][tfeb-lisp-tools]] | Collection of lisp tools |
+| [[https://github.com/ruricolist/overlord][overlord]] | Experimental build system. |
+| [[https://git.mfiano.net/mfiano/parsley][parsley]] | A toolset for parsing binary data formats. |
+| [[https://github.com/shamazmazum/perceptual-hashes][perceptual-hashes]] | Perceptual hash algorithms for images |
+| [[https://github.com/marcoheisig/Petalisp][petalisp]] | Petalisp is an attempt to generate high performance code for parallel computers by JIT-compiling array definitions. It is not a full blown programming language, but rather a carefully crafted extension of Common Lisp that allows for extreme optimization and parallelization. |
+| [[https://github.com/Shinmera/plump][plump]] | An XML / XHTML / HTML parser that aims to be as lenient as possible. |
+| [[https://github.com/Shinmera/plump-sexp][plump-sexp]] | Turning SEXPs into a Plump DOM and back. |
+| [[https://github.com/Shinmera/plump-tex][plump-tex]] | Rudimentary parser turning TeX-like syntax into a Plump DOM. |
+| [[https://github.com/fukamachi/qlot][qlot]] | A project-local library installer |
+| [[https://github.com/rigetti/quilc][quilc]] | A CLI front-end for the Quil compiler |
+| [[https://common-lisp.net/project/rcl/rcl.tar.gz][rcl]] | http://common-lisp.net/project/rcl |
+| [[https://bitbucket.org/dfmorrison/roan][roan]] | A library to support change ringing applications |
+| [[https://github.com/rigetti/rpcq][rpcq]] | Message and RPC specifications for Rigetti Quantum Cloud Services. |
+| [[https://github.com/fisxoj/sanity-clause][sanity-clause]] | Sanity clause is a data contract and validation library. |
+| [[https://github.com/nikodemus/sb-cga][sb-cga]] | Computer graphic algebra for SBCL. |
+| [[https://github.com/byulparan/sc-extensions][sc-extensions]] | additional library collection for cl-collider |
+| [[https://github.com/nikodemus/screamer][screamer]] | Nondeterministic programming and constraint propagation. |
+| [[https://github.com/vindarel/cl-sendgrid][cl-sendgrid]] | Send emails with the SendGrid API |
+| [[https://git.mfiano.net/mfiano/shadow][shadow]] | A management system for OpenGL shader programs and associated buffer objects. |
+| [[https://github.com/Shinmera/qt-libs][qt-libs]] | System to ensure that the necessary Qt libs are available. |
+| [[https://github.com/GrammaTech/sel][sel]] |The SOFTWARE-EVOLUTION-LIBRARY enables the programmatic modification and evaluation of software.  A common interface abstracts over multiple types of software objects including source code abstract syntax trees (primarily using https://tree-sitter.github.io/tree-sitter/, compiled assembler code, and binary software objects.  Software transformation, analysis, and evaluation techniques are implemented on top of this interface supporting automation of common software engineering tasks. |
+| [[https://gitlab.common-lisp.net/stefil/stefil][stefil]] | Stefil - Simple Test Framework In Lisp |
+| [[https://git.mfiano.net/mfiano/stripe][stripe]] | A client for the Stripe payment API. |
+| [[https://github.com/eudoxia0/swank-protocol][swank-protocol]] | A low-level Swank client. |
+| [[https://github.com/mmontone/ten][ten]] | Template System for Common Lisp |
+| [[https://github.com/BnMcGn/gadgets][gadgets]] | Ben McGunigle's utility collection |
+| [[https://gitlab.com/ediethelm/trivial-timer][trivial-timer]] | Easy scheduling of tasks (functions). |
+| [[https://github.com/s-expressionists/Trucler][trucler]] | This library defines a CLOS-based protocol to be used by Common Lisp compilers for environment query and update.  In addition, library authors can use the =trucler-native= interface to inspect native environments. Trucler supports introspection for variables, functions, tags, blocks and optimization policies. |
+| [[https://github.com/sabracrolleton/uax-15][uax-15]] | Common lisp implementation of Unicode normalization functions :nfc, :nfd, :nfkc and :nfkd (Uax-15) |
+| [[https://git.mfiano.net/mfiano/umbra][umbra]] | A library of reusable GPU shader functions. |
+| [[http://git.kpe.io/?p=umlisp.git][umlisp]] | An object-oriented, SQL-based interface library to the Unified Medical Language System. |
+| [[https://github.com/tdrhq/cl-unix-sockets][cl-unix-sockets]] | Most major Lisp implementations don't come with any in-built support for UNIX sockets. This is a simple library that provides a reasonable implementation using FFI. |
+| [[https://github.com/K1D77A/validate-list][validate-list]] | Allows you to validate the contents and structure of a list based off of a template |
+| [[https://github.com/volkers/vgplot][vgplot]] | Interface to gnuplot |
+| [[https://github.com/privet-kitty/wild-package-inferred-system][wild-package-inferred-system]] | Introduces the wildcards `*' and `**' into package-inferred-system |
+| [[https://github.com/y2q-actionman/with-c-syntax][with-c-syntax]] | with-c-syntax is a fun package which introduces the C language syntax into Common Lisp. |
+| [[https://github.com/theZacAttacks/with-user-abort][with-user-abort]] | provides an easy way to catch ctrl+c. useful for making binaries. |
+| [[https://github.com/mbattyani/cl-typesetting][cl-typesetting]] | Common Lisp Typesetting system |
+| [[https://github.com/Shinmera/zippy][zippy]] | A fast zip archive library |
+| [[https://github.com/glv2/cl-zstd][cl-zstd]] | is a Common Lisp library for Zstandard compression/decompression using bindings to the libzstd C library. |
 #+begin_export html
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
