@@ -1,4 +1,4 @@
-#+TITLE: Quicklisp Projects with Short Descriptions From Their ASD files (30 June 2021 Edition)
+#+TITLE: Quicklisp Projects with Short Descriptions From Their ASD files (2 July 2021 Edition)
  #+AUTHOR:      Sabra Crolleton
  #+DATE:        2021-06-30
  #+EMAIL:       sabra.crolleton!gmail.com
@@ -31,7 +31,7 @@
 | [[https://github.com/Shinmera/3d-matrices][3d-matrices]] | A utility library implementing 2x2, 3x3, 4x4, and NxN matrix functionality. |
 | [[https://github.com/Shinmera/3d-vectors][3d-vectors]] | A utility library implementing 2D, 3D, and 4D vector functionality. |
 | [[https://github.com/40ants/doc][40ants-doc-full]] | Documentation generator for 40ANTS-DOC (based on MGL-PAX). You will need to load this system, to build documentation for a library which uses 40ANTS-DOC system. |
-| [[https://github.com/40ants/doc][40ants-doc]] | Documentation generator, based on MGL-PAX. Allows to put documentation inside lisp files and cross-reference between different entities. |
+| [[https://github.com/40ants/doc][40ants-doc, aka doc]]  | Documentation generator, based on MGL-PAX. Allows to put documentation inside lisp files and cross-reference between different entities. |
 | [[https://github.com/AccelerationNet/a-cl-logger][a-cl-logger-logstash]] | Load the logstash appender for a-cl-logger |
 | [[https://github.com/AccelerationNet/a-cl-logger][a-cl-logger]] | A logger that sends to multiple destinations in multiple formats. Based on arnesi logger |
 | [[https://github.com/dherring/able][able]] | A Common Lisp editor |
@@ -709,6 +709,7 @@
 | cl-unification-lib |  |
 | [[https://gitlab.common-lisp.net/cl-unification/cl-unification][cl-unification]] | The CL-UNIFICATION system.The system contains the definitions for the 'unification' machinery. |
 | [[https://common-lisp.net/project/cl-utilities/cl-utilities-latest.tar.gz][cl-utilities]] | This is a yet another utilities library. Comments by 40ants [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/05/0068-cl-utilities.org][here]]. |
+| [[https://github.com/grammatech/cl-utils][cl-utils]] | GrammaTech utilities |
 | [[https://gitlab.common-lisp.net/cl-variates/cl-variates][cl-variates]] | Portable Common Lisp Random Number Generation. |
 | [[https://github.com/fjolliton/cl-vectors][cl-aa-misc]] | cl-aa-misc: some tools related to cl-aa |
 | [[https://github.com/fjolliton/cl-vectors][cl-aa]] | cl-aa: polygon rasterizer |
@@ -1142,6 +1143,7 @@
 | [[https://github.com/death/gcm][gcm]] | Google Cloud Messaging (GCM) library for Common Lisp |
 | [[https://github.com/gpwwjr/GECO][geco]] | GECO is an extensible, object-oriented framework for prototyping genetic algorithms in Common Lisp. |
 | general-accumulator | A general-purpose, extensible value accumulator |
+| [[https://gitlab.common-lisp.net/gendl][gendl aka devo]] | Gendl® is a Generative Programming and Knowledge Based Engineering framework. |
 | [[https://github.com/AccelerationNet/generators][generators]] | A common lisp package providing python style generators based on delimited continuations     |
 | [[https://github.com/alex-gutev/generic-cl][generic-cl]] | Standard Common Lisp functions implemented using generic functions. |
 | generic-cl.util | Utilities implemented on top of GENERIC-CL |
@@ -1593,7 +1595,8 @@
 | [[https://github.com/borodust/nuklear-blob][nuklear-blob]] | Nuklear IM GUI foreign library collection |
 | [[https://github.com/borodust/nuklear-renderer-blob][nuklear-renderer-blob]] | Nuklear IM GUI renderer foreign library collection |
 | [[https://github.com/hyotang666/null-package][null-package]] | Safe and robust S-Expression reader. Useful to read from unfailthfull stream/socket. |
-| [[https://github.com/tpapp/cl-num-utils][num-utils]] | Numerical utilities for Common Lisp |
+| [[https://github.com/Lisp-Stat/numerical-utilities][numerical-utilities]] | Numerical utilities for Common Lisp. Fork of num-utils |
+| [[https://github.com/tpapp/cl-num-utils][num-utils]]      | Numerical utilities for Common Lisp |
 | [[https://github.com/numcl/numcl][numcl]] | Numpy clone in Common Lisp, using MAGICL/LLA/MGL-MAT as the backend (in the future) |
 | nxt-proxy |  |
 | [[https://github.com/woudshoo/cl-nxt][nxt]] | Implements the Lego Mindstorm NXT interface over Bluetooth, USB or a TCP proxy. |
@@ -1957,6 +1960,7 @@
 | [[https://github.com/jaredcdavis/shellpool][shellpool]] | A library for running external programs from Common Lisp. (https://github.org/jaredcdavis/shellpool) |
 | [[https://github.com/fukamachi/shelly][shelly]] | Run Common Lisp from shell easily. |
 | [[https://github.com/ruricolist/cl-shlex][shlex]] | Lexical analyzer for simple shell-like syntax. |
+| [[https://github.com/shop-planner/shop3][shop3] | An open source version of the SHOP3 planner. |
 | [[https://github.com/vseloved/should-test][should-test]] | Minimal yet feature-rich Common Lisp test framework. Comments from 40ants [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/04/0051-should-test.org][here]].|
 | [[https://github.com/ahefner/shuffletron][shuffletron]] | Music player. Comments by 40ants [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/08/0162-shuffletron.org][here]] |
 | [[https://github.com/bytecurry/colliflower][colliflower]] | Generic interfaces for collections and iterators. |
@@ -1993,6 +1997,8 @@
 | skitter.glop | An event system for games - backed by glop |
 | skitter.sdl2 | An event system for games - backed by sdl2 |
 | [[https://github.com/kkazuo/slack-client][slack-client]] | Slack Real Time Messaging API Client |
+| [[https://github.com/slime/slime][slime]] | A Common Lisp IDE for emacs |
+| [[https://github.com/joaotavorna/sly][sly]] | A Common Lisp IDE for emacs |
 | [[https://github.com/mcclim/mcclim][mcclim]] | McCLIM is an implementation of the CLIM 2.0 specification. |
 | [[https://github.com/some-mthfka/slot-extra-options][slot-extra-options]] | Extra options for slots using MOP. |
 | [[https://github.com/aarvid/SmackJack][smackjack]] | A small Ajax framework for hunchentoot using parenscript |
@@ -2513,11 +2519,23 @@
 | [[https://github.com/K1D77A/validate-list][validate-list]] | Allows you to validate the contents and structure of a list based off of a template |
 | [[https://github.com/volkers/vgplot][vgplot]] | Interface to gnuplot |
 | [[https://github.com/privet-kitty/wild-package-inferred-system][wild-package-inferred-system]] | Introduces the wildcards `*' and `**' into package-inferred-system |
-| [[https://github.com/y2q-actionman/with-c-syntax][with-c-syntax]] | with-c-syntax is a fun package which introduces the C language syntax into Common Lisp. |
+| [[https://github.com/y2q-actionman/with-c-syntax][with-c-syntax]] | with-c-syntax is a fun package which introduces the C language syntax into Common Lisp. Remove from quicklisp in June 2021 update. |
 | [[https://github.com/theZacAttacks/with-user-abort][with-user-abort]] | provides an easy way to catch ctrl+c. useful for making binaries. |
 | [[https://github.com/mbattyani/cl-typesetting][cl-typesetting]] | Common Lisp Typesetting system |
 | [[https://github.com/Shinmera/zippy][zippy]] | A fast zip archive library |
 | [[https://github.com/glv2/cl-zstd][cl-zstd]] | is a Common Lisp library for Zstandard compression/decompression using bindings to the libzstd C library. |
+
+;; 2 July 2021 Updates
+|[[https://github.com/K1D77A/cl-megolm/][clm-megolm]] | A copy of the python functionality provided as bindings for Olm. See: https://gitlab.matrix.org/matrix-org/olm/-/blob/master/python/. Big thanks to Borodust for creating the initial bindings using Claw. |
+|[[https://github.com/pokepay/cl-openapi-parser/][openapi-parser]]| OpenAPI 3.0.1 and 3.1.0 parser/validator. |
+|[[https://github.com/ghollisjr/cl-opencl-utils/][cl-opencl-utils]]| OpenCL utility library built on cl-opencl |
+|[[https://github.com/dtenny/cl-sse/][sse-server]]| cl-sse is an partial implementation of the Server Side Events protocol as per https://www.w3.org/TR/eventsource/. It is a toolkit for Common Lisp service implementations that want to send or receive events according tot he protocol. There is a small demo you can try with a browser (instructions below).|
+|[[https://github.com/dtenny/cl-sse/][sse-client]]| Implements client parsing of a Server Sent Events (SSE) stream.|
+|[[https://yitzchak.github.io/trivial-ed-functions/][trivial-ed-functions]] | A compatibility layer for the ED hook extensions of various Common Lisp implementations.|
+|[[https://yitzchak.github.io/trivial-inspector-hook/][trivial-inspector-hook]]| A simple compatability library for *inspector-hook* of CDR-6. A single symbol =*inspector-hook*= is exported from the trivial-inspector-hook package that follows the sematics of CDR-6. This is symbol is also available via the package nicknames of tih and inspector-hook. If the current lisp implementation supports CDR-6 then :cdr-6 and :inspector-hook will be present in =*features*=.|
+|[[https://github.com/fukamachi/webapi/][webapi]]| CLOS-based wrapper builder for Web APIs.|
+|[[https://github.com/codr7/whirlog/][whirlog]]| A minimal versioned log structured relational DB |
+
 #+begin_export html
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
