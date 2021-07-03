@@ -1960,7 +1960,7 @@
 | [[https://github.com/jaredcdavis/shellpool][shellpool]] | A library for running external programs from Common Lisp. (https://github.org/jaredcdavis/shellpool) |
 | [[https://github.com/fukamachi/shelly][shelly]] | Run Common Lisp from shell easily. |
 | [[https://github.com/ruricolist/cl-shlex][shlex]] | Lexical analyzer for simple shell-like syntax. |
-| [[https://github.com/shop-planner/shop3][shop3] | An open source version of the SHOP3 planner. |
+| [[https://github.com/shop-planner/shop3][shop3]] | An open source version of the SHOP3 planner. |
 | [[https://github.com/vseloved/should-test][should-test]] | Minimal yet feature-rich Common Lisp test framework. Comments from 40ants [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/04/0051-should-test.org][here]].|
 | [[https://github.com/ahefner/shuffletron][shuffletron]] | Music player. Comments by 40ants [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/08/0162-shuffletron.org][here]] |
 | [[https://github.com/bytecurry/colliflower][colliflower]] | Generic interfaces for collections and iterators. |
@@ -2524,9 +2524,7 @@
 | [[https://github.com/mbattyani/cl-typesetting][cl-typesetting]] | Common Lisp Typesetting system |
 | [[https://github.com/Shinmera/zippy][zippy]] | A fast zip archive library |
 | [[https://github.com/glv2/cl-zstd][cl-zstd]] | is a Common Lisp library for Zstandard compression/decompression using bindings to the libzstd C library. |
-
-;; 2 July 2021 Updates
-|[[https://github.com/K1D77A/cl-megolm/][clm-megolm]] | A copy of the python functionality provided as bindings for Olm. See: https://gitlab.matrix.org/matrix-org/olm/-/blob/master/python/. Big thanks to Borodust for creating the initial bindings using Claw. |
+| [[https://github.com/K1D77A/cl-megolm/][clm-megolm]] | A copy of the python functionality provided as bindings for Olm. See: https://gitlab.matrix.org/matrix-org/olm/-/blob/master/python/. Big thanks to Borodust for creating the initial bindings using Claw. |
 |[[https://github.com/pokepay/cl-openapi-parser/][openapi-parser]]| OpenAPI 3.0.1 and 3.1.0 parser/validator. |
 |[[https://github.com/ghollisjr/cl-opencl-utils/][cl-opencl-utils]]| OpenCL utility library built on cl-opencl |
 |[[https://github.com/dtenny/cl-sse/][sse-server]]| cl-sse is an partial implementation of the Server Side Events protocol as per https://www.w3.org/TR/eventsource/. It is a toolkit for Common Lisp service implementations that want to send or receive events according tot he protocol. There is a small demo you can try with a browser (instructions below).|
