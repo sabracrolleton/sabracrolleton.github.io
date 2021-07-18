@@ -23,6 +23,9 @@ I am going to use the local-time library to deal with dates, so we need to do a 
 #+end_src
 
 * The Basic SQL Version
+:PROPERTIES:
+:CUSTOM_ID: sql-version
+:END:
 Assuming you already have a database to use, let's create a couple of tables and insert some data.
 #+begin_src lisp
   (pomo:query "CREATE TABLE departments (
@@ -115,13 +118,16 @@ You can also aggregate rows using the Postgresql json_agg function.
 (query "select json_agg(e)
         from
           (select employee_id, department_id, name, start_date, contact, lat_long, geom
-           from employees) e")
+           from employees)
+        e")
 #+end_src
 You could skip the Postgresql json function and ask Postmodern to return the query as a json object expressed as a string. One thing to note is that Postmodern will return the labels as camelCase rather than Postgresql returning them as underscores:
 #+begin_src lisp
-  (query "select employee_id, department_id, name, start_date, contact, lat_long, geom
-             from employees where employee_id=1" :json-str)
- "{\"employeeId\":1,\"departmentId\":1,\"name\":\"Maja\",\"startDate\":\"{2018-09-01T20:00:00.000000-04:00}\",\"contact\":[\"084-767-734\",\"071-334-8473\"],\"latLong\":[59.334591,18.06324],\"geom\":\"0101000020E61000009A44BDE0D3AA4D408ECC237F30103240\"}"
+    (query "select employee_id, department_id, name, start_date, contact, lat_long, geom
+            from employees
+            where employee_id=1"
+           :json-str)
+   "{\"employeeId\":1,\"departmentId\":1,\"name\":\"Maja\",\"startDate\":\"{2018-09-01T20:00:00.000000-04:00}\",\"contact\":[\"084-767-734\",\"071-334-8473\"],\"latLong\":[59.334591,18.06324],\"geom\":\"0101000020E61000009A44BDE0D3AA4D408ECC237F30103240\"}"
 #+end_src
 You would need to do a little more work in order to get the desired latitude and longitude out of the geom value.
 #+begin_src lisp
@@ -130,9 +136,35 @@ You would need to do a little more work in order to get the desired latitude and
 
   "{\"employeeId\":1,\"departmentId\":1,\"name\":\"Maja\",\"startDate\":\"{2018-09-01T20:00:00.000000-04:00}\",\"contact\":[\"084-767-734\",\"071-334-8473\"],\"latLong\":[59.334591,18.06324],\"lat\":59.334591,\"long\":18.06324}"
  #+end_src
-Both the Postgresql function and the Postmodern return type approach can be applied to the end result of more complicated queries with joins, CTEs and other tools of the trade.
+Both the Postgresql function and the Postmodern return type approach can be applied to the end result of more complicated queries with joins, CTEs and other tools of the trade. Which is actually why we have the department table in this example. Instead of having the department-id in the json we are sending to the front end, let's have the department name.
+
+First the using the Postgresql =row-to-json= function:
+#+begin_src lisp
+  (query "select row_to_json(e)
+          from  (select employee_id, departments.name as department_name, employees.name as employee_name,
+                        start_date, contact, lat_long, geom
+                 from employees
+                 left join departments
+                 on departments.department_id = employees.department_id
+                 where employee_id=1) e")
+  (("{\"employee_id\":1,\"department_name\":\"spatial\",\"employee_name\":\"Maja\",\"start_date\":\"2018-09-02\",\"contact\":[\"084-767-734\",\"071-334-8473\"],\"lat_long\":\"(59.334591,18.06324)\",\"geom\":{\"type\":\"Point\",\"coordinates\":[59.334591,18.06324]}}"))
+#+end_src
+Now the sql using the Postmodern :json-str keyword parameter for query:
+#+begin_src lisp
+(query "select employee_id, departments.name as department_name, employees.name as employee_name,
+               start_date, contact, lat_long, geom
+        from employees
+        left join departments
+        on departments.department_id = employees.department_id
+        where employee_id=1"
+     :json-str))
+"{\"employeeId\":1,\"departmentName\":\"spatial\",\"employeeName\":\"Maja\",\"startDate\":\"{2018-09-01T20:00:00.000000-04:00}\",\"contact\":[\"084-767-734\",\"071-334-8473\"],\"latLong\":[59.334591,18.06324],\"geom\":\"0101000020E61000009A44BDE0D3AA4D408ECC237F30103240\"}"
+#+end_src
 
 * The Basic S-SQL Version
+:PROPERTIES:
+:CUSTOM_ID: s-sql-version
+:END:
 Assuming you already have a database to use, let's create a couple of tables and insert some data.
 #+begin_src lisp
   (pomo:query (:create-table 'departments
@@ -240,9 +272,40 @@ You would need to do a little more work in order to get the desired latitude and
          :json-str)
   "{\"employeeId\":1,\"departmentId\":1,\"name\":\"Maja\",\"startDate\":\"{2018-09-01T20:00:00.000000-04:00}\",\"contact\":[\"084-767-734\",\"071-334-8473\"],\"latLong\":[59.334591,18.06324],\"stX\":59.334591,\"stY\":18.06324}"
 #+end_src
-Both the Postgresql function and the Postmodern return type approach can be applied to the end result of more complicated queries with joins, CTEs and other tools of the trade.
+Both the Postgresql function and the Postmodern return type approach can be applied to the end result of more complicated queries with joins, CTEs and other tools of the trade. Which is actually why we have the department table in this example. Instead of having the department-id in the json we are sending to the front end, let's have the department name.
+
+First the s-sql using the Postgresql =row-to-json= function:
+#+begin_src lisp
+  (query (:select (:row-to-json 'e)
+          :from (:as (:select 'employee-id (:as 'departments.name 'department_name)
+                              (:as 'employees.name 'employee-name)
+                              'start-date 'contact 'lat-long
+                              (:st-x 'geom) (:st-y 'geom)
+                      :from 'employees
+                      :left-join 'departments
+                      :on (:= 'departments.department-id 'employees.department-id)
+                      :where (:= 'employee-id 1))
+                 'e)))
+
+ (("{\"employee_id\":1,\"department_name\":\"spatial\",\"employee_name\":\"Maja\",\"start_date\":\"2018-09-02\",\"contact\":[\"084-767-734\",\"071-334-8473\"],\"lat_long\":\"(59.334591,18.06324)\",\"st_x\":59.334591,\"st_y\":18.06324}"))
+#+end_src
+Now the s-sql using the Postmodern :json-str keyword parameter for query:
+#+begin_src lisp
+  (query (:select 'employee-id (:as 'departments.name 'department-name)
+                  (:as 'employees.name 'employee-name)
+                  'start-date 'contact 'lat-long (:st-x 'geom) (:st-y 'geom)
+          :from 'employees
+          :left-join 'departments
+          :on (:= 'departments.department-id 'employees.department-id)
+          :where (:= 'employee-id 1))
+         :json-str)
+  "{\"employeeId\":1,\"departmentName\":\"spatial\",\"employeeName\":\"Maja\",\"startDate\":\"{2018-09-01T20:00:00.000000-04:00}\",\"contact\":[\"084-767-734\",\"071-334-8473\"],\"latLong\":[59.334591,18.06324],\"stX\":59.334591,\"stY\":18.06324}"
+#+end_src
 
 * The Basic Dao-class Version
+:PROPERTIES:
+:CUSTOM_ID: dao-class-version
+:END:
 Assuming you already have a database to use, let's create a couple of dao classes, their associated tables and insert some data. Assume we decide we want to keep the geom as a list of latitude and longitude in the geom slot. That means we need import and export functions.
 #+begin_src lisp
   (defclass departments ()
@@ -358,3 +421,5 @@ was not in sync with the table.) Let's do that:
      {"employeeId":1,"departmentId":1,"name":"Maja","startDate":3744835200,"contact":["084-767-734","071-334-8473"],"latLong":[59.334591,18.06324],"geom":{"geomtype":536870913,"srid":4326,"pointPrimitive":{"x":59.334591,"y":18.06324,"z":0.0,"m":0.0}}}
    #+end_src
 If you are using a different CL json library, you would have to write your own functions to convert from a dao-class object to something that, e.g. jonathan or jsown could use.
+
+Handling joins in a dao-class are more complicated - the Postmodern dao-class is intended to be simple, not recreate Hibernate or SQLAlchemy. You can see an example at [[https://marijnhaverbeke.nl/postmodern/dao-classes.html#multi-table-dao-class-object]].

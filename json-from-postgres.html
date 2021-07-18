@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2021-07-17 Sat 18:31 -->
+<!-- 2021-07-18 Sun 09:38 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>To Json from Postgresql/Postmodern</title>
@@ -45,16 +45,16 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgba8e18c">1. Intro</a></li>
-<li><a href="#org880c827">2. The Basic SQL Version</a></li>
-<li><a href="#orge471ee0">3. The Basic S-SQL Version</a></li>
-<li><a href="#orgb5c2642">4. The Basic Dao-class Version</a></li>
+<li><a href="#orgcc7b57f">1. Intro</a></li>
+<li><a href="#sql-version">2. The Basic SQL Version</a></li>
+<li><a href="#s-sql-version">3. The Basic S-SQL Version</a></li>
+<li><a href="#dao-class-version">4. The Basic Dao-class Version</a></li>
 </ul>
 </div>
 </nav>
 
-<div id="outline-container-orgba8e18c" class="outline-2">
-<h2 id="orgba8e18c"><span class="section-number-2">1</span> Intro</h2>
+<div id="outline-container-orgcc7b57f" class="outline-2">
+<h2 id="orgcc7b57f"><span class="section-number-2">1</span> Intro</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 Suppose the front end of an app needs data as a json string and you need to get the data out of a database and convert it to that format. There are several ways to do that. We will look at doing it with basic sql, s-sql and a dao class. For purposes of this note, we are not looking at jsonb type columns in Postgresql.
@@ -75,9 +75,9 @@ I am going to use the local-time library to deal with dates, so we need to do a 
 </div>
 </div>
 
-<div id="outline-container-org880c827" class="outline-2">
-<h2 id="org880c827"><span class="section-number-2">2</span> The Basic SQL Version</h2>
-<div class="outline-text-2" id="text-2">
+<div id="outline-container-sql-version" class="outline-2">
+<h2 id="sql-version"><span class="section-number-2">2</span> The Basic SQL Version</h2>
+<div class="outline-text-2" id="text-sql-version">
 <p>
 Assuming you already have a database to use, let's create a couple of tables and insert some data.
 </p>
@@ -95,7 +95,7 @@ Assuming you already have a database to use, let's create a couple of tables and
 <span style="color: #e67128;">        contact text[],</span>
 <span style="color: #e67128;">        private text,</span>
 <span style="color: #e67128;">        lat_long point,</span>
-<span style="color: #e67128;">        geom geometry(point, 4326)</span>
+<span style="color: #e67128;">        geom geometry(point, 4326)json-from-p</span>
 <span style="color: #e67128;">        );"</span>)
 
 (pomo:query <span style="color: #e67128;">"INSERT INTO departments</span>
@@ -195,7 +195,8 @@ You can also aggregate rows using the Postgresql json<sub>agg</sub> function.
 <pre class="src src-lisp">(query <span style="color: #e67128;">"select json_agg(e)</span>
 <span style="color: #e67128;">        from</span>
 <span style="color: #e67128;">          (select employee_id, department_id, name, start_date, contact, lat_long, geom</span>
-<span style="color: #e67128;">           from employees) e"</span>)
+<span style="color: #e67128;">           from employees)</span>
+<span style="color: #e67128;">        e"</span>)
 </pre>
 </div>
 <p>
@@ -203,7 +204,9 @@ You could skip the Postgresql json function and ask Postmodern to return the que
 </p>
 <div class="org-src-container">
 <pre class="src src-lisp"> (query <span style="color: #e67128;">"select employee_id, department_id, name, start_date, contact, lat_long, geom</span>
-<span style="color: #e67128;">            from employees where employee_id=1"</span> <span style="color: #23d7d7;">:json-str</span>)
+<span style="color: #e67128;">         from employees</span>
+<span style="color: #e67128;">         where employee_id=1"</span>
+        <span style="color: #23d7d7;">:json-str</span>)
 <span style="color: #e67128;">"{\"employeeId\":1,\"departmentId\":1,\"name\":\"Maja\",\"startDate\":\"{2018-09-01T20:00:00.000000-04:00}\",\"contact\":[\"084-767-734\",\"071-334-8473\"],\"latLong\":[59.334591,18.06324],\"geom\":\"0101000020E61000009A44BDE0D3AA4D408ECC237F30103240\"}"</span>
 </pre>
 </div>
@@ -218,14 +221,43 @@ You would need to do a little more work in order to get the desired latitude and
 </pre>
 </div>
 <p>
-Both the Postgresql function and the Postmodern return type approach can be applied to the end result of more complicated queries with joins, CTEs and other tools of the trade.
+Both the Postgresql function and the Postmodern return type approach can be applied to the end result of more complicated queries with joins, CTEs and other tools of the trade. Which is actually why we have the department table in this example. Instead of having the department-id in the json we are sending to the front end, let's have the department name.
 </p>
+
+<p>
+First the using the Postgresql <code>row-to-json</code> function:
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(query <span style="color: #e67128;">"select row_to_json(e)</span>
+<span style="color: #e67128;">        from  (select employee_id, departments.name as department_name, employees.name as employee_name,</span>
+<span style="color: #e67128;">                      start_date, contact, lat_long, geom</span>
+<span style="color: #e67128;">               from employees</span>
+<span style="color: #e67128;">               left join departments</span>
+<span style="color: #e67128;">               on departments.department_id = employees.department_id</span>
+<span style="color: #e67128;">               where employee_id=1) e"</span>)
+((<span style="color: #e67128;">"{\"employee_id\":1,\"department_name\":\"spatial\",\"employee_name\":\"Maja\",\"start_date\":\"2018-09-02\",\"contact\":[\"084-767-734\",\"071-334-8473\"],\"lat_long\":\"(59.334591,18.06324)\",\"geom\":{\"type\":\"Point\",\"coordinates\":[59.334591,18.06324]}}"</span>))
+</pre>
+</div>
+<p>
+Now the sql using the Postmodern :json-str keyword parameter for query:
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(query <span style="color: #e67128;">"select employee_id, departments.name as department_name, employees.name as employee_name,</span>
+<span style="color: #e67128;">               start_date, contact, lat_long, geom</span>
+<span style="color: #e67128;">        from employees</span>
+<span style="color: #e67128;">        left join departments</span>
+<span style="color: #e67128;">        on departments.department_id = employees.department_id</span>
+<span style="color: #e67128;">        where employee_id=1"</span>
+     <span style="color: #23d7d7;">:json-str</span>))
+<span style="color: #e67128;">"{\"employeeId\":1,\"departmentName\":\"spatial\",\"employeeName\":\"Maja\",\"startDate\":\"{2018-09-01T20:00:00.000000-04:00}\",\"contact\":[\"084-767-734\",\"071-334-8473\"],\"latLong\":[59.334591,18.06324],\"geom\":\"0101000020E61000009A44BDE0D3AA4D408ECC237F30103240\"}"</span>
+</pre>
+</div>
 </div>
 </div>
 
-<div id="outline-container-orge471ee0" class="outline-2">
-<h2 id="orge471ee0"><span class="section-number-2">3</span> The Basic S-SQL Version</h2>
-<div class="outline-text-2" id="text-3">
+<div id="outline-container-s-sql-version" class="outline-2">
+<h2 id="s-sql-version"><span class="section-number-2">3</span> The Basic S-SQL Version</h2>
+<div class="outline-text-2" id="text-s-sql-version">
 <p>
 Assuming you already have a database to use, let's create a couple of tables and insert some data.
 </p>
@@ -366,14 +398,48 @@ You would need to do a little more work in order to get the desired latitude and
 </pre>
 </div>
 <p>
-Both the Postgresql function and the Postmodern return type approach can be applied to the end result of more complicated queries with joins, CTEs and other tools of the trade.
+Both the Postgresql function and the Postmodern return type approach can be applied to the end result of more complicated queries with joins, CTEs and other tools of the trade. Which is actually why we have the department table in this example. Instead of having the department-id in the json we are sending to the front end, let's have the department name.
 </p>
+
+<p>
+First the s-sql using the Postgresql <code>row-to-json</code> function:
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp"> (query (<span style="color: #23d7d7;">:select</span> (<span style="color: #23d7d7;">:row-to-json</span> 'e)
+         <span style="color: #23d7d7;">:from</span> (<span style="color: #23d7d7;">:as</span> (<span style="color: #23d7d7;">:select</span> 'employee-id (<span style="color: #23d7d7;">:as</span> 'departments.name 'department_name)
+                             (<span style="color: #23d7d7;">:as</span> 'employees.name 'employee-name)
+                             'start-date 'contact 'lat-long
+                             (<span style="color: #23d7d7;">:st-x</span> 'geom) (<span style="color: #23d7d7;">:st-y</span> 'geom)
+                     <span style="color: #23d7d7;">:from</span> 'employees
+                     <span style="color: #23d7d7;">:left-join</span> 'departments
+                     <span style="color: #23d7d7;">:on</span> (<span style="color: #23d7d7;">:=</span> 'departments.department-id 'employees.department-id)
+                     <span style="color: #23d7d7;">:where</span> (<span style="color: #23d7d7;">:=</span> 'employee-id 1))
+                'e)))
+
+((<span style="color: #e67128;">"{\"employee_id\":1,\"department_name\":\"spatial\",\"employee_name\":\"Maja\",\"start_date\":\"2018-09-02\",\"contact\":[\"084-767-734\",\"071-334-8473\"],\"lat_long\":\"(59.334591,18.06324)\",\"st_x\":59.334591,\"st_y\":18.06324}"</span>))
+</pre>
+</div>
+<p>
+Now the s-sql using the Postmodern :json-str keyword parameter for query:
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(query (<span style="color: #23d7d7;">:select</span> 'employee-id (<span style="color: #23d7d7;">:as</span> 'departments.name 'department-name)
+                (<span style="color: #23d7d7;">:as</span> 'employees.name 'employee-name)
+                'start-date 'contact 'lat-long (<span style="color: #23d7d7;">:st-x</span> 'geom) (<span style="color: #23d7d7;">:st-y</span> 'geom)
+        <span style="color: #23d7d7;">:from</span> 'employees
+        <span style="color: #23d7d7;">:left-join</span> 'departments
+        <span style="color: #23d7d7;">:on</span> (<span style="color: #23d7d7;">:=</span> 'departments.department-id 'employees.department-id)
+        <span style="color: #23d7d7;">:where</span> (<span style="color: #23d7d7;">:=</span> 'employee-id 1))
+       <span style="color: #23d7d7;">:json-str</span>)
+<span style="color: #e67128;">"{\"employeeId\":1,\"departmentName\":\"spatial\",\"employeeName\":\"Maja\",\"startDate\":\"{2018-09-01T20:00:00.000000-04:00}\",\"contact\":[\"084-767-734\",\"071-334-8473\"],\"latLong\":[59.334591,18.06324],\"stX\":59.334591,\"stY\":18.06324}"</span>
+</pre>
+</div>
 </div>
 </div>
 
-<div id="outline-container-orgb5c2642" class="outline-2">
-<h2 id="orgb5c2642"><span class="section-number-2">4</span> The Basic Dao-class Version</h2>
-<div class="outline-text-2" id="text-4">
+<div id="outline-container-dao-class-version" class="outline-2">
+<h2 id="dao-class-version"><span class="section-number-2">4</span> The Basic Dao-class Version</h2>
+<div class="outline-text-2" id="text-dao-class-version">
 <p>
 Assuming you already have a database to use, let's create a couple of dao classes, their associated tables and insert some data. Assume we decide we want to keep the geom as a list of latitude and longitude in the geom slot. That means we need import and export functions.
 </p>
@@ -520,6 +586,10 @@ And now cl-json generates a json string without the
 </div>
 <p>
 If you are using a different CL json library, you would have to write your own functions to convert from a dao-class object to something that, e.g. jonathan or jsown could use.
+</p>
+
+<p>
+Handling joins in a dao-class are more complicated - the Postmodern dao-class is intended to be simple, not recreate Hibernate or SQLAlchemy. You can see an example at <a href="https://marijnhaverbeke.nl/postmodern/dao-classes.html#multi-table-dao-class-object">https://marijnhaverbeke.nl/postmodern/dao-classes.html#multi-table-dao-class-object</a>.
 </p>
 </div>
 </div>
