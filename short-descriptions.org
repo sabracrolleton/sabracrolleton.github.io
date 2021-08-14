@@ -2533,6 +2533,21 @@
 |[[https://yitzchak.github.io/trivial-inspector-hook/][trivial-inspector-hook]]| A simple compatability library for *inspector-hook* of CDR-6. A single symbol =*inspector-hook*= is exported from the trivial-inspector-hook package that follows the sematics of CDR-6. This is symbol is also available via the package nicknames of tih and inspector-hook. If the current lisp implementation supports CDR-6 then :cdr-6 and :inspector-hook will be present in =*features*=.|
 |[[https://github.com/fukamachi/webapi/][webapi]]| CLOS-based wrapper builder for Web APIs.|
 |[[https://github.com/codr7/whirlog/][whirlog]]| A minimal versioned log structured relational DB |
+|[[https://github.com/charje/cache-while/][cache-while]] | A Common Lisp macro for defining temporary caches that invalidate based on expressions evaluating to different values.|
+| [[https://github.com/K1D77A/cl-coinpayments/][cl-coinpayments]] | Helpers for working with the coinpayments.net api.|
+| [[https://github.com/Goheeca/cl-drawille/][cl-drawille]] | Drawing in terminal with Unicode Braille characters |
+| [[https://github.com/naryl/sha1/][cl-sha1]] | SHA1 digest and HMAC for LispWorks|
+| [[https://github.com/copyleft/cl-webdriver-client/][cl-webdriver-client]] | Binding library to Selenium 4.0|
+| [[https://github.com/dtenny/clj-con/][clj-con]] |  Implements Clojure-styled concurrency operations such as future and promise     |
+| [[https://github.com/dtenny/clj-re/][clj-re]] | Implements Clojure-styled regexp operations such as re-matches and re-find   |
+| [[https://shinmera.github.io/depot][depot]] | Protocolo for transparent collections of files |
+| [[https://gitlab.com/ambrevar/fof][fof]] | Enable rapid file search, inspection and manipulation |
+| [[https://github.com/hyotang666/hash-table-ext/][hash-table-ext]] | Tiny extensions for common lisp hash-tables. |
+| [[https://github.com/interactive-ssr/hunchenissr-routes/][hunchenissr-routes]] | Better routes to be used with Hunchenissr. |
+| [[https://github.com/hemml/OMGlib/][omglib]] | A Common Lisp library to build fully dynamic web interfaces |
+| [[https://github.com/hyotang666/query-repl/][query-repl]] | REPL for user query. |
+| [[https://github.com/tdrhq/slite/][slite]] | SLIME based Test-runner for FiveAM tests (and possibly others in the future) |
+| [[https://github.com/y2q-actionman/with-c-syntax/][with-c-syntax]] | with-c-syntax is a fun package which introduces the C language syntax into Common Lisp. |h
 
 #+begin_export html
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
