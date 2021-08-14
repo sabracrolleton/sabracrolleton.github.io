@@ -1,4 +1,4 @@
-#+TITLE: Quicklisp Projects with Short Descriptions From Their ASD files (2 July 2021 Edition)
+#+TITLE: Quicklisp Projects with Short Descriptions From Their ASD files (13 August 2021 Edition)
  #+AUTHOR:      Sabra Crolleton
  #+DATE:        2021-06-30
  #+EMAIL:       sabra.crolleton!gmail.com
