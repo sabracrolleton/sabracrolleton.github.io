@@ -1,4 +1,4 @@
-#+TITLE: Comparison of Common Lisp Testing Frameworks (13 June 2021 Edition)
+#+TITLE: Comparison of Common Lisp Testing Frameworks (2 Oct 2021 Edition)
  #+AUTHOR:      Sabra Crolleton
  #+DATE:        2021-05-28
  #+EMAIL:       sabra.crolleton!gmail.com
@@ -13,11 +13,13 @@
  #+ATTR_LATEX: :float multicolumn :width
 <<top>>
 * Changelog
+2 October 2021 - Updated for changes at the Common Lisp Cookbook on testing. Updated number of issues and pull requests for FiveAM.
+
 13 June 2021 - Updated clunit2 on its huge performance improvement update and new edge case abilities to compare multiple values in values expressions and handle variables declared in closures. Clunit2 is now substantially differentiated from clunit.
 
 * Introduction
 
-What testing framework should I use? The response should not be X or Y because it is "battle tested" or "extensible" or "has color coding". That is just content free advertising buzz words. Some of the webpages out there mentioning different common lisp unit tests frameworks merely parrot comments from library authors without validating whether they are true. Others like the [[https://lispcookbook.github.io/cl-cookbook/testing.html][lispcookbook]] do silly things like advising to start with FiveAm, but then only gives examples for Prove. The real response should be asking back - "how do you code"? But even armed with that information, how do you match a testing framework to their needs - Common Lisp has a ridiculous number of testing framework libraries.
+What testing framework should I use? The response should not be X or Y because it is "battle tested" or "extensible" or "has color coding". That is just content free advertising buzz words. Some of the webpages out there mentioning different common lisp unit tests frameworks merely parrot comments from library authors without validating whether they are true. The real response should be asking back - "how do you code"? But even armed with that information, how do you match a testing framework to their needs - Common Lisp has a ridiculous number of testing framework libraries.
 
 Previous reviews of testing frameworks were done in  [[http://aperiodic.net/phil/archives/Geekery/notes-on-lisp-testing-frameworks.html][2007]], [[http://maraist.org/static/work/ILC2010-maraist.pdf][2010 (NST review)]] and some work in 2012 by the author of [[http://tgutu.github.io/clunit/][clunit]] which links seem to have bitrot and are now only accessible via the wayback machine: [[https://web.archive.org/web/20121119060726/http://ml.sun.ac.za/2012/11/09/developing-a-unit-test-framework-part-1/][part 1]] and [[https://web.archive.org/web/20130303062507/http://ml.sun.ac.za/2012/11/09/developing-a-unit-test-framework-part-2/][part 2]]. I thought it was time for an update. I am open to pull requests on this document for corrections, additions, whatever. See [[https://github.com/sabracrolleton/sabracrolleton.github.io]]
 
@@ -4086,7 +4088,7 @@ At last count 24 libraries on quicklisp use Fiasco. If you have quicklisp, you c
 ** Summary
  | [[https://github.com/lispci/fiveam][homepage]] | Edward Marco Baringer | BSD | 2020 |
 
-Fiveam has a lot of market share. At the time of writing, it has 9 issues and 7 pull requests with no responses. The README at the github page is lacking but good documentation exists at [[https://common-lisp.net/project/fiveam/docs/index.html][common-lisp.net]] or the [[http://turtleware.eu/posts/Tutorial-Working-with-FiveAM.html][turtleware tutorial]].
+Fiveam has a lot of market share. At the time of writing, it has 10 issues and 9 pull requests with no responses. The README at the github page is lacking but good documentation exists at [[https://common-lisp.net/project/fiveam/docs/index.html][common-lisp.net]] or the [[http://turtleware.eu/posts/Tutorial-Working-with-FiveAM.html][turtleware tutorial]]. There are also examples at [[https://lispcookbook.github.io/cl-cookbook/testing.html][Common Lisp Cookbook]]
 
 Obviously with its market share there is a lot to like. It does report all the assertion failures in a test, allows user defined diagnostic messages with variables, interactive debugging is optional, it has suites and it runs lists of tests.
 
