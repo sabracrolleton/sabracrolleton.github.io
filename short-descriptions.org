@@ -1,4 +1,4 @@
-#+TITLE: Quicklisp Projects with Short Descriptions From Their ASD files (13 August 2021 Edition)
+#+TITLE: Quicklisp Projects with Short Descriptions From Their ASD files (21 October 2021 Edition)
  #+AUTHOR:      Sabra Crolleton
  #+DATE:        2021-06-30
  #+EMAIL:       sabra.crolleton!gmail.com
@@ -2547,7 +2547,39 @@
 | [[https://github.com/hemml/OMGlib/][omglib]] | A Common Lisp library to build fully dynamic web interfaces |
 | [[https://github.com/hyotang666/query-repl/][query-repl]] | REPL for user query. |
 | [[https://github.com/tdrhq/slite/][slite]] | SLIME based Test-runner for FiveAM tests (and possibly others in the future) |
-| [[https://github.com/y2q-actionman/with-c-syntax/][with-c-syntax]] | with-c-syntax is a fun package which introduces the C language syntax into Common Lisp. |h
+| [[https://github.com/y2q-actionman/with-c-syntax/][with-c-syntax]] | with-c-syntax is a fun package which introduces the C language syntax into Common Lisp. |
+| [[https://github.com/Symbolics/alexandria-plus/][alexandria-plus]] | A conservative set of extensions to Alexandria utilities |
+|[[https://github.com/fami-com/autoexport/][autoexport]]| A small library to automatically export definitions|
+|[[https://github.com/Lisp-Stat/cephes.cl/][cephes.cl]]| Wrapper for the Cephese Mathematical Library|
+|[[https://github.com/veer66/cl-apertium-stream-parser/][cl-apertium-stream-parser]]| Apertium stream parser written in Common Lisp |
+|[[https://gitlab.com/Aksej/cl-bus][cl-bus]]| A(n almost) referentially transparent interface for streams|
+|[[https://github.com/hikettei/cl-cram/][cl-cram]]| A simple, Progress bar for Common Lisp|
+|[[https://github.com/oyvinht/cl-earley-parser/][cl-earley-parser]]| Natural language parser using Jay Earleys well-known algorithm |
+|[[https://github.com/atgreen/cl-etcd/][cl-etcd]]| Run etcd as an asynchronous inferior process. |
+|[[https://github.com/gorozhin/cl-gcrypt/][cl-gcrypt]]| Common Lisp bindings for libgcrypt |
+|[[https://github.com/cl-fui/cl-termbox/][cl-termbox]]| Bindings for termbox library, a minimalistic library for building text-mode applications without curses |
+|[[https://github.com/stacksmith/cl-with/][cl-with]]| WITH- group with- macros, allocate objects and rebind slots|
+|[[https://github.com/charJe/cl-yxorp/][cl-yxorp]]|A reverse proxy server that supports WebSocket, HTTP, HTTPS, HTTP to HTTPS redirecting, port and host forwarding configuration using a real programming language, HTTP header and body manipulation (also using a real programming language). |
+|[[https://github.com/BnMcGn/claxy/][claxy]] |Simple proxy middleware for clack |
+|[[https://github.com/lisp-maintainers/clerk/][clerk]]| A cron-like scheduler with sane DSL |
+|[[https://github.com/dnaeon/clingon][clingon]]| Command-line options parser system for Common Lisp|
+|[[https://github.com/alessiostalla/clutter/][clutter]] | Cluttering classes and slots with annotations/decorators/attributes metadata|
+|[[https://40ants.com/commondoc-markdown/][commondoc-markdown]]|Converter from Markdown to CommonDoc. |
+|[[https://github.com/digikar99/compiler-macro-notes/][compiler-macro-notes]]| Provides a macro and some conditions for use within macros and compiler-macros. |
+|[[https://github.com/s-expressionists/ctype/][ctype]]| An implementation of the Common Lisp type system.|
+|[[https://40ants.com/docs-builder][docs-builder]]| A meta documentation builder for Common Lisp projects.|
+|[[https://github.com/charJe/funds/][funds]]| portable, purely functional data structures in Common Lisp |
+|[[https://github.com/mgi/geodesic/][geodesic]]| Library for geodesic calculations.|
+|[[https://github.com/DanielKeogh/hashtrie/][hashtrie]]| An implementation of the Hash Trie datastructure, based on Clojure's|
+|[[https://github.com/hyotang666/mcase/][mcase]]| Control flow macros with case comprehensiveness checking. |
+|[[https://github.com/mnasoft/mnas-path/][mnas-path]]| No description whatsoever|
+|[[https://sr.ht/~shunter/parsnip/][parsnip]]|Parser combinator library|
+|[[https://shinmera.github.io/promise][promise]]| A small, independent promise library for asynchronous frameworks|
+|[[https://github.com/tdrhq/quick-patch/][quick-patch]] | Easily override quicklisp projects without using git submodules|
+|[[https://github.com/cxxxr/strict-function/][strict-function]]| Utility of function definition |
+|[[https://github.com/hyotang666/vivid-colors/][vivid-colors]]| Colored object printer |
+|[[https://github.com/hyotang666/vivid-diff/][vivid-diff]]| Colored object-diff viewer|
+
 
 #+begin_export html
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
