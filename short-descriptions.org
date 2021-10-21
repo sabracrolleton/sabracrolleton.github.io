@@ -43,7 +43,7 @@
 | [[https://github.com/Kalimehtar/advanced-readtable][advanced-readtable]] | Advanced customizable readtable |
 | adw-charting-google | Charting package to make graphs and charts using the Google chart API |
 | adw-charting-vecto | Charting package to make pretty graphs and charts using Vecto |
-| [[https://common-lisp.net/project/adw-charting/adw-charting.tar.gz][adw-charting]] | Charting package to make pretty graphs and charts |
+| [[https://common-lisp.net/project/adw-charting/adw-charting.tar.gz][adw-charting]] | Charting package to make pretty graphs and charts - Removed in Oct 2021 Quicklisp Update |
 | [[https://github.com/dtqec/aether][aether]] | A DSL for emulating an actor-based distributed system, housed on a family of emulated devices. |
 | [[https://gitlab.common-lisp.net/mraskin/agnostic-lizard][agnostic-lizard-debugger-prototype]] | A portable debugger prototype that injects debugger hooks into code |
 | [[https://gitlab.common-lisp.net/mraskin/agnostic-lizard][agnostic-lizard]] | A portable code walker that makes a best effort to be correct in most cases |
@@ -262,7 +262,7 @@
 | [[https://github.com/eudoxia0/cl-base58][cl-base58]] | An implementation of base58 for Common Lisp |
 | [[http://git.kpe.io/?p=cl-base64.git][cl-base64]] | Base64 encoding and decoding with URI support. |
 | [[https://github.com/tamurashingo/cl-batis][batis]] | SQL Mapping Framework for Common Lisp |
-| [[https://github.com/tamurashingo/cl-batis][cl-batis]] | SQL Mapping Framework for Common Lisp |
+| [[https://github.com/tamurashingo/cl-batis][cl-batis]] | SQL Mapping Framework for Common Lisp  - Removed in Oct 2021 Quicklisp Update|
 | [[https://github.com/lhope/cl-bayesnet][cl-bayesnet]] | A Common Lisp Bayesian Network Inference Engine |
 | [[https://github.com/dnaeon/cl-bcrypt][cl-bcrypt]] | Common Lisp system for generating and parsing of bcrypt password hashes |
 | [[https://github.com/antifuchs/cl-beanstalk][cl-beanstalk]] | An interface to the beanstalk queue server |
@@ -611,7 +611,7 @@
 | [[https://github.com/SahilKang/cl-rdkafka][cl-rdkafka]] | A client library for Apache Kafka based on librdkafka CFFI bindings. |
 | [[https://github.com/vindarel/cl-readline][cl-readline]] | Common Lisp bindings to GNU Readline library |
 | [[https://github.com/madnificent/cl-recaptcha/][cl-recaptcha]] | Trivial support for the recaptcha service |
-| [[https://github.com/jperson/cl-reddit][cl-reddit]] | Reddit client api library. Comments by 40ants [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/06/0096-cl-reddit.org][here]]. |
+| [[https://github.com/jperson/cl-reddit][cl-reddit]] | Reddit client api library. Comments by 40ants [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/06/0096-cl-reddit.org][here]].  - Removed in Oct 2021 Quicklisp Update|
 | [[https://github.com/vseloved/cl-redis][cl-redis]] | A fast and robust Common Lisp client for Redis |
 | [[https://github.com/takagi/cl-reexport][cl-reexport]] | Reexport external symbols in other packages. |
 | [[https://github.com/djeis97/cl-renderdoc][cl-renderdoc]] | Wrapper around the renderdoc In-Application API for Common Lisp |
@@ -641,7 +641,7 @@
 | [[https://github.com/html/cl-selenium][cl-selenium]] | cl-selenim-webdriver is a binding library to the Selenium 2.0 |
 | [[https://github.com/cldm/cl-semver][cl-semver]] | Semantic Version implementation |
 | [[https://github.com/RobBlackwell/cl-sentiment][cl-sentiment]] | A sentiment analysis library for Common Lisp. |
-| [[https://github.com/pw4ever/cl-server-manager][cl-server-manager]] | Manage port-based servers (e.g., Swank and Hunchentoot) through a unified interface. |
+| [[https://github.com/pw4ever/cl-server-manager][cl-server-manager]] | Manage port-based servers (e.g., Swank and Hunchentoot) through a unified interface.  - Removed in Oct 2021 Quicklisp Update|
 | [[https://github.com/Jach/cl-ses4][cl-ses4]] | AWS SES email sender using Signature Version 4 of Amazon's API |
 | [[https://github.com/jorams/cl-shellwords][cl-shellwords]] | Common Lisp port of Ruby's shellwords.rb, for escaping andsplitting strings to be passed to a shell. |
 | [[https://github.com/JordanPowell/cl-simple-concurrent-jobs][cl-simple-concurrent-jobs]] | A simple API for running concurrent jobs and collecting the results |
@@ -875,7 +875,7 @@
 | [[https://github.com/ceramic/copy-directory][copy-directory]] | Copy a directory. |
 | [[https://github.com/hyotang666/core-reader][core-reader]] | Utilities for stream oriented reader. |
 | corona-web |  |
-| [[https://github.com/eudoxia0/corona][corona]] | Isolated, reproducible virtual development environments. |
+| [[https://github.com/eudoxia0/corona][corona]] | Isolated, reproducible virtual development environments.  - Removed in Oct 2021 Quicklisp Update|
 | courier | An email marketing service for Radiance |
 | [[https://github.com/pfdietz/cover][cover]] | Code coverage utility for Common Lisp |
 | [[https://github.com/AeroNotix/cqlcl][cqlcl]] | CQLv2 binary protocol |
@@ -924,7 +924,7 @@
 | [[https://github.com/tgbugs/datum-comments][datum-comments]] | datum # (comments) for common lisp |
 | db-introspect | A simple administration interface to interact with Radiance's database. |
 | [[https://github.com/dimitri/cl-db3][db3]] | DB3 file reader |
-| [[https://github.com/tamurashingo/cl-dbi-connection-pool][cl-dbi-connection-pool]] |  |
+| [[https://github.com/tamurashingo/cl-dbi-connection-pool][cl-dbi-connection-pool]] |  Removed in Oct 2021 Quicklisp Update   |
 | dbi-cp | connection pool for CL-DBI |
 | [[https://github.com/fukamachi/cl-dbi][cl-dbi]] | A database independent interface for common lisp |
 | dbd-mysql | Database driver for MySQL. |
@@ -1177,7 +1177,7 @@
 | [[https://github.com/orthecreedence/glu-tessellate][glu-tessellate]] | A simple triangulation engine that wraps around GLU's tessellation system. |
 | [[https://github.com/ahungry/glyphs][glyphs]] | Glyphs to reduce Common Lisp verbosity |
 | [[https://git.mfiano.net/mfiano/golden-utils][golden-utils]] | A utility library. Comments by 40ants [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/04/0027-golden-utils.org][here]]. |
-| [[https://github.com/sgarciac/gordon][gordon]] | Gordon is a library for generating Flash files programmatically. It supports a large subset of the Flash 7.0 specification. |
+| [[https://github.com/sgarciac/gordon][gordon]] | Gordon is a library for generating Flash files programmatically. It supports a large subset of the Flash 7.0 specification.  - Removed in Oct 2021 Quicklisp Update|
 | [[https://github.com/eschulte/graph][graph]] | simple library for building and manipulating graphs |
 | [[https://github.com/sellout/cl-gravatar][gravatar]] | Common Lisp bindings to the popular Gravatar service. |
 | [[https://github.com/e-user/graylex][graylex]] | Gray lexer input streams. Comments by 40ants [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/07/0147-graylex.org][here]]. |
@@ -1200,10 +1200,10 @@
 | [[https://github.com/HDFGroup/hdf5-cffi][hdf5-cffi]] | hdf5-cffi is a CFFI wrapper for the HDF5 library. |
 | [[https://github.com/massung/heap][heap]] | Binary Heap for Common Lisp. |
 | [[https://github.com/rabbibotton/clog][clog]] | The Common Lisp Omnificent GUI |
-| hemlock.base |  |
-| hemlock.clx |  |
-| hemlock.qt |  |
-| hemlock.tty |  |
+| hemlock.base |   - Removed in Oct 2021 Quicklisp Update|
+| hemlock.clx |   - Removed in Oct 2021 Quicklisp Update|
+| hemlock.qt |   - Removed in Oct 2021 Quicklisp Update|
+| hemlock.tty |   - Removed in Oct 2021 Quicklisp Update|
 | [[https://github.com/eudoxia0/hermetic][hermetic]] | Simple authentication for Clack-based Common Lisp web applications. |
 | [[https://github.com/HenryS1/herodotus][herodotus]] | Wrapper around Yason JSON parser/encoder with convenience methods for CLOS |
 | [[https://github.com/hargettp/hh-aws][hh-aws]] | Common Lisp library for acessing the APIs of Amazon Web Services.  |
@@ -1739,7 +1739,7 @@
 | [[https://github.com/pnathan/pp-toml][pp-toml]] | TOML parser |
 | [[https://github.com/fourier/ppath][ppath]] | A Common Lisp path handling library based on Python's os.path module. Comments by 40ants [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/03/0010-ppath.org][here]] |
 | [[https://github.com/jlowder/prbs][prbs]] | A library of higher-order functions for generating Pseudo-Random Binary Sequences of (practically) any degree. Comments by 40ants [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/06/0101-prbs.org][here]]. |
-| [[https://github.com/sharplispers/prepl][prepl]] | prepl is a REPL implementation, also known as a Lisp listener. |
+| [[https://github.com/sharplispers/prepl][prepl]] | prepl is a REPL implementation, also known as a Lisp listener.  - Removed in Oct 2021 Quicklisp Update|
 | [[https://github.com/nallen05/pretty-function][pretty-function]] | This small library makes debugging easier when you are using many anonymous functions. With pretty-functions you can give names to your lambdas. Comments by 40ants [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/05/0057-pretty-function.org][here]]. |
 | [[https://github.com/AaronChen0/primecount][primecount]] | prime counting of sublinear complexity |
 | [[https://github.com/oruppert/print-html][print-html]] | Simple html generator. Comments by 40ants [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/04/0049-print-html.org][here]].|
@@ -2071,7 +2071,7 @@
 | [[https://github.com/Shinmera/studio-client][studio-client]] | A client library for the Studio image hosting service |
 | [[https://github.com/fagg/stumpwm-sndioctl][stumpwm-sndioctl]] | Interface to OpenBSD's sndioctl for StumpWM. |
 | [[https://github.com/stumpwm/stumpwm][stumpwm]] | A tiling, keyboard driven window manager |
-| [[https://gitlab.common-lisp.net/submarine/submarine][submarine]] | Submarine is a Common Lisp library that's somewhere between a PostgreSQL library an an object persistency system.  It uses Postmodern to communicate with the database. The basic idea is that you create your classes in the metaclass DB-CLASS and submarine cares about creating SQL tables or, if the tables already exist, checking if they conform to the provided specification.  Moreover, Submarine supports an intuitive way of expressing both one-to-many and many-to-many relations. |
+| [[https://gitlab.common-lisp.net/submarine/submarine][submarine]] | Submarine is a Common Lisp library that's somewhere between a PostgreSQL library an an object persistency system.  It uses Postmodern to communicate with the database. The basic idea is that you create your classes in the metaclass DB-CLASS and submarine cares about creating SQL tables or, if the tables already exist, checking if they conform to the provided specification.  Moreover, Submarine supports an intuitive way of expressing both one-to-many and many-to-many relations.  - Removed in Oct 2021 Quicklisp Update|
 | [[https://github.com/brown/swank-client][swank-client]] | Client side of the Swank protocol. |
 | [[https://github.com/brown/swank-crew][swank-crew]] | Distributed master/worker computing framework. |
 | [[https://github.com/cbaggers/swank.live][swank.live]] | Some helpers that make live coding with slime/swank easier |
@@ -2163,7 +2163,7 @@
 | [[https://github.com/gigamonkey/toot][toot]] | A minimal web server originally built by stripping down Edi Weitz's Hunchentoot |
 | [[https://github.com/Shinmera/tooter][tooter]] | A client library for Mastodon instances. |
 | [[https://gitlab.com/vindarel/cl-torrents/][torrents]] | Search for torrents on popular trackers. Lisp library, CLI interface, terminal application, Tk GUI. |
-| [[https://github.com/sgarciac/torta][torta]] | Torta shows you where your disk space is being used. Its user interface is similar to that of the program filelight. Unlike filelight, Torta does not need any graphical environment to run: it analyzes the file system directly and generates a Flash file that you can load locally or remotely on any Flash-supporting web browser. |
+| [[https://github.com/sgarciac/torta][torta]] | Torta shows you where your disk space is being used. Its user interface is similar to that of the program filelight. Unlike filelight, Torta does not need any graphical environment to run: it analyzes the file system directly and generates a Flash file that you can load locally or remotely on any Flash-supporting web browser.  - Removed in Oct 2021 Quicklisp Update|
 | [[https://github.com/death/towers][towers]] | Silly geodefense clone wannabe |
 | [[https://github.com/GrammaTech/trace-db][trace-db]] | Writing, reading, storing, and searching of program traces |
 | [[http://git.nklein.com/lisp/libs/track-best/][track-best]] | Macros/functions for tracking the best items.  See the README.md for more details. |
@@ -2246,7 +2246,7 @@
 | trivial-ssh-libssh2 | Trivial libssh2 bindings |
 | [[https://github.com/eudoxia0/trivial-ssh][trivial-ssh]] | An abstraction layer over cl-libssh2. Comments by 40ants [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/05/0078-trivial-ssh.org][here]]. |
 | [[https://github.com/macdavid313/trivial-string-template][trivial-string-template]] |A trivial string template library, inspired by Python's string.Template. Comments by 40ants [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/08/0163-trivial-string-template.org][here]]|
-| [[https://github.com/stacksmith/trivial-swank][trivial-swank]] | swank server communications |
+| [[https://github.com/stacksmith/trivial-swank][trivial-swank]] | swank server communications  - Removed in Oct 2021 Quicklisp Update|
 | [[https://github.com/rmoritz/trivial-tco][trivial-tco]] | A library to assist in ensuring certain code is executed with tail call optimizations enabled. Comments by 40ants [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/06/0103-trivial-tco.org][here]]. |
 | [[https://github.com/Shinmera/trivial-thumbnail][trivial-thumbnail]] | Tiny library to create image thumbnails with imagemagick. See 40ants comments [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/10/0200-trivial-thumbnail.org][here]] |
 | [[https://github.com/gwkkwg/trivial-timeout][trivial-timeout]] | OS and Implementation independent access to timeouts. Comments by 40ants [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/09/0195-trivial-timeout.org][here]]. |
@@ -2335,10 +2335,10 @@
 | [[https://github.com/nathanvy/wallstreetflets][wallstreetflets]] | Wall Street FLETs:  A library for calculating Options Greeks |
 | [[https://github.com/alex-gutev/wasm-encoder][wasm-encoder]] | Library for serializing WebAssembly modules to binary .wasm files |
 | [[https://github.com/handicraftsman/water][water]] | An ES6-compatible class definition for Parenscript |
-| [[https://github.com/weblocks-framework/weblocks-prototype-js][weblocks-prototype-js]] | Weblocks JavaScript backend for PrototypeJs |
+| [[https://github.com/weblocks-framework/weblocks-prototype-js][weblocks-prototype-js]] | Weblocks JavaScript backend for PrototypeJs  - Removed in Oct 2021 Quicklisp Update|
 | [[https://github.com/weblocks-framework/weblocks-stores][weblocks-stores]] | A base for weblocks stores |
-| [[https://github.com/weblocks-framework/weblocks-tree-widget][weblocks-tree-widget]] | A tree widget for weblocks |
-| [[https://github.com/weblocks-framework/weblocks-utils][weblocks-utils]] | Utils for weblocks framework |
+| [[https://github.com/weblocks-framework/weblocks-tree-widget][weblocks-tree-widget]] | A tree widget for weblocks  - Removed in Oct 2021 Quicklisp Update|
+| [[https://github.com/weblocks-framework/weblocks-utils][weblocks-utils]] | Utils for weblocks framework  - Removed in Oct 2021 Quicklisp Update|
 | weblocks-scripts | A set of scripts for weblocks framework. |
 | weblocks-util | Utilities for weblocks |
 | [[https://github.com/skypher/weblocks][weblocks]] | A Common Lisp web framework. |
@@ -2414,7 +2414,7 @@
 | [[https://github.com/marijnh/Postmodern][simple-date]] | Simple date library that can be used with postmodern |
 | [[https://gitlab.common-lisp.net/asdf/asdf-package-system][asdf-package-system]] | Backward-compatible stub for ASDF 3.1's package-inferred-system feature |
 | [[https://github.com/cl-rabbit/cl-amqp][cl-amqp]] | AMQP 0.9.1 with RabbitMQ extensions in Common Lisp |
-| [[https://github.com/cl-rabbit/cl-bunny][cl-bunny]] | Common Lisp RabbitMQ client based on IOLib |
+| [[https://github.com/cl-rabbit/cl-bunny][cl-bunny]] | Common Lisp RabbitMQ client based on IOLib  - Removed in Oct 2021 Quicklisp Update|
 | [[https://github.com/mdbergmann/cl-gserver][cl-gserver]] | Actor framework featuring actors and agents for easy access to state and asynchronous operations. |
 | [[https://github.com/resttime/cl-liballegro][cl-liballegro]] | Allegro 5 game programming library bindings for Common Lisp |
 | [[https://gitlab.com/lockie/cl-liballegro-nuklear][cl-liballegro-nuklear]] | CFFI wrapper for the Nuklear IM GUI library with liballegro backend, to be used with cl-liballegro. |
@@ -2543,7 +2543,7 @@
 | [[https://shinmera.github.io/depot][depot]] | Protocolo for transparent collections of files |
 | [[https://gitlab.com/ambrevar/fof][fof]] | Enable rapid file search, inspection and manipulation |
 | [[https://github.com/hyotang666/hash-table-ext/][hash-table-ext]] | Tiny extensions for common lisp hash-tables. |
-| [[https://github.com/interactive-ssr/hunchenissr-routes/][hunchenissr-routes]] | Better routes to be used with Hunchenissr. |
+| [[https://github.com/interactive-ssr/hunchenissr-routes/][hunchenissr-routes]] | Better routes to be used with Hunchenissr.  - Removed in Oct 2021 Quicklisp Update|
 | [[https://github.com/hemml/OMGlib/][omglib]] | A Common Lisp library to build fully dynamic web interfaces |
 | [[https://github.com/hyotang666/query-repl/][query-repl]] | REPL for user query. |
 | [[https://github.com/tdrhq/slite/][slite]] | SLIME based Test-runner for FiveAM tests (and possibly others in the future) |
