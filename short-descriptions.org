@@ -54,7 +54,7 @@
 | [[https://github.com/tarballs-are-good/algebraic-data-library][algebraic-data-library]] | A library of common algebraic data types. |
 | [[https://github.com/varjagg/also-alsa][also-alsa]] | Basic ALSA bindings for Common Lisp |
 | [[https://github.com/gonzojive/amazon-ecs][amazon-ecs]] | Amazon Product Advertising API library for Common Lisp |
-| [[https://github.com/tokenrove/anaphora][anaphora]] | The Anaphoric Macro Package from Hell |
+| [[https://github.com/spwhitton/anaphora][anaphora]] | The Anaphoric Macro Package from Hell |
 | [[https://tarballs.hexstreamsoft.com/libraries/latest/anaphoric-variants_latest.tar.gz][anaphoric-variants]] | Gives access to anaphoric variants of operators through one macro: ANAPHORIC. The user explicitly provides a variable name, preserving sanity, in contrast to the traditional use of an evil implicit variable (\ |
 | [[https://github.com/pve1/apply-argv][apply-argv]] | Apply-argv is a library for parsing command line arguments. |
 | [[https://github.com/g000001/arc-compat][arc-compat]] | Arc compatible package for CL |
@@ -682,7 +682,7 @@
 | cl-syntax-fare-quasiquote | cl-syntax support for fare-quasiquote |
 | cl-syntax-interpol | CL-Syntax Reader Syntax for CL-INTERPOL |
 | cl-syntax-markup | CL-Syntax Reader Syntax for CL-Markup |
-| [[https://github.com/m2ym/cl-syntax][cl-syntax]] | Reader Syntax Coventions for Common Lisp and SLIME |
+| [[https://github.com/lisp-maintainers/cl-syntax][cl-syntax]] | Reader Syntax Coventions for Common Lisp and SLIME |
 | [[https://github.com/mmaul/cl-syslog][cl-syslog]] | Common Lisp syslog interface. |
 | [[https://github.com/Kalimehtar/cl-table][cl-table]] | Hierarchical tables in Lisp |
 | [[https://github.com/gos-k/cl-tasukete][cl-tasukete]] |  |
@@ -1421,7 +1421,7 @@
 | [[https://github.com/g000001/lisp-critic][ckr-tables]] | A utility library to ease the use of hash-tables |
 | [[https://github.com/g000001/lisp-critic][lisp-critic]] | LISP-CRITIC - A Lisp code critiquing package. Comments by 40ants [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/07/0125-lisp-critic.org][here]]. |
 | [[https://github.com/markcox80/lisp-executable][lisp-executable]] | Library for defining and creating executables that can be called from the Unix shell. |
-| [[https://github.com/fare/lisp-interface-library][lil]] | LIL: Lisp Interface Library |
+| [[https://github.com/fare/lisp-interface-library][lil]] | LIL: Lisp Interface Library (Removed Dec. 2021) |
 | [[https://github.com/fare/lisp-interface-library][lisp-interface-library]] | Long name alias for lil |
 | [[https://gitlab.common-lisp.net/qitab/lisp-invocation][lisp-invocation]] | Invoking Lisp subprocesses from Lisp |
 | [[https://github.com/guicho271828/lisp-namespace][lisp-namespace]] | Provides LISP-N --- extensible namespaces in Common Lisp. |
@@ -1835,7 +1835,7 @@
 | [[https://github.com/tkych/quicksearch][quicksearch]] | Quicksearch searches CL library, and outputs results at REPL. |
 | [[https://github.com/jollheef/cl-logic][cl-logic]] | Boolean algebra package |
 | [[https://github.com/fukamachi/quri][quri]] | Yet another URI library for Common Lisp |
-| [[https://gitlab.common-lisp.net/qitab/quux-hunchentoot][quux-hunchentoot]] | Thread pooling for hunchentoot |
+| [[https://gitlab.common-lisp.net/qitab/quux-hunchentoot][quux-hunchentoot]] | Thread pooling for hunchentoot (Removed Dec 2021)  |
 | [[https://gitlab.common-lisp.net/qitab/quux-time][quux-time]] |  |
 | qvm-app-ng | Application server for the QVM Next Gen. |
 | qvm-app | Application server for the QVM. |
@@ -2579,7 +2579,14 @@
 |[[https://github.com/cxxxr/strict-function/][strict-function]]| Utility of function definition |
 |[[https://github.com/hyotang666/vivid-colors/][vivid-colors]]| Colored object printer |
 |[[https://github.com/hyotang666/vivid-diff/][vivid-diff]]| Colored object-diff viewer|
-
+|[[https://gitlab.com/Aksej/chain][chain]] | Two chaining/piping macros, one of them `setf`ing its first argument — BSD-3|
+|[[https://github.com/ghollisjr/cl-getopt/][cl-getopt]] | CFFI wrapper to the libc getopt_long function — Public Domain|
+| [[https://github.com/shrdlu68/cl-tls/][cl-tls]] | An implementation of the Transport Layer Security Protocols — BSD-3-Clause|
+| [[https://github.com/vityafx/dotenv/][dotenv]] | Ease pain with working with .env files. — MIT|
+| [[https://github.com/K1D77A/latter-day-paypal/][latter-day-paypal]] | Paypal api wrapper. — MIT|
+| [[https://github.com/K1D77A/lunamech-matrix-api/][lunamech-matrix-api]] | An implementation of the Matrix API taken from LunaMech see  [[https://lunamech.com][https://lunamech.com]] — MIT |
+| [[https://github.com/K1D77A/stripe-against-the-modern-world/][stripe-against-the-modern-world]] | Implementation of the Stripe API. — MIT|
+| [[https://gitlab.com/Aksej/verlet][verlet]] | Verlet is a simple physics engine based on verlet integration. It supports particles with position and direction, springs between particles, global gravity as well as gravity between particles, and spacial constraints. — BSD-3|
 
 #+begin_export html
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
