@@ -1,4 +1,4 @@
-#+TITLE: Quicklisp Projects with Short Descriptions From Their ASD files (14 December 2021 Edition)
+#+TITLE: Quicklisp Projects with Short Descriptions From Their ASD files (1 January 2022 Edition)
  #+AUTHOR:      Sabra Crolleton
  #+DATE:        2021-06-30
  #+EMAIL:       sabra.crolleton!gmail.com
@@ -1421,8 +1421,6 @@
 | [[https://github.com/g000001/lisp-critic][ckr-tables]] | A utility library to ease the use of hash-tables |
 | [[https://github.com/g000001/lisp-critic][lisp-critic]] | LISP-CRITIC - A Lisp code critiquing package. Comments by 40ants [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/07/0125-lisp-critic.org][here]]. |
 | [[https://github.com/markcox80/lisp-executable][lisp-executable]] | Library for defining and creating executables that can be called from the Unix shell. |
-| [[https://github.com/fare/lisp-interface-library][lil]] | LIL: Lisp Interface Library (Removed Dec. 2021) |
-| [[https://github.com/fare/lisp-interface-library][lisp-interface-library]] | Long name alias for lil |
 | [[https://gitlab.common-lisp.net/qitab/lisp-invocation][lisp-invocation]] | Invoking Lisp subprocesses from Lisp |
 | [[https://github.com/guicho271828/lisp-namespace][lisp-namespace]] | Provides LISP-N --- extensible namespaces in Common Lisp. |
 | [[https://github.com/cxxxr/lisp-preprocessor][lisp-preprocessor]] | Common Lisp embedded template engine |
@@ -1835,7 +1833,6 @@
 | [[https://github.com/tkych/quicksearch][quicksearch]] | Quicksearch searches CL library, and outputs results at REPL. |
 | [[https://github.com/jollheef/cl-logic][cl-logic]] | Boolean algebra package |
 | [[https://github.com/fukamachi/quri][quri]] | Yet another URI library for Common Lisp |
-| [[https://gitlab.common-lisp.net/qitab/quux-hunchentoot][quux-hunchentoot]] | Thread pooling for hunchentoot (Removed Dec 2021)  |
 | [[https://gitlab.common-lisp.net/qitab/quux-time][quux-time]] |  |
 | qvm-app-ng | Application server for the QVM Next Gen. |
 | qvm-app | Application server for the QVM. |
@@ -2587,6 +2584,15 @@
 | [[https://github.com/K1D77A/lunamech-matrix-api/][lunamech-matrix-api]] | An implementation of the Matrix API taken from LunaMech see  [[https://lunamech.com][https://lunamech.com]] — MIT |
 | [[https://github.com/K1D77A/stripe-against-the-modern-world/][stripe-against-the-modern-world]] | Implementation of the Stripe API. — MIT|
 | [[https://gitlab.com/Aksej/verlet][verlet]] | Verlet is a simple physics engine based on verlet integration. It supports particles with position and direction, springs between particles, global gravity as well as gravity between particles, and spacial constraints. — BSD-3|
+| [[https://github.com/awolven/adhoc/][adhoc]] | Another Declarative Hierarchical Object-centric CLOS Customization — GPLv3|
+| [[https://github.com/phoe/amb/][amb]] | An implementation of John McCarthy's ambiguous operator — MIT|
+| [[https://github.com/fjames86/fsocket/][fsocket]] | Franks socket API — MIT|
+| [[https://github.com/fare/lisp-interface-library/][lisp-interface-library]] | Long name alias for lil — MIT |
+| [[https://github.com/digikar99/polymorphic-functions/][polymorphic-functions]] | Type based dispatch for Common Lisp — MIT|
+| [[https://notabug.org/cage/purgatory][purgatory]] | A simple implementation of the 9p filesystem protocol. — LLGPL |
+| [[https://gitlab.common-lisp.net/qitab/quux-hunchentoot][quux-hunchentoot]] | Thread pooling for hunchentoot — MIT|
+| [[https://github.com/fjames86/schannel/][schannel]] | CFFI wrapper to SChannel — MIT|
+|[[https://github.com/yitzchak/trivial-package-locks][trivial-package-locks]] | A standard interface to the various package lock implementations. — MIT|
 
 #+begin_export html
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
