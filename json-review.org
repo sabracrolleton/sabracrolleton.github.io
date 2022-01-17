@@ -840,7 +840,7 @@ I discovered that many libraries have problems if the alist components are dotte
 
 - cl-json provides a function to encode the alist properly as key:value,
 - com.inuoe.jzon correctly guesses this is a alist which should be encoded as key:value,
-- shasht:*write-alist-as-object provides the ability to write an undotted alist as a json object rather than an array.
+- shasht:*write-alist-as-object* provides the ability to write an undotted alist as a json object rather than an array.
 - yason provides a specific function to encode the alist properly as key:value,
 - If the alist has dotted cons cells, jsown and st-json triggered unhandled memory faults with sbcl 2.1.11-x86-64-linux, ccl version 1.12.1 LinuxX8664 and ecl-version 21.2.1. This appears to be because jsown and st-json have optimized the code and assumed that all lists will be proper lists. The assumption obviously fails in the context of dotted cons cells.
 **** Dotted cons cells (dotted pairs)
