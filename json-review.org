@@ -1550,18 +1550,18 @@ This batch of json strings whould be accepted by all libraries. The only librari
 #+ATTR_LATEX: :float multicolumn
 | Library            | Correct | Incorrect | Comment |
 |--------------------+---------+-----------+---------|
-| boost-json         | 95/(92) |           | (1)     |
-| cl-json            | 95/(92) |         3 | (1)     |
+| boost-json         | 95/(92) |         0 | (1)     |
+| cl-json            | 95/(92) |         0 | (1)     |
 | gigamonkeys        | 95      |         0 |         |
 | com.inuoe.jzon     | 95      |         0 |         |
 | jonathan           | 94      |         1 | (2)     |
-| json-lib           | 95/(92) |         3 | (1)     |
+| json-lib           | 95/(92) |         0 | (1)     |
 | json-streams       | 93      |         2 | (3)     |
 | jsown              | 93      |         2 | (4)     |
-| shasht             | 95/(92) |         3 | (1)     |
-| st-json            | 95/(92) |         3 | (1)     |
-| trivial-json-codec | 90/(87) |         8 | (1)(5)  |
-| yason              | 95/(92) |         3 | (1)     |
+| shasht             | 95/(92) |         0 | (1)     |
+| st-json            | 95/(92) |         0 | (1)     |
+| trivial-json-codec | 90/(87) |         5 | (1)(5)  |
+| yason              | 95/(92) |         0 | (1)     |
 - (1) If \star{}read-default-float-format* is set to 'single-float, there will be decoding failures on [123e65], [123e45], [123.456e78],
 - (2) Failed on [123.456e78] even with \star{}read-default-float-format* is set to 'double-float
 - (3) rejected files with duplicate keys. This can be resolved by passing the keyword parameter :duplicate-key-check nil
