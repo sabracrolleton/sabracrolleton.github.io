@@ -2265,7 +2265,7 @@ cl-json is an old workhorse in area, however, it has not been updated in the las
 
 On the plus side, cl-json does probably have the best support for converting json data to clos objects and vice versa, but surprisingly does not handle structs. Local-time:timestamps are returned as json objects {"day":7990,"sec":0,"nsec":0} but not as javascript date objects. Unlike many of the other libraries, it does handle symbols without you having to write a new method. It allows you to handle incremental encoding.
 
-With respect to conformity testing, cl-json was 92/95 for the json strings it must accept, so middle of the pack. It did not do so well rejecting malformed strings and, like most of the other libraries could exhaust the stack when facing certain types of [[malformed-data][malformed strings]].
+With respect to conformity testing, cl-json was 95/95 for the json strings it must accept. It did not do so well rejecting malformed strings and, like most of the other libraries could exhaust the stack when facing certain types of [[malformed-data][malformed strings]].
 
 When you are looking at plists and alists, cl-json provides specific functions for dealing with those structures rather than attempting to guess how they should be translated into json.
 
@@ -3798,7 +3798,7 @@ There were two general security issues we considered: (1) interning keywords and
 With respect to the second issue, shasht rejected 159 out of 173 malformed test cases. While it did not trigger the stack exhaustion issue exhibited by most of the other packages, some of the malformed json data strings did trigger recoverable error situations.
 <<shasht-conformity>>
 *** Conformity with Json Standard
-shasht accepted 99 of the 95 test cases that are considered "must accept".  If \star{}read-default-float-format* is set to 'single-float, it would refuse to accept:  [123e65], [123e45] and [123.456e78].
+shasht accepted 95 of the 95 test cases that are considered "must accept".  If \star{}read-default-float-format* is set to 'single-float, it would refuse to accept:  [123e65], [123e45] and [123.456e78].
 
 It accepted 9 of the 17 test cases considered to be part of the gray area of the json specification - you could accept or reject.
 *** Benchmarking
