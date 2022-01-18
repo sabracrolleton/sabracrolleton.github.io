@@ -1,5 +1,5 @@
 #+AUTHOR: Sabra Crolleton
-#+TITLE: Review of CL Json Libraries UPDATED 15 Jan 2022
+#+TITLE: Review of CL Json Libraries UPDATED 18 Jan 2022
 
 #+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
 
@@ -15,6 +15,11 @@
 #+LATEX_CLASS_OPTIONS: [letterpaper]
 
 <<top>>
+* Changelong
+18 Jan 2022  - Corrected json conformity tests on boost-json, cl-json, lib-lib, shasht, st-json, trivial-json-codec and yason. If \star{}read-default-float-format* is set to 'single-float, those libraries would refuse to accept:  "[123e65]", "[123e45]" and "[123.456e78]". If \star{}read-default-float-format* is set to 'double-float, then those json strings would be correctly accepted. Net result: with that caveat, boost-json, cl-json, com.gigamonkeys.json, com.inuoe.jzon, json-lib, shasht, st-json and yason all score 95/95 on the json strings that must be accepted.
+
+15 Jan 2022 - Complete rewrite of 1st edition.
+
 * Introduction
 The common lisp (CL) landscape with respect to Json libraries has changed since the first edition of this review eight years ago. While I sometimes complain about someone writing new libraries when there are already so many, there have been major improvements and a couple of the new generation of CL json libraries are actually quite exciting. It still remains the case, however, that your choice of datastructures for your application may drive your choice of json library and vice versa. Like everything else in life, there are trade-offs to be made and I hope this paper helps you think about what may or may not be relevant for your situation.
 
@@ -91,7 +96,7 @@ As can be expected, the libraries do much of the same if you have basic needs. H
 - *Encoding Speed:* If you mostly need to encode lisp data to json and are just looking for speed, I would look at [[com.inuoe.jzon][com.inuoe.jzon]], [[shasht][shasht]] or depending on your data, [[jonathan][jonathan]] or [[st-json][st-json]]. See [[write-times][write-times]]
 - *Unicode Handling:* Most of the libraries can handle unicode. However, if you have unicode surrogate pairs, you need to choose from [[com.inuoe.jzon][com.inuoe.jzon]], [[jonathan][jonathan]], [[json-streams][json-streams]], [[jsown][jsown]], [[shasht][shasht]], [[st-json][st-json]] or [[yason][yason]]. See [[decode-unicode][Decoding Unicode]].
 - *Extracting Subsets:* If you want to extract a subset of json data without paying attention to everything else, [[jsown-filters][jsown]] is the choice. [[jonathan][Jonathan]] allows you to get a key:value pair, but I could only use it one level deep. Obviously every library can import all the json data into some CL datastructure and then use standard CL functionality to get whatever subset you want.
-- *Handling all proper json forms:* I think [[com.inuoe.jzon][com.inuoe.jzon]] is the winner, unfortunately it is not in quicklisp if that is a requirement. [[jonathan][Jonathan]] would be next, but just slightly ahead of most of the rest of the libraries. See [[must-accept][Must Accept]].
+- *Handling all proper json forms:* If you remember to set \star{}read-default-float-format* to 'double-float, there is no clear winner. [[boost-json][boost-json]], [[cl-json][cl-json]], [[com.gigamonkeys.json][com.gigamonkeys.json]], [[com.inuoe.jzon][com.inuoe.jzon]], [[json-lib][json-lib]], [[shasht][shasht]], [[st-json][st-json]] and [[yason][yason]] all score 95/95 on the json standard conformity tests that must be met. If \star{}read-default-float-format* is set to to 'single-float, only [[com.inuoe.jzon][com.inuoe.jzon]] and [[com.gigamonkeys.json][com.gigamonkeys.json]] have perfect scores. See [[must-accept][Must Accept]].
 - *Handling potentially invalid data:* See [[standard-conformity][Standard Conformity and Dealing with Malformed Data]]. I think [[com.inuoe.jzon][com.inuoe.jzon]] is the winner, unfortunately it is not in quicklisp if that is a requirement.
 - *Proper Distinction Between NULL/Nil/False:* [[com.inuoe.jzon][Com.inuoe.jzon]], [[shasht][shasht]] and [[st-json][st-json]] get it right out of the box. [[jonathan][jonathan]] and [[yason][yason]] provide the ability to get there with setting a simple variable.
 - *CLOS Abilities - Decoding:* [[trivial-json-codec][Trivial-json-codec]] can decode objects to standard pre-defined classes. [[boost-json-decoding-to-clos][Boost-json]] can decode json objects to a boost-json:json-object which is a standard object. [[cl-json][Cl-json]] has the ability to decode json objects into a "fluid-class" CLOS object. (Note, this is thread unsafe if you have not already prepped classes for every expected json object. If you define your own classes with a lispclass member, this can be avoided so long as every class is defined that way.) Personally I prefer being able to define my own classes. Trivial-json-codec then just dumps the json data into your classes. If you use [[yason][yason]], I would also use the helper library [[json-mop][json-mop]]. ([[com.inuoe.jzon][com.inuoe.jzon]] decodes json to hash-tables, so does not have decoding to CLOS abilities out of the box.) See [[decode-to-clos][Decoding to CLOS]]
@@ -1545,20 +1550,20 @@ This batch of json strings whould be accepted by all libraries. The only librari
 #+ATTR_LATEX: :float multicolumn
 | Library            | Correct | Incorrect | Comment |
 |--------------------+---------+-----------+---------|
-| boost-json         |      92 |         3 | (1)     |
-| cl-json            |      92 |         3 | (1)     |
-| gigamonkeys        |      95 |         0 |         |
-| com.inuoe.jzon     |      95 |         0 |         |
-| jonathan           |      94 |         1 | (2)     |
-| json-lib           |      92 |         3 | (1)     |
-| json-streams       |      93 |         2 | (3)     |
-| jsown              |      93 |         2 | (4)     |
-| shasht             |      92 |         3 | (1)     |
-| st-json            |      92 |         3 | (1)     |
-| trivial-json-codec |      87 |         8 | (1)(5)  |
-| yason              |      92 |         3 | (1)     |
-- (1) Failed on  [123e65], [123e45], [123.456e78],
-- (2) Failed on [123.456e78]
+| boost-json         | 95/(92) |           | (1)     |
+| cl-json            | 95/(92) |         3 | (1)     |
+| gigamonkeys        | 95      |         0 |         |
+| com.inuoe.jzon     | 95      |         0 |         |
+| jonathan           | 94      |         1 | (2)     |
+| json-lib           | 95/(92) |         3 | (1)     |
+| json-streams       | 93      |         2 | (3)     |
+| jsown              | 93      |         2 | (4)     |
+| shasht             | 95/(92) |         3 | (1)     |
+| st-json            | 95/(92) |         3 | (1)     |
+| trivial-json-codec | 90/(87) |         8 | (1)(5)  |
+| yason              | 95/(92) |         3 | (1)     |
+- (1) If \star{}read-default-float-format* is set to 'single-float, there will be decoding failures on [123e65], [123e45], [123.456e78],
+- (2) Failed on [123.456e78] even with \star{}read-default-float-format* is set to 'double-float
 - (3) rejected files with duplicate keys. This can be resolved by passing the keyword parameter :duplicate-key-check nil
 - (4) Failed on lonely numbers (an integer or negative real not within a json array or json object)
 - (5) Failed on [[]   ], [0e+1], [1E+2], [1e+2], { "min": -1.0e+28, "max": 1.0e+28 }
@@ -2228,9 +2233,9 @@ There were two general security issues we considered: (1) interning keywords and
 Boost-json did not exhibit the first issue in the same way that e.g. cl-json does. However, it does decode json objects to a CLOS object with slot-value names interned in the boost-json package.
 
 With respect to the second issue, boost-json properly rejected 145 malformed test cases but accepted 28. Some of those malformed test cases which were accepted actually triggered stack exhaustion by opening too many levels of json open arrays and not closing them or similar types of issues.
-
+<<boost-json-conformity>>
 *** Conformity with Json Standard
-Boost-json accepted 92 of the 95 test cases that are considered "must accept".  The failures were on:  [123e65], [123e45] and [123.456e78]
+Boost-json accepted 95 of the 95 test cases that are considered "must accept".  If \star{}read-default-float-format* is set to 'single-float, it would refuse to accept:  [123e65], [123e45] and [123.456e78].
 
 It accepted 13 of the 17 test cases considered to be part of the gray area of the json specification - you could accept or reject.
 
@@ -2498,9 +2503,9 @@ There were two general security issues we considered: (1) interning keywords and
 With respect to the first issue, Cl-json flags the issue and provides the function safe-json-intern - which will throw an error if the keyword to be interned does not already exist in the \star{}json-symbols-package*. - so at least you are warned and provided with an alternative.
 
 With respect to the second issue, cl-json properly rejected 153 malformed test cases but accepted 20. Some of those malformed test cases which were accepted actually triggered stack exhaustion by opening too many levels of json open arrays and not closing them or similar types of issues.
-
+<<cl-json-conformity>>
 *** Conformity with Json Standard
-cl-json accepted 92 of the 95 test cases that are considered "must accept".  It failed to accept: [123e65], [123e45] and [123.456e78]
+cl-json accepted 95 of the 95 test cases that are considered "must accept". If \star{}read-default-float-format* is set to 'single-float, it would refuse to accept:  [123e65], [123e45] and [123.456e78].
 
  It accepted 13 of the 17 test cases considered to be part of the gray area of the json specification - you could accept or reject.
 *** Benchmarking
@@ -3159,8 +3164,9 @@ There were two general security issues we considered: (1) interning keywords and
 json-lib did not exhibit the first issue.
 
 With respect to the second issue, json-lib rejected 110 out of 173 malformed test cases. It was one of four packages which allowed you to limit the depths to which it would dive in nested json objects and, therefore, did not trigger the stack exhaustion exhibited by most of the other packages.
+<<json-lib-conformity>>
 *** Conformity with Json Standard
-json-lib accepted 92 of the 95 test cases that are considered "must accept". It failed to accept: [123e65], [123e45] and [123.456e78]
+json-lib accepted 95 of the 95 test cases that are considered "must accept".  If \star{}read-default-float-format* is set to 'single-float, it would refuse to accept:  [123e65], [123e45] and [123.456e78].
 
 It accepted 12 of the 17 test cases considered to be part of the gray area of the json specification - you could accept or reject.
 *** Benchmarking
@@ -3790,8 +3796,9 @@ Going from CL->Json->CL was more problematic. The alist input was converted to v
 There were two general security issues we considered: (1) interning keywords and (2) issues with malformed data. shasht did not exhibit the first issue.
 
 With respect to the second issue, shasht rejected 159 out of 173 malformed test cases. While it did not trigger the stack exhaustion issue exhibited by most of the other packages, some of the malformed json data strings did trigger recoverable error situations.
+<<shasht-conformity>>
 *** Conformity with Json Standard
-shasht accepted 92 of the 95 test cases that are considered "must accept". It failed to accept: [123e65], [123e45] and [123.456e78]
+shasht accepted 99 of the 95 test cases that are considered "must accept".  If \star{}read-default-float-format* is set to 'single-float, it would refuse to accept:  [123e65], [123e45] and [123.456e78].
 
 It accepted 9 of the 17 test cases considered to be part of the gray area of the json specification - you could accept or reject.
 *** Benchmarking
@@ -3984,8 +3991,9 @@ Going from CL->Json->CL was more problematic solely because you need to write a 
 There were two general security issues we considered: (1) interning keywords and (2) issues with malformed data. st-json did not exhibit the first issue.
 
 With respect to the second issue, st-json rejected 140 out of 173 malformed test cases. Unfortunately it did trigger the stack exhaustion issue exhibited by most of the other packages.
+<<st-json-conformity>>
 *** Conformity with Json Standard
-st-json accepted 92 of the 95 test cases that are considered "must accept". It failed to accept: [123e65], [123e45], [123.456e78]
+st-json accepted 95 of the 95 test cases that are considered "must accept". If \star{}read-default-float-format* is set to 'single-float, it would refuse to accept:  [123e65], [123e45] and [123.456e78].
 
 It accepted 8 of the 17 test cases considered to be part of the gray area of the json specification - you could accept or reject.
 *** Benchmarking
@@ -3994,7 +4002,7 @@ It accepted 8 of the 17 test cases considered to be part of the gray area of the
 *** Other Information
 St-json provides error conditions for json-type-error, json-parse error, json-error and json-eof-error. These are undocumented, so you will have to look at the source code for how to use them.
 
-*** st-json exported symbols
+*** st-json exported symbosl
 - *\star{}allow-comments** - Non-nil means ignore comments when parsing.
 - *\star{}decode-objects-as** - Valid values: :jso :hashtable
   Controls how js objects should be decoded. :jso means decode to internal struct which
@@ -4229,7 +4237,7 @@ Interestingly, trivial-json-codec had no problems going from CL->Json->CL.
 
   With respect to the second issue, trivial-json-codec rejected 101 out of 173 malformed test cases. It did not trigger the stack exhaustion issue exhibited by most of the other packages.
 *** Conformity with Json Standard
-  trivial-json-codec accepted 87 of the 95 test cases that are considered "must accept". It failed to accept: [123e65], [123e45], [123.456e78], [[] ], [0e+1], [1E+2], [1e+2], { "min": -1.0e+28, "max": 1.0e+28 }
+  trivial-json-codec accepted 90 of the 95 test cases that are considered "must accept". It failed to accept: [[] ], [0e+1], [1E+2], [1e+2], { "min": -1.0e+28, "max": 1.0e+28 }.  If \star{}read-default-float-format* is set to 'single-float, it would refuse to accept:  [123e65], [123e45] and [123.456e78].
 
   It accepted 13 of the 17 test cases considered to be part of the gray area of the json specification - you could accept or reject.
 *** Benchmarking
@@ -4420,8 +4428,10 @@ The following examples use two exercises. First, incrementally build a json arra
   There were two general security issues we considered: (1) interning keywords and (2) issues with malformed data. yason did not exhibit the first issue.
 
   With respect to the second issue, yason rejected 119 out of 173 malformed test cases. Unfortunately it did trigger the stack exhaustion issue exhibited by most of the other packages.
+<<yason-conformity>>
 *** Conformity with Json Standard
-  yason accepted 92 of the 95 test cases that are considered "must accept". It failed to accept: [123e65], [123e45], [123.456e78],
+  yason accepted 95 of the 95 test cases that are considered "must accept".  If \star{}read-default-float-format* is set to 'single-float, it would refuse to accept:  [123e65], [123e45] and [123.456e78].
+
   It accepted 8 of the 17 test cases considered to be part of the gray area of the json specification - you could accept or reject.
 *** Benchmarking
   See [[benchmarking][Benchmarking]]
