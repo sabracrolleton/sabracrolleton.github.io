@@ -1,5 +1,5 @@
 #+AUTHOR: Sabra Crolleton
-#+TITLE: Review of CL Json Libraries UPDATED 18 Jan 2022
+#+TITLE: Review of CL Json Libraries UPDATED 19 Jan 2022
 
 #+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
 
@@ -577,6 +577,9 @@ Because we have a nested class, we would need drill down and specify the slots f
   "Mount Vernon"
 #+end_src
 *** Trivial-json-codec
+:PROPERTIES:
+:CUSTOM_ID: decode-to-clos-trivial-json-codec
+:END:
 If you have defined your classes, trivial-json-codec does make it easy to decode json data directly to a vector of your classes. Suppose we have a simple person class:
 #+begin_src lisp
 (defclass person ()
@@ -932,6 +935,9 @@ I discovered that many libraries have problems if the alist components are dotte
 - yason provides a specific function to encode the alist properly as key:value,
 - If the alist has dotted cons cells, jsown and st-json triggered unhandled memory faults with sbcl 2.1.11-x86-64-linux, ccl version 1.12.1 LinuxX8664 and ecl-version 21.2.1. This appears to be because jsown and st-json have optimized the code and assumed that all lists will be proper lists. The assumption obviously fails in the context of dotted cons cells.
 **** Dotted cons cells (dotted pairs)
+:PROPERTIES:
+:CUSTOM_ID: encoding-alists-dotted-cons-cells
+:END:
 Using '(("A" . 1) ("B" . 2) ("C" . 3)) as the sample data
 
 #+CAPTION: Encoding Dotted Alists Without Symbols
@@ -1004,6 +1010,9 @@ it would have predicated that the "A" and "B" should be keys and would have retu
 which may or may not have been what you wanted.
 
 **** Without dotted cons cells
+:PROPERTIES:
+:CUSTOM_ID: encoding-alists-undotted-cons-cells
+:END:
 Using '(("A" 1) ("B"  2) ("C" 3)) as the sample data.
 
 Note difference in results. Some libraries return arrays, others return objects. Some libraries return key:[value] pairs, others return two member arrays.
@@ -1247,6 +1256,9 @@ Jsown is the only library to handle a two dimensional array without the user hav
 :END:
 
 *** Using string as key
+:PROPERTIES:
+:CUSTOM_ID: using-string-as-a-key
+:END:
 Using (alexandria:plist-hash-table '("foo" 1 "bar" (7 8 9)) :test #'equal) as the sample data:
 #+CAPTION: Encoding Hash Tables without Symbols
 #+ATTR_HTML: :border 2 :rules all :frame border
@@ -1270,6 +1282,9 @@ Using (alexandria:plist-hash-table '("foo" 1 "bar" (7 8 9)) :test #'equal) as th
 - (2) You would need to use lower level components of json-streams. See [[#json-streams-encoding][json-streams-encoding]].
 - (3) May be able to resolve this with writing your own method.
 *** Using symbol as key
+:PROPERTIES:
+:CUSTOM_ID: using-symbol-as-a-key
+:END:
 Using (alexandria:plist-hash-table '(:foo 1 :bar (7 8 9)) :test #'eq) as the sample data:
 Again, see what gigamonkeys is doing with respect to trying to treat the list as key:value pairs.
 #+CAPTION: Encoding Hash Tables With Symbols as Key
@@ -1732,6 +1747,9 @@ What I found troubling was that jonathan, jsown and shasht all hung on one or mo
 :CUSTOM_ID: malformed-data
 :END:
 **** Must Reject
+:PROPERTIES:
+:CUSTOM_ID: malformed-data-must-reject
+:END:
 Only three libraries did not hang or trigger stack exhaustion on strings designed to open thousands of beginning nested arrays or objects. Those are com.inuoe.jzon, json-lib and json-streams. All three have a limit and refused to exceed the limit.
 #+CAPTION: Malformed Data Testing - Must Reject
 #+ATTR_HTML: :border 2 :rules all :frame border
@@ -2109,6 +2127,9 @@ com.gigamonkeys.json ██▋
 :END:
 The following charts are reading from stream rather than from string (so a slightly smaller list of libraries) and jonathan choked on both files being read into the stream, so it is excluded as well. We see the same comparative results when reading from stream as when we read from strings.
 **** Countries File
+:PROPERTIES:
+:CUSTOM_ID: benchmarking-read-stream-countries
+:END:
 #+begin_src ascii
 
                                 JSON Read Times (sbcl) 1.2 MB Countries File
@@ -2127,6 +2148,9 @@ com.inuoe.jzon █████████████████████�
 #+end_src
 
 **** Historical Events File
+:PROPERTIES:
+:CUSTOM_ID: benchmarking-read-stream-historical-events
+:END:
 #+begin_src ascii
                                 JSON Read Times (sbcl) 9.8 MB Historical Events File
                0                       3.6496155                        7.299231
@@ -2220,6 +2244,9 @@ com.gigamonkeys.json █████▉
 #+end_src
 
 * Json Libraries Specific Comments
+:PROPERTIES:
+:CUSTOM_ID: json-libraries-specific-comments
+:END:
 ** boost-json
 :PROPERTIES:
 :CUSTOM_ID: boost-json
@@ -2490,7 +2517,6 @@ It converts json's 'null' to NIL, which I disagree with. It also fails to deal w
 
 Json objects are converted to alists with dotted pairs which is unusual for the rest of the libraries.
 
-<<cl-json-fluid-class-objects>>
 **** Json data to CLOS Object
 :PROPERTIES:
 :CUSTOM_ID: cl-json-data-to-clos
@@ -2972,6 +2998,9 @@ Com.inuoe.jzon is my new overall favorite. Unfortunately it is not in quicklisp 
 :CUSTOM_ID: jzon-mapping
 :END:
 **** Type Mapping Json -> CL
+:PROPERTIES:
+:CUSTOM_ID: jzon-mapping-json-cl
+:END:
 | json   | CL                                          |
 |--------+---------------------------------------------|
 | true   | t                                           |
@@ -2983,6 +3012,9 @@ Com.inuoe.jzon is my new overall favorite. Unfortunately it is not in quicklisp 
 | object | hash-table using equal as the test function |
 
 **** Type Mapping CL -> Json
+:PROPERTIES:
+:CUSTOM_ID: jzon-mapping-cl-json
+:END:
 Using the stringify function, com.inuoe.jzon will map the following CL data types.
 | CL               | Json                                                                   |
 |------------------+------------------------------------------------------------------------|
@@ -3001,6 +3033,9 @@ Com.inuoe.jzon looks at lists/alists/plists and tries to determine what is an al
 :CUSTOM_ID: jzon-decoding
 :END:
 **** Acceptable Input for Parse
+:PROPERTIES:
+:CUSTOM_ID: jzon-decoding-acceptable-input-for-parse
+:END:
 com.inuoe.jzon will accept strings, octets in utf8, stream characters or binary in utf8, or a pathname (at which point the library will assume you want it to open a file for reading.
 
 The README also notes that (parse ...) accepts the following keyword arguments:
@@ -3062,6 +3097,9 @@ On the downside,
 - Attempting to encode a pathname resulted in an empty json object.
 
 **** Specialize Serialization
+:PROPERTIES:
+:CUSTOM_ID: jzon-decoding-specialize-serialization
+:END:
 com.inuoe.jzon allows you to specialize the coerced-fields method to handle CL data types not included in the above list, including excluding, renaming and adding fields. See the [[https://github.com/Zulu-Inuoe/jzon][README]] for examples.
 
 **** Incremental Encoding
@@ -3164,6 +3202,9 @@ Please note the direction of the arrows in the following table.
 :CUSTOM_ID: jonathan-decoding
 :END:
 **** Overview
+:PROPERTIES:
+:CUSTOM_ID: jonathan-decoding-overview
+:END:
 Jonathan decodes strings, not streams.   In testing, jonathan hung when trying to decode "[123e-10000000]". In its default settings, jonathan will decode a json null as nil, but if you set jonathan:*null-value* to :null, it will decod a json null properly as :null.
 
 Jonathan parse a json object by default into plists, usually reversed. You can change the resulting data structure by passing :as :XXX to the parse function. E.g.
@@ -3218,6 +3259,9 @@ Jonathan can easily extract a subset of data from the first level of a nested ob
 #+end_src
 
 **** Allow json comment string
+:PROPERTIES:
+:CUSTOM_ID: jonathan-decoding-allow-json-comments
+:END:
 - can allow junked JSON format string (:junk-allowed t)
 - can customize *null-value*, *false-value* and *empty-array-value*.
 - can restrict keywords to read. (:keywords-to-read)
@@ -4994,11 +5038,17 @@ The following examples use two exercises. First, incrementally build a json arra
 cl-json-helper is a very small package that adds two functions to help cl-json encoding JSON data and one function to help in processing decoded JSON data. I will use its nickname :xjson in the examples. At the end of the day, I see a slight benefit here, but given that it is really just a cl-json helper and the latest generation of json libraries have passed cl-json by, I think this is only for cl-json devotees.
 
 *** cl-json-helper exported symbols
+:PROPERTIES:
+:CUSTOM_ID: cl-json-helper-exported-symbols
+:END:
 - *json-bool* - (json-bool val) returns an object that cl-json will decode to "true" or "false"
 - *json-empty* - (json-empty) returns an object that cl-json will decode to '{}'
 - *json-key-value* - (json-key-value key list) returns the value associated with key
 - *value-of*
 *** Json-bool
+:PROPERTIES:
+:CUSTOM_ID: json-bool
+:END:
 json-bool simply adds the ability for nil to be translated to json as false.
 #+begin_src lisp
   (cl-json:encode-json-to-string '(t nil))
@@ -5008,12 +5058,18 @@ json-bool simply adds the ability for nil to be translated to json as false.
   "[true,false]"
 #+end_src
 *** json-empty
+:PROPERTIES:
+:CUSTOM_ID: json-empty
+:END:
 json-empty provides the ability to return an empty object. E.g.
 #+begin_src lisp
 (cl-json:encode-json-to-string `(("Empty" . ,(xjson:json-empty))))
 "{\"Empty\":{}}"
 #+end_src
 *** Json-key-value
+:PROPERTIES:
+:CUSTOM_ID: json-key-value
+:END:
 If cl-json:decode-json-from-string \star{}nested-address-1* looks like this:
 #+begin_src lisp
   (cl-json:decode-json-from-string *nested-address-1*)
@@ -5045,10 +5101,16 @@ The only difference between using this and using (assoc ..) is that assoc will a
 
 Define-json-expander is, I think, something interesting to look at, but I do not see it adding a great deal of value. Given the last time it was updated was eight years ago, I think it is of historical interest only.
 *** define-json-expander exported symbols
+:PROPERTIES:
+:CUSTOM_ID: define-json-expander-exported-symbols
+:END:
 - \star{}accessor-prefix*
 - define-json-expander
 
 *** Explanation
+:PROPERTIES:
+:CUSTOM_ID: define-json-expander-explanation
+:END:
 Let's take our simplest json object address example which we keep in *address-1*:
 #+begin_src javascript
 "{
@@ -5090,10 +5152,16 @@ HOWEVER, as far as I can tell, the only accessor or reader method defined is for
 Yason does the json parsing and serialisation for herodotus. The other dependencies are cl-ppcre and alexandria. I think it may be useful if you are a yason user.
 
 *** herodotus exported symbols
+:PROPERTIES:
+:CUSTOM_ID: herodotus-exported-symbols
+:END:
 - *define-json-model*
 - *to-json*
 
 *** Setup
+:PROPERTIES:
+:CUSTOM_ID: herodotus-setup
+:END:
 Let's make an anologue of our simple person class with herodotus:
 #+begin_src lisp
 (herodotus:define-json-model herodotus-person (name eye-colour) :snake-case)
@@ -5107,6 +5175,9 @@ Slot descriptors can be either symbols or lists. If a slot descriptor is a symbo
 
 If a slot descriptor is a list then first argument is the CLOS slot name, the second argument is either () or the name of a previously defined json model to deserialise the value of this field to. The optional third argument is a special case name for this field which can have custom formatting."
 *** Decoding
+:PROPERTIES:
+:CUSTOM_ID: herodotus-decoding
+:END:
 At this point a simple json object could then be decoded into a herodotus-person instance.
 #+begin_src lisp
   (eye-colour
@@ -5125,16 +5196,24 @@ If you have an array of json objects, the from-json function would return a vect
   "Johann"
 #+end_src
 *** Encoding
+:PROPERTIES:
+:CUSTOM_ID: herodotus-encoding
+:END:
 Encoding usage looks much like yason:
 #+begin_src lisp
 (herodotus:to-json (make-instance 'herodotus-person :eye-colour "Green" :name "Persephone"))
 "{\"name\":\"Persephone\",\"eye_colour\":\"Green\"}"
 #+end_src
 *** Additional Info
+:PROPERTIES:
+:CUSTOM_ID: herodotus-additional-info
+:END:
 From the README
 
 **** Nested classes
-
+:PROPERTIES:
+:CUSTOM_ID: herodotus-additional-info-nested-classes
+:END:
 You can also define classes that have class members using the type specifier syntax. This block defines two json models tree and branch. A tree has branch members and the branch members will be parsed from json using the parser defined for the tree.
 #+begin_src lisp
 CL-USER> (herodotus:define-json-model branch (size))
@@ -5153,6 +5232,9 @@ class-name TEST-NO-PARSER slots ((THINGS NOT-PARSEABLE))
 #+end_src
 
 **** None, one or many semantics
+:PROPERTIES:
+:CUSTOM_ID: herodotus-additional-info-none
+:END:
 
 Fields in class definitions are parsed as either nil (if missing from the json), a single instance if the field is not an array and isn’t empty or a vector if the json contains an array of elements.
 #+begin_src lisp
@@ -5166,7 +5248,9 @@ CL-USER> (ns (numbers-json:from-json "{ \"ns\": [1, 2, 3] }"))
 #+end_src
 
 **** Special case field names
-
+:PROPERTIES:
+:CUSTOM_ID: herodotus-additional-info-field-names
+:END:
 Parsing specific field names can be done using the third argument of a field specifier. If a special field name is provided it doesn’t have to match the name of the slot in the CLOS class and can use any formatting convention.
 #+begin_src lisp
 (herodotus:define-json-model special-case ((unusual-format () "A_very-UniqueNAME"))
@@ -5294,6 +5378,9 @@ The README has an example of nested objects:
 #+end_src
 
 *** json-mop exported symbols
+:PROPERTIES:
+:CUSTOM_ID: json-mop-exported-symbols
+:END:
 - json-mop:encode
 - json-mop:json-serializable
 - json-mop:json-serializable-class
@@ -5365,6 +5452,9 @@ You will find more examples in the official [[https://github.com/y2q-actionman/c
 Comparing to the JSON path, the pointer has clearer character escaping rules and is able to work with keys containing dots and slashes and other symbols. But it does not support slicing and some other features of the JSON path.
 
 *** cl-json-pointer exported symbols
+:PROPERTIES:
+:CUSTOM_ID: cl-json-pointer-exported-symbols
+:END:
 - *json-pointer-error* -
 - *\star{}json-object-flavor* - Default flavor of JSON library currently used.This value is used for :FLAVOR argument of exported functions.
 Currently acceptable values are held by '\star{}cl-json-pointer-supported-json-flavors*
@@ -5508,8 +5598,17 @@ The following summary table was generated by trivial-benchmarks from the librari
 | yason               | parse                               |             68.2322 |   14313634192 |
 
 ** Decoding Trivial-Benchmark Detail By Library
+:PROPERTIES:
+:CUSTOM_ID: decoding-benchmark-detail-by-library
+:END:
 *** 1.2 MB Json File
+:PROPERTIES:
+:CUSTOM_ID: decoding-benchmark-detail-by-library12
+:END:
 **** Boost-Json
+:PROPERTIES:
+:CUSTOM_ID: decoding-benchmark-detail-by-library12-boost-json
+:END:
 #+CAPTION: json Parsing a 1.2 MB Json File
 #+ATTR_HTML: :border 2 :rules all :frame border
 #+ATTR_LATEX: :float multicolumn
@@ -5524,6 +5623,9 @@ The following summary table was generated by trivial-benchmarks from the librari
 | EVAL-CALLS      |     100 |         0 |        0 |        0 |        0 |       0.0 |
 
 **** Cl-json
+:PROPERTIES:
+:CUSTOM_ID: decoding-benchmark-detail-by-library12-cl-json
+:END:
 #+CAPTION: cl-json Parsing a 1.2 MB Json File
 #+ATTR_HTML: :border 2 :rules all :frame border
 #+ATTR_LATEX: :float multicolumn
@@ -5539,6 +5641,9 @@ The following summary table was generated by trivial-benchmarks from the librari
 | EVAL-CALLS      |     100 |          0 |        0 |        0 |        0 |       0.0 |
 
 **** Com.gigamonkeys.json
+:PROPERTIES:
+:CUSTOM_ID: decoding-benchmark-detail-by-library12-com-gigamonkeys-json
+:END:
 #+CAPTION: com.gigamonkeys.json Parsing a 1.2 MB Json File
 #+ATTR_HTML: :border 2 :rules all :frame border
 #+ATTR_LATEX: :float multicolumn
@@ -5552,6 +5657,9 @@ The following summary table was generated by trivial-benchmarks from the librari
 | BYTES-CONSED    |     100 | 1343528080 | 13383008 | 17653728 | 13392608 | 423975.53 |
 | EVAL-CALLS      |     100 |          0 |        0 |        0 |        0 |       0.0 |
 **** Com.inuoe.jzon
+:PROPERTIES:
+:CUSTOM_ID: decoding-benchmark-detail-by-library12-com-inuoe-jzon
+:END:
 #+CAPTION: com.inuoe.jzon Parsing a 1.2 MB Json File
 #+ATTR_HTML: :border 2 :rules all :frame border
 #+ATTR_LATEX: :float multicolumn
@@ -5565,6 +5673,9 @@ The following summary table was generated by trivial-benchmarks from the librari
 | BYTES-CONSED    |     100 | 789266144 |  7884976 |  7903872 |  7887792 |  8024.648 |
 | EVAL-CALLS      |     100 |         0 |        0 |        0 |        0 |       0.0 |
 **** Jonathan
+:PROPERTIES:
+:CUSTOM_ID: decoding-benchmark-detail-by-library12-jonathan
+:END:
 HUH??? In both decoding this real world file and the next, Jonathan is orders of magnitude slower than the other libraries.
 #+CAPTION: jonathan Parsing a 1.2 MB Json File
 #+ATTR_HTML: :border 2 :rules all :frame border
@@ -5581,6 +5692,9 @@ HUH??? In both decoding this real world file and the next, Jonathan is orders of
 | EVAL-CALLS      |     100 |             0 |           0 |           0 |           0 |       0.0 |
 
 **** Json-lib
+:PROPERTIES:
+:CUSTOM_ID: decoding-benchmark-detail-by-library12-json-lib
+:END:
 #+CAPTION: json-lib Parsing a 1.2 MB Json File
 #+ATTR_HTML: :border 2 :rules all :frame border
 #+ATTR_LATEX: :float multicolumn
@@ -5594,6 +5708,9 @@ HUH??? In both decoding this real world file and the next, Jonathan is orders of
 | BYTES-CONSED    |     100 | 3588339072 | 35872896 | 35893952 | 35883440 | 2640.1985 |
 | EVAL-CALLS      |     100 |          0 |        0 |        0 |        0 |       0.0 |
 **** Json-streams
+:PROPERTIES:
+:CUSTOM_ID: decoding-benchmark-detail-by-library12-json-streams
+:END:
 #+CAPTION: json-streams Parsing a 1.2 MB Json File
 #+ATTR_HTML: :border 2 :rules all :frame border
 #+ATTR_LATEX: :float multicolumn
@@ -5607,6 +5724,9 @@ HUH??? In both decoding this real world file and the next, Jonathan is orders of
 | BYTES-CONSED    |     100 | 1879613408 | 18766656 | 20651648 | 18777280 | 186493.95 |
 | EVAL-CALLS      |     100 |          0 |        0 |        0 |        0 |       0.0 |
 **** Jsown
+:PROPERTIES:
+:CUSTOM_ID: decoding-benchmark-detail-by-library12-jsown
+:END:
 #+CAPTION: jsown Parsing a 1.2 MB Json File
 #+ATTR_HTML: :border 2 :rules all :frame border
 #+ATTR_LATEX: :float multicolumn
@@ -5621,6 +5741,9 @@ HUH??? In both decoding this real world file and the next, Jonathan is orders of
 | EVAL-CALLS      |     100 |         0 |        0 |        0 |        0 |       0.0 |
 
 **** Shasht
+:PROPERTIES:
+:CUSTOM_ID: decoding-benchmark-detail-by-library12-shasht
+:END:
 #+CAPTION: shasht Parsing a 1.2 MB Json File
 #+ATTR_HTML: :border 2 :rules all :frame border
 #+ATTR_LATEX: :float multicolumn
@@ -5634,6 +5757,9 @@ HUH??? In both decoding this real world file and the next, Jonathan is orders of
 | BYTES-CONSED    |     100 | 1597571088 | 15962992 | 15984800 | 15971744 |  8653.811 |
 | EVAL-CALLS      |     100 |          0 |        0 |        0 |        0 |       0.0 |
 **** St-json
+:PROPERTIES:
+:CUSTOM_ID: decoding-benchmark-detail-by-library12-st-json
+:END:
 #+CAPTION: st-json Parsing a 1.2 MB Json File
 #+ATTR_HTML: :border 2 :rules all :frame border
 #+ATTR_LATEX: :float multicolumn
@@ -5647,6 +5773,9 @@ HUH??? In both decoding this real world file and the next, Jonathan is orders of
 | BYTES-CONSED    |     100 | 429072000 |  4287680 |  4304800 |  4288464 |  5829.427 |
 | EVAL-CALLS      |     100 |         0 |        0 |        0 |        0 |       0.0 |
 **** Yason
+:PROPERTIES:
+:CUSTOM_ID: decoding-benchmark-detail-by-library12-yason
+:END:
 #+CAPTION: yason Parsing a 1.2 MB Json File
 #+ATTR_HTML: :border 2 :rules all :frame border
 #+ATTR_LATEX: :float multicolumn
@@ -5661,7 +5790,13 @@ HUH??? In both decoding this real world file and the next, Jonathan is orders of
 | EVAL-CALLS      |     100 |          0 |        0 |        0 |        0 |       0.0 |
 
 *** 9.8 MB File
+:PROPERTIES:
+:CUSTOM_ID: decoding-benchmark-detail-by-library98
+:END:
 **** Boost Json
+:PROPERTIES:
+:CUSTOM_ID: decoding-benchmark-detail-by-library98-boost
+:END:
 #+CAPTION: json Parsing a 9.8 MB Json File
 #+ATTR_HTML: :border 2 :rules all :frame border
 #+ATTR_LATEX: :float multicolumn
@@ -5675,6 +5810,9 @@ HUH??? In both decoding this real world file and the next, Jonathan is orders of
 | BYTES-CONSED    |     100 | 8123005392 | 81224960 | 81230800 | 81230272 |  621.9398 |
 | EVAL-CALLS      |     100 |          0 |        0 |        0 |        0 |       0.0 |
 **** Cl-json
+:PROPERTIES:
+:CUSTOM_ID: decoding-benchmark-detail-by-library98-cl-json
+:END:
 #+CAPTION: cl-json Parsing a 9.8 MB Json File
 #+ATTR_HTML: :border 2 :rules all :frame border
 #+ATTR_LATEX: :float multicolumn
@@ -5689,6 +5827,9 @@ HUH??? In both decoding this real world file and the next, Jonathan is orders of
 | EVAL-CALLS      |     100 |           0 |         0 |         0 |         0 |       0.0 |
 
 **** Com.Gigamonkeys.json
+:PROPERTIES:
+:CUSTOM_ID: decoding-benchmark-detail-by-library98-gigamonkeys
+:END:
 #+CAPTION: com.gigamonkeys.json Parsing a 9.8 MB Json File
 #+ATTR_HTML: :border 2 :rules all :frame border
 #+ATTR_LATEX: :float multicolumn
@@ -5703,6 +5844,9 @@ HUH??? In both decoding this real world file and the next, Jonathan is orders of
 | EVAL-CALLS      |     100 |           0 |         0 |         0 |         0 |       0.0 |
 
 **** Com.inuoe.jzon
+:PROPERTIES:
+:CUSTOM_ID: decoding-benchmark-detail-by-library98-jzon
+:END:
 #+CAPTION: com.inuoe.jzon Parsing a 9.8 MB Json File
 #+ATTR_HTML: :border 2 :rules all :frame border
 #+ATTR_LATEX: :float multicolumn
@@ -5717,6 +5861,9 @@ HUH??? In both decoding this real world file and the next, Jonathan is orders of
 | EVAL-CALLS      |     100 |          0 |        0 |        0 |           0 |       0.0 |
 
 **** Jonathan
+:PROPERTIES:
+:CUSTOM_ID: decoding-benchmark-detail-by-library98-jonathan
+:END:
 #+CAPTION: jonathan Parsing a 9.8 MB Json File
 #+ATTR_HTML: :border 2 :rules all :frame border
 #+ATTR_LATEX: :float multicolumn
@@ -5731,6 +5878,9 @@ HUH??? In both decoding this real world file and the next, Jonathan is orders of
 | EVAL-CALLS      |     100 |             0 |           0 |           0 |           0 |       0.0 |
 
 **** Json-lib
+:PROPERTIES:
+:CUSTOM_ID: decoding-benchmark-detail-by-library98-json-lib
+:END:
 #+CAPTION: json-lib Parsing a 9.8 MB Json File
 #+ATTR_HTML: :border 2 :rules all :frame border
 #+ATTR_LATEX: :float multicolumn
@@ -5745,6 +5895,9 @@ HUH??? In both decoding this real world file and the next, Jonathan is orders of
 | EVAL-CALLS      |     100 |           0 |         0 |         0 |         0 |       0.0 |
 
 **** Json-streams
+:PROPERTIES:
+:CUSTOM_ID: decoding-benchmark-detail-by-library98-json-streams
+:END:
 #+CAPTION: json-streams Parsing a 9.8 MB Json File
 #+ATTR_HTML: :border 2 :rules all :frame border
 #+ATTR_LATEX: :float multicolumn
@@ -5759,6 +5912,9 @@ HUH??? In both decoding this real world file and the next, Jonathan is orders of
 | EVAL-CALLS      |     100 |           0 |         0 |         0 |         0 |       0.0 |
 
 **** Jsown
+:PROPERTIES:
+:CUSTOM_ID: decoding-benchmark-detail-by-library98-jsown
+:END:
 #+CAPTION: jsown Parsing a 9.8 MB Json File
 #+ATTR_HTML: :border 2 :rules all :frame border
 #+ATTR_LATEX: :float multicolumn
@@ -5772,6 +5928,9 @@ HUH??? In both decoding this real world file and the next, Jonathan is orders of
 | BYTES-CONSED    |     100 | 4919788560 | 49191344 | 49213856 |    49197856 | 1753.3816 |
 | EVAL-CALLS      |     100 |          0 |        0 |        0 |           0 |       0.0 |
 **** Shasht
+:PROPERTIES:
+:CUSTOM_ID: decoding-benchmark-detail-by-library98-shasht
+:END:
 #+CAPTION: shasht Parsing a 9.8 MB Json File
 #+ATTR_HTML: :border 2 :rules all :frame border
 #+ATTR_LATEX: :float multicolumn
@@ -5786,6 +5945,9 @@ HUH??? In both decoding this real world file and the next, Jonathan is orders of
 | EVAL-CALLS      |     100 |           0 |         0 |         0 |         0 |       0.0 |
 
 **** St-json
+:PROPERTIES:
+:CUSTOM_ID: decoding-benchmark-detail-by-library98-st-json
+:END:
 #+CAPTION: st-json Parsing a 9.8 MB Json File
 #+ATTR_HTML: :border 2 :rules all :frame border
 #+ATTR_LATEX: :float multicolumn
@@ -5800,6 +5962,9 @@ HUH??? In both decoding this real world file and the next, Jonathan is orders of
 | EVAL-CALLS      |     100 |          0 |        0 |        0 |        0 |       0.0 |
 
 **** Yason
+:PROPERTIES:
+:CUSTOM_ID: decoding-benchmark-detail-by-library98-yason
+:END:
 #+CAPTION: yason Parsing a 9.8 MB Json File
 #+ATTR_HTML: :border 2 :rules all :frame border
 #+ATTR_LATEX: :float multicolumn
