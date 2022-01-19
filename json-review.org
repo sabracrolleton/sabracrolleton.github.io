@@ -1454,7 +1454,7 @@ In the first easy test, the only surprises were jonathan reversing the order of 
 #+end_src
 If we then pass that to jonathan:to-json, it throws an error because jonathan does not handle alists with dotted pairs. I am only calling this out because jonathan expressly provides you with the ability to return a json object as a dotted pair alist, but then cannot handle it going back the other direction.
 
-Everyone passes when dealing with the easy array will no nulls involved.
+Everyone passes when dealing with the easy array with no nulls involved.
 #+CAPTION: Symmetry Test 1 (Easy) Json Array
 #+ATTR_HTML: :border 2 :rules all :frame border
 #+ATTR_LATEX: :float multicolumn
@@ -1495,7 +1495,7 @@ Everyone passes when dealing with the easy array will no nulls involved.
 | jsown                | PASS      | "{\"items\":[1,2,3]}"    |
 | shasht               | PASS      | "{\"items\":[1,2,3]}"    |
 | st-json              | PASS      | "{\"items\":[1,2,3]}"    |
-| trivial-json-codec   | FAIL      | "<<\":ITEMS\",[1,2,3]>>" |
+| trivial-json-codec   | FAIL      | "<​<\":ITEMS\",[1,2,3]>>" |
 | yason                | PASS      | "{\"items\":[1,2,3]}"    |
 - (1) I was surprised that cl-json failed here by returning a json array instead of a json object. This is flagged on the homepage as [[https://github.com/hankhero/cl-json/issues/22][issue 22]].
 
