@@ -15,6 +15,9 @@
 #+LATEX_CLASS_OPTIONS: [letterpaper]
 
 * Changelog
+:PROPERTIES:
+:CUSTOM_ID: changelog
+:END:
 19 Jan 2022 - Fixed some typos, including a missing earmuff.
 
 18 Jan 2022 - Corrected json conformity tests on boost-json, cl-json, lib-lib, shasht, st-json, trivial-json-codec and yason. If \star{}read-default-float-format* is set to 'single-float, those libraries would refuse to accept:  "[123e65]", "[123e45]" and "[123.456e78]". If \star{}read-default-float-format* is set to 'double-float, then those json strings would be correctly accepted. Net result: with that caveat, [[#boost-json][boost-json]], [[#cl-json][cl-json]], [[#com.gigamonkeys.json][com.gigamonkeys.json]], [[#com.inuoe.jzon][com.inuoe.jzon]], [[#json-lib][json-lib]], [[#shasht][shasht]], [[#st-json][st-json]] and [[#yason][yason]] all score 95/95 on the json strings that must be accepted. See [[#must-accept][Standard Conformity - Must Accept]].
@@ -77,6 +80,9 @@ CL currently has at least twelve libraries that address importing and exporting 
 
 
 ** Helper Libraries
+:PROPERTIES:
+:CUSTOM_ID: helper-libraries-top
+:END:
 We should also talk a bit about some helper libraries.
 #+CAPTION: Helper Libraries
 #+ATTR_HTML: :border 2 :rules all :frame border
@@ -353,7 +359,6 @@ Now looking at all four types within a json array:
 | yason (1)            | (T NIL NIL :null)          | failed null but see next row                  |
 - (1) Jonathan called with jonathan:*null-value* set to :null. Yason called with yason:*parse-json-null-as-keyword* set to t or passing the keyword parameter :json-nulls-as-keyword t to yason:parse
 
-
 *** Decoding Json Arrays
 :PROPERTIES:
 :CUSTOM_ID: decoding-arrays
@@ -507,6 +512,9 @@ For example, consider two address json objects:
 
 Obviously you can always write your own function to initialize a specific class from an alist, but we do have two libraries (boost-json and cl-json) that try to do something like this for you automagically. Let's take a look.
 *** Boost-json
+:PROPERTIES:
+:CUSTOM_ID: decode-to-clos-boost-json
+:END:
 Boost-json will decode the json nested object to a CLOS object class called boost-json:json-object.
 
 #+begin_src lisp
@@ -523,6 +531,9 @@ It appears like you need to call (json-getf obj keyword) in order to act as an a
   {"first_name":"Michael","last_name":"Washington","birthday":"1732-02-22","address":#}>
 #+end_src
 *** Cl-json
+:PROPERTIES:
+:CUSTOM_ID: decode-to-clos-cl-json
+:END:
 cl-json can decode and convert them to a cl-json:fluid-class CLOS object. You do need to at least temporarily set the change the decoder to use simple-clos-semantics and set the \star{}json-symbols-package* to nil. (Note, this is thread unsafe unless you have pre-created. Per the documentation: "To maintain the mapping between lists of superclass names and fluid classes, the decoder maintains a class registry.  Thus, using fluid objects makes the CLOS decoder essentially thread-unsafe. (If every incoming json Object is guaranteed to have a prototype with a "lispClass" member then there are no fluid objects and thread safety is ensured.)  If the user wishes to employ fluid objects in a threaded environment it is advisable to wrap the body of entry-point functions in with-local-class-registry.")
 
 First, looking at the simpler version, notice you need to specify the slots in the fluid-class object:
@@ -1393,7 +1404,13 @@ Consider starting from json and trying to get back to json. To quote Steve Losh:
 Now consider starting from cl and trying to get back to cl. A cl library that handles both lists and arrays might encode both as json arrays. But now when you decode the json array, are you decoding to a cl list or a cl array? If round-tripping is important to you, this will drive your choice of cl data structures so that you know what you are decoding back to. Similarly, what do you do with symbols?
 
 ** Json -> CL -> Json
+:PROPERTIES:
+:CUSTOM_ID: symmetry-json-cl-json
+:END:
 *** First test (Easy)
+:PROPERTIES:
+:CUSTOM_ID: symmetry-json-cl-json1
+:END:
 In the first easy test, the only surprises were jonathan reversing the order of the elements in the json object and I do not know what trivial-json-codec is doing with the angle brackets in the json object test.
 #+CAPTION: Symmetry Test 1 (Easy) Json Object
 #+ATTR_HTML: :border 2 :rules all :frame border
@@ -1443,7 +1460,9 @@ Everyone passes when dealing with the easy array will no nulls involved.
 | trivial-json-codec   | PASS      | "[1,\"sales\",true]"   |
 | yason                | PASS      | "[1,\"sales\",true]"   |
 *** Second Test (Array Inside a Json Object)
-
+:PROPERTIES:
+:CUSTOM_ID: symmetry-json-cl-json2
+:END:
 #+CAPTION: Symmetry Test 2 Json Array Within a Json Object
 #+ATTR_HTML: :border 2 :rules all :frame border
 #+ATTR_LATEX: :float multicolumn
@@ -1466,6 +1485,9 @@ Everyone passes when dealing with the easy array will no nulls involved.
 - (1) I was surprised that cl-json failed here by returning a json array instead of a json object. This is flagged on the homepage as [[https://github.com/hankhero/cl-json/issues/22][issue 22]].
 
 *** Third test (Trickier Data Types)
+:PROPERTIES:
+:CUSTOM_ID: symmetry-json-cl-json3
+:END:
 Now we make it a bit trickier with the following json string, decoded and then encoded it to see if we got back the original. This has trickier bits because of the unicode, exponent and false and null. The results are pretty much what you would expect.
 #+begin_src javascript
 "{\"key1\":\"value\\n\",\"key2\":1,\"key3\":[\"Hello \\u2604\",1.2e-34 ,true,false,null]}"
@@ -1515,7 +1537,9 @@ Now we make it a bit trickier with the following json string, decoded and then e
 - (1) Up to you whether you want to treat the exponent expanded to a decimal as a pass or fail
 
 ** CL -> Json -> CL
-
+:PROPERTIES:
+:CUSTOM_ID: symmetry-cl-json-cl
+:END:
 We did this testing with a simple alist with undotted pairs. Since this is an alist, cl-json and json use specialized functions :encode-json-alist-to-string to successfully write json, then read back a result that is symmetrical to the original alist.
 #+begin_src lisp
     '((:NAME "George Washington")
@@ -1750,7 +1774,7 @@ yason-alist and yason-plist are shorthand for (yason:parse data :object-as :alis
 \"key2\":1,\"key3\":[\"Hello \\u2604\",  1.2e-34 ,true,
   false,null]}")
 #+end_src
-*** Tiny Json Object
+
 #+begin_src ascii
                                 JSON Read Times (sbcl tiny json object)
                      0                  6.147095e-6                  1.229419e-5
@@ -2080,6 +2104,9 @@ com.gigamonkeys.json ██▋
 #+end_src
 
 *** Read Times From Stream (sbcl)
+:PROPERTIES:
+:CUSTOM_ID: benchmarking-read-stream
+:END:
 The following charts are reading from stream rather than from string (so a slightly smaller list of libraries) and jonathan choked on both files being read into the stream, so it is excluded as well. We see the same comparative results when reading from stream as when we read from strings.
 **** Countries File
 #+begin_src ascii

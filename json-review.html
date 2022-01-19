@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-01-19 Wed 07:41 -->
+<!-- 2022-01-19 Wed 07:53 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Review of CL Json Libraries UPDATED 18 Jan 2022</title>
@@ -253,11 +253,11 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org1e55a45">Changelog</a></li>
+<li><a href="#changelog">Changelog</a></li>
 <li><a href="#introduction">Introduction</a>
 <ul>
 <li><a href="#libraries">Common Lisp Encoding and Decoding Libraries</a></li>
-<li><a href="#org48b699e">Helper Libraries</a></li>
+<li><a href="#helper-libraries-top">Helper Libraries</a></li>
 </ul>
 </li>
 <li><a href="#quick-summary">Quick Summary</a></li>
@@ -276,9 +276,9 @@
 </li>
 <li><a href="#decode-to-clos">Converting json data to a CLOS object</a>
 <ul>
-<li><a href="#orga578e94">Boost-json</a></li>
-<li><a href="#org5ba1957">Cl-json</a></li>
-<li><a href="#org3318e83">Trivial-json-codec</a></li>
+<li><a href="#decode-to-clos-boost-json">Boost-json</a></li>
+<li><a href="#decode-to-clos-cl-json">Cl-json</a></li>
+<li><a href="#org5a7d977">Trivial-json-codec</a></li>
 </ul>
 </li>
 <li><a href="#extracting-subset">Extracting a Subset of a json object</a></li>
@@ -308,8 +308,8 @@
 </li>
 <li><a href="#encoding-hash-tables">Encoding hash-tables</a>
 <ul>
-<li><a href="#org37aa410">Using string as key</a></li>
-<li><a href="#orgaddf151">Using symbol as key</a></li>
+<li><a href="#orgc83a583">Using string as key</a></li>
+<li><a href="#org220fa28">Using symbol as key</a></li>
 </ul>
 </li>
 <li><a href="#encoding-objects">Encoding CLOS objects</a></li>
@@ -319,14 +319,14 @@
 </li>
 <li><a href="#symmetry">Symmetry</a>
 <ul>
-<li><a href="#org53fcee9">Json -&gt; CL -&gt; Json</a>
+<li><a href="#symmetry-json-cl-json">Json -&gt; CL -&gt; Json</a>
 <ul>
-<li><a href="#org3b39a0a">First test (Easy)</a></li>
-<li><a href="#org4a16327">Second Test (Array Inside a Json Object)</a></li>
-<li><a href="#orgf61d2eb">Third test (Trickier Data Types)</a></li>
+<li><a href="#symmetry-json-cl-json1">First test (Easy)</a></li>
+<li><a href="#symmetry-json-cl-json2">Second Test (Array Inside a Json Object)</a></li>
+<li><a href="#symmetry-json-cl-json3">Third test (Trickier Data Types)</a></li>
 </ul>
 </li>
-<li><a href="#orge1f2cb8">CL -&gt; Json -&gt; CL</a></li>
+<li><a href="#symmetry-cl-json-cl">CL -&gt; Json -&gt; CL</a></li>
 </ul>
 </li>
 <li><a href="#security">Security</a></li>
@@ -345,14 +345,13 @@
 <ul>
 <li><a href="#read-times">Read Times</a>
 <ul>
-<li><a href="#orge63f044">Tiny Json Object</a></li>
-<li><a href="#org1d6b0cf">Read Times From Stream (sbcl)</a></li>
+<li><a href="#benchmarking-read-stream">Read Times From Stream (sbcl)</a></li>
 </ul>
 </li>
 <li><a href="#write-times">Write Times</a></li>
 </ul>
 </li>
-<li><a href="#orgfd37854">Json Libraries Specific Comments</a>
+<li><a href="#orgae47a3c">Json Libraries Specific Comments</a>
 <ul>
 <li><a href="#boost-json">boost-json</a>
 <ul>
@@ -508,35 +507,35 @@
 <ul>
 <li><a href="#cl-json-helper">cl-json-helper</a>
 <ul>
-<li><a href="#org688163a">cl-json-helper exported symbols</a></li>
-<li><a href="#org765f8bb">Json-bool</a></li>
-<li><a href="#org17379ad">json-empty</a></li>
-<li><a href="#org5d9109a">Json-key-value</a></li>
+<li><a href="#orgb565e0c">cl-json-helper exported symbols</a></li>
+<li><a href="#org620e5ff">Json-bool</a></li>
+<li><a href="#org5e93667">json-empty</a></li>
+<li><a href="#org789b645">Json-key-value</a></li>
 </ul>
 </li>
 <li><a href="#define-json-expander">define-json-expander</a>
 <ul>
-<li><a href="#org3525904">define-json-expander exported symbols</a></li>
-<li><a href="#org93c5a87">Explanation</a></li>
+<li><a href="#org9ca2e2e">define-json-expander exported symbols</a></li>
+<li><a href="#orga7e62f6">Explanation</a></li>
 </ul>
 </li>
 <li><a href="#herodotus">herodotus</a>
 <ul>
-<li><a href="#org6583bdc">herodotus exported symbols</a></li>
-<li><a href="#orgdf672e3">Setup</a></li>
-<li><a href="#org6e100d4">Decoding</a></li>
-<li><a href="#org03f3df9">Encoding</a></li>
-<li><a href="#orga5ad968">Additional Info</a></li>
+<li><a href="#org7d6c026">herodotus exported symbols</a></li>
+<li><a href="#org2dbc9ec">Setup</a></li>
+<li><a href="#org6637829">Decoding</a></li>
+<li><a href="#org127ddb7">Encoding</a></li>
+<li><a href="#org1b18b71">Additional Info</a></li>
 </ul>
 </li>
 <li><a href="#json-mop">json-mop</a>
 <ul>
-<li><a href="#org091276d">json-mop exported symbols</a></li>
+<li><a href="#org594e727">json-mop exported symbols</a></li>
 </ul>
 </li>
 <li><a href="#cl-json-pointer">cl-json-pointer</a>
 <ul>
-<li><a href="#orgc376839">cl-json-pointer exported symbols</a></li>
+<li><a href="#org720b828">cl-json-pointer exported symbols</a></li>
 </ul>
 </li>
 <li><a href="#cl-json-schema">cl-json-schema</a></li>
@@ -546,10 +545,10 @@
 <ul>
 <li><a href="#json-refresher">Json Refresher</a></li>
 <li><a href="#decoding-benchmark-detail">Decoding Trivial-Benchmark Summary</a></li>
-<li><a href="#org8ab7d2e">Decoding Trivial-Benchmark Detail By Library</a>
+<li><a href="#org8ce354d">Decoding Trivial-Benchmark Detail By Library</a>
 <ul>
-<li><a href="#org5c2811e">1.2 MB Json File</a></li>
-<li><a href="#org4ff727b">9.8 MB File</a></li>
+<li><a href="#orgcbb7704">1.2 MB Json File</a></li>
+<li><a href="#org6de6204">9.8 MB File</a></li>
 </ul>
 </li>
 </ul>
@@ -558,9 +557,9 @@
 </div>
 </nav>
 
-<div id="outline-container-org1e55a45" class="outline-2">
-<h2 id="org1e55a45">Changelog</h2>
-<div class="outline-text-2" id="text-org1e55a45">
+<div id="outline-container-changelog" class="outline-2">
+<h2 id="changelog">Changelog</h2>
+<div class="outline-text-2" id="text-changelog">
 <p>
 19 Jan 2022 - Fixed some typos, including a missing earmuff.
 </p>
@@ -816,9 +815,9 @@ CL currently has at least twelve libraries that address importing and exporting 
 </div>
 
 
-<div id="outline-container-org48b699e" class="outline-3">
-<h3 id="org48b699e">Helper Libraries</h3>
-<div class="outline-text-3" id="text-org48b699e">
+<div id="outline-container-helper-libraries-top" class="outline-3">
+<h3 id="helper-libraries-top">Helper Libraries</h3>
+<div class="outline-text-3" id="text-helper-libraries-top">
 <p>
 We should also talk a bit about some helper libraries.
 </p>
@@ -2012,7 +2011,6 @@ Now looking at all four types within a json array:
 </div>
 </div>
 
-
 <div id="outline-container-decoding-arrays" class="outline-4">
 <h4 id="decoding-arrays">Decoding Json Arrays</h4>
 <div class="outline-text-4" id="text-decoding-arrays">
@@ -2524,9 +2522,9 @@ For example, consider two address json objects:
 Obviously you can always write your own function to initialize a specific class from an alist, but we do have two libraries (boost-json and cl-json) that try to do something like this for you automagically. Let's take a look.
 </p>
 </div>
-<div id="outline-container-orga578e94" class="outline-4">
-<h4 id="orga578e94">Boost-json</h4>
-<div class="outline-text-4" id="text-orga578e94">
+<div id="outline-container-decode-to-clos-boost-json" class="outline-4">
+<h4 id="decode-to-clos-boost-json">Boost-json</h4>
+<div class="outline-text-4" id="text-decode-to-clos-boost-json">
 <p>
 Boost-json will decode the json nested object to a CLOS object class called boost-json:json-object.
 </p>
@@ -2550,9 +2548,9 @@ It appears like you need to call (json-getf obj keyword) in order to act as an a
 </div>
 </div>
 </div>
-<div id="outline-container-org5ba1957" class="outline-4">
-<h4 id="org5ba1957">Cl-json</h4>
-<div class="outline-text-4" id="text-org5ba1957">
+<div id="outline-container-decode-to-clos-cl-json" class="outline-4">
+<h4 id="decode-to-clos-cl-json">Cl-json</h4>
+<div class="outline-text-4" id="text-decode-to-clos-cl-json">
 <p>
 cl-json can decode and convert them to a cl-json:fluid-class CLOS object. You do need to at least temporarily set the change the decoder to use simple-clos-semantics and set the *json-symbols-package* to nil. (Note, this is thread unsafe unless you have pre-created. Per the documentation: "To maintain the mapping between lists of superclass names and fluid classes, the decoder maintains a class registry.  Thus, using fluid objects makes the CLOS decoder essentially thread-unsafe. (If every incoming json Object is guaranteed to have a prototype with a "lispClass" member then there are no fluid objects and thread safety is ensured.)  If the user wishes to employ fluid objects in a threaded environment it is advisable to wrap the body of entry-point functions in with-local-class-registry.")
 </p>
@@ -2608,9 +2606,9 @@ Because we have a nested class, we would need drill down and specify the slots f
 </div>
 </div>
 </div>
-<div id="outline-container-org3318e83" class="outline-4">
-<h4 id="org3318e83">Trivial-json-codec</h4>
-<div class="outline-text-4" id="text-org3318e83">
+<div id="outline-container-org5a7d977" class="outline-4">
+<h4 id="org5a7d977">Trivial-json-codec</h4>
+<div class="outline-text-4" id="text-org5a7d977">
 <p>
 If you have defined your classes, trivial-json-codec does make it easy to decode json data directly to a vector of your classes. Suppose we have a simple person class:
 </p>
@@ -4039,9 +4037,9 @@ I discovered that many libraries have problems if the alist components are dotte
 <li>If the alist has dotted cons cells, jsown and st-json triggered unhandled memory faults with sbcl 2.1.11-x86-64-linux, ccl version 1.12.1 LinuxX8664 and ecl-version 21.2.1. This appears to be because jsown and st-json have optimized the code and assumed that all lists will be proper lists. The assumption obviously fails in the context of dotted cons cells.</li>
 </ul>
 </div>
-<div id="outline-container-org3396d0c" class="outline-5">
-<h5 id="org3396d0c">Dotted cons cells (dotted pairs)</h5>
-<div class="outline-text-5" id="text-org3396d0c">
+<div id="outline-container-orge50ec57" class="outline-5">
+<h5 id="orge50ec57">Dotted cons cells (dotted pairs)</h5>
+<div class="outline-text-5" id="text-orge50ec57">
 <p>
 Using '(("A" . 1) ("B" . 2) ("C" . 3)) as the sample data
 </p>
@@ -4321,9 +4319,9 @@ which may or may not have been what you wanted.
 </div>
 </div>
 
-<div id="outline-container-org8e72bcb" class="outline-5">
-<h5 id="org8e72bcb">Without dotted cons cells</h5>
-<div class="outline-text-5" id="text-org8e72bcb">
+<div id="outline-container-org95c1b38" class="outline-5">
+<h5 id="org95c1b38">Without dotted cons cells</h5>
+<div class="outline-text-5" id="text-org95c1b38">
 <p>
 Using '(("A" 1) ("B"  2) ("C" 3)) as the sample data.
 </p>
@@ -5321,9 +5319,9 @@ Jsown is the only library to handle a two dimensional array without the user hav
 <div class="outline-text-3" id="text-encoding-hash-tables">
 </div>
 
-<div id="outline-container-org37aa410" class="outline-4">
-<h4 id="org37aa410">Using string as key</h4>
-<div class="outline-text-4" id="text-org37aa410">
+<div id="outline-container-orgc83a583" class="outline-4">
+<h4 id="orgc83a583">Using string as key</h4>
+<div class="outline-text-4" id="text-orgc83a583">
 <p>
 Using (alexandria:plist-hash-table '("foo" 1 "bar" (7 8 9)) :test #'equal) as the sample data:
 </p>
@@ -5441,9 +5439,9 @@ Using (alexandria:plist-hash-table '("foo" 1 "bar" (7 8 9)) :test #'equal) as th
 </ul>
 </div>
 </div>
-<div id="outline-container-orgaddf151" class="outline-4">
-<h4 id="orgaddf151">Using symbol as key</h4>
-<div class="outline-text-4" id="text-orgaddf151">
+<div id="outline-container-org220fa28" class="outline-4">
+<h4 id="org220fa28">Using symbol as key</h4>
+<div class="outline-text-4" id="text-org220fa28">
 <p>
 Using (alexandria:plist-hash-table '(:foo 1 :bar (7 8 9)) :test #'eq) as the sample data:
 Again, see what gigamonkeys is doing with respect to trying to treat the list as key:value pairs.
@@ -5907,13 +5905,13 @@ Now consider starting from cl and trying to get back to cl. A cl library that ha
 </p>
 </div>
 
-<div id="outline-container-org53fcee9" class="outline-3">
-<h3 id="org53fcee9">Json -&gt; CL -&gt; Json</h3>
-<div class="outline-text-3" id="text-org53fcee9">
+<div id="outline-container-symmetry-json-cl-json" class="outline-3">
+<h3 id="symmetry-json-cl-json">Json -&gt; CL -&gt; Json</h3>
+<div class="outline-text-3" id="text-symmetry-json-cl-json">
 </div>
-<div id="outline-container-org3b39a0a" class="outline-4">
-<h4 id="org3b39a0a">First test (Easy)</h4>
-<div class="outline-text-4" id="text-org3b39a0a">
+<div id="outline-container-symmetry-json-cl-json1" class="outline-4">
+<h4 id="symmetry-json-cl-json1">First test (Easy)</h4>
+<div class="outline-text-4" id="text-symmetry-json-cl-json1">
 <p>
 In the first easy test, the only surprises were jonathan reversing the order of the elements in the json object and I do not know what trivial-json-codec is doing with the angle brackets in the json object test.
 </p>
@@ -6158,9 +6156,9 @@ Everyone passes when dealing with the easy array will no nulls involved.
 </table>
 </div>
 </div>
-<div id="outline-container-org4a16327" class="outline-4">
-<h4 id="org4a16327">Second Test (Array Inside a Json Object)</h4>
-<div class="outline-text-4" id="text-org4a16327">
+<div id="outline-container-symmetry-json-cl-json2" class="outline-4">
+<h4 id="symmetry-json-cl-json2">Second Test (Array Inside a Json Object)</h4>
+<div class="outline-text-4" id="text-symmetry-json-cl-json2">
 <table border="2" rules="all" frame="border">
 <caption class="t-above"><span class="table-number">Table 44:</span> Symmetry Test 2 Json Array Within a Json Object</caption>
 
@@ -6254,7 +6252,7 @@ Everyone passes when dealing with the easy array will no nulls involved.
 <tr>
 <td class="org-left">trivial-json-codec</td>
 <td class="org-left">FAIL</td>
-<td class="org-left">"<a id="org9f887e8"></a>"</td>
+<td class="org-left">"<a id="org0cc7980"></a>"</td>
 </tr>
 
 <tr>
@@ -6270,9 +6268,9 @@ Everyone passes when dealing with the easy array will no nulls involved.
 </div>
 </div>
 
-<div id="outline-container-orgf61d2eb" class="outline-4">
-<h4 id="orgf61d2eb">Third test (Trickier Data Types)</h4>
-<div class="outline-text-4" id="text-orgf61d2eb">
+<div id="outline-container-symmetry-json-cl-json3" class="outline-4">
+<h4 id="symmetry-json-cl-json3">Third test (Trickier Data Types)</h4>
+<div class="outline-text-4" id="text-symmetry-json-cl-json3">
 <p>
 Now we make it a bit trickier with the following json string, decoded and then encoded it to see if we got back the original. This has trickier bits because of the unicode, exponent and false and null. The results are pretty much what you would expect.
 </p>
@@ -6479,9 +6477,9 @@ Now we make it a bit trickier with the following json string, decoded and then e
 </div>
 </div>
 
-<div id="outline-container-orge1f2cb8" class="outline-3">
-<h3 id="orge1f2cb8">CL -&gt; Json -&gt; CL</h3>
-<div class="outline-text-3" id="text-orge1f2cb8">
+<div id="outline-container-symmetry-cl-json-cl" class="outline-3">
+<h3 id="symmetry-cl-json-cl">CL -&gt; Json -&gt; CL</h3>
+<div class="outline-text-3" id="text-symmetry-cl-json-cl">
 <p>
 We did this testing with a simple alist with undotted pairs. Since this is an alist, cl-json and json use specialized functions :encode-json-alist-to-string to successfully write json, then read back a result that is symmetrical to the original alist.
 </p>
@@ -7179,9 +7177,9 @@ What I found troubling was that jonathan, jsown and shasht all hung on one or mo
 <h3 id="malformed-data">Malformed Data</h3>
 <div class="outline-text-3" id="text-malformed-data">
 </div>
-<div id="outline-container-orgf0805f5" class="outline-5">
-<h5 id="orgf0805f5">Must Reject</h5>
-<div class="outline-text-5" id="text-orgf0805f5">
+<div id="outline-container-org0531212" class="outline-5">
+<h5 id="org0531212">Must Reject</h5>
+<div class="outline-text-5" id="text-org0531212">
 <p>
 Only three libraries did not hang or trigger stack exhaustion on strings designed to open thousands of beginning nested arrays or objects. Those are com.inuoe.jzon, json-lib and json-streams. All three have a limit and refused to exceed the limit.
 </p>
@@ -7329,10 +7327,7 @@ yason-alist and yason-plist are shorthand for (yason:parse data :object-as :alis
 <span style="color: #e67128;">  false,null]}"</span>)
 </pre>
 </div>
-</div>
-<div id="outline-container-orge63f044" class="outline-4">
-<h4 id="orge63f044">Tiny Json Object</h4>
-<div class="outline-text-4" id="text-orge63f044">
+
 <div class="org-src-container">
 <pre class="src src-ascii">                                JSON Read Times (sbcl tiny json object)
                      0                  6.147095e-6                  1.229419e-5
@@ -7820,18 +7815,17 @@ com.gigamonkeys.json ██▋
 </pre>
 </div>
 </div>
-</div>
 
-<div id="outline-container-org1d6b0cf" class="outline-4">
-<h4 id="org1d6b0cf">Read Times From Stream (sbcl)</h4>
-<div class="outline-text-4" id="text-org1d6b0cf">
+<div id="outline-container-benchmarking-read-stream" class="outline-4">
+<h4 id="benchmarking-read-stream">Read Times From Stream (sbcl)</h4>
+<div class="outline-text-4" id="text-benchmarking-read-stream">
 <p>
 The following charts are reading from stream rather than from string (so a slightly smaller list of libraries) and jonathan choked on both files being read into the stream, so it is excluded as well. We see the same comparative results when reading from stream as when we read from strings.
 </p>
 </div>
-<div id="outline-container-orga885e73" class="outline-5">
-<h5 id="orga885e73">Countries File</h5>
-<div class="outline-text-5" id="text-orga885e73">
+<div id="outline-container-org8b383cc" class="outline-5">
+<h5 id="org8b383cc">Countries File</h5>
+<div class="outline-text-5" id="text-org8b383cc">
 <div class="org-src-container">
 <pre class="src src-ascii">
                                 JSON Read Times (sbcl) 1.2 MB Countries File
@@ -7852,9 +7846,9 @@ com.inuoe.jzon █████████████████████�
 </div>
 </div>
 
-<div id="outline-container-orge113324" class="outline-5">
-<h5 id="orge113324">Historical Events File</h5>
-<div class="outline-text-5" id="text-orge113324">
+<div id="outline-container-orgd0d7d47" class="outline-5">
+<h5 id="orgd0d7d47">Historical Events File</h5>
+<div class="outline-text-5" id="text-orgd0d7d47">
 <div class="org-src-container">
 <pre class="src src-ascii">                                JSON Read Times (sbcl) 9.8 MB Historical Events File
                0                       3.6496155                        7.299231
@@ -7966,9 +7960,9 @@ com.gigamonkeys.json █████▉
 </div>
 </div>
 
-<div id="outline-container-orgfd37854" class="outline-2">
-<h2 id="orgfd37854">Json Libraries Specific Comments</h2>
-<div class="outline-text-2" id="text-orgfd37854">
+<div id="outline-container-orgae47a3c" class="outline-2">
+<h2 id="orgae47a3c">Json Libraries Specific Comments</h2>
+<div class="outline-text-2" id="text-orgae47a3c">
 </div>
 <div id="outline-container-boost-json" class="outline-3">
 <h3 id="boost-json">boost-json</h3>
@@ -8617,7 +8611,7 @@ Json objects are converted to alists with dotted pairs which is unusual for the 
 </p>
 
 <p>
-<a id="org6d75425"></a>
+<a id="orgc75c5e9"></a>
 </p>
 </div>
 <div id="outline-container-cl-json-data-to-clos" class="outline-5">
@@ -9451,9 +9445,9 @@ Com.inuoe.jzon is my new overall favorite. Unfortunately it is not in quicklisp 
 <h4 id="jzon-mapping">Default Mapping</h4>
 <div class="outline-text-4" id="text-jzon-mapping">
 </div>
-<div id="outline-container-org50f06ee" class="outline-5">
-<h5 id="org50f06ee">Type Mapping Json -&gt; CL</h5>
-<div class="outline-text-5" id="text-org50f06ee">
+<div id="outline-container-org2bab383" class="outline-5">
+<h5 id="org2bab383">Type Mapping Json -&gt; CL</h5>
+<div class="outline-text-5" id="text-org2bab383">
 <table>
 
 
@@ -9508,9 +9502,9 @@ Com.inuoe.jzon is my new overall favorite. Unfortunately it is not in quicklisp 
 </div>
 </div>
 
-<div id="outline-container-org15d3612" class="outline-5">
-<h5 id="org15d3612">Type Mapping CL -&gt; Json</h5>
-<div class="outline-text-5" id="text-org15d3612">
+<div id="outline-container-orgb1e2395" class="outline-5">
+<h5 id="orgb1e2395">Type Mapping CL -&gt; Json</h5>
+<div class="outline-text-5" id="text-orgb1e2395">
 <p>
 Using the stringify function, com.inuoe.jzon will map the following CL data types.
 </p>
@@ -9577,9 +9571,9 @@ Com.inuoe.jzon looks at lists/alists/plists and tries to determine what is an al
 <h4 id="jzon-decoding">Decoding</h4>
 <div class="outline-text-4" id="text-jzon-decoding">
 </div>
-<div id="outline-container-orgdc3060e" class="outline-5">
-<h5 id="orgdc3060e">Acceptable Input for Parse</h5>
-<div class="outline-text-5" id="text-orgdc3060e">
+<div id="outline-container-org4c9d3e1" class="outline-5">
+<h5 id="org4c9d3e1">Acceptable Input for Parse</h5>
+<div class="outline-text-5" id="text-org4c9d3e1">
 <p>
 com.inuoe.jzon will accept strings, octets in utf8, stream characters or binary in utf8, or a pathname (at which point the library will assume you want it to open a file for reading.
 </p>
@@ -9675,9 +9669,9 @@ On the downside,
 </ul>
 </div>
 
-<div id="outline-container-orgbff9556" class="outline-5">
-<h5 id="orgbff9556">Specialize Serialization</h5>
-<div class="outline-text-5" id="text-orgbff9556">
+<div id="outline-container-org26aef8a" class="outline-5">
+<h5 id="org26aef8a">Specialize Serialization</h5>
+<div class="outline-text-5" id="text-org26aef8a">
 <p>
 com.inuoe.jzon allows you to specialize the coerced-fields method to handle CL data types not included in the above list, including excluding, renaming and adding fields. See the <a href="https://github.com/Zulu-Inuoe/jzon">README</a> for examples.
 </p>
@@ -9954,9 +9948,9 @@ Please note the direction of the arrows in the following table.
 <h4 id="jonathan-decoding">Decoding</h4>
 <div class="outline-text-4" id="text-jonathan-decoding">
 </div>
-<div id="outline-container-org39fc931" class="outline-5">
-<h5 id="org39fc931">Overview</h5>
-<div class="outline-text-5" id="text-org39fc931">
+<div id="outline-container-orgdb25bf8" class="outline-5">
+<h5 id="orgdb25bf8">Overview</h5>
+<div class="outline-text-5" id="text-orgdb25bf8">
 <p>
 Jonathan decodes strings, not streams.   In testing, jonathan hung when trying to decode "[123e-10000000]". In its default settings, jonathan will decode a json null as nil, but if you set jonathan:*null-value* to :null, it will decod a json null properly as :null.
 </p>
@@ -10028,9 +10022,9 @@ nil
 </div>
 </div>
 
-<div id="outline-container-org3539d4a" class="outline-5">
-<h5 id="org3539d4a">Allow json comment string</h5>
-<div class="outline-text-5" id="text-org3539d4a">
+<div id="outline-container-org5c79963" class="outline-5">
+<h5 id="org5c79963">Allow json comment string</h5>
+<div class="outline-text-5" id="text-org5c79963">
 <ul class="org-ul">
 <li>can allow junked JSON format string (:junk-allowed t)</li>
 <li>can customize <b>null-value</b>, <b>false-value</b> and <b>empty-array-value</b>.</li>
@@ -13336,9 +13330,9 @@ cl-json-helper is a very small package that adds two functions to help cl-json e
 </p>
 </div>
 
-<div id="outline-container-org688163a" class="outline-4">
-<h4 id="org688163a">cl-json-helper exported symbols</h4>
-<div class="outline-text-4" id="text-org688163a">
+<div id="outline-container-orgb565e0c" class="outline-4">
+<h4 id="orgb565e0c">cl-json-helper exported symbols</h4>
+<div class="outline-text-4" id="text-orgb565e0c">
 <ul class="org-ul">
 <li><b>json-bool</b> - (json-bool val) returns an object that cl-json will decode to "true" or "false"</li>
 <li><b>json-empty</b> - (json-empty) returns an object that cl-json will decode to '{}'</li>
@@ -13347,9 +13341,9 @@ cl-json-helper is a very small package that adds two functions to help cl-json e
 </ul>
 </div>
 </div>
-<div id="outline-container-org765f8bb" class="outline-4">
-<h4 id="org765f8bb">Json-bool</h4>
-<div class="outline-text-4" id="text-org765f8bb">
+<div id="outline-container-org620e5ff" class="outline-4">
+<h4 id="org620e5ff">Json-bool</h4>
+<div class="outline-text-4" id="text-org620e5ff">
 <p>
 json-bool simply adds the ability for nil to be translated to json as false.
 </p>
@@ -13363,9 +13357,9 @@ json-bool simply adds the ability for nil to be translated to json as false.
 </div>
 </div>
 </div>
-<div id="outline-container-org17379ad" class="outline-4">
-<h4 id="org17379ad">json-empty</h4>
-<div class="outline-text-4" id="text-org17379ad">
+<div id="outline-container-org5e93667" class="outline-4">
+<h4 id="org5e93667">json-empty</h4>
+<div class="outline-text-4" id="text-org5e93667">
 <p>
 json-empty provides the ability to return an empty object. E.g.
 </p>
@@ -13376,9 +13370,9 @@ json-empty provides the ability to return an empty object. E.g.
 </div>
 </div>
 </div>
-<div id="outline-container-org5d9109a" class="outline-4">
-<h4 id="org5d9109a">Json-key-value</h4>
-<div class="outline-text-4" id="text-org5d9109a">
+<div id="outline-container-org789b645" class="outline-4">
+<h4 id="org789b645">Json-key-value</h4>
+<div class="outline-text-4" id="text-org789b645">
 <p>
 If cl-json:decode-json-from-string *nested-address-1* looks like this:
 </p>
@@ -13457,9 +13451,9 @@ The only difference between using this and using (assoc ..) is that assoc will a
 Define-json-expander is, I think, something interesting to look at, but I do not see it adding a great deal of value. Given the last time it was updated was eight years ago, I think it is of historical interest only.
 </p>
 </div>
-<div id="outline-container-org3525904" class="outline-4">
-<h4 id="org3525904">define-json-expander exported symbols</h4>
-<div class="outline-text-4" id="text-org3525904">
+<div id="outline-container-org9ca2e2e" class="outline-4">
+<h4 id="org9ca2e2e">define-json-expander exported symbols</h4>
+<div class="outline-text-4" id="text-org9ca2e2e">
 <ul class="org-ul">
 <li>*accessor-prefix*</li>
 <li>define-json-expander</li>
@@ -13467,9 +13461,9 @@ Define-json-expander is, I think, something interesting to look at, but I do not
 </div>
 </div>
 
-<div id="outline-container-org93c5a87" class="outline-4">
-<h4 id="org93c5a87">Explanation</h4>
-<div class="outline-text-4" id="text-org93c5a87">
+<div id="outline-container-orga7e62f6" class="outline-4">
+<h4 id="orga7e62f6">Explanation</h4>
+<div class="outline-text-4" id="text-orga7e62f6">
 <p>
 Let's take our simplest json object address example which we keep in <b>address-1</b>:
 </p>
@@ -13560,9 +13554,9 @@ Yason does the json parsing and serialisation for herodotus. The other dependenc
 </p>
 </div>
 
-<div id="outline-container-org6583bdc" class="outline-4">
-<h4 id="org6583bdc">herodotus exported symbols</h4>
-<div class="outline-text-4" id="text-org6583bdc">
+<div id="outline-container-org7d6c026" class="outline-4">
+<h4 id="org7d6c026">herodotus exported symbols</h4>
+<div class="outline-text-4" id="text-org7d6c026">
 <ul class="org-ul">
 <li><b>define-json-model</b></li>
 <li><b>to-json</b></li>
@@ -13570,9 +13564,9 @@ Yason does the json parsing and serialisation for herodotus. The other dependenc
 </div>
 </div>
 
-<div id="outline-container-orgdf672e3" class="outline-4">
-<h4 id="orgdf672e3">Setup</h4>
-<div class="outline-text-4" id="text-orgdf672e3">
+<div id="outline-container-org2dbc9ec" class="outline-4">
+<h4 id="org2dbc9ec">Setup</h4>
+<div class="outline-text-4" id="text-org2dbc9ec">
 <p>
 Let's make an anologue of our simple person class with herodotus:
 </p>
@@ -13598,9 +13592,9 @@ If a slot descriptor is a list then first argument is the CLOS slot name, the se
 </p>
 </div>
 </div>
-<div id="outline-container-org6e100d4" class="outline-4">
-<h4 id="org6e100d4">Decoding</h4>
-<div class="outline-text-4" id="text-org6e100d4">
+<div id="outline-container-org6637829" class="outline-4">
+<h4 id="org6637829">Decoding</h4>
+<div class="outline-text-4" id="text-org6637829">
 <p>
 At this point a simple json object could then be decoded into a herodotus-person instance.
 </p>
@@ -13628,9 +13622,9 @@ If you have an array of json objects, the from-json function would return a vect
 </div>
 </div>
 </div>
-<div id="outline-container-org03f3df9" class="outline-4">
-<h4 id="org03f3df9">Encoding</h4>
-<div class="outline-text-4" id="text-org03f3df9">
+<div id="outline-container-org127ddb7" class="outline-4">
+<h4 id="org127ddb7">Encoding</h4>
+<div class="outline-text-4" id="text-org127ddb7">
 <p>
 Encoding usage looks much like yason:
 </p>
@@ -13641,17 +13635,17 @@ Encoding usage looks much like yason:
 </div>
 </div>
 </div>
-<div id="outline-container-orga5ad968" class="outline-4">
-<h4 id="orga5ad968">Additional Info</h4>
-<div class="outline-text-4" id="text-orga5ad968">
+<div id="outline-container-org1b18b71" class="outline-4">
+<h4 id="org1b18b71">Additional Info</h4>
+<div class="outline-text-4" id="text-org1b18b71">
 <p>
 From the README
 </p>
 </div>
 
-<div id="outline-container-orge77d4a9" class="outline-5">
-<h5 id="orge77d4a9">Nested classes</h5>
-<div class="outline-text-5" id="text-orge77d4a9">
+<div id="outline-container-orgcd50ec3" class="outline-5">
+<h5 id="orgcd50ec3">Nested classes</h5>
+<div class="outline-text-5" id="text-orgcd50ec3">
 <p>
 You can also define classes that have class members using the type specifier syntax. This block defines two json models tree and branch. A tree has branch members and the branch members will be parsed from json using the parser defined for the tree.
 </p>
@@ -13677,9 +13671,9 @@ class-name TEST-NO-PARSER slots ((THINGS NOT-PARSEABLE))
 </div>
 </div>
 
-<div id="outline-container-org771854c" class="outline-5">
-<h5 id="org771854c">None, one or many semantics</h5>
-<div class="outline-text-5" id="text-org771854c">
+<div id="outline-container-orgc33f738" class="outline-5">
+<h5 id="orgc33f738">None, one or many semantics</h5>
+<div class="outline-text-5" id="text-orgc33f738">
 <p>
 Fields in class definitions are parsed as either nil (if missing from the json), a single instance if the field is not an array and isn’t empty or a vector if the json contains an array of elements.
 </p>
@@ -13696,9 +13690,9 @@ CL-USER&gt; (ns (numbers-json:from-json <span style="color: #e67128;">"{ \"ns\":
 </div>
 </div>
 
-<div id="outline-container-org9617ecb" class="outline-5">
-<h5 id="org9617ecb">Special case field names</h5>
-<div class="outline-text-5" id="text-org9617ecb">
+<div id="outline-container-orgd88873f" class="outline-5">
+<h5 id="orgd88873f">Special case field names</h5>
+<div class="outline-text-5" id="text-orgd88873f">
 <p>
 Parsing specific field names can be done using the third argument of a field specifier. If a special field name is provided it doesn’t have to match the name of the slot in the CLOS class and can use any formatting convention.
 </p>
@@ -13934,9 +13928,9 @@ The README has an example of nested objects:
 </div>
 </div>
 
-<div id="outline-container-org091276d" class="outline-4">
-<h4 id="org091276d">json-mop exported symbols</h4>
-<div class="outline-text-4" id="text-org091276d">
+<div id="outline-container-org594e727" class="outline-4">
+<h4 id="org594e727">json-mop exported symbols</h4>
+<div class="outline-text-4" id="text-org594e727">
 <ul class="org-ul">
 <li>json-mop:encode</li>
 <li>json-mop:json-serializable</li>
@@ -14064,9 +14058,9 @@ Comparing to the JSON path, the pointer has clearer character escaping rules and
 </p>
 </div>
 
-<div id="outline-container-orgc376839" class="outline-4">
-<h4 id="orgc376839">cl-json-pointer exported symbols</h4>
-<div class="outline-text-4" id="text-orgc376839">
+<div id="outline-container-org720b828" class="outline-4">
+<h4 id="org720b828">cl-json-pointer exported symbols</h4>
+<div class="outline-text-4" id="text-org720b828">
 <ul class="org-ul">
 <li><b>json-pointer-error</b> -</li>
 <li><b>*json-object-flavor</b> - Default flavor of JSON library currently used.This value is used for :FLAVOR argument of exported functions.</li>
@@ -14440,17 +14434,17 @@ The following summary table was generated by trivial-benchmarks from the librari
 </div>
 </div>
 
-<div id="outline-container-org8ab7d2e" class="outline-3">
-<h3 id="org8ab7d2e">Decoding Trivial-Benchmark Detail By Library</h3>
-<div class="outline-text-3" id="text-org8ab7d2e">
+<div id="outline-container-org8ce354d" class="outline-3">
+<h3 id="org8ce354d">Decoding Trivial-Benchmark Detail By Library</h3>
+<div class="outline-text-3" id="text-org8ce354d">
 </div>
-<div id="outline-container-org5c2811e" class="outline-4">
-<h4 id="org5c2811e">1.2 MB Json File</h4>
-<div class="outline-text-4" id="text-org5c2811e">
+<div id="outline-container-orgcbb7704" class="outline-4">
+<h4 id="orgcbb7704">1.2 MB Json File</h4>
+<div class="outline-text-4" id="text-orgcbb7704">
 </div>
-<div id="outline-container-org4775c0b" class="outline-5">
-<h5 id="org4775c0b">Boost-Json</h5>
-<div class="outline-text-5" id="text-org4775c0b">
+<div id="outline-container-org704407a" class="outline-5">
+<h5 id="org704407a">Boost-Json</h5>
+<div class="outline-text-5" id="text-org704407a">
 <table border="2" rules="all" frame="border">
 <caption class="t-above"><span class="table-number">Table 61:</span> json Parsing a 1.2 MB Json File</caption>
 
@@ -14564,9 +14558,9 @@ The following summary table was generated by trivial-benchmarks from the librari
 </div>
 </div>
 
-<div id="outline-container-org2beb521" class="outline-5">
-<h5 id="org2beb521">Cl-json</h5>
-<div class="outline-text-5" id="text-org2beb521">
+<div id="outline-container-orgda28ffe" class="outline-5">
+<h5 id="orgda28ffe">Cl-json</h5>
+<div class="outline-text-5" id="text-orgda28ffe">
 <table border="2" rules="all" frame="border">
 <caption class="t-above"><span class="table-number">Table 62:</span> cl-json Parsing a 1.2 MB Json File</caption>
 
@@ -14681,9 +14675,9 @@ The following summary table was generated by trivial-benchmarks from the librari
 </div>
 </div>
 
-<div id="outline-container-orgc425cd7" class="outline-5">
-<h5 id="orgc425cd7">Com.gigamonkeys.json</h5>
-<div class="outline-text-5" id="text-orgc425cd7">
+<div id="outline-container-org7478cf9" class="outline-5">
+<h5 id="org7478cf9">Com.gigamonkeys.json</h5>
+<div class="outline-text-5" id="text-org7478cf9">
 <table border="2" rules="all" frame="border">
 <caption class="t-above"><span class="table-number">Table 63:</span> com.gigamonkeys.json Parsing a 1.2 MB Json File</caption>
 
@@ -14796,9 +14790,9 @@ The following summary table was generated by trivial-benchmarks from the librari
 </table>
 </div>
 </div>
-<div id="outline-container-orgcf25ba0" class="outline-5">
-<h5 id="orgcf25ba0">Com.inuoe.jzon</h5>
-<div class="outline-text-5" id="text-orgcf25ba0">
+<div id="outline-container-orgdf1b51e" class="outline-5">
+<h5 id="orgdf1b51e">Com.inuoe.jzon</h5>
+<div class="outline-text-5" id="text-orgdf1b51e">
 <table border="2" rules="all" frame="border">
 <caption class="t-above"><span class="table-number">Table 64:</span> com.inuoe.jzon Parsing a 1.2 MB Json File</caption>
 
@@ -14911,9 +14905,9 @@ The following summary table was generated by trivial-benchmarks from the librari
 </table>
 </div>
 </div>
-<div id="outline-container-org8a20cd9" class="outline-5">
-<h5 id="org8a20cd9">Jonathan</h5>
-<div class="outline-text-5" id="text-org8a20cd9">
+<div id="outline-container-orgcebfd55" class="outline-5">
+<h5 id="orgcebfd55">Jonathan</h5>
+<div class="outline-text-5" id="text-orgcebfd55">
 <p>
 HUH??? In both decoding this real world file and the next, Jonathan is orders of magnitude slower than the other libraries.
 </p>
@@ -15031,9 +15025,9 @@ HUH??? In both decoding this real world file and the next, Jonathan is orders of
 </div>
 </div>
 
-<div id="outline-container-org06ebfa4" class="outline-5">
-<h5 id="org06ebfa4">Json-lib</h5>
-<div class="outline-text-5" id="text-org06ebfa4">
+<div id="outline-container-org62ec077" class="outline-5">
+<h5 id="org62ec077">Json-lib</h5>
+<div class="outline-text-5" id="text-org62ec077">
 <table border="2" rules="all" frame="border">
 <caption class="t-above"><span class="table-number">Table 66:</span> json-lib Parsing a 1.2 MB Json File</caption>
 
@@ -15146,9 +15140,9 @@ HUH??? In both decoding this real world file and the next, Jonathan is orders of
 </table>
 </div>
 </div>
-<div id="outline-container-org5e8d286" class="outline-5">
-<h5 id="org5e8d286">Json-streams</h5>
-<div class="outline-text-5" id="text-org5e8d286">
+<div id="outline-container-org4a3cdb9" class="outline-5">
+<h5 id="org4a3cdb9">Json-streams</h5>
+<div class="outline-text-5" id="text-org4a3cdb9">
 <table border="2" rules="all" frame="border">
 <caption class="t-above"><span class="table-number">Table 67:</span> json-streams Parsing a 1.2 MB Json File</caption>
 
@@ -15261,9 +15255,9 @@ HUH??? In both decoding this real world file and the next, Jonathan is orders of
 </table>
 </div>
 </div>
-<div id="outline-container-orgf45e135" class="outline-5">
-<h5 id="orgf45e135">Jsown</h5>
-<div class="outline-text-5" id="text-orgf45e135">
+<div id="outline-container-org6af68e3" class="outline-5">
+<h5 id="org6af68e3">Jsown</h5>
+<div class="outline-text-5" id="text-org6af68e3">
 <table border="2" rules="all" frame="border">
 <caption class="t-above"><span class="table-number">Table 68:</span> jsown Parsing a 1.2 MB Json File</caption>
 
@@ -15377,9 +15371,9 @@ HUH??? In both decoding this real world file and the next, Jonathan is orders of
 </div>
 </div>
 
-<div id="outline-container-org688ac8c" class="outline-5">
-<h5 id="org688ac8c">Shasht</h5>
-<div class="outline-text-5" id="text-org688ac8c">
+<div id="outline-container-org2b3ef7b" class="outline-5">
+<h5 id="org2b3ef7b">Shasht</h5>
+<div class="outline-text-5" id="text-org2b3ef7b">
 <table border="2" rules="all" frame="border">
 <caption class="t-above"><span class="table-number">Table 69:</span> shasht Parsing a 1.2 MB Json File</caption>
 
@@ -15492,9 +15486,9 @@ HUH??? In both decoding this real world file and the next, Jonathan is orders of
 </table>
 </div>
 </div>
-<div id="outline-container-org0eeaf58" class="outline-5">
-<h5 id="org0eeaf58">St-json</h5>
-<div class="outline-text-5" id="text-org0eeaf58">
+<div id="outline-container-org9e60378" class="outline-5">
+<h5 id="org9e60378">St-json</h5>
+<div class="outline-text-5" id="text-org9e60378">
 <table border="2" rules="all" frame="border">
 <caption class="t-above"><span class="table-number">Table 70:</span> st-json Parsing a 1.2 MB Json File</caption>
 
@@ -15607,9 +15601,9 @@ HUH??? In both decoding this real world file and the next, Jonathan is orders of
 </table>
 </div>
 </div>
-<div id="outline-container-orgdd86fac" class="outline-5">
-<h5 id="orgdd86fac">Yason</h5>
-<div class="outline-text-5" id="text-orgdd86fac">
+<div id="outline-container-orgd218f65" class="outline-5">
+<h5 id="orgd218f65">Yason</h5>
+<div class="outline-text-5" id="text-orgd218f65">
 <table border="2" rules="all" frame="border">
 <caption class="t-above"><span class="table-number">Table 71:</span> yason Parsing a 1.2 MB Json File</caption>
 
@@ -15724,13 +15718,13 @@ HUH??? In both decoding this real world file and the next, Jonathan is orders of
 </div>
 </div>
 
-<div id="outline-container-org4ff727b" class="outline-4">
-<h4 id="org4ff727b">9.8 MB File</h4>
-<div class="outline-text-4" id="text-org4ff727b">
+<div id="outline-container-org6de6204" class="outline-4">
+<h4 id="org6de6204">9.8 MB File</h4>
+<div class="outline-text-4" id="text-org6de6204">
 </div>
-<div id="outline-container-orgc40f3ac" class="outline-5">
-<h5 id="orgc40f3ac">Boost Json</h5>
-<div class="outline-text-5" id="text-orgc40f3ac">
+<div id="outline-container-orgd36f5ed" class="outline-5">
+<h5 id="orgd36f5ed">Boost Json</h5>
+<div class="outline-text-5" id="text-orgd36f5ed">
 <table border="2" rules="all" frame="border">
 <caption class="t-above"><span class="table-number">Table 72:</span> json Parsing a 9.8 MB Json File</caption>
 
@@ -15843,9 +15837,9 @@ HUH??? In both decoding this real world file and the next, Jonathan is orders of
 </table>
 </div>
 </div>
-<div id="outline-container-org25cf751" class="outline-5">
-<h5 id="org25cf751">Cl-json</h5>
-<div class="outline-text-5" id="text-org25cf751">
+<div id="outline-container-orge8452ad" class="outline-5">
+<h5 id="orge8452ad">Cl-json</h5>
+<div class="outline-text-5" id="text-orge8452ad">
 <table border="2" rules="all" frame="border">
 <caption class="t-above"><span class="table-number">Table 73:</span> cl-json Parsing a 9.8 MB Json File</caption>
 
@@ -15959,9 +15953,9 @@ HUH??? In both decoding this real world file and the next, Jonathan is orders of
 </div>
 </div>
 
-<div id="outline-container-org8d3f35d" class="outline-5">
-<h5 id="org8d3f35d">Com.Gigamonkeys.json</h5>
-<div class="outline-text-5" id="text-org8d3f35d">
+<div id="outline-container-org2ba4332" class="outline-5">
+<h5 id="org2ba4332">Com.Gigamonkeys.json</h5>
+<div class="outline-text-5" id="text-org2ba4332">
 <table border="2" rules="all" frame="border">
 <caption class="t-above"><span class="table-number">Table 74:</span> com.gigamonkeys.json Parsing a 9.8 MB Json File</caption>
 
@@ -16075,9 +16069,9 @@ HUH??? In both decoding this real world file and the next, Jonathan is orders of
 </div>
 </div>
 
-<div id="outline-container-org6aad12a" class="outline-5">
-<h5 id="org6aad12a">Com.inuoe.jzon</h5>
-<div class="outline-text-5" id="text-org6aad12a">
+<div id="outline-container-orgd166734" class="outline-5">
+<h5 id="orgd166734">Com.inuoe.jzon</h5>
+<div class="outline-text-5" id="text-orgd166734">
 <table border="2" rules="all" frame="border">
 <caption class="t-above"><span class="table-number">Table 75:</span> com.inuoe.jzon Parsing a 9.8 MB Json File</caption>
 
@@ -16191,9 +16185,9 @@ HUH??? In both decoding this real world file and the next, Jonathan is orders of
 </div>
 </div>
 
-<div id="outline-container-org84b8fc9" class="outline-5">
-<h5 id="org84b8fc9">Jonathan</h5>
-<div class="outline-text-5" id="text-org84b8fc9">
+<div id="outline-container-org623c792" class="outline-5">
+<h5 id="org623c792">Jonathan</h5>
+<div class="outline-text-5" id="text-org623c792">
 <table border="2" rules="all" frame="border">
 <caption class="t-above"><span class="table-number">Table 76:</span> jonathan Parsing a 9.8 MB Json File</caption>
 
@@ -16307,9 +16301,9 @@ HUH??? In both decoding this real world file and the next, Jonathan is orders of
 </div>
 </div>
 
-<div id="outline-container-org05f3244" class="outline-5">
-<h5 id="org05f3244">Json-lib</h5>
-<div class="outline-text-5" id="text-org05f3244">
+<div id="outline-container-org6be7f0f" class="outline-5">
+<h5 id="org6be7f0f">Json-lib</h5>
+<div class="outline-text-5" id="text-org6be7f0f">
 <table border="2" rules="all" frame="border">
 <caption class="t-above"><span class="table-number">Table 77:</span> json-lib Parsing a 9.8 MB Json File</caption>
 
@@ -16423,9 +16417,9 @@ HUH??? In both decoding this real world file and the next, Jonathan is orders of
 </div>
 </div>
 
-<div id="outline-container-org8ada85e" class="outline-5">
-<h5 id="org8ada85e">Json-streams</h5>
-<div class="outline-text-5" id="text-org8ada85e">
+<div id="outline-container-orgaba0014" class="outline-5">
+<h5 id="orgaba0014">Json-streams</h5>
+<div class="outline-text-5" id="text-orgaba0014">
 <table border="2" rules="all" frame="border">
 <caption class="t-above"><span class="table-number">Table 78:</span> json-streams Parsing a 9.8 MB Json File</caption>
 
@@ -16539,9 +16533,9 @@ HUH??? In both decoding this real world file and the next, Jonathan is orders of
 </div>
 </div>
 
-<div id="outline-container-org670ef5d" class="outline-5">
-<h5 id="org670ef5d">Jsown</h5>
-<div class="outline-text-5" id="text-org670ef5d">
+<div id="outline-container-orgbbd9a1e" class="outline-5">
+<h5 id="orgbbd9a1e">Jsown</h5>
+<div class="outline-text-5" id="text-orgbbd9a1e">
 <table border="2" rules="all" frame="border">
 <caption class="t-above"><span class="table-number">Table 79:</span> jsown Parsing a 9.8 MB Json File</caption>
 
@@ -16654,9 +16648,9 @@ HUH??? In both decoding this real world file and the next, Jonathan is orders of
 </table>
 </div>
 </div>
-<div id="outline-container-org64b111e" class="outline-5">
-<h5 id="org64b111e">Shasht</h5>
-<div class="outline-text-5" id="text-org64b111e">
+<div id="outline-container-org6d361a9" class="outline-5">
+<h5 id="org6d361a9">Shasht</h5>
+<div class="outline-text-5" id="text-org6d361a9">
 <table border="2" rules="all" frame="border">
 <caption class="t-above"><span class="table-number">Table 80:</span> shasht Parsing a 9.8 MB Json File</caption>
 
@@ -16770,9 +16764,9 @@ HUH??? In both decoding this real world file and the next, Jonathan is orders of
 </div>
 </div>
 
-<div id="outline-container-orgd1ff83e" class="outline-5">
-<h5 id="orgd1ff83e">St-json</h5>
-<div class="outline-text-5" id="text-orgd1ff83e">
+<div id="outline-container-org4bab99d" class="outline-5">
+<h5 id="org4bab99d">St-json</h5>
+<div class="outline-text-5" id="text-org4bab99d">
 <table border="2" rules="all" frame="border">
 <caption class="t-above"><span class="table-number">Table 81:</span> st-json Parsing a 9.8 MB Json File</caption>
 
@@ -16886,9 +16880,9 @@ HUH??? In both decoding this real world file and the next, Jonathan is orders of
 </div>
 </div>
 
-<div id="outline-container-org9a3da40" class="outline-5">
-<h5 id="org9a3da40">Yason</h5>
-<div class="outline-text-5" id="text-org9a3da40">
+<div id="outline-container-org2fbee7d" class="outline-5">
+<h5 id="org2fbee7d">Yason</h5>
+<div class="outline-text-5" id="text-org2fbee7d">
 <table border="2" rules="all" frame="border">
 <caption class="t-above"><span class="table-number">Table 82:</span> yason Parsing a 9.8 MB Json File</caption>
 
