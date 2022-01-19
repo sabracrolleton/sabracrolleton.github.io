@@ -4085,7 +4085,7 @@ Issue 27 on github claims an unhandled memory fault on the following bad json st
 | ratio                | ->  | number with frac or exp parts    |
 | T                    | <-> | true                             |
 | nil                  | <-> | false                            |
-| :NULL                | <-  | null                             |
+| :NULL                | <-> | null                             |
 | #()                  | <-  | []                               |
 | other symbol         | ->  | string                           |
 | character            | ->  | string                           |
