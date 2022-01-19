@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-01-19 Wed 12:24 -->
+<!-- 2022-01-19 Wed 13:02 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Review of CL Json Libraries UPDATED 19 Jan 2022</title>
@@ -253,7 +253,7 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#changelog">Changelog</a></li>
+<li><a href="#orgeb690c3">Changelog</a></li>
 <li><a href="#introduction">Introduction</a>
 <ul>
 <li><a href="#libraries">Common Lisp Encoding and Decoding Libraries</a></li>
@@ -557,15 +557,18 @@
 </div>
 </nav>
 
-<div id="outline-container-changelog" class="outline-2">
-<h2 id="changelog">Changelog</h2>
-<div class="outline-text-2" id="text-changelog">
+<div id="outline-container-orgeb690c3" class="outline-2">
+<h2 id="orgeb690c3">Changelog</h2>
+<div class="outline-text-2" id="text-orgeb690c3">
 <p>
-19 Jan 2022 - Fixed some typos, including a missing earmuff.
+:PROPERTIES:
+:CUSTOM_ID: changelog
+:END:+
+19 Jan 2022 - Updated shasht for fixes in character, 2D arrays, and nil handling. (If you rely on quicklisp versions, expect these improvements in the next quicklisp version, but they are up on github now.) Fixed some typos, including a missing earmuff.
 </p>
 
 <p>
-18 Jan 2022 - Corrected json conformity tests on boost-json, cl-json, lib-lib, shasht, st-json, trivial-json-codec and yason. If *read-default-float-format* is set to 'single-float, those libraries would refuse to accept:  "[123e65]", "[123e45]" and "[123.456e78]". If *read-default-float-format* is set to 'double-float, then those json strings would be correctly accepted. Net result: with that caveat, <a href="#boost-json">boost-json</a>, <a href="#cl-json">cl-json</a>, <a href="#com.gigamonkeys.json">com.gigamonkeys.json</a>, <a href="#com.inuoe.jzon">com.inuoe.jzon</a>, <a href="#json-lib">json-lib</a>, <a href="#shasht">shasht</a>, <a href="#st-json">st-json</a> and <a href="#yason">yason</a> all score 95/95 on the json strings that must be accepted. See <a href="#must-accept">Standard Conformity - Must Accept</a>.
+18 Jan 2022 - Corrected json conformity tests on boost-json, cl-json, json-lib, shasht, st-json, trivial-json-codec and yason. If *read-default-float-format* is set to 'single-float, those libraries would refuse to accept:  "[123e65]", "[123e45]" and "[123.456e78]". If *read-default-float-format* is set to 'double-float, then those json strings would be correctly accepted. Net result: with that caveat, <a href="#boost-json">boost-json</a>, <a href="#cl-json">cl-json</a>, <a href="#com.gigamonkeys.json">com.gigamonkeys.json</a>, <a href="#com.inuoe.jzon">com.inuoe.jzon</a>, <a href="#json-lib">json-lib</a>, <a href="#shasht">shasht</a>, <a href="#st-json">st-json</a> and <a href="#yason">yason</a> all score 95/95 on the json strings that must be accepted. See <a href="#must-accept">Standard Conformity - Must Accept</a>.
 </p>
 
 <p>
@@ -582,7 +585,7 @@ The common lisp (CL) landscape with respect to Json libraries has changed since 
 </p>
 
 <p>
-Corrections to this report are welcomed. Please submit issues to <a href="https://github.com/sabracrolleton/sabracrolleton.github.io">https://github.com/sabracrolleton/sabracrolleton.github.io</a> or pull requests against eh json-view.org file.
+Corrections to this report are welcomed. Please submit issues to <a href="https://github.com/sabracrolleton/sabracrolleton.github.io">https://github.com/sabracrolleton/sabracrolleton.github.io</a> or pull requests against the json-view.org file.
 </p>
 </div>
 
@@ -698,7 +701,7 @@ CL currently has at least twelve libraries that address importing and exporting 
 <td class="org-left">MIT</td>
 <td class="org-left"><a href="https://github.com/yitzchak/shasht">homepage</a></td>
 <td class="org-left">Yes</td>
-<td class="org-left">11 Oct 2021</td>
+<td class="org-left">19 Jan 2022</td>
 </tr>
 
 <tr>
@@ -919,7 +922,7 @@ As can be expected, the libraries do much of the same if you have basic needs. H
 </p>
 
 <ul class="org-ul">
-<li><b>Overall:</b> I quite like the newcomers <a href="#shasht">shasht</a> and <a href="#com.inuoe.jzon">com.inuoe.jzon</a>. <a href="#jonathan">jonathan</a> would be there unless you start running into decoding the types of larger json data sets which cause it to go into slow motion. <a href="#cl-json">cl-json</a> and <a href="#yason">yason</a> are still the work horses if you need fine control, but speed is not their forte.</li>
+<li><b>Overall:</b> I quite like the newcomers <a href="#shasht">shasht</a> and <a href="#com.inuoe.jzon">com.inuoe.jzon</a>. <a href="#jonathan">jonathan</a> might be there unless you start running into decoding the types of larger json data sets which cause it to go into slow motion. <a href="#cl-json">cl-json</a> and <a href="#yason">yason</a> are still the work horses if you need fine control, but speed is not their forte.</li>
 <li><b>Decoding or Parsing Speed:</b> Speed is not everything, but seems to be important to a lot of readers. If you are parsing compliant data and are just looking for speed, look at <a href="#jsown">jsown</a>, <a href="#com.inuoe.jzon">com.inuoe.jzon</a> (not in quicklisp) or <a href="#shasht">shasht</a>. <a href="#jonathan">Jonathan</a> is faster on tiny strings but starts to slow down with nested objects and eventually, depending on the size of the json object, becomes orders of magnitude slower than the other libraries. The effect was seen faster under sbcl but as data file size increased, it was also obvious under ccl and ecl as well. See <a href="#read-times">read-times</a></li>
 <li><b>Encoding Speed:</b> If you mostly need to encode lisp data to json and are just looking for speed, I would look at <a href="#com.inuoe.jzon">com.inuoe.jzon</a>, <a href="#shasht">shasht</a> or depending on your data, <a href="#jonathan">jonathan</a> or <a href="#st-json">st-json</a>. See <a href="#write-times">write-times</a></li>
 <li><b>Unicode Handling:</b> Most of the libraries can handle unicode. However, if you have unicode surrogate pairs, you need to choose from <a href="#com.inuoe.jzon">com.inuoe.jzon</a>, <a href="#jonathan">jonathan</a>, <a href="#json-streams">json-streams</a>, <a href="#jsown">jsown</a>, <a href="#shasht">shasht</a>, <a href="#st-json">st-json</a> or <a href="#yason">yason</a>. See <a href="#decode-unicode">Decoding Unicode</a>.</li>
@@ -2837,8 +2840,8 @@ This is a test of how the library function for reading from a string handles nil
 <tr>
 <td class="org-left">shasht</td>
 <td class="org-left">read-json</td>
-<td class="org-left">HANG</td>
-<td class="org-left">Surprise</td>
+<td class="org-left">Error</td>
+<td class="org-left">&#xa0;</td>
 </tr>
 
 <tr>
@@ -3178,7 +3181,7 @@ The following table uses 'a as the symbol input and #\C as a character input. :n
 <td class="org-left">shasht</td>
 <td class="org-left">write-json</td>
 <td class="org-left">"A"</td>
-<td class="org-left">Error (3)</td>
+<td class="org-left">"C"</td>
 <td class="org-left">"true"</td>
 <td class="org-left">false/null</td>
 </tr>
@@ -3663,7 +3666,7 @@ The following table is just a quick summary of library functionality for arrays,
 <tr>
 <td class="org-left">shasht</td>
 <td class="org-left">write-json</td>
-<td class="org-left">YES</td>
+<td class="org-left">YES (10)</td>
 <td class="org-left">YES</td>
 <td class="org-left">YES</td>
 <td class="org-left">YES</td>
@@ -3712,7 +3715,7 @@ See <a href="#st-json-encoding">st-json-encoding</a>.
 <ul class="org-ul">
 <li>(8) Typically for these objects jonathan requires extra keyword parameters like :from :alist</li>
 <li>(9) May require using one of the more specialized functions such as encode-alist etc.</li>
-<li>(10) jsown is the only library which can handle multi-dimensional arrays</li>
+<li>(10) jsown and shasht are the only libraries which can handle multi-dimensional arrays.</li>
 </ul>
 </div>
 </div>
@@ -5200,7 +5203,7 @@ Just to see what happens if we give the libraries a two dimensional array, let's
 </p>
 
 <p>
-Jsown is the only library to handle a two dimensional array without the user having to write additional methods.
+Jsown and shasht are the only libraries to handle a two dimensional array without the user having to write additional methods.
 </p>
 
 <table border="2" rules="all" frame="border">
@@ -5284,7 +5287,7 @@ Jsown is the only library to handle a two dimensional array without the user hav
 <tr>
 <td class="org-left">shasht</td>
 <td class="org-left">write-json</td>
-<td class="org-left">Error: No primary method</td>
+<td class="org-left">Passed "[[1.0e+0,1.0e+0],[1.0e+0,1.0e+0],[1.0e+0,1.0e+0]]"</td>
 </tr>
 
 <tr>
@@ -7056,7 +7059,7 @@ This batch of json strings were designed to find the under-specified holes in th
 </p>
 
 <p>
-What I found troubling was that jonathan, jsown and shasht all hung on one or more of these strings.
+What I found troubling was that jonathan and jsown all hung on one or more of these strings.
 </p>
 <table border="2" rules="all" frame="border">
 <caption class="t-above"><span class="table-number">Table 52:</span> Conformity Testing - Can Accept or Reject</caption>
@@ -7139,7 +7142,7 @@ What I found troubling was that jonathan, jsown and shasht all hung on one or mo
 <td class="org-left">shasht</td>
 <td class="org-right">9</td>
 <td class="org-right">8</td>
-<td class="org-left">(2)</td>
+<td class="org-left">&#xa0;</td>
 </tr>
 
 <tr>
@@ -7167,7 +7170,6 @@ What I found troubling was that jonathan, jsown and shasht all hung on one or mo
 
 <ul class="org-ul">
 <li>(1) hang on i_number_real_underflow [123e-10000000]</li>
-<li>(2) will hang if input is nil</li>
 </ul>
 </div>
 </div>
@@ -8415,7 +8417,7 @@ See <a href="#benchmarking">Benchmarking</a>
 </table>
 
 <p>
-cl-json is an old workhorse in area, however, it has not been updated in the last seven years and is fairly slow as you can tell from the <a href="#benchmarking">benchmarks</a>. It does not handle unicode surrogate pairs, json's null and is not as likely to be symmetric as some of the other libraries. Like most of the other libraries (except jsown), cl-json does not encode multi-dimensional arrays. As noted in the <a href="#security">security</a> section, cl-json interns keys into the keyword package which can open you up to the equivalent of a DOS attack. cl-json does provide a mitigation function which will throw an error if the keyword to be interned does not already exist in the *json-symbols-package*.
+cl-json is an old workhorse in area, however, it has not been updated in the last seven years and is fairly slow as you can tell from the <a href="#benchmarking">benchmarks</a>. It does not handle unicode surrogate pairs, json's null and is not as likely to be symmetric as some of the other libraries. Like most of the other libraries (except jsown and shasht), cl-json does not encode multi-dimensional arrays. As noted in the <a href="#security">security</a> section, cl-json interns keys into the keyword package which can open you up to the equivalent of a DOS attack. cl-json does provide a mitigation function which will throw an error if the keyword to be interned does not already exist in the *json-symbols-package*.
 </p>
 
 <div class="org-src-container">
@@ -11315,7 +11317,7 @@ Encoding chars, pathnames, CLOS objects, structs and other data structures not l
 </p>
 
 <p>
-On the plus side, jsown is the only library which can handle multi-dimensional arrays
+On the plus side, jsown is the one of the two libraries (the other is shasht) which can handle multi-dimensional arrays
 </p>
 
 <p>
@@ -11545,7 +11547,7 @@ Issue 27 on github claims an unhandled memory fault on the following bad json st
 </table>
 
 <p>
-Shasht is one of the two new libraries that I particularly like and is already in quicklisp. It is fast, it handles null correctly, it encodes CLOS objects, structures and hash-tables. It can also do incremental encoding. The one improvement I would request is that it not hang when decoding if provided nil rather than a string.
+Shasht is one of the two new libraries that I particularly like and is already in quicklisp. It is fast, it handles null correctly, it encodes CLOS objects, structures and hash-tables. It can also do incremental encoding.
 </p>
 </div>
 
@@ -11606,12 +11608,6 @@ Please note the direction of the arrows in the following table.
 <tr>
 <td class="org-left">nil</td>
 <td class="org-left">&lt;-&gt;</td>
-<td class="org-left">nil</td>
-</tr>
-
-<tr>
-<td class="org-left">nil</td>
-<td class="org-left">&lt;-</td>
 <td class="org-left">false</td>
 </tr>
 
@@ -11636,7 +11632,7 @@ Please note the direction of the arrows in the following table.
 <tr>
 <td class="org-left">character</td>
 <td class="org-left">-&gt;</td>
-<td class="org-left">Error</td>
+<td class="org-left">string</td>
 </tr>
 
 <tr>
@@ -11723,9 +11719,6 @@ There is also a keyword variant read-json* which will set the various dynamic va
             <span style="color: #23d7d7;">:float-format</span> 'single-float)
 </pre>
 </div>
-<p>
-Aside from the default mapping, you should keep in mind that shasht will hang if you provide it with nil rather than a json string.
-</p>
 </div>
 </div>
 
