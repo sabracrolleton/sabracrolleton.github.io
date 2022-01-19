@@ -1,5 +1,5 @@
 #+AUTHOR: Sabra Crolleton
-#+TITLE: Review of CL Json Libraries UPDATED 18 Jan 2022
+#+TITLE: Review of CL Json Libraries UPDATED 19 Jan 2022
 
 #+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
 
@@ -16,14 +16,16 @@
 
 <<top>>
 * Changelog
-18 Jan 2022  - Corrected json conformity tests on boost-json, cl-json, lib-lib, shasht, st-json, trivial-json-codec and yason. If \star{}read-default-float-format* is set to 'single-float, those libraries would refuse to accept:  "[123e65]", "[123e45]" and "[123.456e78]". If \star{}read-default-float-format* is set to 'double-float, then those json strings would be correctly accepted. Net result: with that caveat, [[boost-json][boost-json]], [[cl-json][cl-json]], [[com.gigamonkeys.json][com.gigamonkeys.json]], [[com.inuoe.jzon][com.inuoe.jzon]], [[json-lib][json-lib]], [[shasht][shasht]], [[st-json][st-json]] and [[yason][yason]] all score 95/95 on the json strings that must be accepted. See [[must-accept][Standard Conformity - Must Accept]].
+19 Jan 2022 - Updated shasht for fixes in character, 2D arrays, and nil handling.
+
+18 Jan 2022 - Corrected json conformity tests on boost-json, cl-json, lib-lib, shasht, st-json, trivial-json-codec and yason. If \star{}read-default-float-format* is set to 'single-float, those libraries would refuse to accept:  "[123e65]", "[123e45]" and "[123.456e78]". If \star{}read-default-float-format* is set to 'double-float, then those json strings would be correctly accepted. Net result: with that caveat, [[boost-json][boost-json]], [[cl-json][cl-json]], [[com.gigamonkeys.json][com.gigamonkeys.json]], [[com.inuoe.jzon][com.inuoe.jzon]], [[json-lib][json-lib]], [[shasht][shasht]], [[st-json][st-json]] and [[yason][yason]] all score 95/95 on the json strings that must be accepted. See [[must-accept][Standard Conformity - Must Accept]].
 
 15 Jan 2022 - Complete rewrite of 1st edition.
 
 * Introduction
 The common lisp (CL) landscape with respect to Json libraries has changed since the first edition of this review eight years ago. While I sometimes complain about someone writing new libraries when there are already so many, there have been major improvements and a couple of the new generation of CL json libraries are actually quite exciting. It still remains the case, however, that your choice of datastructures for your application may drive your choice of json library and vice versa. Like everything else in life, there are trade-offs to be made and I hope this paper helps you think about what may or may not be relevant for your situation.
 
-Corrections to this report are welcomed. Please submit issues to [[https://github.com/sabracrolleton/sabracrolleton.github.io][https://github.com/sabracrolleton/sabracrolleton.github.io]] or pull requests against eh json-view.org file.
+Corrections to this report are welcomed. Please submit issues to [[https://github.com/sabracrolleton/sabracrolleton.github.io][https://github.com/sabracrolleton/sabracrolleton.github.io]] or pull requests against the json-view.org file.
 
 ** Common Lisp Encoding and Decoding Libraries
 CL currently has at least twelve libraries that address importing and exporting json data. The libraries considered in this report are listed in the table below. (For purposes of this comparison, I will refer to "encoding" as converting from CL to JSON and "decoding" or "parsing" as converting from JSON to CL.)
@@ -41,7 +43,7 @@ CL currently has at least twelve libraries that address importing and exporting 
  | [[json-lib][json-lib]]               | Alex Nygren                                 | MIT     | [[https://github.com/KinaKnowledge/json-lib][homepage]]  | No         | 19 Dec 2021 |
  | [[json-streams][json-streams]]           | Thomas Bakketun, Stian Sletner              | GPL3    | [[http://github.com/rotatef/json-streams][homepage]]  | Yes        | 12 Oct 2017 |
  | [[jsown][jsown]]                  | Aad Versteden                               | MIT     | [[https://github.com/madnificent/jsown][homepage]]  | Yes        | 4 Feb 2020  |
- | [[shasht][shasht]]                 | Tarn W. Burton                              | MIT     | [[https://github.com/yitzchak/shasht][homepage]]  | Yes        | 11 Oct 2021 |
+ | [[shasht][shasht]]                 | Tarn W. Burton                              | MIT     | [[https://github.com/yitzchak/shasht][homepage]]  | Yes        | 19 Jan 2022 |
  | [[st-json][st-json]]                | Marijn Haverbeke                            | zlib    | [[https://github.com/marijnh/ST-JSON][homepage]]  | Yes        | 28 Jun 2021 |
  | [[trivial-json-codec][trivial-json-codec]] (2) | Eric Diethelm                               | MIT     | [[https://gitlab.com/ediethelm/trivial-json-codec][homepage]]  | Yes        |  8 Mar 2020 |
  | [[yason][yason]]  (1)             | Hans Huebner                                | BSD     | [[https://github.com/phmarek/yason][homepage]]  | Yes        | 27 Aug 2021 |
@@ -578,7 +580,7 @@ Jsown has the ability, once a json object has been parsed into a jsown object, t
 #+end_src
 
 ** Handling NIL
-This is a test of how the library function for reading from a string handles nil. Errors are not surprising. What was surprising was shasht:read-json hanging when given a nil.
+This is a test of how the library function for reading from a string handles nil. Errors are not surprising.
 #+CAPTION: Reading NIL
 #+ATTR_HTML: :border 2 :rules all :frame border
 #+ATTR_LATEX: :float multicolumn
@@ -592,7 +594,7 @@ This is a test of how the library function for reading from a string handles nil
 | json-lib             | parse                   | ""     |          |
 | json-streams         | json-parse              | Error  |          |
 | jsown                | parse                   | NIL    |          |
-| shasht               | read-json               | HANG   | Surprise |
+| shasht               | read-json               | Error  |          |
 | st-json              | deserialize-raw         | Error  |          |
 | yason                | parse                   | Error  |          |
 
@@ -659,7 +661,7 @@ The following table uses 'a as the symbol input and #\C as a character input. :n
 | json-lib             | stringify      | "null" (2) | "null" (3) | "true" | "null"/"null"   |
 | json-streams         | json-stringify | Error (3)  | Error (3)  | "true" | "false"/"null"  |
 | jsown                | to-json        | "\"A\""    | Error (3)  | "true" | "[]"/"null"     |
-| shasht               | write-json     | "A"        | Error (3)  | "true" | false/null      |
+| shasht               | write-json     | "A"        | "C"        | "true" | false/null      |
 | st-json              | write-json     | Error (3)  | Error (3)  | "true" | []/null         |
 | trivial-json-codec   | serialize-json | "A"        | Error (3)  | "true" | "null"/":NULL"  |
 | yason                | encode         | Error (5) | Error (3)  | true   | null/null       |
@@ -751,7 +753,7 @@ The following table is just a quick summary of library functionality for arrays,
 | json-lib             | stringify             | YES      | YES        | "null"  | NO     |
 | json-streams         | json-stringify        | (3)      | (3)        | (3)     | (3)    |
 | jsown                | to-json               | YES (10) | YES        | (4)     | (4)    |
-| shasht               | write-json            | YES      | YES        | YES     | YES    |
+| shasht               | write-json            | YES (10) | YES        | YES     | YES    |
 | st-json              | write-json            | (7)      | (1)        | (4)     | (4)    |
 | trivial-json-codec   | serialize-json        | YES      | (4)        | YES     | (4)    |
 | yason                | encode-* (9)          | YES      | (1) (4)    | (4)     | (4)    |
@@ -765,7 +767,7 @@ The following table is just a quick summary of library functionality for arrays,
 See [[st-json-encoding][st-json-encoding]].
 - (8) Typically for these objects jonathan requires extra keyword parameters like :from :alist
 - (9) May require using one of the more specialized functions such as encode-alist etc.
-- (10) jsown is the only library which can handle multi-dimensional arrays
+- (10) jsown and shasht are the only libraries which can handle multi-dimensional arrays.
 
 <<encoding-lists-to-json-summary>>
 ** Encoding Lists (Summary)
@@ -1121,27 +1123,27 @@ The following example uses a very simple nested array:
 *** Encoding 2 Dimensional Array Version
 Just to see what happens if we give the libraries a two dimensional array, let's use #2A((1.0 1.0) (1.0 1.0) (1.0 1.0)) as the sample data.
 
-Jsown is the only library to handle a two dimensional array without the user having to write additional methods.
+Jsown and shasht are the only libraries to handle a two dimensional array without the user having to write additional methods.
 
 #+CAPTION: Encoding 2D Array
 #+ATTR_HTML: :border 2 :rules all :frame border
 #+ATTR_LATEX: :float multicolumn
-| Library              | Function       | Result                                   |
-|----------------------+----------------+------------------------------------------|
-| Original data        |                | #2A((1.0 1.0) (1.0 1.0) (1.0 1.0))       |
-|                      |                |                                          |
-| boost-json           | json-encode    | Error: No applicable method              |
-| cl-json              | encode-json    | Error: Unencodable value                 |
-| com.gigamonkeys.json | write-json     | Method emit-json hangs                   |
-| com.inuoe.jzon       | stringify      | {}                                       |
-| jonathan             | to-json        | Error: No applicable method              |
-| json-lib             | stringify      | "null"                                   |
-| json-streams         | json-stringify | Error: (1) |
-| jsown                | to-json        | Passed "[[1.0,1.0],[1.0,1.0],[1.0,1.0]]" |
-| shasht               | write-json     | Error: No primary method                 |
-| st-json              | write-json     | Error: Cannot write object as json       |
-| trivial-json-codec   | serialize-json | Error: value is not of type sequence     |
-| yason                | encode         | Error: No applicable method              |
+| Library              | Function       | Result                                                     |
+|----------------------+----------------+------------------------------------------------------------|
+| Original data        |                | #2A((1.0 1.0) (1.0 1.0) (1.0 1.0))                         |
+|                      |                |                                                            |
+| boost-json           | json-encode    | Error: No applicable method                                |
+| cl-json              | encode-json    | Error: Unencodable value                                   |
+| com.gigamonkeys.json | write-json     | Method emit-json hangs                                     |
+| com.inuoe.jzon       | stringify      | {}                                                         |
+| jonathan             | to-json        | Error: No applicable method                                |
+| json-lib             | stringify      | "null"                                                     |
+| json-streams         | json-stringify | Error: (1)                                                 |
+| jsown                | to-json        | Passed "[[1.0,1.0],[1.0,1.0],[1.0,1.0]]"                   |
+| shasht               | write-json     | Passed "[[1.0e+0,1.0e+0],[1.0e+0,1.0e+0],[1.0e+0,1.0e+0]]" |
+| st-json              | write-json     | Error: Cannot write object as json                         |
+| trivial-json-codec   | serialize-json | Error: value is not of type sequence                       |
+| yason                | encode         | Error: No applicable method                                |
 - (1) You would need to use lower level components of json-streams. See [[json-streams-encoding][json-streams-encoding]].
 - (2) You can resolve this by writing your own method for handling symbols. See [[st-json-encoding][st-json-encoding]].
 
@@ -1571,7 +1573,7 @@ This batch of json strings whould be accepted by all libraries. The only librari
 *** Can Accept or Reject
 This batch of json strings were designed to find the under-specified holes in the json specification. As such, libraries could accept or reject the strings without being out of compliance with the standard. For purposes of the following table, I only tested files that could be read as encoded in utf-8.
 
-What I found troubling was that jonathan, jsown and shasht all hung on one or more of these strings.
+What I found troubling was that jonathan and jsown both hung on one or more of these strings.
 #+CAPTION: Conformity Testing - Can Accept or Reject
 #+ATTR_HTML: :border 2 :rules all :frame border
 #+ATTR_LATEX: :float multicolumn
@@ -1585,13 +1587,12 @@ What I found troubling was that jonathan, jsown and shasht all hung on one or mo
 | json-lib           |       12 |        5 |         |
 | json-streams       |        1 |       16 |         |
 | jsown              |       11 |        5 | (1)     |
-| shasht             |        9 |        8 | (2)     |
+| shasht             |        9 |        8 |         |
 | st-json            |        8 |        9 |         |
 | trivial-json-codec |       13 |        4 |         |
 | yason              |        8 |        9 |         |
 
 - (1) hang on i_number_real_underflow [123e-10000000]
-- (2) will hang if input is nil
 
 <<malformed-data>>
 ** Malformed Data
@@ -2256,7 +2257,7 @@ It accepted 13 of the 17 test cases considered to be part of the gray area of th
  |---------+---------------------------------------------+---------+-------------------------------------|
  | [[cl-json][cl-json]] | Henrik Hjelte, Boris Smilga, Robert Goldman | MIT     | [[https://github.com/hankhero/cl-json][https://github.com/hankhero/cl-json]] |
 
-cl-json is an old workhorse in area, however, it has not been updated in the last seven years and is fairly slow as you can tell from the [[benchmarking][benchmarks]]. It does not handle unicode surrogate pairs, json's null and is not as likely to be symmetric as some of the other libraries. Like most of the other libraries (except jsown), cl-json does not encode multi-dimensional arrays. As noted in the [[security][security]] section, cl-json interns keys into the keyword package which can open you up to the equivalent of a DOS attack. cl-json does provide a mitigation function which will throw an error if the keyword to be interned does not already exist in the \star{}json-symbols-package*.
+cl-json is an old workhorse in area, however, it has not been updated in the last seven years and is fairly slow as you can tell from the [[benchmarking][benchmarks]]. It does not handle unicode surrogate pairs, json's null and is not as likely to be symmetric as some of the other libraries. Like most of the other libraries (except jsown and shasht), cl-json does not encode multi-dimensional arrays. As noted in the [[security][security]] section, cl-json interns keys into the keyword package which can open you up to the equivalent of a DOS attack. cl-json does provide a mitigation function which will throw an error if the keyword to be interned does not already exist in the \star{}json-symbols-package*.
 
 #+begin_src lisp
   (setf cl-json::*identifier-name-to-key* #'cl-json::safe-json-intern)
@@ -3521,7 +3522,7 @@ On the downside, jsown actually hung when trying to decode an underflow number: 
 
 Encoding chars, pathnames, CLOS objects, structs and other data structures not listed in the default mapping above will require that you write a new to-json method to handle that particular datatype.
 
-On the plus side, jsown is the only library which can handle multi-dimensional arrays
+On the plus side, jsown is one the libraries which can handle multi-dimensional arrays.
 
 When writing to json,lisp's nil is translated to the empty JSON list []. You can write json's false by writing lisp's keywords :false or :f.
 #+begin_src lisp
@@ -3641,7 +3642,7 @@ Issue 27 on github claims an unhandled memory fault on the following bad json st
  |---------+----------------+---------+------------------------------------|
  | [[shasht][shasht]]  | Tarn W. Burton | MIT     | [[https://github.com/yitzchak/shasht][https://github.com/yitzchak/shasht]] |
 
- Shasht is one of the two new libraries that I particularly like and is already in quicklisp. It is fast, it handles null correctly, it encodes CLOS objects, structures and hash-tables. It can also do incremental encoding. The one improvement I would request is that it not hang when decoding if provided nil rather than a string.
+ Shasht is one of the two new libraries that I particularly like and is already in quicklisp. It is fast, it handles null correctly, it encodes CLOS objects, structures and hash-tables. It can also do incremental encoding.
 
   <<shasht-mapping>>
 *** Default Mappping
@@ -3653,12 +3654,11 @@ Issue 27 on github claims an unhandled memory fault on the following bad json st
 | rational             | ->  | number with frac or exp parts    |
 | ratio                | ->  | number with frac or exp parts    |
 | T                    | <-> | true                             |
-| nil                  | <-> | nil                              |
-| nil                  | <-  | false                            |
-| :NULL                | <-  | null                             |
-| #()                  | <-  | []                               |
+| nil                  | <-> | false                            |
+| :NULL                | <-> | null                             |
+| #()                  | <-> | []                               |
 | other symbol         | ->  | string                           |
-| character            | ->  | Error                            |
+| character            | ->  | string                           |
 | string               | <-> | string                           |
 | list (except alists) | ->  | array                            |
 | vector               | <-> | array                            |
@@ -3696,7 +3696,6 @@ There is also a keyword variant read-json* which will set the various dynamic va
             :object-format :hash-table
             :float-format 'single-float)
 #+end_src
-Aside from the default mapping, you should keep in mind that shasht will hang if you provide it with nil rather than a json string.
 
 <<shasht-encoding>>
 *** Encoding
