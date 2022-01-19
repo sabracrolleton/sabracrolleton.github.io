@@ -17,7 +17,7 @@
 * Changelog
 :PROPERTIES:
 :CUSTOM_ID: changelog
-:END:+
+:END:
 19 Jan 2022 - Updated shasht for fixes in character, 2D arrays, and nil handling. (If you rely on quicklisp versions, expect these improvements in the next quicklisp version, but they are up on github now.) Fixed some typos, including a missing earmuff.
 
 18 Jan 2022 - Corrected json conformity tests on boost-json, cl-json, json-lib, shasht, st-json, trivial-json-codec and yason. If \star{}read-default-float-format* is set to 'single-float, those libraries would refuse to accept:  "[123e65]", "[123e45]" and "[123.456e78]". If \star{}read-default-float-format* is set to 'double-float, then those json strings would be correctly accepted. Net result: with that caveat, [[#boost-json][boost-json]], [[#cl-json][cl-json]], [[#com.gigamonkeys.json][com.gigamonkeys.json]], [[#com.inuoe.jzon][com.inuoe.jzon]], [[#json-lib][json-lib]], [[#shasht][shasht]], [[#st-json][st-json]] and [[#yason][yason]] all score 95/95 on the json strings that must be accepted. See [[#must-accept][Standard Conformity - Must Accept]].
