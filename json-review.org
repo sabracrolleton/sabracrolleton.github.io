@@ -873,7 +873,7 @@ In general, plain lists and plists are returned as json arrays unless some other
 | json-lib             | stringify         | (4)     | (1)      | YES    |
 | json-streams         | json-stringify    | (6)     | (6)      | (6)    |
 | jsown                | to-json           | YES     | (1) (10) | (3)    |
-| shasht               | write-json        | YES     | (1)      | (3)    |
+| shasht               | write-json        | YES     | YES      | YES    |
 | st-json              | write-json        | YES     | YES (10) | (3)    |
 | trivial-json-codec   | serialize-json    | (14)    | (14)     | (14)   |
 | yason                | encode            | (5)     | (5)      | (5)    |
