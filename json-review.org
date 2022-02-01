@@ -18,6 +18,8 @@
 :PROPERTIES:
 :CUSTOM_ID: changelog
 :END:
+1 Feb 2022 - Picks up updates in shasht and now includes warnings on libraries with safety 0 (jsown, jonathan, st-json).
+
 19 Jan 2022 - Updated shasht for fixes in character, 2D arrays, and nil handling. (If you rely on quicklisp versions, expect these improvements in the next quicklisp version, but they are up on github now.) Fixed some typos, including a missing earmuff.
 
 18 Jan 2022 - Corrected json conformity tests on boost-json, cl-json, json-lib, shasht, st-json, trivial-json-codec and yason. If \star{}read-default-float-format* is set to 'single-float, those libraries would refuse to accept:  "[123e65]", "[123e45]" and "[123.456e78]". If \star{}read-default-float-format* is set to 'double-float, then those json strings would be correctly accepted. Net result: with that caveat, [[#boost-json][boost-json]], [[#cl-json][cl-json]], [[#com.gigamonkeys.json][com.gigamonkeys.json]], [[#com.inuoe.jzon][com.inuoe.jzon]], [[#json-lib][json-lib]], [[#shasht][shasht]], [[#st-json][st-json]] and [[#yason][yason]] all score 95/95 on the json strings that must be accepted. See [[#must-accept][Standard Conformity - Must Accept]].
@@ -105,9 +107,10 @@ We should also talk a bit about some helper libraries.
 :END:
 As can be expected, the libraries do much of the same if you have basic needs. However, differences exist and should be considered in choosing which library is right for any particular project. Many applications are asymmetric in how they will use these libraries, so consider the strengths and weakness given the needs of your case. Library links are to the libraries' individual sections below.
 
-- *Overall:* I quite like the newcomers [[#shasht][shasht]] and [[#com.inuoe.jzon][com.inuoe.jzon]]. [[#jonathan][jonathan]] might be there unless you start running into decoding the types of larger json data sets which cause it to go into slow motion. [[cl-json][cl-json]] and [[#yason][yason]] are still the work horses if you need fine control, but speed is not their forte.
+- *Overall:* I quite like the newcomers [[#shasht][shasht]] and [[#com.inuoe.jzon][com.inuoe.jzon]]. [[cl-json][cl-json]] and [[#yason][yason]] are still the work horses if you need fine control, but speed is not their forte.
 - *Decoding or Parsing Speed:* Speed is not everything, but seems to be important to a lot of readers. If you are parsing compliant data and are just looking for speed, look at [[#jsown][jsown]], [[#com.inuoe.jzon][com.inuoe.jzon]] (not in quicklisp) or [[#shasht][shasht]]. [[#jonathan][Jonathan]] is faster on tiny strings but starts to slow down with nested objects and eventually, depending on the size of the json object, becomes orders of magnitude slower than the other libraries. The effect was seen faster under sbcl but as data file size increased, it was also obvious under ccl and ecl as well. See [[#read-times][read-times]]
 - *Encoding Speed:* If you mostly need to encode lisp data to json and are just looking for speed, I would look at [[#com.inuoe.jzon][com.inuoe.jzon]], [[#shasht][shasht]] or depending on your data, [[#jonathan][jonathan]] or [[#st-json][st-json]]. See [[#write-times][write-times]]
+- *Safety 0* Three libraries (jsown, jonathan and st-json) have optimize set for safety 0 to increase speed. This has bitten some users hard in the past, so you have been warned.
 - *Unicode Handling:* Most of the libraries can handle unicode. However, if you have unicode surrogate pairs, you need to choose from [[#com.inuoe.jzon][com.inuoe.jzon]], [[#jonathan][jonathan]], [[#json-streams][json-streams]], [[#jsown][jsown]], [[#shasht][shasht]], [[#st-json][st-json]] or [[#yason][yason]]. See [[#decode-unicode][Decoding Unicode]].
 - *Extracting Subsets:* If you want to extract a subset of json data without paying attention to everything else, [[#jsown-filters][jsown]] is the choice. [[#jonathan][Jonathan]] allows you to get a key:value pair, but I could only use it one level deep. Obviously every library can import all the json data into some CL datastructure and then use standard CL functionality to get whatever subset you want.
 - *Handling all proper json forms:* If you remember to set \star{}read-default-float-format* to 'double-float, there is no clear winner. [[#boost-json][boost-json]], [[cl-json][cl-json]], [[#com.gigamonkeys.json][com.gigamonkeys.json]], [[#com.inuoe.jzon][com.inuoe.jzon]], [[#json-lib][json-lib]], [[#shasht][shasht]], [[#st-json][st-json]] and [[#yason][yason]] all score 95/95 on the json standard conformity tests that must be met. If \star{}read-default-float-format* is set to to 'single-float, only [[#com.inuoe.jzon][com.inuoe.jzon]] and [[#com.gigamonkeys.json][com.gigamonkeys.json]] have perfect scores. See [[#must-accept][Must Accept]].
@@ -3164,7 +3167,7 @@ It accepted 7 of the 17 test cases considered to be part of the gray area of the
  |----------+----------------+---------+--------------------------------------------|
  | [[#jonathan][jonathan]] | Rudolph Miller | MIT     | [[https://github.com/Rudolph-Miller/jonathan][https://github.com/Rudolph-Miller/jonathan]] |
 
-While jsown is the winner in the decoding speed stakes, Jonathan can be faster or orders of magnitude slower depending on the amount of json data and its structure. Jonathan is among the leaders in [[#write-times][encoding speed]] along with [[#st-json][st-json]], [[#com.inuoe.jzon][com.inuoe.jzon]], and [[#com.gigamonkeys.json][com.gigamonkeys.json]]. However, speed is not everything and there are a few concerning issues.
+While jsown is the winner in the decoding speed stakes, Jonathan can be faster or orders of magnitude slower depending on the amount of json data and its structure. Jonathan is among the leaders in [[#write-times][encoding speed]] along with [[#st-json][st-json]], [[#com.inuoe.jzon][com.inuoe.jzon]], and [[#com.gigamonkeys.json][com.gigamonkeys.json]]. However, speed is not everything and there are a few concerning issues. It has optimize set for safety 0 to increase speed. This has bitten some users hard in the past, so you have been warned.
 
 - As previously noted, jonathan shows substantial slow downs in decoding nested json objects of any real size.
 - Jonathan is unable to parse float if SAFETY restricted to 2 or 3 on SBCL. See [[https://github.com/Rudolph-Miller/jonathan/issues/66][https://github.com/Rudolph-Miller/jonathan/issues/66]].
@@ -3795,7 +3798,7 @@ As mentioned above, there are no doc-strings for json-streams' exported symbols.
  |---------+---------------+---------+--------------------------------------|
  | [[#jsown][jsown]]   | Aad Versteden | MIT     | [[https://github.com/madnificent/jsown][https://github.com/madnificent/jsown]] |
 
-Yes, it is the fastest in pure decoding but speed is not everything. You do have to be careful about what data structures you use. For example, encoding dotted alists triggered memory fault issues. It fails to deal with json's null properly and actually hung when trying to decode a json real number with an underflow problem.
+Yes, it is the fastest in pure decoding but speed is not everything. It has optimize set for safety 0 to increase speed. This has bitten some users hard in the past, so you have been warned. You do have to be careful about what data structures you use. For example, encoding dotted alists triggered memory fault issues. It fails to deal with json's null properly and actually hung when trying to decode a json real number with an underflow problem.
 
 On the plus side, it has the ability to extract a subset out of a json string, but you have to have read the entire string since it does not deal with streams.
 
@@ -4077,24 +4080,138 @@ Issue 27 on github claims an unhandled memory fault on the following bad json st
 :CUSTOM_ID: shasht-mapping
 :END:
  Please note the direction of the arrows in the following table.
-| Lisp                 |     | Json                             |
-|----------------------+-----+----------------------------------|
-| integer              | <-> | number with no frac or exp parts |
-| float                | <-> | number with frac or exp parts    |
-| rational             | ->  | number with frac or exp parts    |
-| ratio                | ->  | number with frac or exp parts    |
-| T                    | <-> | true                             |
-| nil                  | <-> | false                            |
-| :NULL                | <-> | null                             |
-| #()                  | <-  | []                               |
-| other symbol         | ->  | string                           |
-| character            | ->  | string                           |
-| string               | <-> | string                           |
-| list (except alists) | ->  | array                            |
-| vector               | <-> | array                            |
-| alist                | ->  | array                            |
-| hash-table           | <-> | object                           |
-| standard object      | ->  | object                           |
+| Lisp                                |     | Json                             |
+|-------------------------------------+-----+----------------------------------|
+| integer                             | <-> | number with no frac or exp parts |
+| float                               | <-> | number with frac or exp parts    |
+| rational                            | ->  | number with frac or exp parts    |
+| ratio                               | ->  | number with frac or exp parts    |
+| T                                   | <-> | true                             |
+| :true                               | ->  | true                             |
+| :false                              | ->  | false                            |
+| nil                                 | <-> | false                            |
+| :NULL                               | <-> | null                             |
+| #()                                 | <-  | []                               |
+| other symbol                        | ->  | string                           |
+| character                           | ->  | string                           |
+| string                              | <-> | string                           |
+| pathname                            | ->  | string                           |
+| list (except alists)                | ->  | array                            |
+| vector                              | <-> | array                            |
+| multi-dimensional array             | ->  | nested array                     |
+| alist                               | ->  | array                            |
+| hash-table                          | <-> | object                           |
+| standard object                     | ->  | object                           |
+| structure                           | ->  | object                           |
+| :empty-array                        | ->  | []                               |
+| :empty-object                       | ->  | {}                               |
+| '(:array 1 2 3)                     | ->  | [1,2,2]                          |
+| '(:object-alist ("a" . 1)("b" . 2)) | ->  | {"a":1,"b":2}                    |
+| '(:object-plist "a" 1 "b" 2)        | ->  | {"a":1,"b":2}                    |
+
+The following subsections are from the README:
+**** Mapping of Number Types
+:PROPERTIES:
+:CUSTOM_ID: shasht-mapping-number-types
+:END:
+
+The format of a number read from JSON when a decimal or an exponent is present
+in the number literal can be influenced with cl:*read-default-float-format*.
+This is the same behavior of cl:read. In order to read JSON numbers with large
+exponents one would need do something like the following.
+
+#+begin_src lisp
+(shasht:read-json "[2.232e75]" :float-format 'double-float)
+#+end_src
+
+**** Mapping of Array Types
+:PROPERTIES:
+:CUSTOM_ID: shasht-mapping-array-types
+:END:
+The dynamic variables \star{}read-default-array-format*,
+\star{}write-empty-array-values*, and \star{}write-array-tags* all influence the mapping
+of JSON arrays to Common Lisp vectors and lists. Common Lisp vectors and
+multi-dimensional arrays are always writen as JSON arrays. By default JSON
+arrays are read as Common Lisp vectors. With the default settings only non-nil
+lists that don't satisfy some other mapping rule are written as JSON arrays.
+
+If one wants to use lists as the default JSON array format then
+\star{}read-default-false-value*, \star{}read-default-array-format*, and
+\star{}write-false-value* will need to need to be set to appropriate values since
+in the default mapping nil maps to false. For example, the following
+could be done.
+
+#+begin_src lisp
+(let ((shasht:*read-default-false-value* :false)
+      (shasht:*read-default-array-format* :list)
+      (shasht:*write-false-values* '(:false)))
+ (shasht:read-json ...)
+ (shasht:write-json ...))
+#+end_src
+
+Lists with a CAR eql to a value in \star{}write-array-tags*,
+\star{}write-object-alist-tags*, \star{}write-object-plist-tags* will still be written
+as an array or object as appropriate. To completely disable this behavior the
+variables would need to be bound to nil. Or one could do the following.
+
+#+begin_src lisp
+(shasht:write-json '(1 2 3) :false-value '(:false) :array-tags nil
+                            :object-alist-tags nil :object-plist-tags nil)
+#+end_src
+
+In this case the mapping for array types would become:
+
+| Common Lisp                            |     | JSON                               |
+|----------------------------------------|----:|------------------------------------|
+| vector                                 |  -> | array                              |
+| multi-dimensional array                |  -> | nested array                       |
+| list                                   | <-> | array                              |
+
+**** Mapping of Object Types
+:PROPERTIES:
+:CUSTOM_ID: shasht-mapping-object-types
+:END:
+The dynamic variables \star{}read-default-object-format*, \star{}write-alist-as-object*,
+\star{}write-plist-as-object*, \star{}write-empty-object-values*,
+\star{}write-object-alist-tags*, and \star{}write-object-plist-tags* all influence the
+mapping of JSON objects to Common Lisp hash tables, alists, and plists. Common
+Lisp hash tables are always written as JSON objects. By default JSON objects are
+read as Common Lisp hash tables.
+
+In order to use alists as the default JSON object format the dynamic variables
+\star{}read-default-object-format*, \star{}write-alist-as-object*,
+\star{}read-default-false-value*, and \star{}write-false-values* will need to be set
+to appropriate values. For example, the following would use alists as the
+default JSON object format and :false as the JSON false value.
+
+#+begin_src lisp
+(let ((shasht:*read-default-object-format* :alist)
+      (shasht:*write-alist-as-object* t)
+      (shasht:*read-default-false-value* :false)
+      (shasht:*write-false-values* '(:false)))
+ (shasht:read-json ...)
+ (shasht:write-json ...))
+#+end_src
+
+In this case the mapping for object types would become:
+
+| Common Lisp      |     | JSON   |
+|------------------+-----+--------|
+| hash table       | ->  | object |
+| alist            | <-> | object |
+| standard object  | ->  | object |
+| structure object | ->  | object |
+
+The same could be accomplished for plists by doing the following.
+
+#+begin_src lisp
+(let ((shasht:*read-default-object-format* :plist)
+      (shasht:*write-plist-as-object* t)
+      (shasht:*read-default-false-value* :false)
+      (shasht:*write-false-values* '(:false)))
+ (shasht:read-json ...)
+ (shasht:write-json ...))
+#+end_src
 
 *** Decoding
 :PROPERTIES:
@@ -4224,7 +4341,33 @@ One way of doing the second exercise could look like this:
                                  ,*standard-output*))
   {"hello": "hu hu", "harr": [0,1,2]}
 #+end_src
+The following two examples are taken from the README. There are keyword literals that can be used to help constructing json objects and arrays. The values and tags that indicate these literals can be configured via the dynamic variables \star{}write-empty-array-values*, \star{}write-empty-object-values*, \star{}write-array-tags*, \star{}write-object-alist-tags*,
+and \star{}write-object-plist-tags*.
 
+These literals forms are only meant for serialization and not for round-trip
+mapping. Therefore there is no way to read JSON in the same format.:
+#+begin_src lisp
+  (shasht:write-json
+   '(:object-alist ("a" . :empty-array)
+     ("b" . :empty-object)
+     ("c" . (:object-plist "d" 1
+             "e" (:array 1 2 3)))))
+  {
+  "a": [],
+  "b": {},
+  "c": {
+  "d": 1,
+  "e": [
+  1,
+  2,
+  3
+  ]
+  }
+  }
+
+  (:OBJECT-ALIST ("a" . :EMPTY-ARRAY) ("b" . :EMPTY-OBJECT)
+                 ("c" :OBJECT-PLIST "d" 1 "e" (:ARRAY 1 2 3)))
+#+end_src
 *** Symmetry
 :PROPERTIES:
 :CUSTOM_ID: shasht-symmetry
@@ -4264,6 +4407,9 @@ It accepted 9 of the 17 test cases considered to be part of the gray area of the
 - *\star{}read-default-true-value** - The default value to return when reading a true token. Initially set to t
 - *\star{}symbol-name-function**
 - *\star{}write-alist-as-object** - If true then assocation lists will be written as an object. Initially set to nil
+- *\star{}write-array-tags*  -  Indicators in the CAR of a list that indicate that the CDR or the list should be written as an array.
+- *\star{}write-object-alist-tags* - Indicators in the CAR of a list that indicate that the CDR of the list is an alist and should be written as object.
+- *\star{}write-object-plist-tags* - Indicators in the CAR of a list that indicate that the CDR of the list is an plist and should be written as object.
 - *\star{}write-ascii-encoding** - If true then any non ASCII values will be encoded using Unicode escape sequences. Initially set to nil
 - *\star{}write-empty-array-values**
 - *\star{}write-empty-object-values**
@@ -4324,7 +4470,7 @@ It accepted 9 of the 17 test cases considered to be part of the gray area of the
  |---------+------------------+------------+------------------------------------|
  | [[#st-json][st-json]] | Marijn Haverbeke | zlib-style | [[https://github.com/marijnh/ST-JSON][https://github.com/marijnh/ST-JSON]] |
 
-As the README says, st-json does mostly the same thing as cl-json, but is simpler and more precise about types (distinguishing boolean false, the empty array, and the empty object). It is very fast encoding. While not the fastest decoder, it has respectable decoding speed. It handles json's null correctly. You will have to write your own methods to handle symbols and CLOS objects.
+As the README says, st-json does mostly the same thing as cl-json, but is simpler and more precise about types (distinguishing boolean false, the empty array, and the empty object). It is very fast encoding. While not the fastest decoder, it has respectable decoding speed. It does have optimize set for safety 0 to increase speed. This has bitten some users hard in the past, so you have been warned. It handles json's null correctly. You will have to write your own methods to handle symbols and CLOS objects.
 
 Documentation is found at [[https://marijnhaverbeke.nl/st-json/][https://marijnhaverbeke.nl/st-json/]].
 

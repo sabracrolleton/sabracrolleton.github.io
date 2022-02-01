@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-01-19 Wed 15:12 -->
+<!-- 2022-02-01 Tue 08:22 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Review of CL Json Libraries UPDATED 19 Jan 2022</title>
@@ -561,6 +561,10 @@
 <h2 id="changelog">Changelog</h2>
 <div class="outline-text-2" id="text-changelog">
 <p>
+1 Feb 2022 - Picks up updates in shasht and now includes warnings on libraries with safety 0 (jsown, jonathan, st-json).
+</p>
+
+<p>
 19 Jan 2022 - Updated shasht for fixes in character, 2D arrays, and nil handling. (If you rely on quicklisp versions, expect these improvements in the next quicklisp version, but they are up on github now.) Fixed some typos, including a missing earmuff.
 </p>
 
@@ -919,9 +923,10 @@ As can be expected, the libraries do much of the same if you have basic needs. H
 </p>
 
 <ul class="org-ul">
-<li><b>Overall:</b> I quite like the newcomers <a href="#shasht">shasht</a> and <a href="#com.inuoe.jzon">com.inuoe.jzon</a>. <a href="#jonathan">jonathan</a> might be there unless you start running into decoding the types of larger json data sets which cause it to go into slow motion. <a href="#cl-json">cl-json</a> and <a href="#yason">yason</a> are still the work horses if you need fine control, but speed is not their forte.</li>
+<li><b>Overall:</b> I quite like the newcomers <a href="#shasht">shasht</a> and <a href="#com.inuoe.jzon">com.inuoe.jzon</a>. <a href="#cl-json">cl-json</a> and <a href="#yason">yason</a> are still the work horses if you need fine control, but speed is not their forte.</li>
 <li><b>Decoding or Parsing Speed:</b> Speed is not everything, but seems to be important to a lot of readers. If you are parsing compliant data and are just looking for speed, look at <a href="#jsown">jsown</a>, <a href="#com.inuoe.jzon">com.inuoe.jzon</a> (not in quicklisp) or <a href="#shasht">shasht</a>. <a href="#jonathan">Jonathan</a> is faster on tiny strings but starts to slow down with nested objects and eventually, depending on the size of the json object, becomes orders of magnitude slower than the other libraries. The effect was seen faster under sbcl but as data file size increased, it was also obvious under ccl and ecl as well. See <a href="#read-times">read-times</a></li>
 <li><b>Encoding Speed:</b> If you mostly need to encode lisp data to json and are just looking for speed, I would look at <a href="#com.inuoe.jzon">com.inuoe.jzon</a>, <a href="#shasht">shasht</a> or depending on your data, <a href="#jonathan">jonathan</a> or <a href="#st-json">st-json</a>. See <a href="#write-times">write-times</a></li>
+<li><b>Safety 0</b> Three libraries (jsown, jonathan and st-json) have optimize set for safety 0 to increase speed. This has bitten some users hard in the past, so you have been warned.</li>
 <li><b>Unicode Handling:</b> Most of the libraries can handle unicode. However, if you have unicode surrogate pairs, you need to choose from <a href="#com.inuoe.jzon">com.inuoe.jzon</a>, <a href="#jonathan">jonathan</a>, <a href="#json-streams">json-streams</a>, <a href="#jsown">jsown</a>, <a href="#shasht">shasht</a>, <a href="#st-json">st-json</a> or <a href="#yason">yason</a>. See <a href="#decode-unicode">Decoding Unicode</a>.</li>
 <li><b>Extracting Subsets:</b> If you want to extract a subset of json data without paying attention to everything else, <a href="#jsown-filters">jsown</a> is the choice. <a href="#jonathan">Jonathan</a> allows you to get a key:value pair, but I could only use it one level deep. Obviously every library can import all the json data into some CL datastructure and then use standard CL functionality to get whatever subset you want.</li>
 <li><b>Handling all proper json forms:</b> If you remember to set *read-default-float-format* to 'double-float, there is no clear winner. <a href="#boost-json">boost-json</a>, <a href="#cl-json">cl-json</a>, <a href="#com.gigamonkeys.json">com.gigamonkeys.json</a>, <a href="#com.inuoe.jzon">com.inuoe.jzon</a>, <a href="#json-lib">json-lib</a>, <a href="#shasht">shasht</a>, <a href="#st-json">st-json</a> and <a href="#yason">yason</a> all score 95/95 on the json standard conformity tests that must be met. If *read-default-float-format* is set to to 'single-float, only <a href="#com.inuoe.jzon">com.inuoe.jzon</a> and <a href="#com.gigamonkeys.json">com.gigamonkeys.json</a> have perfect scores. See <a href="#must-accept">Must Accept</a>.</li>
@@ -9792,7 +9797,7 @@ See <a href="#benchmarking">Benchmarking</a>
 </table>
 
 <p>
-While jsown is the winner in the decoding speed stakes, Jonathan can be faster or orders of magnitude slower depending on the amount of json data and its structure. Jonathan is among the leaders in <a href="#write-times">encoding speed</a> along with <a href="#st-json">st-json</a>, <a href="#com.inuoe.jzon">com.inuoe.jzon</a>, and <a href="#com.gigamonkeys.json">com.gigamonkeys.json</a>. However, speed is not everything and there are a few concerning issues.
+While jsown is the winner in the decoding speed stakes, Jonathan can be faster or orders of magnitude slower depending on the amount of json data and its structure. Jonathan is among the leaders in <a href="#write-times">encoding speed</a> along with <a href="#st-json">st-json</a>, <a href="#com.inuoe.jzon">com.inuoe.jzon</a>, and <a href="#com.gigamonkeys.json">com.gigamonkeys.json</a>. However, speed is not everything and there are a few concerning issues. It has optimize set for safety 0 to increase speed. This has bitten some users hard in the past, so you have been warned.
 </p>
 
 <ul class="org-ul">
@@ -11022,7 +11027,7 @@ As mentioned above, there are no doc-strings for json-streams' exported symbols.
 </table>
 
 <p>
-Yes, it is the fastest in pure decoding but speed is not everything. You do have to be careful about what data structures you use. For example, encoding dotted alists triggered memory fault issues. It fails to deal with json's null properly and actually hung when trying to decode a json real number with an underflow problem.
+Yes, it is the fastest in pure decoding but speed is not everything. It has optimize set for safety 0 to increase speed. This has bitten some users hard in the past, so you have been warned. You do have to be careful about what data structures you use. For example, encoding dotted alists triggered memory fault issues. It fails to deal with json's null properly and actually hung when trying to decode a json real number with an underflow problem.
 </p>
 
 <p>
@@ -11603,6 +11608,18 @@ Please note the direction of the arrows in the following table.
 </tr>
 
 <tr>
+<td class="org-left">:true</td>
+<td class="org-left">-&gt;</td>
+<td class="org-left">true</td>
+</tr>
+
+<tr>
+<td class="org-left">:false</td>
+<td class="org-left">-&gt;</td>
+<td class="org-left">false</td>
+</tr>
+
+<tr>
 <td class="org-left">nil</td>
 <td class="org-left">&lt;-&gt;</td>
 <td class="org-left">false</td>
@@ -11639,6 +11656,12 @@ Please note the direction of the arrows in the following table.
 </tr>
 
 <tr>
+<td class="org-left">pathname</td>
+<td class="org-left">-&gt;</td>
+<td class="org-left">string</td>
+</tr>
+
+<tr>
 <td class="org-left">list (except alists)</td>
 <td class="org-left">-&gt;</td>
 <td class="org-left">array</td>
@@ -11648,6 +11671,12 @@ Please note the direction of the arrows in the following table.
 <td class="org-left">vector</td>
 <td class="org-left">&lt;-&gt;</td>
 <td class="org-left">array</td>
+</tr>
+
+<tr>
+<td class="org-left">multi-dimensional array</td>
+<td class="org-left">-&gt;</td>
+<td class="org-left">nested array</td>
 </tr>
 
 <tr>
@@ -11667,8 +11696,244 @@ Please note the direction of the arrows in the following table.
 <td class="org-left">-&gt;</td>
 <td class="org-left">object</td>
 </tr>
+
+<tr>
+<td class="org-left">structure</td>
+<td class="org-left">-&gt;</td>
+<td class="org-left">object</td>
+</tr>
+
+<tr>
+<td class="org-left">:empty-array</td>
+<td class="org-left">-&gt;</td>
+<td class="org-left">[]</td>
+</tr>
+
+<tr>
+<td class="org-left">:empty-object</td>
+<td class="org-left">-&gt;</td>
+<td class="org-left">{}</td>
+</tr>
+
+<tr>
+<td class="org-left">'(:array 1 2 3)</td>
+<td class="org-left">-&gt;</td>
+<td class="org-left">[1,2,2]</td>
+</tr>
+
+<tr>
+<td class="org-left">'(:object-alist ("a" . 1)("b" . 2))</td>
+<td class="org-left">-&gt;</td>
+<td class="org-left">{"a":1,"b":2}</td>
+</tr>
+
+<tr>
+<td class="org-left">'(:object-plist "a" 1 "b" 2)</td>
+<td class="org-left">-&gt;</td>
+<td class="org-left">{"a":1,"b":2}</td>
+</tr>
 </tbody>
 </table>
+
+<p>
+The following subsections are from the README:
+</p>
+</div>
+<div id="outline-container-shasht-mapping-number-types" class="outline-5">
+<h5 id="shasht-mapping-number-types">Mapping of Number Types</h5>
+<div class="outline-text-5" id="text-shasht-mapping-number-types">
+<p>
+The format of a number read from JSON when a decimal or an exponent is present
+in the number literal can be influenced with cl:*read-default-float-format*.
+This is the same behavior of cl:read. In order to read JSON numbers with large
+exponents one would need do something like the following.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lisp">(shasht:read-json <span style="color: #e67128;">"[2.232e75]"</span> <span style="color: #23d7d7;">:float-format</span> 'double-float)
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-shasht-mapping-array-types" class="outline-5">
+<h5 id="shasht-mapping-array-types">Mapping of Array Types</h5>
+<div class="outline-text-5" id="text-shasht-mapping-array-types">
+<p>
+The dynamic variables *read-default-array-format*,
+*write-empty-array-values*, and *write-array-tags* all influence the mapping
+of JSON arrays to Common Lisp vectors and lists. Common Lisp vectors and
+multi-dimensional arrays are always writen as JSON arrays. By default JSON
+arrays are read as Common Lisp vectors. With the default settings only non-nil
+lists that don't satisfy some other mapping rule are written as JSON arrays.
+</p>
+
+<p>
+If one wants to use lists as the default JSON array format then
+*read-default-false-value*, *read-default-array-format*, and
+*write-false-value* will need to need to be set to appropriate values since
+in the default mapping nil maps to false. For example, the following
+could be done.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lisp">(<span style="color: #ffad29; font-weight: bold;">let</span> ((shasht:*read-default-false-value* <span style="color: #23d7d7;">:false</span>)
+      (shasht:*read-default-array-format* <span style="color: #23d7d7;">:list</span>)
+      (shasht:*write-false-values* '(<span style="color: #23d7d7;">:false</span>)))
+ (shasht:read-json ...)
+ (shasht:write-json ...))
+</pre>
+</div>
+
+<p>
+Lists with a CAR eql to a value in *write-array-tags*,
+*write-object-alist-tags*, *write-object-plist-tags* will still be written
+as an array or object as appropriate. To completely disable this behavior the
+variables would need to be bound to nil. Or one could do the following.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lisp">(shasht:write-json '(1 2 3) <span style="color: #23d7d7;">:false-value</span> '(<span style="color: #23d7d7;">:false</span>) <span style="color: #23d7d7;">:array-tags</span> nil
+                            <span style="color: #23d7d7;">:object-alist-tags</span> nil <span style="color: #23d7d7;">:object-plist-tags</span> nil)
+</pre>
+</div>
+
+<p>
+In this case the mapping for array types would become:
+</p>
+
+<table>
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Common Lisp</th>
+<th scope="col" class="org-left">&#xa0;</th>
+<th scope="col" class="org-left">JSON</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">vector</td>
+<td class="org-left">-&gt;</td>
+<td class="org-left">array</td>
+</tr>
+
+<tr>
+<td class="org-left">multi-dimensional array</td>
+<td class="org-left">-&gt;</td>
+<td class="org-left">nested array</td>
+</tr>
+
+<tr>
+<td class="org-left">list</td>
+<td class="org-left">&lt;-&gt;</td>
+<td class="org-left">array</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div id="outline-container-shasht-mapping-object-types" class="outline-5">
+<h5 id="shasht-mapping-object-types">Mapping of Object Types</h5>
+<div class="outline-text-5" id="text-shasht-mapping-object-types">
+<p>
+The dynamic variables *read-default-object-format*, *write-alist-as-object*,
+*write-plist-as-object*, *write-empty-object-values*,
+*write-object-alist-tags*, and *write-object-plist-tags* all influence the
+mapping of JSON objects to Common Lisp hash tables, alists, and plists. Common
+Lisp hash tables are always written as JSON objects. By default JSON objects are
+read as Common Lisp hash tables.
+</p>
+
+<p>
+In order to use alists as the default JSON object format the dynamic variables
+*read-default-object-format*, *write-alist-as-object*,
+*read-default-false-value*, and *write-false-values* will need to be set
+to appropriate values. For example, the following would use alists as the
+default JSON object format and :false as the JSON false value.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lisp">(<span style="color: #ffad29; font-weight: bold;">let</span> ((shasht:*read-default-object-format* <span style="color: #23d7d7;">:alist</span>)
+      (shasht:*write-alist-as-object* t)
+      (shasht:*read-default-false-value* <span style="color: #23d7d7;">:false</span>)
+      (shasht:*write-false-values* '(<span style="color: #23d7d7;">:false</span>)))
+ (shasht:read-json ...)
+ (shasht:write-json ...))
+</pre>
+</div>
+
+<p>
+In this case the mapping for object types would become:
+</p>
+
+<table>
+
+
+<colgroup>
+<col  class="org-left">
+
+<col  class="org-left">
+
+<col  class="org-left">
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Common Lisp</th>
+<th scope="col" class="org-left">&#xa0;</th>
+<th scope="col" class="org-left">JSON</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">hash table</td>
+<td class="org-left">-&gt;</td>
+<td class="org-left">object</td>
+</tr>
+
+<tr>
+<td class="org-left">alist</td>
+<td class="org-left">&lt;-&gt;</td>
+<td class="org-left">object</td>
+</tr>
+
+<tr>
+<td class="org-left">standard object</td>
+<td class="org-left">-&gt;</td>
+<td class="org-left">object</td>
+</tr>
+
+<tr>
+<td class="org-left">structure object</td>
+<td class="org-left">-&gt;</td>
+<td class="org-left">object</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+The same could be accomplished for plists by doing the following.
+</p>
+
+<div class="org-src-container">
+<pre class="src src-lisp">(<span style="color: #ffad29; font-weight: bold;">let</span> ((shasht:*read-default-object-format* <span style="color: #23d7d7;">:plist</span>)
+      (shasht:*write-plist-as-object* t)
+      (shasht:*read-default-false-value* <span style="color: #23d7d7;">:false</span>)
+      (shasht:*write-false-values* '(<span style="color: #23d7d7;">:false</span>)))
+ (shasht:read-json ...)
+ (shasht:write-json ...))
+</pre>
+</div>
+</div>
 </div>
 </div>
 
@@ -11849,10 +12114,41 @@ One way of doing the second exercise could look like this:
 {<span style="color: #e67128;">"hello"</span>: <span style="color: #e67128;">"hu hu"</span>, <span style="color: #e67128;">"harr"</span>: [0,1,2]}
 </pre>
 </div>
-</div>
-</div>
-</div>
+<p>
+The following two examples are taken from the README. There are keyword literals that can be used to help constructing json objects and arrays. The values and tags that indicate these literals can be configured via the dynamic variables *write-empty-array-values*, *write-empty-object-values*, *write-array-tags*, *write-object-alist-tags*,
+and *write-object-plist-tags*.
+</p>
 
+<p>
+These literals forms are only meant for serialization and not for round-trip
+mapping. Therefore there is no way to read JSON in the same format.:
+</p>
+<div class="org-src-container">
+<pre class="src src-lisp">(shasht:write-json
+ '(<span style="color: #23d7d7;">:object-alist</span> (<span style="color: #e67128;">"a"</span> . <span style="color: #23d7d7;">:empty-array</span>)
+   (<span style="color: #e67128;">"b"</span> . <span style="color: #23d7d7;">:empty-object</span>)
+   (<span style="color: #e67128;">"c"</span> . (<span style="color: #23d7d7;">:object-plist</span> <span style="color: #e67128;">"d"</span> 1
+           <span style="color: #e67128;">"e"</span> (<span style="color: #23d7d7;">:array</span> 1 2 3)))))
+{
+<span style="color: #e67128;">"a"</span>: [],
+<span style="color: #e67128;">"b"</span>: {},
+<span style="color: #e67128;">"c"</span>: {
+<span style="color: #e67128;">"d"</span>: 1,
+<span style="color: #e67128;">"e"</span>: [
+1,
+2,
+3
+]
+}
+}
+
+(<span style="color: #23d7d7;">:OBJECT-ALIST</span> (<span style="color: #e67128;">"a"</span> . <span style="color: #23d7d7;">:EMPTY-ARRAY</span>) (<span style="color: #e67128;">"b"</span> . <span style="color: #23d7d7;">:EMPTY-OBJECT</span>)
+               (<span style="color: #e67128;">"c"</span> <span style="color: #23d7d7;">:OBJECT-PLIST</span> <span style="color: #e67128;">"d"</span> 1 <span style="color: #e67128;">"e"</span> (<span style="color: #23d7d7;">:ARRAY</span> 1 2 3)))
+</pre>
+</div>
+</div>
+</div>
+</div>
 <div id="outline-container-shasht-symmetry" class="outline-4">
 <h4 id="shasht-symmetry">Symmetry</h4>
 <div class="outline-text-4" id="text-shasht-symmetry">
@@ -11910,6 +12206,9 @@ See <a href="#benchmarking">Benchmarking</a>
 <li><b>*read-default-true-value*</b> - The default value to return when reading a true token. Initially set to t</li>
 <li><b>*symbol-name-function*</b></li>
 <li><b>*write-alist-as-object*</b> - If true then assocation lists will be written as an object. Initially set to nil</li>
+<li><b>*write-array-tags</b>  -  Indicators in the CAR of a list that indicate that the CDR or the list should be written as an array.</li>
+<li><b>*write-object-alist-tags</b> - Indicators in the CAR of a list that indicate that the CDR of the list is an alist and should be written as object.</li>
+<li><b>*write-object-plist-tags</b> - Indicators in the CAR of a list that indicate that the CDR of the list is an plist and should be written as object.</li>
 <li><b>*write-ascii-encoding*</b> - If true then any non ASCII values will be encoded using Unicode escape sequences. Initially set to nil</li>
 <li><b>*write-empty-array-values*</b></li>
 <li><b>*write-empty-object-values*</b></li>
@@ -12012,7 +12311,7 @@ See <a href="#benchmarking">Benchmarking</a>
 </table>
 
 <p>
-As the README says, st-json does mostly the same thing as cl-json, but is simpler and more precise about types (distinguishing boolean false, the empty array, and the empty object). It is very fast encoding. While not the fastest decoder, it has respectable decoding speed. It handles json's null correctly. You will have to write your own methods to handle symbols and CLOS objects.
+As the README says, st-json does mostly the same thing as cl-json, but is simpler and more precise about types (distinguishing boolean false, the empty array, and the empty object). It is very fast encoding. While not the fastest decoder, it has respectable decoding speed. It does have optimize set for safety 0 to increase speed. This has bitten some users hard in the past, so you have been warned. It handles json's null correctly. You will have to write your own methods to handle symbols and CLOS objects.
 </p>
 
 <p>
