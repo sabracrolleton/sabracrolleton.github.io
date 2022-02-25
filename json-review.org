@@ -98,7 +98,6 @@ We should also talk a bit about some helper libraries.
 | [[#cl-json-helper][cl-json-helper]]       | Bob Felts     | BSD     | [[https://github.com/stablecross/cl-json-helper][homepage]] | cl-json                                                                          |                 |
 | [[#cl-json-schema][cl-json-schema]]       | Mark Skilbeck | MIT     | [[https://github.com/notmgsk/cl-json-schema][homepage]] |                                                                                  |                 |
 | [[#cl-json-pointer][cl-json-pointer]]      | Yokata Yuki   | MIT     | [[https://github.com/y2q-actionman/cl-json-pointer][homepage]] | cl-json, st-json, yason, jsown, jonathan, json-streams, com.gigamonkeys.json, (1) | [[https://40ants.com/lisp-project-of-the-day/2020/08/0158-cl-json-pointer.html][40ants comments]] |
-- (1) There is an outstanding issue asking for com.inuoe.jzon support opened on May 14, 2021, but no action.
 - (1) asd file says BSD, but license included is MIT.
 
 * Quick Summary
@@ -185,7 +184,7 @@ Json has a limited number of data types. You will get different lisp data-types 
 #+ATTR_LATEX: :float multicolumn
 | Library                | [[#true-false-null-mapping][True/False/ Null]]         |      Number | Array        | Json Object (3)(6)                     |
 |------------------------+---------------------------+-------------+--------------+----------------------------------------|
-| Original Json          | "true"/  "false"/  "null" |      "12.3" | "[1,2]"      | "{\"a\": 1}"                           |
+| Original Json          | "true"/  "false"/  "null" |      "12.3" | "[1,2]"      | "{\"a\": 2}"                           |
 |                        |                           |             |              |                                        |
 | [[#boost-json-mapping][boost-json]]            | T / NIL/ NIL              |        12.3 | (1 2)        | [[#boost-json-decoding-to-clos][#<JSON-OBJECT {"a":2}>]]                 |
 | [[#cl-json-mapping][cl-json]]    (1)         | T /  NIL / NIL            |        12.3 | (1 2)        | ((A . 2))                              |
@@ -197,7 +196,7 @@ Json has a limited number of data types. You will get different lisp data-types 
 | [[#jsown-mapping][jsown]] (5)             | T /  NIL / NIL            | 123/10  (5) | (1 2)        | (OBJ (a . 2))                          |
 | [[#shasht-mapping][shasht]] (3)(6)         | T / NIL /  NULL           |        12.3 | #(1 2)       | #<HASH-TABLE :TEST EQUAL :COUNT 1> (6) |
 | [[#st-json-mapping][st-json]]               | TRUE /  FALSE /  NULL     |        12.3 | (1 2)        | #S(JSO :ALIST ((a . 2)))               |
-| [[#trivial-json-codec-mapping][trivial-json-codec]] (2) | "true"/  "false"/  "null" |        12.3 | #(1 2)       | ((:A 1))                               |
+| [[#trivial-json-codec-mapping][trivial-json-codec]] (2) | "true"/  "false"/  "null" |        12.3 | #(1 2)       | ((:A 2))                               |
 | [[#yason-mapping][yason]] (3)(4)(6)       | T / NIL/  NIL/:NULL       |        12.3 | (1 2)/#(1 2) | #<HASH-TABLE :TEST EQUAL :COUNT 1> (6) |
 
 - (1) This is cl-json's default mode. Using cl-json:with-decoder-simple-clos-semantics or cl-json:simple-clos-semantics will switch cl-json into a mode where json arrays are decoded to cl vectors rather than lists, and json objects are decoded to CLOS objects rather than alists.
@@ -1693,7 +1692,7 @@ While json has a standard, it is arguably under-specified. Using the tests from 
 :PROPERTIES:
 :CUSTOM_ID: must-accept
 :END:
-This batch of json strings whould be accepted by all libraries. The only libraries to meet that standard are com.inuoe.jzon and com.gigamonkeys.json. Almost all the rest came "reasonably" close. Json-streams has the dubious distinction of not accepting any.
+This batch of json strings whould be accepted by all libraries. The only libraries to meet that standard are com.inuoe.jzon and com.gigamonkeys.json. Almost all the rest came "reasonably" close.
 #+CAPTION: Conformity Testing - Must Accept
 #+ATTR_HTML: :border 2 :rules all :frame border
 #+ATTR_LATEX: :float multicolumn

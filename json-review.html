@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2022-02-01 Tue 15:15 -->
+<!-- 2022-02-25 Fri 06:40 -->
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Review of CL Json Libraries UPDATED 19 Jan 2022</title>
+<title>Review of CL Json Libraries UPDATED 1 Feb 2022</title>
 <meta name="generator" content="Org mode">
 <meta name="author" content="Sabra Crolleton">
 <meta name="description" content="This is a tutorial chapter for the sc-webapp-tutorial"
@@ -248,7 +248,7 @@
 <body>
 <div id="content">
 <header>
-<h1 class="title">Review of CL Json Libraries UPDATED 19 Jan 2022</h1>
+<h1 class="title">Review of CL Json Libraries UPDATED 1 Feb 2022</h1>
 </header><nav id="table-of-contents">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
@@ -908,7 +908,6 @@ We should also talk a bit about some helper libraries.
 </tbody>
 </table>
 <ul class="org-ul">
-<li>(1) There is an outstanding issue asking for com.inuoe.jzon support opened on May 14, 2021, but no action.</li>
 <li>(1) asd file says BSD, but license included is MIT.</li>
 </ul>
 </div>
@@ -1187,7 +1186,7 @@ Json has a limited number of data types. You will get different lisp data-types 
 <td class="org-left">"true"/  "false"/  "null"</td>
 <td class="org-right">"12.3"</td>
 <td class="org-left">"[1,2]"</td>
-<td class="org-left">"{\"a\": 1}"</td>
+<td class="org-left">"{\"a\": 2}"</td>
 </tr>
 
 <tr>
@@ -1283,7 +1282,7 @@ Json has a limited number of data types. You will get different lisp data-types 
 <td class="org-left">"true"/  "false"/  "null"</td>
 <td class="org-right">12.3</td>
 <td class="org-left">#(1 2)</td>
-<td class="org-left">((:A 1))</td>
+<td class="org-left">((:A 2))</td>
 </tr>
 
 <tr>
@@ -6935,7 +6934,7 @@ While json has a standard, it is arguably under-specified. Using the tests from 
 <h4 id="must-accept">Must Accept</h4>
 <div class="outline-text-4" id="text-must-accept">
 <p>
-This batch of json strings whould be accepted by all libraries. The only libraries to meet that standard are com.inuoe.jzon and com.gigamonkeys.json. Almost all the rest came "reasonably" close. Json-streams has the dubious distinction of not accepting any.
+This batch of json strings whould be accepted by all libraries. The only libraries to meet that standard are com.inuoe.jzon and com.gigamonkeys.json. Almost all the rest came "reasonably" close.
 </p>
 <table border="2" rules="all" frame="border">
 <caption class="t-above"><span class="table-number">Table 51:</span> Conformity Testing - Must Accept</caption>
