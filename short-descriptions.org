@@ -2604,3 +2604,30 @@
     } );
 } );</script>
 #+end_export
+
+| [[https://shinmera.github.io/3d-quaternions/][3d-quaternions]] | A utility library implementing quaternion and dual-quaternion functionality.  zlib|
+| [[https://shinmera.github.io/3d-transforms/][3d-transforms]] | A utility library implementing a common structure to encapsulate spatial transformations  zlib |
+| [[https://40ants.com/ci/][ci]] | A tool simplify continuous deployment for Common Lisp projects.  BSD |
+| [[https://github.com/scottmcleodjr/cl-lambdacalc/][cl-lambdacalc]] | Define Lisp functions using lambda calculus syntax  MIT |
+| [[https://github.com/albuspiroglu/cl-lib-helper/][cl-lib-helper]] | For common-lisp, organisation of popular functionalities in a central, easy-to-browse set of packages.  MIT |
+| [[https://gitlab.com/ariSun/cl-myriam][cl-myriam]] | Simple actor model implementation for local and remote actors  3-clause BSD |
+| [[https://gitlab.common-lisp.net/cl-tar/cl-tar][cl-tar]] | A high level interface for tar archives  MIT |
+| [[https://gitlab.common-lisp.net/cl-tar/cl-tar-file][cl-tar-file]] | A system for reading and writing physical entries from/to tar files.  BSD-style (http://opensource.org/licenses/BSD-3-Clause) |
+| [[https://github.com/inconvergent/cl-veq/][cl-veq]] | reasonably fast operations for 1d, 2d, 3d vectors and arrays of vectors.  MIT |
+| [[https://github.com/dnaeon/cl-wol][cl-wol]] | CLI built on top of the cl-wol.core system  BSD 2-Clause|
+| [[https://github.com/sheepduke/clop/][clop]] | CLOP | Common Lisp tOml Parser  MIT|
+| [[https://fisxoj.github.io/factory-alien/][factory-alien]] | Factory alien is a library for generating fixture data for testing applications.  MIT|
+| [[https://github.com/phoe/in-nomine/][in-nomine]] | Utilities for extensible namespaces in Common Lisp.   LLGPL|
+| [[http://github.com/melisgl/journal][journal]] | A library for logging, tracing, testing and persistence.  MIT, see COPYING.|
+| [[https://fisxoj.github.io/json-schema/][json-schema]] | JSON schema validation   LLGPL|
+| [[http://melisgl.github.io/mgl][mgl]] | MGL is a machine learning library for backpropagation neural networks, boltzmann machines, gaussian processes and more.   MIT, see COPYING.|
+| [[https://github.com/melisgl/mgl-mat/][mgl-mat]] | MAT is library for working with multi-dimensional arrays which supports efficient interfacing to foreign and CUDA code. BLAS and CUBLAS bindings are available.  MIT|
+| [[https://gitlab.common-lisp.net/mantoniotti/mk-defsystem][mk-defsystem]] | The MK-DEFSYSTEM ASDF System.   Other|
+| [[https://github.com/BlueFlo0d/named-closure/][named-closure]] | Named closures  GPLv3+|
+| [[https://github.com/atlas-engineer/nfiles][nfiles]] | Manage file persistence and loading.   BSD 3-Clause|
+| [[https://github.com/atlas-engineer/nhooks/][nhooks]] | Improved hooks facility inspired by Serapeum.   MIT|
+| [[https://github.com/omar-polo/phos/][phos]] | An experimental Gemini client library   ISC|
+| [[https://github.com/jcguu95/stumpwm-dynamic-float/][stumpwm-dynamic-float]] | stumpwm-dynamic-float is an extension to the X window manager "StumpWM". It provides a dynamic-tiling environment based on StumpWM's floating-group.   MIT|
+| [[https://github.com/jeko2000/tiny-routes/][tiny-routes]] | A tiny routing library for Common Lisp targeting Clack.   BSD 3-Clause|
+| [[http://melisgl.github.io/try][try]] | Try is a test framework.   MIT, see COPYING.|
+| [[https://github.com/phoe/with-branching/][with-branching]] | An implementation of macroexpand-time conditionalization   MIT
