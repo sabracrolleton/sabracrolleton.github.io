@@ -1,6 +1,6 @@
-#+TITLE: Quicklisp Projects with Short Descriptions From Their ASD files (1 January 2022 Edition)
+#+TITLE: Quicklisp Projects with Short Descriptions From Their ASD files (15 April 2022 Edition)
  #+AUTHOR:      Sabra Crolleton
- #+DATE:        2021-06-30
+ #+DATE:        2022-04-15h
  #+EMAIL:       sabra.crolleton!gmail.com
  #+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
  #+LANGUAGE:    en
@@ -2593,6 +2593,18 @@
 | [[https://gitlab.common-lisp.net/qitab/quux-hunchentoot][quux-hunchentoot]] | Thread pooling for hunchentoot — MIT|
 | [[https://github.com/fjames86/schannel/][schannel]] | CFFI wrapper to SChannel — MIT|
 |[[https://github.com/yitzchak/trivial-package-locks][trivial-package-locks]] | A standard interface to the various package lock implementations. — MIT|
+|[[https://github.com/fukamachi/asn1/][asn1]] | ASN.1 encoder/decoder — BSD 2-Clause |
+| [[https://github.com/tdrhq/auto-restart/][auto-restart]] | automatically generate restart-cases for the most common use cases, and also use the restart for automatic retries — Apache License, Version 2.0|
+| [[https://github.com/szos/cl-advice/][cl-advice]] | Portable advice for Common Lisp — LGPL|
+| [[https://shirakumo.github.io/cl-gltf/][cl-gltf]] | A library to parse the glTF file format. — zlib |
+| [[https://github.com/masatoi/clgplot/][clgplot]] | A Gnuplot front-end for Common lisp — MIT Licence|
+| [[https://github.com/sirherrbatka/clusters/][clusters]] | Cluster algorithms in CL, for CL. — BSD simplified|
+| [[https://github.com/thephoeron/generalized-reference/][generalized-reference]] | Generalized reference over structured data by pairwise reduction of arbitrary place identifiers for Common Lisp. — MIT|
+| [[https://github.com/muyinliu/jsown-utils/][jsown-utils]] | Utilities for Common Lisp JSON library jsown — MIT|
+| [[https://github.com/glv2/maidenhead/][maidenhead]] | Convert coordinates between Latitude/Longitude and Maidenhead. — GPL-3 |
+| [[https://github.com/glv2/olc/][olc]] | Convert coordinates between Latitude/Longitude and Open Location Code. — GPL-3 |
+| [[https://github.com/telekons/one-more-re-nightmare/][one-more-re-nightmare]] | A regular expression compiler — BSD 2-clause |
+| [[https://sr.ht/~shunter/posix-shm/][posix-shm]] | POSIX shared memory — BSD 3-Clause |
 
 #+begin_export html
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
