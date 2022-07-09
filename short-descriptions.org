@@ -1,6 +1,6 @@
-#+TITLE: Quicklisp Projects with Short Descriptions From Their ASD files (15 April 2022 Edition)
+#+TITLE: Quicklisp Projects with Short Descriptions From Their ASD files (9 July 2022 Edition)
  #+AUTHOR:      Sabra Crolleton
- #+DATE:        2022-04-15h
+ #+DATE:        2022-07-09
  #+EMAIL:       sabra.crolleton!gmail.com
  #+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
  #+LANGUAGE:    en
@@ -50,7 +50,6 @@
 | [[https://github.com/alex-gutev/agutil][agutil]] | A collection of utility functions not found in other utility libraries. |
 | [[https://github.com/rigetti/alexa][alexa]] | A lexical analyzer generator. |
 | [[https://gitlab.common-lisp.net/alexandria/alexandria][alexandria]] | Alexandria is a collection of portable public domain utilities. |
-| [[https://git.mfiano.net/mfiano/algae][algae]] | Assortment of Lisp Game Algorithms and Experiments |
 | [[https://github.com/tarballs-are-good/algebraic-data-library][algebraic-data-library]] | A library of common algebraic data types. |
 | [[https://github.com/varjagg/also-alsa][also-alsa]] | Basic ALSA bindings for Common Lisp |
 | [[https://github.com/gonzojive/amazon-ecs][amazon-ecs]] | Amazon Product Advertising API library for Common Lisp |
@@ -778,7 +777,6 @@
 | [[https://github.com/schani/clickr][clickr]] | High-level Flickr interface |
 | [[https://github.com/jschatzer/clim-widgets][clim-widgets]] | small collection of clim widgets |
 | [[https://gitlab.common-lisp.net/climacs/climacs][climacs]] |  |
-| [[https://github.com/nlamirault/climc][climc]] | A common lisp Instant Messaging client. |
 | [[https://github.com/nlamirault/climon][climon]] | The Simon game. |
 | clinch-cairo |  |
 | clinch-classimp |  |
@@ -1176,7 +1174,6 @@
 | [[https://github.com/Shirakumo/glsl-toolkit][glsl-toolkit]] | A library to parse and modify OpenGL Shader Language (GLSL) source code |
 | [[https://github.com/orthecreedence/glu-tessellate][glu-tessellate]] | A simple triangulation engine that wraps around GLU's tessellation system. |
 | [[https://github.com/ahungry/glyphs][glyphs]] | Glyphs to reduce Common Lisp verbosity |
-| [[https://git.mfiano.net/mfiano/golden-utils][golden-utils]] | A utility library. Comments by 40ants [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/04/0027-golden-utils.org][here]]. |
 | [[https://github.com/sgarciac/gordon][gordon]] | Gordon is a library for generating Flash files programmatically. It supports a large subset of the Flash 7.0 specification.  - Removed in Oct 2021 Quicklisp Update|
 | [[https://github.com/eschulte/graph][graph]] | simple library for building and manipulating graphs |
 | [[https://github.com/sellout/cl-gravatar][gravatar]] | Common Lisp bindings to the popular Gravatar service. |
@@ -1545,7 +1542,6 @@
 | [[https://github.com/gigamonkey/monkeylib-text-output][monkeylib-text-output]] | Formatted text output. |
 | [[https://gitlab.com/smaller-infinity/monomyth][monomyth]] | A distributed data processing library for CL |
 | [[https://github.com/sharplispers/montezuma][montezuma]] | Montezuma is a port of the Lucene text search engine library. |
-| [[https://common-lisp.net/project/submarine/mop-utils.tar.gz][mop-utils]] | A set of Metaobject Protocol utilities. |
 | [[https://github.com/gwkkwg/moptilities][moptilities]] | Common Lisp MOP utilities |
 | [[https://github.com/scymtym/more-conditions][more-conditions]] | This system provides some generic condition classes in                conjunction with support functions and macros. |
 | [[https://github.com/fukamachi/mp3-duration][mp3-duration]] | Get the duration of an MP3 file |
@@ -2001,7 +1997,6 @@
 | [[https://github.com/aarvid/SmackJack][smackjack]] | A small Ajax framework for hunchentoot using parenscript |
 | [[https://github.com/fukamachi/smart-buffer][smart-buffer]] | Smart octets buffer |
 | [[https://github.com/drewc/smug][smug]] | SMUG: Simple Monadic Uber Go-into, Parsing made easy. Comments by 40ants [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/08/0175-smug.org][here]]. |
-| [[https://github.com/snmsts/sn.man][sn.man]] | stub man launcher.it should be a man parser. |
 | [[https://github.com/BnMcGn/snakes][snakes]] | Python style generators for Common Lisp. Comments by 40ants [[https://github.com/40ants/lisp-project-of-the-day/blob/master/content/2020/08/0169-snakes][here]] |
 | [[https://github.com/brown/snappy][snappy]] | An implementation of Snappy compression. |
 | snark-agenda | The Snark Theorem Prover |
@@ -2483,7 +2478,6 @@
 | [[https://github.com/tfeb/tfeb-lisp-hax][tfeb-lisp-hax]] | Collection of lisp hacks |
 | [[https://github.com/tfeb/tfeb-lisp-tools][tfeb-lisp-tools]] | Collection of lisp tools |
 | [[https://github.com/ruricolist/overlord][overlord]] | Experimental build system. |
-| [[https://git.mfiano.net/mfiano/parsley][parsley]] | A toolset for parsing binary data formats. |
 | [[https://github.com/shamazmazum/perceptual-hashes][perceptual-hashes]] | Perceptual hash algorithms for images |
 | [[https://github.com/marcoheisig/Petalisp][petalisp]] | Petalisp is an attempt to generate high performance code for parallel computers by JIT-compiling array definitions. It is not a full blown programming language, but rather a carefully crafted extension of Common Lisp that allows for extreme optimization and parallelization. |
 | [[https://github.com/Shinmera/plump][plump]] | An XML / XHTML / HTML parser that aims to be as lenient as possible. |
@@ -2605,18 +2599,6 @@
 | [[https://github.com/glv2/olc/][olc]] | Convert coordinates between Latitude/Longitude and Open Location Code. — GPL-3 |
 | [[https://github.com/telekons/one-more-re-nightmare/][one-more-re-nightmare]] | A regular expression compiler — BSD 2-clause |
 | [[https://sr.ht/~shunter/posix-shm/][posix-shm]] | POSIX shared memory — BSD 3-Clause |
-
-#+begin_export html
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
-
-<script> $(document).ready(function() {
-    $('table').DataTable( {
-        "lengthMenu": [25, 50, 100]
-    } );
-} );</script>
-#+end_export
-
 | [[https://shinmera.github.io/3d-quaternions/][3d-quaternions]] | A utility library implementing quaternion and dual-quaternion functionality.  zlib|
 | [[https://shinmera.github.io/3d-transforms/][3d-transforms]] | A utility library implementing a common structure to encapsulate spatial transformations  zlib |
 | [[https://40ants.com/ci/][ci]] | A tool simplify continuous deployment for Common Lisp projects.  BSD |
@@ -2642,4 +2624,60 @@
 | [[https://github.com/jcguu95/stumpwm-dynamic-float/][stumpwm-dynamic-float]] | stumpwm-dynamic-float is an extension to the X window manager "StumpWM". It provides a dynamic-tiling environment based on StumpWM's floating-group.   MIT|
 | [[https://github.com/jeko2000/tiny-routes/][tiny-routes]] | A tiny routing library for Common Lisp targeting Clack.   BSD 3-Clause|
 | [[http://melisgl.github.io/try][try]] | Try is a test framework.   MIT, see COPYING.|
-| [[https://github.com/phoe/with-branching/][with-branching]] | An implementation of macroexpand-time conditionalization   MIT
+| [[https://github.com/phoe/with-branching/][with-branching]] | An implementation of macroexpand-time conditionalization   MIT|
+|[[https://github.com/digikar99/abstract-arrays/][abstract-arrays]] | Julia's AbstractArray like abstraction for Common Lisp. — MIT |
+|[[https://git.mfiano.net/mfiano/avl-tree][avl-tree]] | An implementation of the AVL tree data structure. — MIT |
+|[[https://github.com/mfiano/binary-parser][binary-parser]] | A toolset for parsing binary data formats. — MIT|
+|[[https://git.mfiano.net/mfiano/binary-search-tree][binary-search-tree]] | An implementation of the binary search tree data structure. — MIT|
+|[[https://github.com/digikar99/cl-bmas/][cl-bmas]] | A Common Lisp wrapper around BMAS - a BLAS like library with support for integers, basic math operations, trigonometry, and more. — MIT |
+|[[https://github.com/melusina-org/cl-confidence/][cl-confidence]] | A Simple Interactive Test Framework for Common Lisp — MIT|
+|[[https://github.com/malcolmstill/cl-libinput/][cl-libinput]] | Common Lisp wrapper for libinput — BSD 3-Clause |
+|[[https://gitee.com/bobwxc/cl-mdb][cl-mdb]] | cl-mdb: a simple in-memory key-value database — MulanPubL-2.0 |
+|[[https://github.com/em7/cl-morse/][cl-morse]] | Library for translating ASCII letters to morse code and back. — BSD-3clause|
+|[[https://github.com/melusina-org/cl-rashell/][cl-rashell]] | Resilient replicant Shell Programming Library for Common Lisp — MIT|
+|[[https://github.com/IgSokolov/cl-replica/][cl-replica]] | Library for hash-table replication via epidemic algorithms — BSD |
+|[[https://github.com/dvush/cl-secp256k1/][cl-secp256k1]] | FFI findings for secp256k1 library — MIT|
+|[[https://github.com/teddywing/cl-sysexits/][cl-sysexits]] | Exit codes defined in sysexits.h — BSD-3-Clause |
+|[[https://github.com/erjoalgo/cl-voipms/][cl-voipms]] | Common Lisp HTTP api client to the voip.ms api. — BSD |
+|[[https://github.com/rabbibotton/clog-ace/][clog-ace]] | CLOG Ace Editor Plugin — BSD |
+|[[https://codeberg.org/thegreatcatadorer/clam][cluster]] | A set of utilities for Common Lisp, including a full prototype system — MIT |
+|[[https://github.com/dtenny/clustered-intset/][clustered-intset]] | Implements a non-negative keyed set of integers favoring clustered keys. — MIT|
+|[[https://git.mfiano.net/mfiano/convolution-kernel][convolution-kernel]] | An implementation of a kernel useful for convolution-like cellular transformations across a grid. — MIT|
+|[[https://github.com/digikar99/dense-arrays/][dense-arrays]] | Numpy like array objects for Common Lisp — MIT |
+|[[https://git.mfiano.net/mfiano/doubly-linked-list][doubly-linked-list]] | An implementation of the doubly linked list data structure. — MIT|
+|[[https://git.mfiano.net/mfiano/dungen][dungen]] | A procedural dungeon generator. — MIT |
+|[[https://git.mfiano.net/mfiano/dynamic-array][dynamic-array]] | An optimized 1-dimensional array of fixnums that automatically re-adjusts in size. — MIT|
+|[[https://notabug.org/cage/easter-gauss][easter-gauss]] | Calculate the Ester date from year using the method developed from Gauss. — MIT |
+|[[https://github.com/erjoalgo/erjoalgo-webutil/][erjoalgo-webutil]] | Framework for defining [oauth] http api client & sever. — GPLv3|
+|[[https://github.com/digikar99/extensible-compound-types/][extensible-compound-types]] | EXTENSIBLE-COMPOUND-TYPES for user-defined compound-types like (array &optional element-type dimension-spec) — MIT|
+|[[https://git.mfiano.net/mfiano/freebsd-ffi][freebsd-ffi]] | A small, but growing collection of syscall and base install library FFI wrappers for FreeBSD. | BSD2  |
+|[[https://git.mfiano.net/mfiano/gfxmath][gfxmath]] | A graphics math library. — MIT |
+|[[https://github.com/ccqpein/Github-API-CL][github-api-cl]] | The lite Github rest v3 api client SDK — Apache|
+|[[https://git.mfiano.net/mfiano/glsl-metadata][glsl-metadata]] | A computer-readable representation of all versions of the OpenGL Shader Language specifications. | MIT |
+|[[https://git.mfiano.net/mfiano/grid-formation][grid-formation]] | Simple cellular grid formations and algorithms. — MIT |
+|[[https://github.com/zellerin/http2/][http2]] | HTTP2 protocol implementation — MIT |
+|[[https://git.mfiano.net/mfiano/identifier-pool][identifier-pool]] | A simple generational identification number allocator. — MIT|
+|[[https://git.mfiano.net/mfiano/mfiano-utils][mfiano-utils]] | A utility library. — MIT |
+|[[https://sr.ht/~shunter/mstrings/][mstrings]] | Pretty multiline strings Reader Macro — BSD 3-Clause |
+|[[https://github.com/shamazmazum/nibbles-streams/][nibbles-streams]] | Proof of concept for lossless audio compressor — 2-clause BSD|
+|[[https://github.com/atlas-engineer/nkeymaps][nkeymaps]] | General-purpose keymap management Ã -la Emacs. — BSD 3-Clause |
+|[[https://github.com/bpanthi977/nlopt/][nlopt]] | Common Lisp interface to Non-linear optimization library NLopt — MIT |
+|[[https://github.com/bpanthi977/qoi/][qoi]] | Library for encoding/decoding QOI (Quite OK Image Format) files — MIT |
+|[[https://git.mfiano.net/mfiano/quad-tree][quad-tree]] | An implementation of the quad tree data structure. — MIT|
+|[[https://git.mfiano.net/mfiano/red-black-tree][red-black-tree]] | An implementation of the red-black search tree data structure. — MIT|
+|[[https://git.mfiano.net/mfiano/slot-map][slot-map]] | An implementation of the slot-map data structure. — MIT |
+|[[https://git.mfiano.net/mfiano/sparse-set][sparse-set]] | An implementation of the sparse set data structure. — MIT|
+|[[https://git.mfiano.net/mfiano/tile-grid][tile-grid]] | A simple tile grid implementation. — MIT |
+|[[https://github.com/digikar99/trivial-coerce/][trivial-coerce]] | `trivial-coerce` primarily provides a `trivial-coerce:coerce` function intended as an extensible alternative to `cl:coerce`. — MIT|
+|[[https://github.com/sirherrbatka/vellum-binary/][vellum-binary]] | vellum custom binary format. — BSD simplified |
+
+#+begin_export html
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.25/js/jquery.dataTables.min.js"></script>
+
+<script> $(document).ready(function() {
+    $('table').DataTable( {
+        "lengthMenu": [25, 50, 100]
+    } );
+} );</script>
+#+end_export
