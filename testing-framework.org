@@ -344,30 +344,30 @@ I am not including a pie chart describing which library has market share because
 #+ATTR_HTML: :border 2 :rules all :frame border
 | Name          | Hierarchies/suites/tags/lists | Composable | Reports |
 |---------------+-------------------------------+------------+---------|
-| [[1am][1am]]           | N (2)(5)                      | N          | N       |
-| [[2am][2am]]           | Y                             | Y (5)      | (4)     |
+| [[1am][1am]]           | ❌️ (2)(5)                      | ❌️          | ❌️       |
+| [[2am][2am]]           | ✅️                            | ✅️ (5)     | (4)     |
 | [[cacau][cacau]]         | (6)                           |            | (4)     |
-| [[clunit][clunit]]        | Y                             | Y          | (4)     |
-| [[clunit2][clunit2]]       | Y                             | Y          | (4)     |
-| [[fiasco][fiasco]]        | Y                             | Y          |         |
-| [[fiveam][fiveam]]        | Y                             | Y          |         |
-| [[gigamonkeys][gigamonkeys]]   | N                             |            |         |
-| [[kaputt][kaputt]]        | N (9)                         |            |         |
-| [[lift][lift]]          | Y                             | Y          |         |
+| [[clunit][clunit]]        | ✅️                            | ✅️         | (4)     |
+| [[clunit2][clunit2]]       | ✅️                            | ✅️         | (4)     |
+| [[fiasco][fiasco]]        | ✅️                            | ✅️         |         |
+| [[fiveam][fiveam]]        | ✅️                            | ✅️         |         |
+| [[gigamonkeys][gigamonkeys]]   | ❌️                             |            |         |
+| [[kaputt][kaputt]]        | ❌️ (9)                         |            |         |
+| [[lift][lift]]          | ✅️                            | ✅️         |         |
 | [[lisp-unit][lisp-unit]]     | (tags) (3)                    |            | (1,4)   |
-| [[lisp-unit2][lisp-unit2]]    | (tags) (3)(5)                 | Y (5)      | (1,4)   |
-| [[nst][nst]]           | Y                             | Y          |         |
-| [[parachute][parachute]]     | Y                             | Y          | (1)     |
-| [[prove][prove]]         | Y                             | Y          | (4)     |
-| [[ptester][ptester]]       | N                             |            |         |
+| [[lisp-unit2][lisp-unit2]]    | (tags) (3)(5)                 | ✅️ (5)     | (1,4)   |
+| [[nst][nst]]           | ✅️                            | ✅️         |         |
+| [[parachute][parachute]]     | ✅️                            | ✅️         | (1)     |
+| [[prove][prove]]         | ✅️                            | ✅️         | (4)     |
+| [[ptester][ptester]]       | ❌️                             |            |         |
 | [[rove][rove]]          | (7)                           | (7)        |         |
 | [[rt][rt]]            | package                       | (8)        |         |
 | [[should-test][should-test]]   | package                       |            |         |
-| [[simplet][simplet]]       | N                             |            |         |
-| [[tap-unit-test][tap-unit-test]] | N                             |            | (4)     |
-| [[unit-test][unit-test]]     | Y                             | Y          |         |
-| [[xlunit][xlunit]]        | Y                             | Y          |         |
-| [[xptest][xptest]]        | Y                             | N          |         |
+| [[simplet][simplet]]       | ❌️                             |            |         |
+| [[tap-unit-test][tap-unit-test]] | ❌️                             |            | (4)     |
+| [[unit-test][unit-test]]     | ✅️                            | ✅️         |         |
+| [[xlunit][xlunit]]        | ✅️                            | ✅️         |         |
+| [[xptest][xptest]]        | ✅️                            | ❌️          |         |
 1. report objects are provided which are expected to be extended by the user
 2. uses a flat list of tests. You can pass any list of test-names to run. See, e.g. macro provided by Phoe in the 1am [[1am-discussion][discussion]].
 3. lisp-unit and lisp-unit2 organize by packages and by tags. You can run all the tests in a package, or all the tests for a list of tags, but they do not have the strict sense of hierarchy that other libraries have.
@@ -377,7 +377,7 @@ I am not including a pie chart describing which library has market share because
 7. Rove's =run-suite= function will run all the tests in a particular package but does not accept a style parameter and simply prints out the results of each individual test, without summarizing. Rove's =run= function does accept a style parameter but seems to handle only package-inferred systems. I confirm Rove's [[https://github.com/fukamachi/rove/issues/42][issue #42]] that it will not run with non-package inferred systems.
 8. RT does not have suites per se. You can run all the tests that have been defined using the DO-TESTS function. By default it prints to =*standard-output*= but accepts an optional stream parameter which would allow you to redirect the results to a file or other stream of your choice. do-tests will print the results for each individual test and then summarize with something like the following:
 
-** Run on Compile and Funcallable Tests
+** Run on compile, funcallable tests
     <<run-on-compile>><<funcallable>>
 #+CAPTION: Run on Compile and Funcallable Tests
 #+ATTR_HTML: :border 2 :rules all :frame border
@@ -417,31 +417,31 @@ I am not including a pie chart describing which library has market share because
 #+CAPTION: Fixtures
 #+ATTR_HTML: :border 2 :rules all :frame border
 #+ATTR_LATEX: :float multicolumn
-| Library                | Fixtures  | Suite Fixtures | Test Fixtures | Multiple Fixtures                  |
-|------------------------+-----------+----------------+---------------+------------------------------------|
-| [[1am][1am]]                    | N         |                |               |                                    |
-| [[2am][2am]] (not in quicklisp) | N         |                |               |                                    |
-| [[cacau][cacau]]                  | Y         | Y              | Y             |                                    |
-| [[clunit][clunit]]                 | Y         | Y              | Y             | Y                                  |
-| [[clunit2][clunit2]]                | Y         | Y              | Y             | Y                                  |
-| [[fiasco][fiasco]]                 | N         |                |               |                                    |
-| [[fiveam][fiveam]]  (a)            | K         | Y              | Y             |                                    |
-| [[gigamonkeys][gigamonkeys]]            | N         |                |               |                                    |
-| [[kaputt][kaputt]]                 | N         |                |               |                                    |
-| [[lift][lift]]                   | Y         | Y              |               | inherited from higher level suites |
-| [[lisp-unit][lisp-unit]]              | N         |                |               |                                    |
-| [[lisp-unit2][lisp-unit2]]             | Y         |                | Y             |                                    |
-| [[nst][nst]]                    | Y         | Y              | Y             | Y                                  |
-| [[parachute][parachute]]              | Y         |                | Y             |                                    |
-| [[prove][prove]]                  | N         |                |               |                                    |
-| [[ptester][ptester]]                | N         |                |               |                                    |
-| [[rove][rove]]                   | Y         | Y              | Y             | Y                                  |
-| [[rt][rt]]                     | N         |                |               |                                    |
-| [[should-test][should-test]]            | N         |                |               |                                    |
-| [[tap-unit-test][tap-unit-test]]          | N         |                |               |                                    |
-| [[unit-test][unit-test]] (b)          | Y         | (b)            | (b)           | (b)                                |
-| [[xlunit][xlunit]]                 | Y         | Y              | Y             | Y                                  |
-| [[xptest][xptest]]                 | Y         |                | Y             |                                    |
+| Library                | Fixtures | Suite Fixtures | Test Fixtures | Multiple Fixtures                  |
+|------------------------+----------+----------------+---------------+------------------------------------|
+| [[1am][1am]]                    | ❌️       |                |               |                                    |
+| [[2am][2am]] (not in quicklisp) | ❌️       |                |               |                                    |
+| [[cacau][cacau]]                  | ✅️       | ✅️             | ✅️            |                                    |
+| [[clunit][clunit]]                 | ✅️       | ✅️             | ✅️            | ✅️                                 |
+| [[clunit2][clunit2]]                | ✅️       | ✅️             | ✅️            | ✅️                                 |
+| [[fiasco][fiasco]]                 | ❌️       |                |               |                                    |
+| [[fiveam][fiveam]]  (a)            | K        | ✅️             | ✅️            |                                    |
+| [[gigamonkeys][gigamonkeys]]            | ❌️       |                |               |                                    |
+| [[kaputt][kaputt]]                 | ❌️       |                |               |                                    |
+| [[lift][lift]]                   | ✅️       | ✅️             |               | inherited from higher level suites |
+| [[lisp-unit][lisp-unit]]              | ❌️       |                |               |                                    |
+| [[lisp-unit2][lisp-unit2]]             | ✅️       |                | ✅️            |                                    |
+| [[nst][nst]]                    | ✅️       | ✅️             | ✅️            | ✅️                                 |
+| [[parachute][parachute]]              | ✅️       |                | ✅️            |                                    |
+| [[prove][prove]]                  | ❌️       |                |               |                                    |
+| [[ptester][ptester]]                | ❌️       |                |               |                                    |
+| [[rove][rove]]                   | ✅️       | ✅️             | ✅️            | ✅️                                 |
+| [[rt][rt]]                     | ❌️       |                |               |                                    |
+| [[should-test][should-test]]            | ❌️       |                |               |                                    |
+| [[tap-unit-test][tap-unit-test]]          | ❌️       |                |               |                                    |
+| [[unit-test][unit-test]] (b)          | ✅️       | (b)            | (b)           | (b)                                |
+| [[xlunit][xlunit]]                 | ✅️       | ✅️             | ✅️            | ✅️                                 |
+| [[xptest][xptest]]                 | ✅️       |                | ✅️            |                                    |
 (a) Not really recommended, but does exist.
 (b) Users are expected to create a subclass of the unit-test class using the =define-test-class= macro.
 
