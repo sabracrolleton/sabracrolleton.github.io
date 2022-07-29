@@ -70,16 +70,16 @@ In any event, yes, I will state my opinions, but what you think is important wil
 | Library                        | Homepage | Author                                          | License           | Last Update |
 |--------------------------------+----------+-------------------------------------------------+-------------------+-------------|
 | [[1am][1am]]                            | [[https://github.com/lmj/1am][homepage]] | James Lawrence                                  | MIT               |        2014 |
-| [[2am][2am]] (not in quicklisp)         | [[https://gitlab.common-lisp.net/dkochmanski/2am][homepage]] | Daniel Kochmański                               | MIT               |        2016 |
+| [[2am][2am]] [fn:1]                     | [[https://gitlab.common-lisp.net/dkochmanski/2am][homepage]] | Daniel Kochmański                               | MIT               |        2016 |
 | [[cacau][cacau]]                          | [[https://github.com/noloop/cacau][homepage]] | Noloop                                          | GPL3              |        2020 |
-| [[cardiogram][cardiogram]] (e)                 | [[https://gitlab.com/a.aguilar/cardiogram][homepage]] | Abraham Aguilar                                 | MIT               |        2020 |
-| [[clunit][clunit]] (a)                     | [[http://tgutu.github.io/clunit/][homepage]] | Tapiwa Gutu                                     | BSD               |        2017 |
+| [[cardiogram][cardiogram]] [fn:2]              | [[https://gitlab.com/a.aguilar/cardiogram][homepage]] | Abraham Aguilar                                 | MIT               |        2020 |
+| [[clunit][clunit]] [fn:3]                  | [[http://tgutu.github.io/clunit/][homepage]] | Tapiwa Gutu                                     | BSD               |        2017 |
 | [[clunit2][clunit2]]                        | [[https://notabug.org/cage/clunit2][homepage]] | Cage (fork of clunit)                           | BSD               |        2021 |
 | [[com.gigamonkeys.test-framework][com.gigamonkeys.test-framework]] | [[https://github.com/gigamonkey/monkeylib-test-framework][homepage]] | Peter Seibel                                    | BSD               |        2010 |
-| [[fiasco][fiasco]] (b)                     | [[https://github.com/joaotavora/fiasco][homepage]] | João Távora                                     | BSD 2 Clause      |        2020 |
+| [[fiasco][fiasco]] [fn:4]                  | [[https://github.com/joaotavora/fiasco][homepage]] | João Távora                                     | BSD 2 Clause      |        2020 |
 | [[fiveam][fiveam]]                         | [[https://github.com/lispci/fiveam][homepage]] | Edward Marco Baringer                           | BSD               |        2020 |
 | [[kaputt][kaputt]]                         | [[https://github.com/foretspaisibles/cl-kaputt][homepage]] | Michaël Le Barbier                              | MIT               |        2020 |
-| [[lift][lift]]                           | [[https://github.com/gwkkwg/lift][homepage]] | Gary Warren King                                | MIT               |    2019 (c) |
+| [[lift][lift]]                           | [[https://github.com/gwkkwg/lift][homepage]] | Gary Warren King                                | MIT               | 2019 [fn:5] |
 | [[lisp-unit][lisp-unit]]                      | [[https://github.com/OdonataResearchLLC/lisp-unit][homepage]] | Thomas M. Hermann                               | MIT               |        2017 |
 | [[lisp-unit2][lisp-unit2]]                     | [[https://github.com/AccelerationNet/lisp-unit2][homepage]] | Russ Tyndall                                    | MIT               |        2018 |
 | [[nst][nst]]                            | [[https://github.com/jphmrst/cl-nst][homepage]] | John Maraist                                    | LLGPL3 latest     |        2021 |
@@ -90,18 +90,19 @@ In any event, yes, I will state my opinions, but what you think is important wil
 | [[rt][rt]]                             | none     | Kevin M. Rosenberg                              | MIT               |        2010 |
 | [[should-test][should-test]]                    | [[https://github.com/vseloved/should-test][homepage]] | Vsevolod Dyomkin                                | MIT               |        2019 |
 | [[simplet][simplet]]                        | [[https://github.com/noloop/simplet][homepage]] | Noloop                                          | GPLv3             |        2019 |
-| stefil (f)                     | [[http://dwim.hu/darcsweb/darcsweb.cgi?r=HEAD%20hu.dwim.stefil;a=summary][homepage]] | Attila Lendvai, Tamas Borbely, Levente Meszaros | BSD/Public Domain |        2018 |
-| [[tap-unit-test][tap-unit-test]] (d)              | [[https://github.com/jhanley634/tap-unit-test][homepage]] | Christopher K. Riesbeck, John Hanley            | MIT               |        2017 |
+| stefil [fn:6]                  | [[http://dwim.hu/darcsweb/darcsweb.cgi?r=HEAD%20hu.dwim.stefil;a=summary][homepage]] | Attila Lendvai, Tamas Borbely, Levente Meszaros | BSD/Public Domain |        2018 |
+| [[tap-unit-test][tap-unit-test]] [fn:7]           | [[https://github.com/jhanley634/tap-unit-test][homepage]] | Christopher K. Riesbeck, John Hanley            | MIT               |        2017 |
 | [[unit-test][unit-test]]                      | [[https://github.com/hanshuebner/unit-test][homepage]] | Manuel Odendahl, Alain Picard                   | MIT               |        2012 |
 | [[xlunit][xlunit]]                         | [[http://git.kpe.io/?p=xlunit.git;a=tree][homepage]] | Kevin RosenBerg                                 | BSD               |        2015 |
 | [[xptest][xptest]]                         | none     | Craig Brozensky                                 | Public Domain     |        2015 |
 
-- (a) Looking for new maintainer. Has been forked to clunit2 and you should only consider clunit2.
-- (b) Fork of stefil
-- (c) Port to Clasp, otherwise 2015
-- (d) Tap-Unit-Test is a version of lisp-unit with [[http://en.wikipedia.org/wiki/Test_Anything_Protocol][TAP]] formatted reporting.
-- (e) Cannot get it to work.
-- (f) The authors have specified it as obsolete, so it will not be further considered.
+[fn:1] Not available from QuickLisp
+[fn:2] Cannot get it to work.
+[fn:3] Looking for new maintainer. Has been forked to clunit2 and you should only consider clunit2.
+[fn:4] Fork of stefil
+[fn:5] Port to Clasp, otherwise 2015
+[fn:6] The authors have specified it as obsolete, so it will not be further considered.
+[fn:7] Tap-Unit-Test is a version of lisp-unit with [[http://en.wikipedia.org/wiki/Test_Anything_Protocol][TAP]] formatted reporting.
 
 ** Speciality Libaries
 #+CAPTION: Speciality Libaries
