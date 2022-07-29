@@ -194,7 +194,7 @@ The selenium interfaces are here for reference purposes and are not further disc
 For those who want the opinionated quick summary. The awards are -
 - Best General Purpose: *Parachute*
 
-  It hits almost everything on my wish list - optionality on progress reports and debugging, good suite setup and reporting, good default error-reporting and the ability to provide diagnostic strings with variables, the ability to skip failing test dependencies and set time limits on tests (and reports the time for each test and decent fixture capability. It does not have the built-in ability to re-run just the last failing tests, but that is a relatively easy add-on. The bigger limitation is that while fixtures are easy to setup, fixtures at a parent test level (suite level) do not apply to nested child tests. While it is not the fastest, it is in the pack as opposed to the also-rans.)
+  It hits almost everything on my wish list - optional progress reports and debugging, good suite setup and reporting, good default error-reporting and the ability to provide diagnostic strings with variables, the ability to skip failing test dependencies, to set time limits on tests, to report the time for each test and decent fixture capability. It does not have the built-in ability to re-run just the last failing tests, but that is a relatively easy add-on. The bigger limitation is that while fixtures are easy to setup, fixtures for parent tests (suites) do not apply to nested child tests. While it is not the fastest, it is in the pack as opposed to the also-rans.
 
   My second pick would be *Fiasco*, but I like Parachute's fixture capability and suite setup better.
 
@@ -212,7 +212,7 @@ For those who want the opinionated quick summary. The awards are -
 
 - If you need tests to take parameters: *Fiasco*
 
-- If you need progress reporting optionality: *Parachute, Fiasco, or Clunit2*
+- If you need progress reporting to be optional: *Parachute, Fiasco, or Clunit2*
 
 - Favorite Hierarchy Setup (nestable suites): *Parachute*
 
@@ -447,7 +447,7 @@ I am not including a pie chart describing which library has market share because
 
 [[top][top]]
 
-** Debugging Optionality and User Provided Diagnostic Messages
+** Control over debugging, and user-provided diagnostic messages
 Does a failure (not error) trigger the debugger, is it optional, and do assertions allow user-provided diagnostic messages. If yes, can you further provide variables for a failure message?
 <<debugging>><<diagnostic-messages>>
 #+CAPTION: Overview Reporting v. Debugger Optionality / Diagnostic Messages
@@ -2121,7 +2121,7 @@ Can you generate different types of random data to feed to the testing framework
 [[top][top]]
 ** Summary
  | [[https://github.com/lmj/1am][homepage]] | James Lawrence | MIT | 2014 |
-1am will thrown you into the debugger on failures or errors. There is no optionality, there is no reporting - in you go. There is no provision for diagnostic strings in assertions, but since it throws you into the debugger, that is probably not relevant. Tests are shuffled on each run.
+1am will thrown you into the debugger on failures or errors. There is no way to disable this, there is no reporting - in you go. There is no provision for diagnostic strings in assertions, but since it throws you into the debugger, that is probably not relevant. Tests are shuffled on each run.
 
 On the plus side for some people, tests are functions.
 
