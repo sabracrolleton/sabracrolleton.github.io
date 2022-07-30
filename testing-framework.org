@@ -19,31 +19,35 @@
 
 * Introduction
 
-What testing framework should I use? The response should not be X or Y because it is "battle tested" or "extensible" or "has color coding". That is just content free advertising buzz words. Some of the webpages out there mentioning different common lisp unit tests frameworks merely parrot comments from library authors without validating whether they are true. The real response should be asking back - "how do you code"? But even armed with that information, how do you match a testing framework to their needs - Common Lisp has a ridiculous number of testing framework libraries.
+What testing framework should I use? The response should not be X or Y because it is "battle-tested", or "extensible", or "has color coding". Those are just content-free advertising buzzwords. Some webpages which mention different Common Lisp unit test frameworks merely parrot comments from the framework authors without ensuring their veracity.
 
-Previous reviews of testing frameworks were done in  [[http://aperiodic.net/phil/archives/Geekery/notes-on-lisp-testing-frameworks.html][2007]], [[http://maraist.org/static/work/ILC2010-maraist.pdf][2010 (NST review)]] and some work in 2012 by the author of [[http://tgutu.github.io/clunit/][clunit]] which links seem to have bitrot and are now only accessible via the wayback machine: [[https://web.archive.org/web/20121119060726/http://ml.sun.ac.za/2012/11/09/developing-a-unit-test-framework-part-1/][part 1]] and [[https://web.archive.org/web/20130303062507/http://ml.sun.ac.za/2012/11/09/developing-a-unit-test-framework-part-2/][part 2]]. I thought it was time for an update. I am open to pull requests on this document for corrections, additions, whatever. See [[https://github.com/sabracrolleton/sabracrolleton.github.io]]
+The real response should be to respond, "How do you code?" But even armed with that information, how do you match a testing framework to the user's needs? Common Lisp has a ridiculous number of testing framework libraries.
 
-The best testing framework is context dependent and that context includes how you work. As an example, there was an exchange on reddit.com between dzecniv and shinmera. Dzecniv likes Prove more than Parachute because s/he could run tests just by hitting (C-c) the source. Shinmera pointed out a way you could easily add that to Parachute, but he views compilation and execution as two different things. I'm in Shinmera's camp. I do not want to run the test until I want to run it. At the same time, I want to be clear on terminology. If I understand the context, Dzecniv was talking about was what I would call an assertion, so in the interests of clear terminology, consider the following pseudo code:
+Some past reviews of testing frameworks were done in [[http://aperiodic.net/phil/archives/Geekery/notes-on-lisp-testing-frameworks.html][2007]] and [[http://maraist.org/static/work/ILC2010-maraist.pdf][2010 (NST review)]]. There was also some work in 2012 by the author of [[http://tgutu.github.io/clunit/][clunit]], which seems to have bitrotten and is now only accessible via the Wayback Machine - [[https://web.archive.org/web/20121119060726/http://ml.sun.ac.za/2012/11/09/developing-a-unit-test-framework-part-1/][part 1]] and [[https://web.archive.org/web/20130303062507/http://ml.sun.ac.za/2012/11/09/developing-a-unit-test-framework-part-2/][part 2]]. I thought it was time for an update. I am open to pull requests on this document for corrections, additions, whatever. See [[https://github.com/sabracrolleton/sabracrolleton.github.io]]
+
+The best testing framework is context-dependent, and that context includes how you work. As an example, there was an exchange on [[https://old.reddit.com/r/common_lisp][r/common​_lisp]] between dzecniv and Shinmera. dzecniv likes Prove more than Parachute because they could run tests just by hitting (C-c) the source. Shinmera pointed out a way you could easily add that to Parachute, but he views compilation and execution as two different things. I'm in Shinmera's camp - I do not want to run the test until I want to run it. At the same time, I want to be clear on terminology. If I understand the context, dzecniv was talking about was what I would call an assertion. In the interest of clear terminology, consider the following pseudocode -
+
 #+begin_src lisp
     (defsuite s0  ; (1)
       (deftest t1 ; (2)
         (assert-true (= 1 1)))) ; (3)
 #+end_src
-(1) I will call this a suite - It contains one or more tests (or other suites) and hopefully composes the results
-(2) I will call this a test - it contains one or more assertions and hopefull composes the results
-(3) I will call this an assertion and the "assert-true" or equivalent as a testing function
 
-I still do not want to run assertions at compilation either, but I do not compile assertions outside of test anyway. So, just for Dzecniv and those like him, there is a [[run-on-compile][functionality table on running assertions on compilation]].
++ (1) :: I call this a suite - it contains one or more tests (or other suites) and hopefully composes the results
++ (2) :: I will call this a test - it contains one or more assertions and hopefully composes the results
++ (3) :: I will call this an assertion and the =assert-true= or equivalent as a testing function
 
-Some people are just looking for regression testing, so focusing on running all the tests at once. For example, the README for Prove does not even mention =deftest= or =run-test=. Others are looking for TDD or other continuous testing with their development. I use individual tests a lot during development, but obviously need regression testing as well.
+I do not want to run assertions at compile-time, but I do not compile assertions outside of tests anyway. So, just for Dzecniv and those like him, there is a [[run-on-compile][functionality table on running assertions on compilation]].
 
-Some testing frameworks insist on tracking [[progress-reports][progress printing little dots or checkmarks with every assertion or test passed or failed]]. Consider testing libraries like [[https://github.com/Shinmera/uax-9][uax-9]] which has 1,815,582 assertions (yes the tests are autogenerated). I do not want to waste the screen space for all those dots, the time wasted printing those dots to screen or, if there is a test failure, trying to find the failed test in the haystack of successful tests. So I prefer a testing framework that allowed me to only collect failures and turn off the progress report. Of course some frameworks do not do progress reports (or do them at the test level not the assertion level) but you might really want or need those progress reports.
+Some people are just looking for regression testing - they focus on running all the tests at once. For example, the README for Prove does not even mention =deftest= or =run-test=. Others are looking for TDD or other continuous testing for their development. I use individual tests a lot during development, but obviously need regression testing as well.
 
-Some frameworks cannot find lexical variables declared in a closure containing the test. Most people will not care, but if you use closures you might.
+Some testing frameworks insist on [[progress-reports][tracking progress by printing little dots or checkmarks]] for every assertion or test that passed or failed. Consider a library like [[https://github.com/Shinmera/uax-9][uax-9]], which has 1,815,582 assertions (yes, the tests are autogenerated). I don't want to waste screen space on that many dots; I don't want to waste time on printing those dots to screen, nor, if a test fails, in trying to find the failed test amidst the haystack of successful tests. Therefore, I prefer a testing framework that allows me to only collect failures, and to turn off progress reporting. Of course, some frameworks do not display progress reports at all - or do so at the test level rather than the assertion level - but you might really want or need those progress reports.
 
-Other contexts are best served by other libraries. Complex fixture requirements might drive you towards something like [[nst][NST]], the need to define your own speciality assertions might be served by [[should-test][should-test]] or [[kaputt][kaputt]]. Numerical comparisons might suggest using [[lisp-unit][lisp-unit]], [[lisp-unit2][lisp-unit2]] or [[kaputt][kaputt]] (or just write your own). For macro expansion testing [[clunit][clunit]], [[clunit2][clunit2]], [[lisp-unit][lisp-unit]], [[lisp-unit2][lisp-unit2]] and [[rove][rove]] have specific assertion functions. Your situation should govern which testing framework you use, not your project skeleton or market share.
+Some frameworks cannot find lexical variables declared in a closure containing the test. Most people will not care, but if you use closures, you might.
 
-I occasionally hear extensibility as a buzzword applied to a framework. I'm not sure that means to people. Consider the following example in sxql which is not a testing framework but which included this macro in its own test file to simplify use of prove.
+Other contexts are best served by other libraries. Complex fixture requirements might drive you towards something like [[nst][NST]], the need to define your own bespoke assertions might be served by [[should-test][should-test]] or [[kaputt][kaputt]]. Numerical comparisons might lead you to use [[lisp-unit][lisp-unit]], [[lisp-unit2][lisp-unit2]] or [[kaputt][kaputt]] (or just writing your own). For macro-expansion testing, [[clunit][clunit]], [[clunit2][clunit2]], [[lisp-unit][lisp-unit]], [[lisp-unit2][lisp-unit2]] and [[rove][rove]] have specific assertion functions. Your situation should govern which testing framework you use, not your project skeleton or market share.
+
+I occasionally hear "extensibility" used as a buzzword applied to a framework. I'm not sure what it means to people. Consider the following example in =sxql=, which is not a testing framework but which included this macro in its own test file to simplify its use of =prove= -
 #+begin_src lisp
 (defmacro is-mv (test result &optional desc)
   `(is (multiple-value-list (yield ,test))
@@ -54,7 +58,7 @@ I occasionally hear extensibility as a buzzword applied to a framework. I'm not 
        '("SELECT (? + ?)" (1 1))
        "field")
 #+end_src
-How hard is that to do in any framework? This is CL.
+How hard is that to do in any framework? This is Common Lisp.
 
 In any event, yes, I will state my opinions, but what you think is important will drive your preferences in testing frameworks.
 
@@ -66,16 +70,16 @@ In any event, yes, I will state my opinions, but what you think is important wil
 | Library                        | Homepage | Author                                          | License           | Last Update |
 |--------------------------------+----------+-------------------------------------------------+-------------------+-------------|
 | [[1am][1am]]                            | [[https://github.com/lmj/1am][homepage]] | James Lawrence                                  | MIT               |        2014 |
-| [[2am][2am]] (not in quicklisp)         | [[https://gitlab.common-lisp.net/dkochmanski/2am][homepage]] | Daniel Kochmański                               | MIT               |        2016 |
+| [[2am][2am]] [fn:1]                     | [[https://gitlab.common-lisp.net/dkochmanski/2am][homepage]] | Daniel Kochmański                               | MIT               |        2016 |
 | [[cacau][cacau]]                          | [[https://github.com/noloop/cacau][homepage]] | Noloop                                          | GPL3              |        2020 |
-| [[cardiogram][cardiogram]] (e)                 | [[https://gitlab.com/a.aguilar/cardiogram][homepage]] | Abraham Aguilar                                 | MIT               |        2020 |
-| [[clunit][clunit]] (a)                     | [[http://tgutu.github.io/clunit/][homepage]] | Tapiwa Gutu                                     | BSD               |        2017 |
+| [[cardiogram][cardiogram]] [fn:2]              | [[https://gitlab.com/a.aguilar/cardiogram][homepage]] | Abraham Aguilar                                 | MIT               |        2020 |
+| [[clunit][clunit]] [fn:3]                  | [[http://tgutu.github.io/clunit/][homepage]] | Tapiwa Gutu                                     | BSD               |        2017 |
 | [[clunit2][clunit2]]                        | [[https://notabug.org/cage/clunit2][homepage]] | Cage (fork of clunit)                           | BSD               |        2021 |
 | [[com.gigamonkeys.test-framework][com.gigamonkeys.test-framework]] | [[https://github.com/gigamonkey/monkeylib-test-framework][homepage]] | Peter Seibel                                    | BSD               |        2010 |
-| [[fiasco][fiasco]] (b)                     | [[https://github.com/joaotavora/fiasco][homepage]] | João Távora                                     | BSD 2 Clause      |        2020 |
+| [[fiasco][fiasco]] [fn:4]                  | [[https://github.com/joaotavora/fiasco][homepage]] | João Távora                                     | BSD 2 Clause      |        2020 |
 | [[fiveam][fiveam]]                         | [[https://github.com/lispci/fiveam][homepage]] | Edward Marco Baringer                           | BSD               |        2020 |
 | [[kaputt][kaputt]]                         | [[https://github.com/foretspaisibles/cl-kaputt][homepage]] | Michaël Le Barbier                              | MIT               |        2020 |
-| [[lift][lift]]                           | [[https://github.com/gwkkwg/lift][homepage]] | Gary Warren King                                | MIT               |    2019 (c) |
+| [[lift][lift]]                           | [[https://github.com/gwkkwg/lift][homepage]] | Gary Warren King                                | MIT               | 2019 [fn:5] |
 | [[lisp-unit][lisp-unit]]                      | [[https://github.com/OdonataResearchLLC/lisp-unit][homepage]] | Thomas M. Hermann                               | MIT               |        2017 |
 | [[lisp-unit2][lisp-unit2]]                     | [[https://github.com/AccelerationNet/lisp-unit2][homepage]] | Russ Tyndall                                    | MIT               |        2018 |
 | [[nst][nst]]                            | [[https://github.com/jphmrst/cl-nst][homepage]] | John Maraist                                    | LLGPL3 latest     |        2021 |
@@ -86,18 +90,20 @@ In any event, yes, I will state my opinions, but what you think is important wil
 | [[rt][rt]]                             | none     | Kevin M. Rosenberg                              | MIT               |        2010 |
 | [[should-test][should-test]]                    | [[https://github.com/vseloved/should-test][homepage]] | Vsevolod Dyomkin                                | MIT               |        2019 |
 | [[simplet][simplet]]                        | [[https://github.com/noloop/simplet][homepage]] | Noloop                                          | GPLv3             |        2019 |
-| stefil (f)                     | [[http://dwim.hu/darcsweb/darcsweb.cgi?r=HEAD%20hu.dwim.stefil;a=summary][homepage]] | Attila Lendvai, Tamas Borbely, Levente Meszaros | BSD/Public Domain |        2018 |
-| [[tap-unit-test][tap-unit-test]] (d)              | [[https://github.com/jhanley634/tap-unit-test][homepage]] | Christopher K. Riesbeck, John Hanley            | MIT               |        2017 |
+| stefil [fn:6]                  | [[http://dwim.hu/darcsweb/darcsweb.cgi?r=HEAD%20hu.dwim.stefil;a=summary][homepage]] | Attila Lendvai, Tamas Borbely, Levente Meszaros | BSD/Public Domain |        2018 |
+| [[tap-unit-test][tap-unit-test]] [fn:7]           | [[https://github.com/jhanley634/tap-unit-test][homepage]] | Christopher K. Riesbeck, John Hanley            | MIT               |        2017 |
 | [[unit-test][unit-test]]                      | [[https://github.com/hanshuebner/unit-test][homepage]] | Manuel Odendahl, Alain Picard                   | MIT               |        2012 |
 | [[xlunit][xlunit]]                         | [[http://git.kpe.io/?p=xlunit.git;a=tree][homepage]] | Kevin RosenBerg                                 | BSD               |        2015 |
 | [[xptest][xptest]]                         | none     | Craig Brozensky                                 | Public Domain     |        2015 |
 
-- (a) Looking for new maintainer. Has been forked to clunit2 and you should only consider clunit2.
-- (b) Fork of stefil
-- (c) Port to Clasp, otherwise 2015
-- (d) Tap-Unit-Test is a version of lisp-unit with [[http://en.wikipedia.org/wiki/Test_Anything_Protocol][TAP]] formatted reporting.
-- (e) Cannot get it to work.
-- (f) The authors have specified it as obsolete, so it will not be further considered.
+[fn:1] Not available from QuickLisp
+[fn:2] Cannot get it to work.
+[fn:3] Looking for new maintainer. Has been forked to clunit2 and you should only consider clunit2.
+[fn:4] Fork of stefil
+[fn:5] Port to Clasp, otherwise 2015
+[fn:6] The authors have specified it as obsolete, so it will not be further considered.
+[fn:7] Tap-Unit-Test is a version of lisp-unit with [[http://en.wikipedia.org/wiki/Test_Anything_Protocol][TAP]] formatted reporting.
+
 ** Speciality Libaries
 #+CAPTION: Speciality Libaries
 #+ATTR_HTML: :border 2 :rules all :frame border
@@ -115,6 +121,7 @@ In any event, yes, I will state my opinions, but what you think is important wil
 | selenium              | [[https://github.com/html/cl-selenium][homepage]] | Matthew Kennedy | LLGPL   |        2016 | 1.0?     |
 
 The selenium interfaces are here for reference purposes and are not further discussed.
+
 ** [[helper-libraries][Helper Libraries]]
 #+CAPTION: Libraries Considered
 #+ATTR_HTML: :border 2 :rules all :frame border
@@ -135,29 +142,29 @@ The selenium interfaces are here for reference purposes and are not further disc
 | [[testbild][testbild]]                  | [[https://github.com/e-user/testbild][homepage]] | Alexander Kahl      | GPLv3        |        2010 |
 | [[test-utils][test-utils]]                | [[https://github.com/inaimathi/test-utils][homepage]] | Leo Zovic           | MIT          |        2020 |
 
-Assert-p, assertion-error, check-it, cl-fuzz, cl-quickcheck, cover, hamcrest, protest, testbild and test-utils are not, per se, testing frameworks. They are designed to be used in connection with other testing frameworks.
+=assert-p=, =assertion-error=, =check-it=, =cl-fuzz=, =cl-quickcheck=, =cover=, =hamcrest=, =protest=, =testbild= and =test-utils= are not, per se, testing frameworks. They are designed to be used in conjunction with other testing frameworks.
 
-- Check-it and cl-quickcheck are randomized property-based testing libraries (Quickcheck style). See https://en.wikipedia.org/wiki/QuickCheck
+- =check-it= and =cl-quickcheck= are randomized property-based testing libraries (Quickcheck style). See https://en.wikipedia.org/wiki/QuickCheck
 
-- Cl-fuzz is another variant of testing with random data.
+- =cl-fuzz= is another variant of testing with random data.
 
-- Assert-p and Assertion-error are collections of assertions or assertion error macros that can be used in testing frameworks or by a test runner.
+- =assert-p= and =Assertion-error= are collections of assertions or assertion error macros that can be used in testing frameworks or by a test runner.
 
-- Cover is a test coverage library, much like sbcl's [[http://www.sbcl.org/manual/index.html#sb_002dcover][sb-cover]], ccl's [[https://ccl.clozure.com/docs/ccl.html#code-coverage][code-cover]], or LispWorks [[http://www.lispworks.com/documentation/lw71/LW/html/lw-68.htm][Code Coverage]]
+- =cover= is a test coverage library, much like SBCL's [[http://www.sbcl.org/manual/index.html#sb_002dcover][sb-cover]], CCL's [[https://ccl.clozure.com/docs/ccl.html#code-coverage][code-cover]], or LispWorks [[http://www.lispworks.com/documentation/lw71/LW/html/lw-68.htm][Code Coverage]]
 
-- Hamcrest uses pattern matching for building tests.
+- =hamcrest= uses pattern matching for building tests.
 
-- Mockingbird provides stubbing and mocking macros for unit testing. These are used when specified functions in a test should not be computed but should instead return a provided constant value.
+- =mockingbird= provides stubbing and mocking macros for unit testing. These are used when specified functions in a test should not be computed but should instead return a provided constant value.
 
-- Portch helps organize tests written with Franz's portable ptester library
+- =portch= helps organize tests written with Franz's portable ptester library
 
-- Protest is a wrapper around other testing libraries, currently 1am and parachute. It wraps around test assertions and, in case of failure, informs the user of details of the failed test step.
+- =protest= is a wrapper around other testing libraries, currently =1am= and =parachute=. It wraps around test assertions and, in case of failure, informs the user of details of the failed test step.
 
-- Rtch helps organize RT tests based on their position in a directory hierarchy
+- =rtch= helps organize RT tests based on their position in a directory hierarchy
 
-- Testbild provides a common interface for unit testing output, supporting TAP (versions 12 and 13) and xunit styles.
+- =testbild= provides a common interface for unit testing output, supporting TAP (versions 12 and 13) and xunit styles.
 
-- Test-utils provides convenience functions and macros for prove and cl-quickcheck.
+- =test-utils= provides convenience functions and macros for =prove= and =cl-quickcheck=.
 
 [[top][top]]
 
@@ -180,22 +187,43 @@ Assert-p, assertion-error, check-it, cl-fuzz, cl-quickcheck, cover, hamcrest, pr
 | [[should-test][should-test]] | rutils, local-time, osicat, cl-ppcre                                |
 
 <<quick-summary>>
+
 * Quick Summary
 ** Opinionated Awards
 
-For those who want the opinionated quick summary. So, the awards are:
-- Best General Purpose: *Parachute* (It hits almost everything on my wish list - optionality on progress reports and debugging, good suite setup and reporting, good default error reporting and the ability to provide diagnostic strings with variables, the ability to skip failing test dependencies and set time limits on tests (and reports the time for each test and decent fixture capability. It does not have the built-in ability to re-run just the last failing tests, but that is a relatively easy add-on. The bigger limitation is that while fixtures are easy to setup, fixtures at a parent test level (suite level) do not apply to nested child tests. While it is not the fastest, it is in the pack as opposed to the also-rans.) My second pick would be *Fiasco*, but I like Parachute's fixture capability and suite setup better. My third choice would be *Lisp-Unit2*. *(Update 13 June 2021 - based on the latest update of Clunit2, it needs to be included for consideration as well)*
+For those who want the opinionated quick summary. The awards are -
+- Best General Purpose: *Parachute*
+
+  It hits almost everything on my wish list - optional progress reports and debugging, good suite setup and reporting, good default error-reporting and the ability to provide diagnostic strings with variables, the ability to skip failing test dependencies, to set time limits on tests, to report the time for each test and decent fixture capability. It does not have the built-in ability to re-run just the last failing tests, but that is a relatively easy add-on. The bigger limitation is that while fixtures are easy to setup, fixtures for parent tests (suites) do not apply to nested child tests. While it is not the fastest, it is in the pack as opposed to the also-rans.
+
+  My second pick would be *Fiasco*, but I like Parachute's fixture capability and suite setup better.
+
+  My third choice would be *Lisp-Unit2*.
+
+   *(Update 13 June 2021 - based on the latest update of Clunit2, it needs to be included for consideration as well)*
 
 - If Only Award: *Lift* If only it reported all failing assertions and did not stop at the first one. Why? Why can't I change this?
+
 - If you only care about speed: *Lift and 2am* [[benchmarking][Go to Benchmarking]]
+
 - Best General Purpose Fixtures (Suite/Tag and test level): *Lisp-Unit2 and Lift*
+
 - Ability to reuse tests in multiple suites: *Lisp-Unit2* (because of composable tags)
+
 - If you need tests to take parameters: *Fiasco*
-- If you need progress reporting optionality: *Parachute or Fiasco or Clunit2*
-- Favorite Hierarchy Setup (nestable suites): *Parachute* (Everything is a test and its :parents all the way up, can easily specify parents at the child level). Also *2am and Lift*
+
+- If you need progress reporting to be optional: *Parachute, Fiasco, or Clunit2*
+
+- Favorite Hierarchy Setup (nestable suites): *Parachute*
+
+  Everything is a test and its =:parents= all the way up; can easily specify parents at the child level.
+
+  Honorable mentions - *2am and Lift*
 
 - Assertions that take diagnostic comments with variables: *Parachute, Fiasco, 2am, Fiveam, Lift, Clunit2* This is something that I like for debugging purposes along with whatever reporting comes built in with the framework. See [[error-reporting][error-reporting]]
+
 - Values expression testing: *Lisp-Unit2, Lisp-Unit, Parachute*, (*Update* *Clunit2* as well)
+
 - I want to track if my functions changed results: *Checkl*
 - Tests that specify suite or tags (does not rely on location in file): *Parachute, Lisp-Unit (tags), Lisp-Unit2(tags), Lift, Clunit2*
 - Heavy duty complex fixtures: *NST* (but there are trade-offs in the shape of the learning curve and performance)
@@ -216,6 +244,7 @@ For those who want the opinionated quick summary. So, the awards are:
 
 [[top][top]]
 <<problem-space>>
+
 ** Features Considered
 - Ease of use and documentation: Most of the frameworks are straightforward. Some have no documentation, others have partial documentation (often documenting only one use case). The documentation may be out of sync with the code. Some get so excited about writing up the implementation details that it becomes difficult to see the forest for the trees. NST has a high learning curve. Prove and Rove will require digging into the source code if you want to do more than simple regression testing. Lift has a lot of undocumented functionality that might be just what you need but you have no way of knowing.
 
@@ -255,10 +284,10 @@ For those who want the opinionated quick summary. So, the awards are:
   - Does the framework have [[progress-reports][progress reporting, at what level and can it be turned off]]?
   - Report just failing tests with descriptive info
   - Composable Reports (in the sense of a single report aggregating multiple tests or test suites)
-  - Reports to File. I know most developers do not care, but I have seen situations where the ability to prove that the software at date A is documented to have passed xyz tests would have been nice). See [[dribble-and-output-streams][Dribble and Output Streams]]
+  - Reports to File. I know most developers do not care, but I have seen situations where the ability to prove that the software at date A is documented to have passed xyz tests would have been nice. See [[dribble-and-output-streams][Dribble and Output Streams]]
   - Test Timing. See [[timing][Timing]]
   - TAP Output (some people like to pass this test results in this format on to other tools).
-  - Reports of Function (and parameter) test coverage (Rove was the only framework that has something in this area and it depends on using sbcl. I would suggest looking to your compiler and did not test this.)
+  - Reports of Function (and parameter) test coverage (Rove was the only framework that has something in this area and it depends on using SBCL. I would suggest looking to your compiler and did not test this.)
 
 - Error tracking (Do test runs create a test history so that you can run only against failing tests?) As far as I can tell, no framework creates a database to allow historical analysis.
 
@@ -273,7 +302,7 @@ For those who want the opinionated quick summary. So, the awards are:
   - Skip based on implementations
   - also skip tests that exceed a certain time period
 
-- [[benchmarks][Benchmarks]] There were a few surprises here. I tested each framework on uax-15 which has 16 tests and 338760 assertions (all passing) and ran trivial-benchmark with 10 iterations on both the latest sbcl and ccl. Obviously the smaller the code base, the less important speed matters. If speed is important to you, stay away from clunit and nst. (*Note:* 13 June 2021 Update - removing clunit2 from this caveat)
+- [[benchmarks][Benchmarks]] There were a few surprises here. I tested each framework on uax-15 which has 16 tests and 338760 assertions (all passing) and ran trivial-benchmark with 10 iterations on both the latest SBCL and CCL. Obviously the smaller the code base, the less important speed matters. If speed is important to you, stay away from clunit and nst. (*Note:* 13 June 2021 Update - removing clunit2 from this caveat)
 
 - Asynchronous and parallel testing (not tested in this report)
 - Case safety (Max Mikhanosha asked for this an an exchange with Tapiwa in 2013. Not tested in this report)
@@ -308,37 +337,37 @@ I am not including a pie chart describing which library has market share because
 | xptest      |     0 |
 
 <<functionality-mapping>> <<summary-table>>
-* Functionality Comparison
 
+* Functionality Comparison
 ** Hierarchy Overview
 #+CAPTION: Overview-1
 #+ATTR_HTML: :border 2 :rules all :frame border
 | Name          | Hierarchies/suites/tags/lists | Composable | Reports |
 |---------------+-------------------------------+------------+---------|
-| [[1am][1am]]           | N (2)(5)                      | N          | N       |
-| [[2am][2am]]           | Y                             | Y (5)      | (4)     |
+| [[1am][1am]]           | ❌️ (2)(5)                      | ❌️          | ❌️       |
+| [[2am][2am]]           | ✅️                            | ✅️ (5)     | (4)     |
 | [[cacau][cacau]]         | (6)                           |            | (4)     |
-| [[clunit][clunit]]        | Y                             | Y          | (4)     |
-| [[clunit2][clunit2]]       | Y                             | Y          | (4)     |
-| [[fiasco][fiasco]]        | Y                             | Y          |         |
-| [[fiveam][fiveam]]        | Y                             | Y          |         |
-| [[gigamonkeys][gigamonkeys]]   | N                             |            |         |
-| [[kaputt][kaputt]]        | N (9)                         |            |         |
-| [[lift][lift]]          | Y                             | Y          |         |
+| [[clunit][clunit]]        | ✅️                            | ✅️         | (4)     |
+| [[clunit2][clunit2]]       | ✅️                            | ✅️         | (4)     |
+| [[fiasco][fiasco]]        | ✅️                            | ✅️         |         |
+| [[fiveam][fiveam]]        | ✅️                            | ✅️         |         |
+| [[gigamonkeys][gigamonkeys]]   | ❌️                             |            |         |
+| [[kaputt][kaputt]]        | ❌️ (9)                         |            |         |
+| [[lift][lift]]          | ✅️                            | ✅️         |         |
 | [[lisp-unit][lisp-unit]]     | (tags) (3)                    |            | (1,4)   |
-| [[lisp-unit2][lisp-unit2]]    | (tags) (3)(5)                 | Y (5)      | (1,4)   |
-| [[nst][nst]]           | Y                             | Y          |         |
-| [[parachute][parachute]]     | Y                             | Y          | (1)     |
-| [[prove][prove]]         | Y                             | Y          | (4)     |
-| [[ptester][ptester]]       | N                             |            |         |
+| [[lisp-unit2][lisp-unit2]]    | (tags) (3)(5)                 | ✅️ (5)     | (1,4)   |
+| [[nst][nst]]           | ✅️                            | ✅️         |         |
+| [[parachute][parachute]]     | ✅️                            | ✅️         | (1)     |
+| [[prove][prove]]         | ✅️                            | ✅️         | (4)     |
+| [[ptester][ptester]]       | ❌️                             |            |         |
 | [[rove][rove]]          | (7)                           | (7)        |         |
 | [[rt][rt]]            | package                       | (8)        |         |
 | [[should-test][should-test]]   | package                       |            |         |
-| [[simplet][simplet]]       | N                             |            |         |
-| [[tap-unit-test][tap-unit-test]] | N                             |            | (4)     |
-| [[unit-test][unit-test]]     | Y                             | Y          |         |
-| [[xlunit][xlunit]]        | Y                             | Y          |         |
-| [[xptest][xptest]]        | Y                             | N          |         |
+| [[simplet][simplet]]       | ❌️                             |            |         |
+| [[tap-unit-test][tap-unit-test]] | ❌️                             |            | (4)     |
+| [[unit-test][unit-test]]     | ✅️                            | ✅️         |         |
+| [[xlunit][xlunit]]        | ✅️                            | ✅️         |         |
+| [[xptest][xptest]]        | ✅️                            | ❌️          |         |
 1. report objects are provided which are expected to be extended by the user
 2. uses a flat list of tests. You can pass any list of test-names to run. See, e.g. macro provided by Phoe in the 1am [[1am-discussion][discussion]].
 3. lisp-unit and lisp-unit2 organize by packages and by tags. You can run all the tests in a package, or all the tests for a list of tags, but they do not have the strict sense of hierarchy that other libraries have.
@@ -348,7 +377,7 @@ I am not including a pie chart describing which library has market share because
 7. Rove's =run-suite= function will run all the tests in a particular package but does not accept a style parameter and simply prints out the results of each individual test, without summarizing. Rove's =run= function does accept a style parameter but seems to handle only package-inferred systems. I confirm Rove's [[https://github.com/fukamachi/rove/issues/42][issue #42]] that it will not run with non-package inferred systems.
 8. RT does not have suites per se. You can run all the tests that have been defined using the DO-TESTS function. By default it prints to =*standard-output*= but accepts an optional stream parameter which would allow you to redirect the results to a file or other stream of your choice. do-tests will print the results for each individual test and then summarize with something like the following:
 
-** Run on Compile and Funcallable Tests
+** Run on compile, funcallable tests
     <<run-on-compile>><<funcallable>>
 #+CAPTION: Run on Compile and Funcallable Tests
 #+ATTR_HTML: :border 2 :rules all :frame border
@@ -388,37 +417,37 @@ I am not including a pie chart describing which library has market share because
 #+CAPTION: Fixtures
 #+ATTR_HTML: :border 2 :rules all :frame border
 #+ATTR_LATEX: :float multicolumn
-| Library                | Fixtures  | Suite Fixtures | Test Fixtures | Multiple Fixtures                  |
-|------------------------+-----------+----------------+---------------+------------------------------------|
-| [[1am][1am]]                    | N         |                |               |                                    |
-| [[2am][2am]] (not in quicklisp) | N         |                |               |                                    |
-| [[cacau][cacau]]                  | Y         | Y              | Y             |                                    |
-| [[clunit][clunit]]                 | Y         | Y              | Y             | Y                                  |
-| [[clunit2][clunit2]]                | Y         | Y              | Y             | Y                                  |
-| [[fiasco][fiasco]]                 | N         |                |               |                                    |
-| [[fiveam][fiveam]]  (a)            | K         | Y              | Y             |                                    |
-| [[gigamonkeys][gigamonkeys]]            | N         |                |               |                                    |
-| [[kaputt][kaputt]]                 | N         |                |               |                                    |
-| [[lift][lift]]                   | Y         | Y              |               | inherited from higher level suites |
-| [[lisp-unit][lisp-unit]]              | N         |                |               |                                    |
-| [[lisp-unit2][lisp-unit2]]             | Y         |                | Y             |                                    |
-| [[nst][nst]]                    | Y         | Y              | Y             | Y                                  |
-| [[parachute][parachute]]              | Y         |                | Y             |                                    |
-| [[prove][prove]]                  | N         |                |               |                                    |
-| [[ptester][ptester]]                | N         |                |               |                                    |
-| [[rove][rove]]                   | Y         | Y              | Y             | Y                                  |
-| [[rt][rt]]                     | N         |                |               |                                    |
-| [[should-test][should-test]]            | N         |                |               |                                    |
-| [[tap-unit-test][tap-unit-test]]          | N         |                |               |                                    |
-| [[unit-test][unit-test]] (b)          | Y         | (b)            | (b)           | (b)                                |
-| [[xlunit][xlunit]]                 | Y         | Y              | Y             | Y                                  |
-| [[xptest][xptest]]                 | Y         |                | Y             |                                    |
+| Library                | Fixtures | Suite Fixtures | Test Fixtures | Multiple Fixtures                  |
+|------------------------+----------+----------------+---------------+------------------------------------|
+| [[1am][1am]]                    | ❌️       |                |               |                                    |
+| [[2am][2am]] (not in quicklisp) | ❌️       |                |               |                                    |
+| [[cacau][cacau]]                  | ✅️       | ✅️             | ✅️            |                                    |
+| [[clunit][clunit]]                 | ✅️       | ✅️             | ✅️            | ✅️                                 |
+| [[clunit2][clunit2]]                | ✅️       | ✅️             | ✅️            | ✅️                                 |
+| [[fiasco][fiasco]]                 | ❌️       |                |               |                                    |
+| [[fiveam][fiveam]]  (a)            | K        | ✅️             | ✅️            |                                    |
+| [[gigamonkeys][gigamonkeys]]            | ❌️       |                |               |                                    |
+| [[kaputt][kaputt]]                 | ❌️       |                |               |                                    |
+| [[lift][lift]]                   | ✅️       | ✅️             |               | inherited from higher level suites |
+| [[lisp-unit][lisp-unit]]              | ❌️       |                |               |                                    |
+| [[lisp-unit2][lisp-unit2]]             | ✅️       |                | ✅️            |                                    |
+| [[nst][nst]]                    | ✅️       | ✅️             | ✅️            | ✅️                                 |
+| [[parachute][parachute]]              | ✅️       |                | ✅️            |                                    |
+| [[prove][prove]]                  | ❌️       |                |               |                                    |
+| [[ptester][ptester]]                | ❌️       |                |               |                                    |
+| [[rove][rove]]                   | ✅️       | ✅️             | ✅️            | ✅️                                 |
+| [[rt][rt]]                     | ❌️       |                |               |                                    |
+| [[should-test][should-test]]            | ❌️       |                |               |                                    |
+| [[tap-unit-test][tap-unit-test]]          | ❌️       |                |               |                                    |
+| [[unit-test][unit-test]] (b)          | ✅️       | (b)            | (b)           | (b)                                |
+| [[xlunit][xlunit]]                 | ✅️       | ✅️             | ✅️            | ✅️                                 |
+| [[xptest][xptest]]                 | ✅️       |                | ✅️            |                                    |
 (a) Not really recommended, but does exist.
 (b) Users are expected to create a subclass of the unit-test class using the =define-test-class= macro.
 
 [[top][top]]
 
-** Debugging Optionality and User Provided Diagnostic Messages
+** Control over debugging, and user-provided diagnostic messages
 Does a failure (not error) trigger the debugger, is it optional, and do assertions allow user-provided diagnostic messages. If yes, can you further provide variables for a failure message?
 <<debugging>><<diagnostic-messages>>
 #+CAPTION: Overview Reporting v. Debugger Optionality / Diagnostic Messages
@@ -562,6 +591,7 @@ D - failing dependencies, C - children, P - pending, S - suites, T - tests, A - 
 3) run! returns a list of failed-test-results that you could save and use for this purpose
 4) Prove can skip a specified number of tests using the skip function. Unfortunately it marks them as passed rather than skipped.
 <<timing>>
+
 ** Timing Reporting and Time Limits
 #+CAPTION: Timing Reporting and Time Limits
 #+ATTR_HTML: :border 2 :rules all :frame border
@@ -593,6 +623,7 @@ D - failing dependencies, C - children, P - pending, S - suites, T - tests, A - 
 | [[xptest][xptest]]                 | N              | N           |
 (a) Fiveam has some undocumented profiling capabilities that I did not look at
 <<dribble-and-output-streams>>
+
 ** Dribble and Output Streams
 #+CAPTION: Dribble and Output Streams
 #+ATTR_HTML: :border 2 :rules all :frame border
@@ -670,6 +701,7 @@ This table is looking at whether the framework provides [[bounded-equality][floa
 | [[nst][nst]]       |                        | Y                                 |
 
 (a) Running suites without tests or tests without test functions will result in tests marked PENDING rather than success or fail
+
 ** Claims Not Test
 <<not-test>>
 #+CAPTION: Overview-5 Claims Not Tested
@@ -684,16 +716,20 @@ This table is looking at whether the framework provides [[bounded-equality][floa
 
 [[top][top]]
 <<error-reporting>> <<error-checking>>
+
 * Assertion Failure Comments
-There are two reasons you test. First to pat yourself on the back that your code passed tests. Second, find any bugs. Assertions in the test frameworks have different amounts of automatically generated information that they will provide on failures. The following are the automatically generated failure messages on an assertion that (= x y) where x is 1 and y is 2. We also note whether the framework also accepts diagnostic strings and variables for those strings.
+There are two reasons you test. First, to pat yourself on the back when all test pass. Second, to find any bugs. Assertions in the test frameworks have different amounts of automatically generated information that they will provide on failures. The following are the automatically generated failure messages on an assertion that (= x y) where x is 1 and y is 2. We also note whether the framework also accepts diagnostic strings and variables for those strings.
+
 ** [[1am][1am]]
 What, you wanted a report? Let me introduce you to the debugger.
+
 ** [[2am][2am]]
 Assertions also accept diagnostic strings with variables
 #+begin_src lisp
   T1-FAIL-34:
   FAIL: (= X Y)
 #+end_src
+
 ** [[cacau][cacau]]
 #+begin_src lisp
 Error message:
@@ -703,6 +739,7 @@ Actual:
 Expected:
 2
 #+end_src
+
 ** [[clunit][clunit]] and [[clunit2][clunit2]]
 Assertions also accept diagnostic strings with variables
 #+begin_src lisp
@@ -710,6 +747,7 @@ Assertions also accept diagnostic strings with variables
   Expected: T
   Returned: NIL
 #+end_src
+
 ** [[fiasco][fiasco]]
 Assertions also accept diagnostic strings with variables
 #+begin_src lisp
@@ -718,6 +756,7 @@ Assertions also accept diagnostic strings with variables
   x: X => 1
   y: Y => 2
 #+end_src
+
 ** [[fiveam][fiveam]]
 Assertions also accept diagnostic strings with variables. I deleted several blank lines. Why do you waste so much screen space Fiveam?
 #+begin_src lisp
@@ -730,6 +769,7 @@ Assertions also accept diagnostic strings with variables. I deleted several blan
   to
   1
 #+end_src
+
 ** [[gigamonkeys][gigamonkeys]]
 #+begin_src lisp
   FAIL ... (T1-FAIL): (= X Y)
@@ -737,6 +777,7 @@ Assertions also accept diagnostic strings with variables. I deleted several blan
   Y                 => 2
   (= X Y)           => NIL
 #+end_src
+
 ** [[kaputt][kaputt]]
 Into the debugger you go.
 #+begin_src lisp
@@ -746,6 +787,7 @@ In this call, the composed forms in argument position evaluate as:
   (= X Y) => NIL
 The assertion (ASSERT-T EXPR) is true, iff EXPR is a true generalised boolean.
 #+end_src
+
 ** [[lift][lift]]
 Assertions also accept diagnostic strings with variables
 #+begin_src lisp
@@ -758,6 +800,7 @@ Assertions also accept diagnostic strings with variables
                   ((LET ((X 1) (Y 2))
                      (ENSURE (= X Y)))))
 #+end_src
+
 ** [[lisp-unit][lisp-unit]]
 Assertions also accept diagnostic strings but no variables
 #+begin_src lisp
@@ -766,6 +809,7 @@ Failed Form: (= X Y)
  | X => 1
  | Y => 2
 #+end_src
+
 ** [[lisp-unit2][lisp-unit2]]
 Assertions also accept diagnostic strings but no variables
 #+begin_src lisp
@@ -774,6 +818,7 @@ Assertions also accept diagnostic strings but no variables
   | Expected T
   | but saw NIL
 #+end_src
+
 ** [[parachute][parachute]]
 Assertions also accept diagnostic strings with variables
 #+begin_src lisp
@@ -789,17 +834,20 @@ evaluated to    2
 when            1
 was expected to be equal under =.
 #+end_src
+
 ** [[ptester][ptester]]
 #+begin_src lisp
 Test failed: Y
   wanted: 1
      got: 2
 #+end_src
+
 ** [[prove][prove]]
 Assertions also accept diagnostic strings but no variables
 #+begin_src lisp
   × NIL is expected to be T (prove)
 #+end_src
+
 ** [[rove][rove]]
 Assertions also accept diagnostic strings but no variables
 #+begin_src lisp
@@ -807,6 +855,7 @@ Assertions also accept diagnostic strings but no variables
   X = 1
   Y = 2
 #+end_src
+
 ** [[rt][rt]]
 #+begin_src lisp
   Form: (LET ((X 1) (Y 2))
@@ -814,6 +863,7 @@ Assertions also accept diagnostic strings but no variables
   Expected value: T
   Actual value: NIL.
 #+end_src
+
 ** [[should-test][should-test]]
 Assertions also accept diagnostic strings but no variables
 #+begin_src lisp
@@ -823,12 +873,14 @@ Assertions also accept diagnostic strings but no variables
   actual: 2
   FAILED
 #+end_src
+
 ** [[tap-unit-test][tap-unit-test]]
 Assertions also accept diagnostic strings but no variables
 #+begin_src lisp
   T1-FAIL-34: (= X Y) failed:
   Expected T but saw NIL
 #+end_src
+
 ** [[unit-test][unit-test]]
 Assertions also accept diagnostic strings but no variables
 #+begin_src lisp
@@ -838,17 +890,18 @@ Assertions also accept diagnostic strings but no variables
 [[top][top]]
 
 <<benchmarking>>
+
 * Benchmarking
 <<benchmarks>>
 
-This is really simple benchmarking using sbcl version 2.1.4 on a linux server and ccl version 1.12 LinuxX8664. I used each framework and applied them to uax-15 which has 16 tests and 338760 assertions (and they all pass). The tests were stripped to the minimum. No diagnostic strings were used and for the frameworks which allowed it, the test was set to no progress reporting and overall summary only. All of the assertions pass, so any real world test with failing assertions generating failure reports will be different.
+This is really simple benchmarking using SBCL version 2.1.4 on a linux server and CCL version 1.12 LinuxX8664. I used each framework and applied them to uax-15 which has 16 tests and 338760 assertions (and they all pass). The tests were stripped to the minimum. No diagnostic strings were used and for the frameworks which allowed it, the test was set to no progress reporting and overall summary only. All of the assertions pass, so any real world test with failing assertions generating failure reports will be different.
 
 Based on this one application, from a speed perspective, there was a host of frameworks in a pack, with Rove and Prove at the back, then NST and Clunit not even on the same continent. (*13 June 2021 Update:* Clunit2 has resolved clunit's performance deficit.)  (Strangely enough, while the other frameworks were slower under cc, Clunit and NST improved.) Fiveam is in the pack so long as it runs in a terminal or some non-emacs editor. If running in emacs it runs into an emacs issue with long lines. You will see the difference in the fiveam report.
 
 Your context will be important as to whether these benchmarks are at all meaningful to you.
 <<stacked-ranking-benchmarks>>
 ** Stack Ranking
-What immediately jumps out is the vast majority are grouped together, then there are a few outliers that are just way worse than the pack. For consistency, every benchmark was done on sbcl 2.1.4 in a terminal (to avoid emacs issues) except as noted to show the emacs effect.
+What immediately jumps out is the vast majority are grouped together, then there are a few outliers that are just way worse than the pack. For consistency, every benchmark was done on SBCL 2.1.4 in a terminal (to avoid emacs issues) except as noted to show the emacs effect.
 
 
 #+CAPTION: Order by Benchmark Runtime (lower is better)
@@ -965,7 +1018,7 @@ Now the detailed report.
   BYTES-CONSED     10       4870658256  487053200  487078096  487066720  487065820.0  7454.81
   EVAL-CALLS       10       0           0          0          0          0            0.0
 #+end_src
-The ccl version:
+The CCL version:
 #+begin_src lisp
 -          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
 REAL-TIME  10       12.877645  1.277734  1.307823  1.285777  1.287764  0.00831
@@ -988,7 +1041,7 @@ RUN-TIME   10       12.870041  1.276389  1.306837  1.285161  1.287004  0.008351
   BYTES-CONSED     10       3541592704  354158208  354162800  354158736  354159260.0  1253.5916
   EVAL-CALLS       10       0           0          0          0          0            0.0
 #+end_src
-The ccl version
+The CCL version
 #+begin_src lisp
 -          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
 REAL-TIME  10       12.906069  1.278402  1.332574  1.28587   1.290607  0.014833
@@ -1008,15 +1061,15 @@ GC-RUN-TIME      10       572.44     0         57.244     0         5.7244    17
 BYTES-CONSED     10       3576325600 0         357534400  0         35763256  107257040.0
 EVAL-CALLS       10       0          0         0          0         0         0.0
 #+end_src
-The ccl version (total multiplied by 10 get try to get a comparable)
+The CCL version (total multiplied by 10 get try to get a comparable)
 #+begin_src lisp
 -          SAMPLES  TOTAL     MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
 REAL-TIME  1        11.63139  1.163139  1.163139  1.163139  1.163139  0
 RUN-TIME   1        11.6093   1.16093   1.16093   1.16093   1.16093   0
 #+end_src
 ** [[clunit][clunit]]
-Clunit has always had a concern about performance. Running this benchmark was painful. Unlike fiveam, which should not be run in a REPL in emacs on tests with lots of assertions because of emacs' issues with long lines, clunit has no one to blame but itself. But look at the ccl results compared to the sbcl results. Clunit was the only framework faster under ccl than sbcl. Still unacceptably slow, but ...
-Wwith sbcl in a terminal.
+Clunit has always had a concern about performance. Running this benchmark was painful. Unlike fiveam, which should not be run in a REPL in emacs on tests with lots of assertions because of emacs' issues with long lines, clunit has no one to blame but itself. But look at the CCL results compared to the SBCL results. Clunit was the only framework faster under CCL than SBCL. Still unacceptably slow, but ...
+Wwith SBCL in a terminal.
 #+begin_src lisp
   Passed: 338760/338760 all tests passed
   -                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE    DEVIATION
@@ -1030,7 +1083,7 @@ Wwith sbcl in a terminal.
   EVAL-CALLS       10       320         32         32         32         32         0.0
   NIL
 #+end_src
-The ccl result
+The CCL result
 #+begin_src lisp
 -          SAMPLES  TOTAL     MINIMUM    MAXIMUM    MEDIAN    AVERAGE    DEVIATION
 REAL-TIME  10       272.9831  27.003325  27.478271  27.37946  27.298307  0.179919
@@ -1054,7 +1107,7 @@ GC-RUN-TIME      10       999.48       91.007      122.793     92.142      99.94
 BYTES-CONSED     10       13401972672  1340051456  1340265440  1340209264  1340197200.0  65795.266
 EVAL-CALLS       10       0            0           0           0           0             0.0
 #+end_src
-The ccl version:
+The CCL version:
 #+begin_src lisp
 -          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
 REAL-TIME  10       26.267895  2.592513  2.656461  2.627074  2.626789  0.015478
@@ -1072,7 +1125,7 @@ GC-RUN-TIME      10       1186.3       93.469      256.883     97.418      118.6
 BYTES-CONSED     10       15377667616  1537414496  1540026832  1537518864  1537766800.0  755227.9
 EVAL-CALLS       10       0            0           0           0           0             0.0
 #+end_src
-The ccl version:
+The CCL version:
 #+begin_src lisp
 -          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
 REAL-TIME  10       32.504135  3.207461  3.299608  3.244852  3.250414  0.0254
@@ -1095,7 +1148,7 @@ BYTES-CONSED     10       4249190656  424657984  426455728  424685488  424919070
 EVAL-CALLS       10       10          1          1          1          1            0.0
 NIL
 #+end_src
-The ccl version:
+The CCL version:
 #+begin_src lisp
 -          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
 REAL-TIME  10       28.8267    2.806652  2.952852  2.882208  2.88267   0.043738
@@ -1122,7 +1175,7 @@ If you do not have progress reporting turned off, besides wasting a huge amount 
 
 Rule of thumb for big test systems and fiveam. Run it from a terminal, not an emacs REPL.
 
-First, this is sbcl running in a terminal with progress reporting on:
+First, this is SBCL running in a terminal with progress reporting on:
 #+begin_src lisps
 (benchmark:with-timing (10) (run 'uax-15-fiveam))
 -                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
@@ -1137,13 +1190,13 @@ EVAL-CALLS       10       0           0          0          0          0        
 
 NIL
 #+end_src
-The ccl version
+The CCL version
 #+begin_src lisp
 -          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
 REAL-TIME  10       19.297316  1.917268  1.957064  1.926189  1.929732  0.01028
 RUN-TIME   10       19.291763  1.917065  1.958334  1.92539   1.929176  0.010841
 #+end_src
-Now look at the run using sbcl in emacs base case:
+Now look at the run using SBCL in emacs base case:
 #+begin_src lisp
 (benchmark:with-timing (10) (run 'uax-15-fiveam))
 
@@ -1185,7 +1238,7 @@ GC-RUN-TIME      10       330.405     31.881     35.916     32.204     33.0405  
 BYTES-CONSED     10       4950815168  495054096  495089584  495087440  495081500.0  13706.401
 EVAL-CALLS       10       0           0          0          0          0            0.0
 #+end_src
-The ccl version
+The CCL version
 #+begin_src lisp
 -          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
 REAL-TIME  10       30.610546  3.024176  3.284612  3.033481  3.061055  0.075138
@@ -1208,7 +1261,7 @@ GC-RUN-TIME      10       411.1       31.975     98.302     36.429     41.11    
 BYTES-CONSED     10       4034319280  403009904  407150416  403012320  403431928  1239563.6
 EVAL-CALLS       10       0           0          0          0          0          0.0
 #+end_src
-The ccl version:
+The CCL version:
 #+begin_src lisp
 -          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
 REAL-TIME  10       15.73      1.551425  1.603039  1.561077  1.573     0.019737
@@ -1228,7 +1281,7 @@ GC-RUN-TIME      10       278.852     23.49      40.71      27.184     27.8852  
 BYTES-CONSED     10       3662570128  365002000  377114400  365003264  366257020.0  3620682.0
 EVAL-CALLS       10       0           0          0          0          0            0.0
 #+end_src
-The ccl version of the benchmark resulted in this:
+The CCL version of the benchmark resulted in this:
 #+begin_src lisp
   (benchmark:with-timing (10) (run-tests :suite 'uax-lift-15))
 
@@ -1250,7 +1303,7 @@ GC-RUN-TIME      10       444.581     35.22      63.385     37.716     44.4581  
 BYTES-CONSED     10       4411139200  440744928  444310816  440759072  441113920  1065665.8
 EVAL-CALLS       10       160         16         16         16         16         0.0
 #+end_src
-Now the ccl version:
+Now the CCL version:
 #+begin_src lisp
 -          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
 REAL-TIME  10       13.336789  1.326142  1.349726  1.330619  1.333679  0.007343
@@ -1271,7 +1324,7 @@ No progress reports
   BYTES-CONSED     10       5127796976  512756560  512800544  512778608  512779700.0  13773.206
   EVAL-CALLS       10       0           0          0          0          0            0.0
 #+end_src
-No ccl version because ccl decide not to compile lisp-unit2.
+No CCL version because CCL decide not to compile lisp-unit2.
 ** [[nst][nst]]
 NST's results were surprisingly bad. I ran tests with and without :cache being set on each fixture and it did not seem to make much of a difference.
 #+begin_src lisp
@@ -1286,7 +1339,7 @@ GC-RUN-TIME      10       16532.35      1629.216     1679.521     1656.667     1
 BYTES-CONSED     10       319321472704  31931030448  31942032624  31931048176  31932148000.0  3295139.8
 EVAL-CALLS       10       6768780       676878       676878       676878       676878         0.0
 #+end_src
-The ccl version:
+The CCL version:
 #+begin_src lisp
 -          SAMPLES  TOTAL      MINIMUM   MAXIMUM    MEDIAN     AVERAGE    DEVIATION
 REAL-TIME  10       490.6759   48.98529  49.147766  49.05929   49.067593  0.040534
@@ -1308,7 +1361,7 @@ Progress reporting turned off by using the quiet report.
   BYTES-CONSED     10       5357258016  528976624  596222960  529004640  535725800.0  20165728.0
   EVAL-CALLS       10       0           0          0          0          0            0.0
 #+end_src
-The same benchmark with ccl:
+The same benchmark with CCL:
 #+begin_src lisp
 -          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
 REAL-TIME  10       35.034126  3.446474  3.589289  3.496444  3.503413  0.038255
@@ -1330,7 +1383,7 @@ GC-RUN-TIME      10       2573.17      169.012     522.004     217.099     257.3
 BYTES-CONSED     10       14124826480  1405710432  1439239664  1405725840  1412482648  10476879.0
 EVAL-CALLS       10       0            0           0           0           0           0.0
 #+end_src
-The ccl version:
+The CCL version:
 #+begin_src lisp
 -          SAMPLES  TOTAL      MINIMUM    MAXIMUM    MEDIAN     AVERAGE    DEVIATION
 REAL-TIME  10       116.92284  11.292191  12.127493  11.640758  11.692284  0.26381
@@ -1349,7 +1402,7 @@ GC-RUN-TIME      10       339.523     19.892     53.051     29.351     33.9523  
 BYTES-CONSED     10       5195902592  519572448  519605984  519591104  519590270.0  12074.577
 EVAL-CALLS       10       0           0          0          0          0            0.0
 #+end_src
-The ccl version:
+The CCL version:
 #+begin_src lisp
 -          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
 REAL-TIME  10       22.3047    2.07826   2.369612  2.307167  2.23047   0.118142
@@ -1357,7 +1410,7 @@ RUN-TIME   10       22.307024  2.072661  2.370712  2.302883  2.230702  0.118646
 #+end_src
 ** [[rove][rove]]
 <<benchmarking-rove>>
-I ran into an as yet unidentified issue with rove and sbcl. Several attempts to run the benchmark on sbcl triggered heap exhaustion during garbage collection (even on a clean sbcl instance). Below are the results for the one clean run of 10 iterations that I did get.
+I ran into an as yet unidentified issue with rove and SBCL. Several attempts to run the benchmark on SBCL triggered heap exhaustion during garbage collection (even on a clean SBCL instance). Below are the results for the one clean run of 10 iterations that I did get.
 
 #+begin_src lisp
 (benchmark:with-timing (10) (run :uax-15-rove-tests :style :none))
@@ -1372,7 +1425,7 @@ GC-RUN-TIME      10       6424.622    381.013    1233.202   516.577    642.4622 
 BYTES-CONSED     10       8960510816  895972464  896586032  895994096  896051100.0  178432.86
 EVAL-CALLS       10       130         13         13         13         13           0.0
 #+end_src
-I did not have the same problem running the same benchmark test with ccl, but obviously apples and oranges. Here is the ccl benchmark.
+I did not have the same problem running the same benchmark test with CCL, but obviously apples and oranges. Here is the CCL benchmark.
 #+begin_src lisp
     (benchmark:with-timing (10) (run :uax-15-rove-tests :style :none))
 -          SAMPLES  TOTAL      MINIMUM  MAXIMUM   MEDIAN    AVERAGE   DEVIATION
@@ -1393,7 +1446,7 @@ Rt reports only the tests, not the assertions.
   BYTES-CONSED     10       3781963056  378147840  378340736  378182688  378196300.0  50474.535
   EVAL-CALLS       10       480         48         48         48         48           0.0
 #+end_src
-Now ccl version:
+Now CCL version:
 #+begin_src lisp
 -          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
 REAL-TIME  10       11.663611  1.155944  1.180289  1.166971  1.166361  0.006513
@@ -1413,7 +1466,7 @@ GC-RUN-TIME      10       440.966     33.525     112.947    38.192     44.0966  
 BYTES-CONSED     10       4033912496  403038928  406439808  403043248  403391230.0  1016250.75
 EVAL-CALLS       10       0           0          0          0          0            0.0
 #+end_src
-The ccl version
+The CCL version
 #+begin_src lisp
 -          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
 REAL-TIME  10       24.659025  2.453905  2.483674  2.463236  2.465902  0.008501
@@ -1433,7 +1486,7 @@ GC-RUN-TIME      10       484.082     33.188     154.321    35.693     48.4082  
 BYTES-CONSED     10       4406207680  440607680  440635344  440620080  440620768  8083.716
 EVAL-CALLS       10       160         16         16         16         16         0.0
 #+end_src
-The ccl version:
+The CCL version:
 #+begin_src lisp
 -          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
 REAL-TIME  10       13.113791  1.305049  1.321753  1.310286  1.311379  0.005856
@@ -1453,7 +1506,7 @@ GC-RUN-TIME      10       850.624     52.211     190.571    63.007     85.0624  
 BYTES-CONSED     10       3842573536  381252624  411219072  381259776  384257340.0  8987242.0
 EVAL-CALLS       10       0           0          0          0          0            0.0
 #+end_src
-The ccl version:
+The CCL version:
 #+begin_src lisp
 -          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
 REAL-TIME  10       17.873028  1.676715  2.000257  1.68315   1.787303  0.129952
@@ -1473,7 +1526,7 @@ GC-RUN-TIME      10       246.993     19.932     50.002     23.138     24.6993  
 BYTES-CONSED     10       3547926336  354158256  359179296  354160208  354792640.0  1513466.4
 EVAL-CALLS       10       0           0          0          0          0            0.0
 #+end_src
-The ccl version:
+The CCL version:
 #+begin_src lisp
 -          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
 REAL-TIME  10       11.600723  1.148456  1.19076   1.156022  1.160072  0.011422
@@ -1493,7 +1546,7 @@ GC-RUN-TIME      10       253.887     20.3       51.813     23.71      25.3887  
 BYTES-CONSED     10       3545190064  354157152  357744240  354158784  354519000.0  1075096.0
 EVAL-CALLS       10       0           0          0          0          0            0.0
 #+end_src
-The ccl version:
+The CCL version:
 #+begin_src lisp
 -          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
 REAL-TIME  10       11.375671  1.133088  1.148804  1.136425  1.137567  0.004255
@@ -2066,15 +2119,18 @@ Can you generate different types of random data to feed to the testing framework
 <<1am>>
 * 1am
 [[top][top]]
+
 ** Summary
  | [[https://github.com/lmj/1am][homepage]] | James Lawrence | MIT | 2014 |
-1am will thrown you into the debugger on failures or errors. There is no optionality, there is no reporting - in you go. There is no provision for diagnostic strings in assertions, but since it throws you into the debugger, that is probably not relevant. Tests are shuffled on each run.
+1am will thrown you into the debugger on failures or errors. There is no way to disable this, there is no reporting - in you go. There is no provision for diagnostic strings in assertions, but since it throws you into the debugger, that is probably not relevant. Tests are shuffled on each run.
 
 On the plus side for some people, tests are functions.
 
 On the minus side for people like me, you cannot turn off progress reports. You can create a list of tests, but there is no concept of suites or tags.
+
 ** Assertion Functions
 1am's assertion functions are limited to =is= and =signals=.
+
 ** Usage
 - =run= will run all the tests in =*tests*=
 - =(run '(foo))= will run the named tests in the provided parameter list.
@@ -2088,6 +2144,7 @@ On the minus side for people like me, you cannot turn off progress reports. You 
   FOO; Evaluation aborted on #<SIMPLE-ERROR "~@<The assertion ~S failed~:[.~:; ~
                                            with ~:*~{~S = ~S~^, ~}.~]~:@>" {100B996103}>.
 #+end_src
+
 *** Basics
 Starting with a basic test where we know everything will pass. These are all the assertion functions that 1am has. There is no provision for documentation strings or test descriptions.
 #+begin_src lisp
@@ -2120,6 +2177,7 @@ Now with a deliberately failing test. Notice how it just immediately kicks into 
    3: [ABORT] abort thread (#<THREAD "new-repl-thread" RUNNING {10035CE213}>)
 #+end_src
 As you would hope, you do not have to manually recompile a test after a tested function has been modified.
+
 *** Conditions
 1am works as expected if you signal the expected error. If you signal an unexpected error, it throws you into the debugger just like every other time a test fails.
 #+begin_src lisp
@@ -2137,6 +2195,7 @@ As you would hope, you do not have to manually recompile a test after a tested f
           (is (equal (values 1 2)
                      (values 1 3))))
 #+end_src
+
 **** Now looping and closures.
 1am will handle looping through assertions using variables declared in a closure surrounding the test.
 #+begin_src lisp
@@ -2146,6 +2205,7 @@ As you would hope, you do not have to manually recompile a test after a tested f
     (loop for x in l1 for y in l2 do
       (is (= (char-code x) y)))))
 #+end_src
+
 **** Calling a test inside another test
 It works but do not expect composable reports.
 #+begin_src lisp
@@ -2176,6 +2236,7 @@ N/A
 None
 *** Random Data Generators
 None
+
 ** Discussion
 <<1am-discussion>>
 The comments that I have seen around 1am seem to revolve around having only a single global variable to collect all compiled tests. Various people have suggested different solutions to essentially build test suites capability:
@@ -2212,6 +2273,7 @@ phoe suggested the following very simple 1AM wrapper to achieve multiple test su
        (1am:test ,name ,@body)
        (pushnew ',name *my-tests*)))
 #+end_src
+
 ** Who Uses 1am?
 ("adopt/test" "authenticated-encryption-test" "beast-test" "binary-io/test"
  "bobbin/test" "chancery.test" "cl-digraph.test" "cl-netpbm/test" "cl-pcg.test"
@@ -2221,10 +2283,12 @@ phoe suggested the following very simple 1AM wrapper to achieve multiple test su
 
 [[top][top]]
 <<2am>>
+
 * 2am
 ** Summary
      | [[https://gitlab.common-lisp.net/dkochmanski/2am][homepage]] | Daniel Kochmański | MIT | 2016 |
 2am is based on 1am with some features wanted for CI and hierarchical tests. As with 1am, 2am runs tests randomly - the order is shuffled on each run. There is no optionality. There is also no provision for only running the tests that failed last time. There is also no way to turn off the progress report.
+
 ** Assertion Functions
 |is|signals|finishes|
 
@@ -3696,7 +3760,7 @@ One thing to note on setup. If you are using quicklisp, the quickload system nam
 #+begin_src lisp
 (ql:quickload :com.gigamonkeys.test-framework)
 #+end_src
-however the package name, at least in sbcl, is com.gigamonkeys.test
+however the package name, at least in SBCL, is com.gigamonkeys.test
 *** Report Format
 Gigamonkey tests can be set to go into the debugger on errors, failures or never. this is controlled by the settings of =*debug*= (for error conditions) and =*debug-on-faill*= (for test failures).
 *** Basics
@@ -5485,7 +5549,7 @@ Unlike the situation with Clunit and Clunit2 which are almost identical, Lisp-Un
 Lisp-unit2 has fixtures and can run just the previously failing tests and you can turn on debugging for failures as well as errors.
 It does not have progress reports which might bother some people.  If you need floating point tests, those are built-in.
 
-It will report all the assertion failures in a test, gives the opportunity to provide user generated diagnostic messages in assertions and has a tags system that allows different ways to re-use tests not found in the typical hierarchical setup. It can re-run failed tests and interactive debugging is optional. I did find the fixture structure to be confusing and it does not have progress reporting which some people really like. I did have an issue compiling it with ccl but have not tracked it down sufficiently to see if it is a bug to be reported.
+It will report all the assertion failures in a test, gives the opportunity to provide user generated diagnostic messages in assertions and has a tags system that allows different ways to re-use tests not found in the typical hierarchical setup. It can re-run failed tests and interactive debugging is optional. I did find the fixture structure to be confusing and it does not have progress reporting which some people really like. I did have an issue compiling it with CCL but have not tracked it down sufficiently to see if it is a bug to be reported.
 ** Assertion Functions
 | assert-eq              | assert-eql          | assert-equal        |
 | assert-equality        | assert-equalp       | assert-error        |
@@ -5841,7 +5905,7 @@ Lisp-unit2 has various functions for generating random data. See examples below:
 #+end_src
 
 ** Discussion
-Hmm. My ccl version 1.12 LinuxX8664 decided not to compile Lisp-Unit2 with the following error:
+Hmm. My CCL version 1.12 LinuxX8664 decided not to compile Lisp-Unit2 with the following error:
 #+begin_src lisp
 Read error between positions 2071 and 2506 in /home/sabra/quicklisp/dists/quicklisp/software/lisp-unit2-20180131-git/interop.lisp.
 > Error: Reader error: No external symbol named "*SYSTEMS-BEING-OPERATED*" in package #<Package "ASDF/OPERATE"> .
@@ -6202,7 +6266,7 @@ Maybe it is just me, but every time I tried to redefine a test, I triggered a ha
 #+ATTR_LATEX: :float multicolumn
  | [[https://github.com/Shinmera/parachute][homepage]]                                      | Nicolas Hafner | zlib          | 2021           |
 
-It hits almost everything on my wish list - optionality on progress reports and debugging, good suite setup and reporting, good default error reporting and the ability to provide diagnostic strings with variables, skip failing dependencies, set time limits on long running tests and has decent fixture capability. It does not have the built-in ability to re-run just the last failing tests, but that is a relatively easy add-on. (see [[parachute-discussion][Discussion]]) The bigger limitation is that fixtures at a parent test level (suite level) do not apply to nested child tests. While it is not the fastest, it is in the pack as opposed to the also-rans.
+It hits almost everything on my wish list - optionality on progress reports and debugging, good suite setup and reporting, good default error-reporting and the ability to provide diagnostic strings with variables, skip failing dependencies, set time limits on long running tests and has decent fixture capability. It does not have the built-in ability to re-run just the last failing tests, but that is a relatively easy add-on. (see [[parachute-discussion][Discussion]]) The bigger limitation is that fixtures at a parent test level (suite level) do not apply to nested child tests. While it is not the fastest, it is in the pack as opposed to the also-rans.
 
 The name of a test is coerced into a string internally, so test names are not functions that can be called on their own.
 
@@ -6937,7 +7001,7 @@ If you use package-inferred systems, there may be more capabilities than if you 
 
 As noted in the functionality tables, there have been reports that rove crashes with multithreaded results. See [[https://tychoish.com/post/programming-in-the-common-lisp-ecosystem/][https://tychoish.com/post/programming-in-the-common-lisp-ecosystem/]]: "rove doesn't seem to work when multi-threaded results effectively. It's listed in the readme, but I was able to write really trivial tests that crashed the test harness."
 
-As mentioned in the [[benchmarking-rove][Benchmarking]] section, I ran into an as yet unidentified issue with rove and sbcl. Several attempts to run the benchmark (10 iterations) on sbcl triggered heap exhaustion during garbage collection (even on a clean sbcl instance).
+As mentioned in the [[benchmarking-rove][Benchmarking]] section, I ran into an as yet unidentified issue with rove and SBCL. Several attempts to run the benchmark (10 iterations) on SBCL triggered heap exhaustion during garbage collection (even on a clean SBCL instance).
 
 Compared to Prove, Rove does have better failure reporting, is faster (but still not even in the middle of the pack)  and has added fixtures. It is still missing some of the capabilities that that Prove has such as time limits on tests as well as test functions such as is-type, likes and is-values expression capabilities.
 
@@ -8304,7 +8368,7 @@ It provides additional generators for:
 The following is a sample sequence running sb-cover on the package you want to test
 #+begin_src lisp
 (require :sb-cover)
-;; now you need to tell sbcl to instrument what it is about to load
+;; now you need to tell SBCL to instrument what it is about to load
 (declaim (optimize sb-cover:store-coverage-data))
 (asdf:oos 'asdf:load-op :your-package-name-here :force t)
 
@@ -8312,7 +8376,7 @@ The following is a sample sequence running sb-cover on the package you want to t
 
 (sb-cover:report "path-to-directory-for-the-coverage-htmlpages" :form-mode :car)
 
-;; now restore sbcl to its normal state
+;; now restore SBCL to its normal state
 (declaim (optimize (sb-cover:store-coverage-data 0)))
 ;; to restore
 #+end_src
@@ -8334,13 +8398,13 @@ Per pfdietz: "The problem I have with sb-cover is that is can screw up when the 
 
 <<ccl-code-coverage>>
 [[top][top]]
-** ccl code coverage
+** CCL code coverage
 I have not used this tool.
 #+begin_src lisp
 (setf ccl:*compile-code-coverage* t)
 
 #+end_src
-Comment: when ccl:*compile-code-coverage* was set to t, compiling ironclad triggered an error:
+Comment: when =ccl:*compile-code-coverage*= was set to t, compiling ironclad triggered an error:
 
 [package ironclad].......
 > Error: The value (&LAP . 0) is not of the expected type VAR.
@@ -8360,7 +8424,6 @@ I have not tried cover.
 * Appendix
 <<problem-space>>
 ** Problem Space
-
 Testing covers a lot of ground, there are unit tests, regression tests, test driven development, etc. Testing often runs on an automated basis, but CL being CL, it can be part of an interactive development process. Some people write their unit tests first, then develop to pass the tests (test driven development). Testing is also not error checking.
 
 Ideally a testing framework should make it as easy as possible to write tests, cover different inputs and produce a report showing _what_ passed and failed. If you are writing a library rather than an application, it can be useful to recognize that your test suites are a client to your library's API (and if you find it hard to write the tests, think about how a client user will feel).
