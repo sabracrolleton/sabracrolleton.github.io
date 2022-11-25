@@ -18,11 +18,11 @@
 :PROPERTIES:
 :CUSTOM_ID: changelog
 :END:
-1 Feb 2022 - Picks up updates in shasht and now includes warnings on libraries with safety 0 (jsown, jonathan, st-json).
+1 Feb 2022 - Picks up updates in shasht and now includes warnings on libraries with safety 0 (=jsown=, =jonathan=, =st-json=).
 
-19 Jan 2022 - Updated shasht for fixes in character, 2D arrays, and nil handling. (If you rely on quicklisp versions, expect these improvements in the next quicklisp version, but they are up on github now.) Fixed some typos, including a missing earmuff.
+19 Jan 2022 - Updated shasht for fixes in character, 2D arrays, and nil handling. (If you rely on Quicklisp versions, expect these improvements in the next Quicklisp version, but they are up on GitHub now.) Fixed some typos, including a missing earmuff.
 
-18 Jan 2022 - Corrected JSON conformity tests on boost-json, cl-json, json-lib, shasht, st-json, trivial-json-codec and yason. If \star{}read-default-float-format* is set to 'single-float, those libraries would refuse to accept:  "[123e65]", "[123e45]" and "[123.456e78]". If \star{}read-default-float-format* is set to 'double-float, then those JSON strings would be correctly accepted. Net result: with that caveat, [[#boost-json][boost-json]], [[#cl-json][cl-json]], [[#com.gigamonkeys.json][com.gigamonkeys.json]], [[#com.inuoe.jzon][com.inuoe.jzon]], [[#json-lib][json-lib]], [[#shasht][shasht]], [[#st-json][st-json]] and [[#yason][yason]] all score 95/95 on the JSON strings that must be accepted. See [[#must-accept][Standard Conformity - Must Accept]].
+18 Jan 2022 - Corrected JSON conformity tests on =boost-json=, =cl-json=, =json-lib=, =shasht=, =st-json=, =trivial-json-codec= and =yason=. If =*read-default-float-format*= is set to ='single-float=, those libraries would refuse to accept:  ="[123e65]"=, ="[123e45]"= and ="[123.456e78]"=. If =*read-default-float-format*= is set to ='double-float=, then those JSON strings would be correctly accepted. Net result: with that caveat, [[#boost-json][boost-json]], [[#cl-json][cl-json]], [[#com.gigamonkeys.json][com.gigamonkeys.json]], [[#com.inuoe.jzon][com.inuoe.jzon]], [[#json-lib][json-lib]], [[#shasht][shasht]], [[#st-json][st-json]] and [[#yason][yason]] all score 95/95 on the JSON strings that must be accepted. See [[#must-accept][Standard Conformity - Must Accept]].
 
 15 Jan 2022 - Complete rewrite of 1st edition.
 
@@ -31,7 +31,7 @@
 :CUSTOM_ID: introduction
 :END:
 
-The common lisp (CL) landscape with respect to JSON libraries has changed since the first edition of this review eight years ago. While I sometimes complain about someone writing new libraries when there are already so many, there have been major improvements and a couple of the new generation of CL JSON libraries are actually quite exciting. It still remains the case, however, that your choice of datastructures for your application may drive your choice of JSON library and vice versa. Like everything else in life, there are trade-offs to be made and I hope this paper helps you think about what may or may not be relevant for your situation.
+The Common Lisp (CL) landscape with respect to JSON libraries has changed since the first edition of this review eight years ago. While I sometimes complain about someone writing new libraries when there are already so many, there have been major improvements and a couple of the new generation of CL JSON libraries are actually quite exciting. It still remains the case, however, that your choice of data structures for your application may drive your choice of JSON library, and vice versa. Like everything else in life, there are trade-offs to be made and I hope this paper helps you think about what may or may not be relevant for your situation.
 
 Corrections to this report are welcomed. Please submit issues to [[https://github.com/sabracrolleton/sabracrolleton.github.io][https://github.com/sabracrolleton/sabracrolleton.github.io]] or pull requests against the json-view.org file.
 
@@ -59,7 +59,7 @@ CL currently has at least twelve libraries that address importing and exporting 
  | [[#trivial-json-codec][trivial-json-codec]] (2) | Eric Diethelm                               | MIT     | [[https://gitlab.com/ediethelm/trivial-json-codec][homepage]]  | Yes        |  8 Mar 2020 |
  | [[#yason][yason]]  (1)             | Hans Huebner                                | BSD     | [[https://github.com/phmarek/yason][homepage]]  | Yes        | 27 Aug 2021 |
 
-- (1) IMPORTANT: Notice the github location has moved. Hans Huebner's old github location will automatically redirect to Phil Marek's, but quicklisp is not (as of the time of this writing) pulling code from the new github location.
+- (1) IMPORTANT: Notice the GitHub location has moved. Hans Huebner's old GitHub location will automatically redirect to Phil Marek's, but Quicklisp is not (as of the time of this writing) pulling code from the new GitHub location.
 - (2) trivial-json-codec seems more targeted at decoding from JSON to CL than serializing to JSON. Its main purpose is in serializing JSON data to CLOS hierarchical objects.
 
 #+CAPTION: Dependencies
@@ -97,7 +97,7 @@ We should also talk a bit about some helper libraries.
 | [[json-mop][json-mop]]             | Grim Schjetne | MIT     | [[https://github.com/gschjetne/json-mop][homepage]] | yason                                                                            | CLOS<->JSON     |
 | [[#cl-json-helper][cl-json-helper]]       | Bob Felts     | BSD     | [[https://github.com/stablecross/cl-json-helper][homepage]] | cl-json                                                                          |                 |
 | [[#cl-json-schema][cl-json-schema]]       | Mark Skilbeck | MIT     | [[https://github.com/notmgsk/cl-json-schema][homepage]] |                                                                                  |                 |
-| [[#cl-json-pointer][cl-json-pointer]]      | Yokata Yuki   | MIT     | [[https://github.com/y2q-actionman/cl-json-pointer][homepage]] | cl-json, st-json, yason, jsown, jonathan, json-streams, com.gigamonkeys.json, (1) | [[https://40ants.com/lisp-project-of-the-day/2020/08/0158-cl-json-pointer.html][40ants comments]] |
+| [[#cl-json-pointer][cl-json-pointer]]      | Yokata Yuki   | MIT     | [[https://github.com/y2q-actionman/cl-json-pointer][homepage]] | cl-json, st-json, yason, =jsown=, jonathan, json-streams, com.gigamonkeys.json, (1) | [[https://40ants.com/lisp-project-of-the-day/2020/08/0158-cl-json-pointer.html][40ants comments]] |
 - (1) asd file says BSD, but license included is MIT.
 
 * Quick Summary
@@ -107,13 +107,13 @@ We should also talk a bit about some helper libraries.
 As can be expected, the libraries do much of the same if you have basic needs. However, differences exist and should be considered in choosing which library is right for any particular project. Many applications are asymmetric in how they will use these libraries, so consider the strengths and weakness given the needs of your case. Library links are to the libraries' individual sections below.
 
 - *Overall:* I quite like the newcomers [[#shasht][shasht]] and [[#com.inuoe.jzon][com.inuoe.jzon]]. [[cl-json][cl-json]] and [[#yason][yason]] are still the work horses if you need fine control, but speed is not their forte.
-- *Decoding or Parsing Speed:* Speed is not everything, but seems to be important to a lot of readers. If you are parsing compliant data and are just looking for speed, look at [[#jsown][jsown]], [[#com.inuoe.jzon][com.inuoe.jzon]] (not in quicklisp) or [[#shasht][shasht]]. [[#jonathan][Jonathan]] is faster on tiny strings but starts to slow down with nested objects and eventually, depending on the size of the JSON object, becomes orders of magnitude slower than the other libraries. The effect was seen faster under sbcl but as data file size increased, it was also obvious under ccl and ecl as well. See [[#read-times][read-times]]
+- *Decoding or Parsing Speed:* Speed is not everything, but seems to be important to a lot of readers. If you are parsing compliant data and are just looking for speed, look at [[#jsown][jsown]], [[#com.inuoe.jzon][com.inuoe.jzon]] (not in Quicklisp) or [[#shasht][shasht]]. [[#jonathan][Jonathan]] is faster on tiny strings but starts to slow down with nested objects and eventually, depending on the size of the JSON object, becomes orders of magnitude slower than the other libraries. The effect was seen faster under SBCL but as data file size increased, it was also obvious under CCL and ECL as well. See [[#read-times][read-times]]
 - *Encoding Speed:* If you mostly need to encode lisp data to JSON and are just looking for speed, I would look at [[#com.inuoe.jzon][com.inuoe.jzon]], [[#shasht][shasht]] or depending on your data, [[#jonathan][jonathan]] or [[#st-json][st-json]]. See [[#write-times][write-times]]
-- *Safety 0* Three libraries (jsown, jonathan and st-json) have optimize set for safety 0 to increase speed. This has bitten some users hard in the past, so you have been warned.
+- *Safety 0* Three libraries (=jsown=, jonathan and st-json) have optimize set for safety 0 to increase speed. This has bitten some users hard in the past, so you have been warned.
 - *Unicode Handling:* Most of the libraries can handle unicode. However, if you have unicode surrogate pairs, you need to choose from [[#com.inuoe.jzon][com.inuoe.jzon]], [[#jonathan][jonathan]], [[#json-streams][json-streams]], [[#jsown][jsown]], [[#shasht][shasht]], [[#st-json][st-json]] or [[#yason][yason]]. See [[#decode-unicode][Decoding Unicode]].
 - *Extracting Subsets:* If you want to extract a subset of JSON data without paying attention to everything else, [[#jsown-filters][jsown]] is the choice. [[#jonathan][Jonathan]] allows you to get a key:value pair, but I could only use it one level deep. Obviously every library can import all the JSON data into some CL datastructure and then use standard CL functionality to get whatever subset you want.
 - *Handling all proper JSON forms:* If you remember to set \star{}read-default-float-format* to 'double-float, there is no clear winner. [[#boost-json][boost-json]], [[cl-json][cl-json]], [[#com.gigamonkeys.json][com.gigamonkeys.json]], [[#com.inuoe.jzon][com.inuoe.jzon]], [[#json-lib][json-lib]], [[#shasht][shasht]], [[#st-json][st-json]] and [[#yason][yason]] all score 95/95 on the JSON standard conformity tests that must be met. If \star{}read-default-float-format* is set to to 'single-float, only [[#com.inuoe.jzon][com.inuoe.jzon]] and [[#com.gigamonkeys.json][com.gigamonkeys.json]] have perfect scores. See [[#must-accept][Must Accept]].
-- *Handling potentially invalid data:* See [[#standard-conformity][Standard Conformity and Dealing with Malformed Data]]. I think [[#com.inuoe.jzon][com.inuoe.jzon]] is the winner, unfortunately it is not in quicklisp if that is a requirement.
+- *Handling potentially invalid data:* See [[#standard-conformity][Standard Conformity and Dealing with Malformed Data]]. I think [[#com.inuoe.jzon][com.inuoe.jzon]] is the winner, unfortunately it is not in Quicklisp if that is a requirement.
 - *Proper Distinction Between NULL/Nil/False:* [[#com.inuoe.jzon][Com.inuoe.jzon]], [[#shasht][shasht]] and [[#st-json][st-json]] get it right out of the box. [[#jonathan][jonathan]] and [[#yason][yason]] provide the ability to get there with setting a simple variable.
 - *CLOS Abilities - Decoding:* [[#trivial-json-codec][Trivial-json-codec]] can decode objects to standard pre-defined classes. [[#boost-json-decoding-to-clos][Boost-json]] can decode JSON objects to a boost-json:json-object which is a standard object. [[cl-json][Cl-json]] has the ability to decode JSON objects into a "fluid-class" CLOS object. (Note, this is thread unsafe if you have not already prepped classes for every expected JSON object. If you define your own classes with a lispclass member, this can be avoided so long as every class is defined that way.) Personally I prefer being able to define my own classes. Trivial-json-codec then just dumps the JSON data into your classes. If you use [[#yason][yason]], I would also use the helper library [[json-mop][json-mop]]. ([[#com.inuoe.jzon][com.inuoe.jzon]] decodes JSON to hash-tables, so does not have decoding to CLOS abilities out of the box.) See [[#decode-to-clos][Decoding to CLOS]]
 - *CLOS Abilities - Encoding:* On the encoding side, [[cl-json][cl-json]], [[#com.inuoe.jzon][com.inuoe.jzon]], [[#shasht][shasht]] and [[#trivial-json-codec][trivial-json-codec]] are able to encode CLOS objects to JSON out of the box. The rest of the libraries require that you write your own methods for your clos classes - which is not necessarily that difficult, but not something you get out of the box. If you like [[#yason][yason]], there are two helper libraries: [[json-mop][json-mop]] or [[herodotus][herodotus]]. I have a preference for [[json-mop][json-mop]] with the caveat that, at the moment, you cannot redefine classes. There is also a [[cl-json][cl-json]] helper library, [[define-json-expander][define-json-expander]], which defines classses which can be used by cl-json to help move data back and forth. See [[#encoding-objects][Encoding Objects]]
@@ -166,7 +166,7 @@ Does the library take both strings and streams as input?
 | jonathan             | YES                | NO      |
 | json-lib             | UTF-8 Encoded Only | NO      |
 | json-streams         | YES                | YES     |
-| jsown                | YES                | NO      |
+| =jsown=                | YES                | NO      |
 | shasht               | YES                | YES     |
 | st-json              | YES                | YES     |
 | trivial-json-codec   | YES                | NO      |
@@ -202,8 +202,8 @@ JSON has a limited number of data types. You will get different lisp data-types 
 - (1) This is cl-json's default mode. Using cl-json:with-decoder-simple-clos-semantics or cl-json:simple-clos-semantics will switch cl-json into a mode where JSON arrays are decoded to cl vectors rather than lists, and JSON objects are decoded to CLOS objects rather than alists.
 - (2) There is a difference between how it handles the string false and string null and how it handles them when they are in an object and not separated as sub-strings. See [[#true-false-null-mapping][true-false-null-mapping]].
 - (3) All four libraries that decode a JSON object to a CL hash use strings as hash keys by default
-- (4) yason:parse has a keyword parameter :json-nulls-as-keyword and a keyword parameter :json-arrays-as-vectors.
-- (5) Parsing JSON value strings which are not embedded in a JSON object or array will trigger errors. For example (jsown:parse "12.3") or (jsown:parse "alpha") will trigger a sb-kernal:bounding-indices-bad error in sbcl. Floats in an array or object will be converted to a ratio:
+- (4) yason:parse has a keyword parameter =:json-nulls-as-keyword= and a keyword parameter =:json-arrays-as-vectors=.
+- (5) Parsing JSON value strings which are not embedded in a JSON object or array will trigger errors. For example =(jsown:parse "12.3")= or =(jsown:parse "alpha")= will trigger a =sb-kernal:bounding-indices-bad= error in SBCL. Floats in an array or object will be converted to a ratio:
   #+begin_src lisp
     (jsown:parse "[123e-1, 15.2]")
     (123/10 76/5)
@@ -889,7 +889,7 @@ In general, plain lists and plists are returned as JSON arrays unless some other
 - (7) Fail - the JSON arrays are invalid. They have ',.' or ',' rather than ':' depending on whether they are dotted cons cells or not.
 - (8) As you might expect, plists are treated the same as plain lists and will lose their key-value connections. If you want to keep the key-value connections, you can either convert the list to an alist or hash-table or use the cl-json:encode-json-plist function.
 - (9) This function is plist specific and will error if provided an alist.
-- (10) If the alist has dotted cons cells, jsown and st-json triggered unhandled memory faults with sbcl 2.1.11-x86-64-linux, ccl version 1.12.1 LinuxX8664 and ecl-version 21.2.1. This appears to be because jsown and st-json have optimized the code and assumed that all lists will be proper lists. The assumption obviously fails in the context of dotted cons cells.
+- (10) If the alist has dotted cons cells, jsown and st-json triggered unhandled memory faults with SBCL 2.1.11-x86-64-linux, CCL version 1.12.1 LinuxX8664 and ecl-version 21.2.1. This appears to be because jsown and st-json have optimized the code and assumed that all lists will be proper lists. The assumption obviously fails in the context of dotted cons cells.
 - (11) The *-alist functions require an alist. Shocking, I know.
 - (12) com.gigamonkeys.json will assume a plain list is a plist, returning a JSON object with key-value pairs. If the length of the list is odd, the final value in the list will be treated as a key and an empty set will be inserted as the value.
 - (13) For jonathan to properly handle alists, you need to add the additional keyword parameters :from :alist
@@ -935,7 +935,7 @@ I discovered that many libraries have problems if the alist components are dotte
 - com.inuoe.jzon correctly guesses this is a alist which should be encoded as key:value,
 - shasht:*write-alist-as-object* provides the ability to write an undotted alist as a JSON object rather than an array.
 - yason provides a specific function to encode the alist properly as key:value,
-- If the alist has dotted cons cells, jsown and st-json triggered unhandled memory faults with sbcl 2.1.11-x86-64-linux, ccl version 1.12.1 LinuxX8664 and ecl-version 21.2.1. This appears to be because jsown and st-json have optimized the code and assumed that all lists will be proper lists. The assumption obviously fails in the context of dotted cons cells.
+- If the alist has dotted cons cells, jsown and st-json triggered unhandled memory faults with SBCL 2.1.11-x86-64-linux, CCL version 1.12.1 LinuxX8664 and ecl-version 21.2.1. This appears to be because jsown and st-json have optimized the code and assumed that all lists will be proper lists. The assumption obviously fails in the context of dotted cons cells.
 **** Dotted cons cells (dotted pairs)
 :PROPERTIES:
 :CUSTOM_ID: encoding-alists-dotted-cons-cells
@@ -965,7 +965,7 @@ Using '(("A" . 1) ("B" . 2) ("C" . 3)) as the sample data
 - (1) Fail - the JSON arrays are invalid. They have ',.' rather than ','
 - (2) You may be able to write a new method to handle dotted.
 - (3) Only if (setf shasht:*write-alist-as-object* t), which is not the default. Otherwise it generates an error.
-- (4) If the alist has dotted cons cells, jsown and st-json triggered unhandled memory faults with sbcl 2.1.11-x86-64-linux, ccl version 1.12.1 LinuxX8664 and ecl-version 21.2.1. This appears to be because jsown and st-json have optimized the code and assumed that all lists will be proper lists. The assumption obviously fails in the context of dotted cons cells.
+- (4) If the alist has dotted cons cells, jsown and st-json triggered unhandled memory faults with SBCL 2.1.11-x86-64-linux, CCL version 1.12.1 LinuxX8664 and ecl-version 21.2.1. This appears to be because jsown and st-json have optimized the code and assumed that all lists will be proper lists. The assumption obviously fails in the context of dotted cons cells.
 - (5) You would need to use lower level components of json-streams. See [[#json-streams-encoding][json-streams-encoding]].
 
 Now we change the data slightly, still using dotted pairs, but with a nested list as the value in one pair: Using '(("foo" . "bar") ("baz" . ((1 2 3) (4 5 6)))) as the sample data.
@@ -996,7 +996,7 @@ Now we change the data slightly, still using dotted pairs, but with a nested lis
 - (2) You may be able to write a new method to handle dotted.
 - (3) This error is generated if shasht:*write-alist-as-object* is nil (the default).
 - (3a) If shasht:*write-alist-as-object* is t (not the default).
-- (4) If the alist has dotted cons cells, jsown and st-json triggered unhandled memory faults with sbcl 2.1.11-x86-64-linux, ccl version 1.12.1 LinuxX8664 and ecl-version 21.2.1. This appears to be because jsown and st-json have optimized the code and assumed that all lists will be proper lists. The assumption obviously fails in the context of dotted cons cells.
+- (4) If the alist has dotted cons cells, jsown and st-json triggered unhandled memory faults with SBCL 2.1.11-x86-64-linux, CCL version 1.12.1 LinuxX8664 and ecl-version 21.2.1. This appears to be because jsown and st-json have optimized the code and assumed that all lists will be proper lists. The assumption obviously fails in the context of dotted cons cells.
 - (5) You would need to use lower level components of json-streams. See [[#json-streams-encoding][json-streams-encoding]].
 
 Notice the difference in the successful results. cl-json and yason's result of {"foo":"bar","baz":[[1,2,3],[4,5,6]]} is what I would have expected. jonathan tried to force a key value pair into the second alist value. {"foo":"bar","baz":{"1":[2,3],"4":[5,6]}}.
@@ -1686,7 +1686,7 @@ If you follow this logic, your encoding function should be perfectly compliant a
 :PROPERTIES:
 :CUSTOM_ID: conformity-testing
 :END:
-While JSON has a standard, it is arguably under-specified. Using the tests from [[https://github.com/nst/JSONTestSuite][https://github.com/nst/JSONTestSuite]], I intended to focus on whether the libraries correctly parsed JSON strings that must be accepted and whether they throw errors on JSON strings that must be rejected. However, as you will see, how the libraries handle the "must reject" strings and "under-specified" strings also implicate security and stability. Some libraries' attempts to handle intentionally malformed JSON strings actually hung sbcl or triggered stack exhaustion. These are not the libraries you want facing uncontrolled input.
+While JSON has a standard, it is arguably under-specified. Using the tests from [[https://github.com/nst/JSONTestSuite][https://github.com/nst/JSONTestSuite]], I intended to focus on whether the libraries correctly parsed JSON strings that must be accepted and whether they throw errors on JSON strings that must be rejected. However, as you will see, how the libraries handle the "must reject" strings and "under-specified" strings also implicate security and stability. Some libraries' attempts to handle intentionally malformed JSON strings actually hung SBCL or triggered stack exhaustion. These are not the libraries you want facing uncontrolled input.
 
 *** Must Accept
 :PROPERTIES:
@@ -1781,9 +1781,9 @@ Only three libraries did not hang or trigger stack exhaustion on strings designe
 :PROPERTIES:
 :CUSTOM_ID: read-times
 :END:
-Ok. We are going to show read benchmarking results using sbcl, ccl and ecl because the changes in the results for jonathan were so different.
+Ok. We are going to show read benchmarking results using SBCL, CCL and ECL because the changes in the results for jonathan were so different.
 
-Jsown maintains its crown as the fastest parser *on sbcl* (assuming no errors in the file). It is beaten slightly by jonathan on tiny strings, but jonathan shows a slow-down with certain nested JSON objects that gets progressively worse as string sizes increase. This effect is more immediate under sbcl where it starts slowing down < 12.7k data. The effect is obvious even under ccl and ecl by the time you get to 227k JSON data objects and by the time you get over 1MB JSON data objects, jonathan is orders of magnitude slower than all other libraries, not just jsown.
+Jsown maintains its crown as the fastest parser *on SBCL* (assuming no errors in the file). It is beaten slightly by jonathan on tiny strings, but jonathan shows a slow-down with certain nested JSON objects that gets progressively worse as string sizes increase. This effect is more immediate under SBCL where it starts slowing down < 12.7k data. The effect is obvious even under CCL and ECL by the time you get to 227k JSON data objects and by the time you get over 1MB JSON data objects, jonathan is orders of magnitude slower than all other libraries, not just jsown.
 
 If we take a quick look at benchmarking with *tiny* JSON strings, we get read time chart comparisons that look like the following. The numbers come from applying the cost-of-nothing benchmark function against the libraries parsing the JSON string immediately below and using cl-spark's vspark function.
 
@@ -1795,7 +1795,7 @@ yason-alist and yason-plist are shorthand for (yason:parse data :object-as :alis
 #+end_src
 
 #+begin_src ascii
-                                JSON Read Times (sbcl tiny JSON object)
+                                JSON Read Times (SBCL tiny JSON object)
                      0                  6.147095e-6                  1.229419e-5
                      ˫----------------------------+----------------------------˧
           boost-json █████████████████████████▎
@@ -1814,7 +1814,7 @@ com.gigamonkeys.json ███████████████████�
          yason-plist ███████████████████████████████████▎
 
 
-                                JSON Read Times (ccl tiny JSON object)
+                                JSON Read Times (CCL tiny JSON object)
                      0                  3.137722E-5                  6.275444E-5
                      ˫----------------------------+----------------------------˧
           boost-json ███████████████▉
@@ -1829,7 +1829,7 @@ com.gigamonkeys.json █████████████████▌
              st-json ████████████████▍
                yason █████████████████▎
 
-                                JSON Read Times (ecl tiny JSON object)
+                                JSON Read Times (ECL tiny JSON object)
                      0                 1.3122593e-4                 2.6245185e-4
                      ˫----------------------------+----------------------------˧
           boost-json ███████▍
@@ -1844,9 +1844,9 @@ com.gigamonkeys.json █████████▋
              st-json █████████▊
                yason ████████▌
 #+end_src
-The read times start to look different with respect to nested JSON objects as the file sizes increase. The next chart is a 2.7k JSON nested object. With sbcl, jonathan is slightly behind JSON, but still looking good compared to the rest of the libraries. The JSON dataset for charts between 2.7k and 221k are all from a Nobel prize dataset which can be found at [[http://api.nobelprize.org/v1/prize.json][http://api.nobelprize.org/v1/prize.json]]. The 2.7k data is just 2021. The 12.9k data is 2017-2021 and the 221k data are all years. We are dropping trivial-json-codec out at this point because it claims the data is invalid.
+The read times start to look different with respect to nested JSON objects as the file sizes increase. The next chart is a 2.7k JSON nested object. With SBCL, jonathan is slightly behind JSON, but still looking good compared to the rest of the libraries. The JSON dataset for charts between 2.7k and 221k are all from a Nobel prize dataset which can be found at [[http://api.nobelprize.org/v1/prize.json][http://api.nobelprize.org/v1/prize.json]]. The 2.7k data is just 2021. The 12.9k data is 2017-2021 and the 221k data are all years. We are dropping trivial-json-codec out at this point because it claims the data is invalid.
 #+begin_src ascii
-                                JSON Read Times (sbcl 2.7k JSON object)
+                                JSON Read Times (SBCL 2.7k JSON object)
                      0                 1.3253705e-4                  2.650741e-4
                      ˫----------------------------+----------------------------˧
           boost-json ████████████▉
@@ -1863,7 +1863,7 @@ com.gigamonkeys.json ██████████████████▏
          yason-alist █████████████████████████████████████████▍
          yason-plist █████████████████████████████████████████▍
 
-                                JSON Read Times (ccl 2.7k JSON object)
+                                JSON Read Times (CCL 2.7k JSON object)
                      0                   4.59796E-4                   9.19592E-4
                      ˫----------------------------+----------------------------˧
           boost-json █████████████▋
@@ -1878,7 +1878,7 @@ com.gigamonkeys.json █████████████████▎
              st-json █████████████▏
                yason ███████████████████████████▏
 
-                                JSON Read Times (ecl 2.7k JSON object)
+                                JSON Read Times (ECL 2.7k JSON object)
                      0                 0.0029186574                 0.0058373148
                      ˫----------------------------+----------------------------˧
           boost-json █████▍
@@ -1893,9 +1893,9 @@ com.gigamonkeys.json ███████████▏
              st-json █████▉
                yason ███████████▎
 #+end_src
-Now we increase the size to a 12.9k JSON nested object. Using sbcl, jsown is by itself and jonathan has fallen behind four other libraries. On the other hand, jonathan is still faster with ccl and ecl.
+Now we increase the size to a 12.9k JSON nested object. Using SBCL, jsown is by itself and jonathan has fallen behind four other libraries. On the other hand, jonathan is still faster with CCL and ECL.
 #+begin_src ascii
-                                JSON Read Times (sbcl 12.9k JSON object)
+                                JSON Read Times (SBCL 12.9k JSON object)
                      0                 6.402964e-4                  0.0012805928
                      ˫----------------------------+----------------------------˧
           boost-json █████████████▏
@@ -1912,7 +1912,7 @@ com.gigamonkeys.json █████████████████▉
          yason-alist ████████████████████████████████████████▊
          yason-plist ████████████████████████████████████████▉
 
-                                JSON Read Times (ccl 12.9k JSON object)
+                                JSON Read Times (CCL 12.9k JSON object)
                      0                  0.0022879406                 0.004575881
                      ˫----------------------------+----------------------------˧
           boost-json █████████████▎
@@ -1927,7 +1927,7 @@ com.gigamonkeys.json ████████████████▍
              st-json ████████████▊
                yason ██████████████████████████▎
 
-                                JSON Read Times (ecl 12.9k JSON object)
+                                JSON Read Times (ECL 12.9k JSON object)
                      0                   0.02525251                   0.05050502
                      ˫----------------------------+----------------------------˧
           boost-json ███▍
@@ -1942,9 +1942,9 @@ com.gigamonkeys.json ████▏
              st-json █▉
                yason █████████▍
 #+end_src
-Now we jump up to the 221k JSON object and jonathan is really falling behind with sbcl and suddenly starts struggling under ccl and ecl for unknown reasons.
+Now we jump up to the 221k JSON object and jonathan is really falling behind with SBCL and suddenly starts struggling under CCL and ECL for unknown reasons.
 #+begin_src ascii
-                                JSON Read Times (sbcl 221k JSON object)
+                                JSON Read Times (SBCL 221k JSON object)
                      0                   0.03486486                   0.06972972
                      ˫----------------------------+----------------------------˧
           boost-json ████▏
@@ -1959,7 +1959,7 @@ com.gigamonkeys.json █████▊
              st-json ████▍
                yason ██████████████▎
 
-                               JSON Read Times (ccl 221k JSON object)
+                               JSON Read Times (CCL 221k JSON object)
                      0                  0.045712363                  0.091424726
                      ˫----------------------------+----------------------------˧
           boost-json ███████████▌
@@ -1990,7 +1990,7 @@ com.gigamonkeys.json ███████████▍
                yason ███████████████████▎
 #+end_src
 Switching to trivial-benchmarking numbers and just taking the cumulative timing and consing for 20 runs of these three JSON strings and just comparing jonathan v. com.inuoe.jzon. Obviously the first thing that jumps out is the garbage collection while jonathan parses the 221k JSON string. Look at the relative increase. The largest string is 8162% larger than the smallest, but jonathan's run time increases by 100000% and the bytes consed increases by 576000%. At the same time com.inuoe.jzon's increases slightly less than the increase in string size.
-#+CAPTION: Jonathan Parsing (sbcl)
+#+CAPTION: Jonathan Parsing (SBCL)
 #+ATTR_HTML: :border 2 :rules all :frame border
 #+ATTR_LATEX: :float multicolumn
 |                   |             |             |             | Relative Increase |
@@ -2004,7 +2004,7 @@ Switching to trivial-benchmarking numbers and just taking the cumulative timing 
 | GC-RUN-TIME       |           0 |           0 |     217.427 |                   |
 | BYTES-CONSED      |     1754032 |    37784576 | 10100294512 |           575832% |
 
-#+CAPTION: Com.inuoe.jzon Parsing (sbcl)
+#+CAPTION: Com.inuoe.jzon Parsing (SBCL)
 #+ATTR_HTML: :border 2 :rules all :frame border
 #+ATTR_LATEX: :float multicolumn
 |                   |             |             |             | Relative Increase |
@@ -2020,7 +2020,7 @@ Switching to trivial-benchmarking numbers and just taking the cumulative timing 
 
 Now looking at parsing a 1.2 MB JSON string with nested objects, jonathan is orders of magnitude slower than all the other libraries regardless of which compiler is used. The JSON dataset can be found at [[https://github.com/mledoze/countries/blob/master/countries.json][https://github.com/mledoze/countries/blob/master/countries.json]].
 #+begin_src ascii
-                                JSON Read Times (sbcl 1.2MB JSON object)
+                                JSON Read Times (SBCL 1.2MB JSON object)
                      0                     1.193597                     2.387194
                      ˫----------------------------+----------------------------˧
           boost-json ▌
@@ -2039,7 +2039,7 @@ com.gigamonkeys.json ▊
 
 CCL results not included since it had an issue with some of the unicode in the file.
 
-                                JSON Read Times (ecl 1.2MB JSON object)
+                                JSON Read Times (ECL 1.2MB JSON object)
                      0                          2.0                          4.0
                      ˫----------------------------+----------------------------˧
           boost-json █▍
@@ -2058,7 +2058,7 @@ com.gigamonkeys.json ████████▏
 If we drop jonathan and look at the remaining libraries and add in results for yason decoding to plists and alists, it looks like this:
 #+begin_src ascii
 
-                                JSON Read Times (sbcl 1.2 MB JSON object)
+                                JSON Read Times (SBCL 1.2 MB JSON object)
                      0                   0.04651775                    0.0930355
                      ˫----------------------------+----------------------------˧
           boost-json ███████████▍
@@ -2076,7 +2076,7 @@ com.gigamonkeys.json ███████████████████�
 #+end_src
 Interestingly, if we go up to a 9.8 MB file (still on the small side) downloaded from [[https://www.vizgr.org/historical-events/search.php?format=json&begin_date=-3000000&end_date=20151231&lang=en][https://www.vizgr.org/historical-events/search.php?format=json&begin_date=-3000000&end_date=20151231&lang=en]], we see substantial improvement from jzon (com.inoue.jzon) and some slowing down from gigamonkeys. I am going to guess that there is something different in the structure of the files which jzon handles faster than the 1.2 MB file. Again, trivial-json-codec rejected the data as invalid, so it is left out.
 #+begin_src ascii
-                                JSON Read Times (sbcl 9.8MB JSON object)
+                                JSON Read Times (SBCL 9.8MB JSON object)
                      0                    8.908338                     17.816675
                      ˫----------------------------+----------------------------˧
           boost-json ▊
@@ -2091,7 +2091,7 @@ com.gigamonkeys.json █▎
              st-json ▊
                yason ██▍
 
-                                JSON Read Times (ccl 9.8MB JSON object)
+                                JSON Read Times (CCL 9.8MB JSON object)
                      0                    11.320626                    22.641253
                      ˫----------------------------+----------------------------˧
           boost-json ██▏
@@ -2106,7 +2106,7 @@ com.gigamonkeys.json ███▏
              st-json █▉
                yason ███▋
 
-                                JSON Read Times (ecl 9.8 MB JSON object)
+                                JSON Read Times (ECL 9.8 MB JSON object)
                      0                         11.0                         22.0
                      ˫----------------------------+----------------------------˧
           boost-json ██▋
@@ -2122,7 +2122,7 @@ com.gigamonkeys.json ██▋
                yason █████▍
 #+end_src
 
-*** Read Times From Stream (sbcl)
+*** Read Times From Stream (SBCL)
 :PROPERTIES:
 :CUSTOM_ID: benchmarking-read-stream
 :END:
@@ -2133,7 +2133,7 @@ The following charts are reading from stream rather than from string (so a sligh
 :END:
 #+begin_src ascii
 
-                                JSON Read Times (sbcl) 1.2 MB Countries File
+                                JSON Read Times (SBCL) 1.2 MB Countries File
                0                     0.045713887                      0.09142777
                ˫-------------------------------+-------------------------------˧
     boost-json █████████████▏
@@ -2153,7 +2153,7 @@ com.inuoe.jzon █████████████████████�
 :CUSTOM_ID: benchmarking-read-stream-historical-events
 :END:
 #+begin_src ascii
-                                JSON Read Times (sbcl) 9.8 MB Historical Events File
+                                JSON Read Times (SBCL) 9.8 MB Historical Events File
                0                       3.6496155                        7.299231
                ˫-------------------------------+-------------------------------˧
     boost-json █▊
@@ -2254,7 +2254,7 @@ com.gigamonkeys.json █████▉
 :END:
  | Library    | Author          | License    | Website                          | Comments         |
  |------------+-----------------+------------+----------------------------------+------------------|
- | [[#boost-json][boost-json]] | Jeffrey Massung | Apache v.2 | [[https://github.com/cl-boost/json][https://github.com/cl-boost/json]] | Not in quicklisp |
+ | [[#boost-json][boost-json]] | Jeffrey Massung | Apache v.2 | [[https://github.com/cl-boost/json][https://github.com/cl-boost/json]] | Not in Quicklisp |
 
 Boost-json is one of the faster decoders. The author notes that he personally uses it to parse extremely large, genomics JSON-list files (several GB in size). The author and I have different opinions on nil/false/null/[] and whether they actually have meaningful differences. He does not think so; I disagree. It does have issues on the encoding side, sometimes losing values when encoding vectors and is generally one of the slowest writers. I think it has value in the right use cases, but you do need to make sure it meets your particular needs.
 
@@ -2990,9 +2990,9 @@ It accepted 14 of the 17 test cases considered to be part of the gray area of th
 
  | Library        | Author                       | License | Website                            | Comments         |
  |----------------+------------------------------+---------+------------------------------------+------------------|
- | [[#com.inuoe.jzon][com.inuoe.jzon]] | Wilfredo Velázquez-Rodríguez | MIT     | [[https://github.com/Zulu-Inuoe/jzon][https://github.com/Zulu-Inuoe/jzon]] | Not in quicklisp |
+ | [[#com.inuoe.jzon][com.inuoe.jzon]] | Wilfredo Velázquez-Rodríguez | MIT     | [[https://github.com/Zulu-Inuoe/jzon][https://github.com/Zulu-Inuoe/jzon]] | Not in Quicklisp |
 
-Com.inuoe.jzon is my new overall favorite. Unfortunately it is not in quicklisp (if that matters to you).  It is fast, it handles null correctly, it encodes all kinds of lists, CLOS objects, structures and hash-tables. The one improvement I would request is the ability to do incremental coding and that is being worked on.
+Com.inuoe.jzon is my new overall favorite. Unfortunately it is not in Quicklisp (if that matters to you).  It is fast, it handles null correctly, it encodes all kinds of lists, CLOS objects, structures and hash-tables. The one improvement I would request is the ability to do incremental coding and that is being worked on.
 
 *** Default Mapping
 :PROPERTIES:
@@ -3427,7 +3427,7 @@ It accepted 9 out of the 17 test cases considered to be part of the gray area of
 
  | Library  | Author      | License | Website                                   | Comments         |
  |----------+-------------+---------+-------------------------------------------+------------------|
- | [[#json-lib][json-lib]] | Alex Nygren | MIT     | [[https://github.com/KinaKnowledge/json-lib][https://github.com/KinaKnowledge/json-lib]] | Not in quicklisp |
+ | [[#json-lib][json-lib]] | Alex Nygren | MIT     | [[https://github.com/KinaKnowledge/json-lib][https://github.com/KinaKnowledge/json-lib]] | Not in Quicklisp |
 
 Json-lib describes itself as a simple JSON decoder and encoder which tries to achieve symmetry. It falls a little short when dealing with JSON's false and with unicode char codes. On the plus side, it was one of four libraries to limit depth and avoid stack exhaustion on malformed JSON data. I think it generally does what it was intended for.
 
@@ -3946,7 +3946,7 @@ You can specify that JSON returns an object.  The following call to to-json wrap
  (jsown:to-json '(:obj (("a" "alpha") ("b" "beta"))))
   "{\"(a alpha)\":[[\"b\",\"beta\"]]}"
 #+end_src
-If jsown tries to encode an alist which has dotted cons cells, jsown triggered unhandled memory faults with sbcl 2.1.11-x86-64-linux, ccl version 1.12.1 LinuxX8664 and ecl-version 21.2.1. This appears to be because jsown has optimized the code and assumed that all lists will be proper lists. The assumption obviously fails in the context of dotted cons cells.
+If jsown tries to encode an alist which has dotted cons cells, jsown triggered unhandled memory faults with SBCL 2.1.11-x86-64-linux, CCL version 1.12.1 LinuxX8664 and ecl-version 21.2.1. This appears to be because jsown has optimized the code and assumed that all lists will be proper lists. The assumption obviously fails in the context of dotted cons cells.
 
 When to-json is called, jsown will internally call to-json each step of the way. This has a performance downside, yet it seems to provide the least surprises in the output. If you need more performance, jsown* offers that, at the cost of flexibility.
 
@@ -4027,7 +4027,7 @@ See [[#benchmarking][Benchmarking]]
 :PROPERTIES:
 :CUSTOM_ID: jsown-miscellaneous
 :END:
-Issue 27 on github claims an unhandled memory fault on the following bad JSON string in sbcl 2.0.8, but I do not see that with ccl, clisp or sbcl 2.1.11, so this issue may have been fixed.
+Issue 27 on GitHub claims an unhandled memory fault on the following bad JSON string in SBCL 2.0.8, but I do not see that with CCL, clisp or SBCL 2.1.11, so this issue may have been fixed.
 #+begin_src lisp
 (jsown:parse "{\"foo\": a}")
 #+end_src
@@ -4072,7 +4072,7 @@ Issue 27 on github claims an unhandled memory fault on the following bad JSON st
  |---------+----------------+---------+------------------------------------|
  | [[#shasht][shasht]]  | Tarn W. Burton | MIT     | [[https://github.com/yitzchak/shasht][https://github.com/yitzchak/shasht]] |
 
- Shasht is one of the two new libraries that I particularly like and is already in quicklisp. It is fast, it handles null correctly, it encodes CLOS objects, structures and hash-tables. It can also do incremental encoding.
+ Shasht is one of the two new libraries that I particularly like and is already in Quicklisp. It is fast, it handles null correctly, it encodes CLOS objects, structures and hash-tables. It can also do incremental encoding.
 
 *** Default Mappping
 :PROPERTIES:
@@ -4546,7 +4546,7 @@ You need to write your own st-json::write-json-element function for arrays. Poss
 :PROPERTIES:
 :CUSTOM_ID: st-json-encoding-alists
 :END:
-If the alist has dotted cons cells, jsown and st-json triggered unhandled memory faults with sbcl 2.1.11-x86-64-linux, ccl version 1.12.1 LinuxX8664 and ecl-version 21.2.1. This appears to be because jsown and st-json have optimized the code and assumed that all lists will be proper lists. The assumption obviously fails in the context of dotted cons cells.
+If the alist has dotted cons cells, jsown and st-json triggered unhandled memory faults with SBCL 2.1.11-x86-64-linux, CCL version 1.12.1 LinuxX8664 and ecl-version 21.2.1. This appears to be because jsown and st-json have optimized the code and assumed that all lists will be proper lists. The assumption obviously fails in the context of dotted cons cells.
 **** Encoding CLOS
 :PROPERTIES:
 :CUSTOM_ID: st-json-encoding-clos
@@ -4918,7 +4918,7 @@ There were two general security issues we considered: (1) interning keywords and
  |---------+--------------+---------+----------------------------------|
  | [[#yason][yason]]   | Hans Huebner | BSD     | [[https://github.com/phmarek/yason][https://github.com/phmarek/yason]] |
 
-IMPORTANT: Notice the github location has moved. Hans Huebner's old github location will automatically redirect to Phil Marek's, but quicklisp is not (as of the time of this writing) pulling code from the new github location. It is actively maintained by Phil Marek and he is very responsive.
+IMPORTANT: Notice the GitHub location has moved. Hans Huebner's old GitHub location will automatically redirect to Phil Marek's, but Quicklisp is not (as of the time of this writing) pulling code from the new GitHub location. It is actively maintained by Phil Marek and he is very responsive.
 
 From the author: "the major difference between YASON and the other JSON libraries that were available when I wrote it is that YASON does not require the user to come up with a Lisp data structure that reflects the JSON data structure that should be generated. Rather, I wanted a way to generate JSON directly from my internal data structures.
 
@@ -5035,7 +5035,7 @@ yason:encode-alist, yason:encode-plist, yason:encode-object, etc. The following 
 :PROPERTIES:
 :CUSTOM_ID: yason-encloding-symbols
 :END:
-The version of yason in quicklisp as of this writing (version 7.8) has no applicable method for encoding a symbol. This also means that  by default, yason will not encode lists with symbols. That is resolved in version 8.2 on github, but for some reason it is not getting picked up in quicklisp. You can resolve this in version 7.8 by writing a new method to handle symbols. Such a method could look like this:
+The version of yason in Quicklisp as of this writing (version 7.8) has no applicable method for encoding a symbol. This also means that  by default, yason will not encode lists with symbols. That is resolved in version 8.2 on GitHub, but for some reason it is not getting picked up in Quicklisp. You can resolve this in version 7.8 by writing a new method to handle symbols. Such a method could look like this:
 #+begin_src lisp
   (defmethod encode ((object symbol) &optional (stream *json-output*))
     (let ((new (funcall #'ENCODE-SYMBOL-AS-LOWERCASE object)))
@@ -5139,7 +5139,7 @@ The following examples use two exercises. First, incrementally build a JSON arra
 - *\star{}parse-object-as** - can be set to :hash-table to parse objects as hash tables, :alist to parse them as alists or :plist to parse them as plists. :hash-table is the default.
 - *\star{}parse-object-as-alist**
 - *\star{}parse-object-key-fn** - function to call to convert a key string in a JSON object to a key in the cl hash produced. identity is the default.
-- *\star{}symbol-encoder** - warning: as of the time of this writing, this variable is in version 0.8.2 on github and not in version 0.7.8 in quicklisp. function to call to translate a cl symbol into a JSON string. the default is to error out, to provide backwards-compatible behaviour. a useful function that can be bound to this variable is yason:encode-symbol-as-lowercase
+- *\star{}symbol-encoder** - warning: as of the time of this writing, this variable is in version 0.8.2 on GitHub and not in version 0.7.8 in Quicklisp. function to call to translate a cl symbol into a JSON string. the default is to error out, to provide backwards-compatible behaviour. a useful function that can be bound to this variable is yason:encode-symbol-as-lowercase
 - *\star{}symbol-key-encoder*- defines the policy to encode symbols as keys (eg. in hash tables). the default is to error out, to provide backwards-compatible behaviour. a useful function that can be bound to this variable is yason:encode-symbol-as-lowercase
 - *encode* - encode object in JSON format and write to stream. may be specialized by applications to perform specific rendering. stream defaults to \star{}standard-output*.
 - *encode-alist* - encodes object, an alist, in JSON format and write to stream.
@@ -5414,7 +5414,7 @@ Unlike [[herodotus][herodotus]] which creates a new package, json-mop wants you 
 #+begin_src lisp
   (:metaclass json-serializable-class)
 #+end_src
-I quite like json-mop (assuming I was using yason), but you do need to watch for one issue: At the moment you cannot redefine a class. The issue has been flagged twice on github and I ran into it in testing.
+I quite like json-mop (assuming I was using yason), but you do need to watch for one issue: At the moment you cannot redefine a class. The issue has been flagged twice on GitHub and I ran into it in testing.
 
 For slots that you want to appear in the JSON representation of your class, add the slot option :json-key with the string to use as the attribute name. The option :json-type defaults to :any, but you can control how each slot value is transformed to and from JSON with one of the following JSON type specifiers:
     | Type        | Remarks                                                                                                |
