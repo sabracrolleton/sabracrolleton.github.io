@@ -45,7 +45,7 @@ Some testing frameworks insist on [[progress-reports][tracking progress by print
 
 Some frameworks cannot find lexical variables declared in a closure containing the test. Most people will not care, but if you use closures, you might.
 
-Other contexts are best served by other libraries. Complex fixture requirements might drive you towards something like [[nst][NST]], the need to define your own bespoke assertions might be served by [[should-test][should-test]] or [[kaputt][kaputt]]. Numerical comparisons might lead you to use [[lisp-unit][lisp-unit]], [[lisp-unit2][lisp-unit2]] or [[kaputt][kaputt]] (or just writing your own). For macro-expansion testing, [[clunit][clunit]], [[clunit2][clunit2]], [[lisp-unit][lisp-unit]], [[lisp-unit2][lisp-unit2]] and [[rove][rove]] have specific assertion functions. Your situation should govern which testing framework you use, not your project skeleton or market share.
+Other contexts are best served by other libraries. Complex fixture requirements might drive you towards something like [[nst][NST]], the need to define your own bespoke assertions might be served by [[should-test][should-test]] or [[confidence][confidence]]. Numerical comparisons might lead you to use [[lisp-unit][lisp-unit]], [[lisp-unit2][lisp-unit2]] or [[confidence][confidence]] (or just writing your own). For macro-expansion testing, [[clunit][clunit]], [[clunit2][clunit2]], [[lisp-unit][lisp-unit]], [[lisp-unit2][lisp-unit2]] and [[rove][rove]] have specific assertion functions. Your situation should govern which testing framework you use, not your project skeleton or market share.
 
 I occasionally hear "extensibility" used as a buzzword applied to a framework. I'm not sure what it means to people. Consider the following example in =sxql=, which is not a testing framework but which included this macro in its own test file to simplify its use of =prove= -
 #+begin_src lisp
@@ -76,9 +76,9 @@ In any event, yes, I will state my opinions, but what you think is important wil
 | [[clunit][clunit]] [fn:3]                  | [[http://tgutu.github.io/clunit/][homepage]] | Tapiwa Gutu                                     | BSD               |        2017 |
 | [[clunit2][clunit2]]                        | [[https://notabug.org/cage/clunit2][homepage]] | Cage (fork of clunit)                           | BSD               |        2021 |
 | [[com.gigamonkeys.test-framework][com.gigamonkeys.test-framework]] | [[https://github.com/gigamonkey/monkeylib-test-framework][homepage]] | Peter Seibel                                    | BSD               |        2010 |
+| [[confidence][confidence]]                         | [[https://github.com/melusina-org/cl-confidence][homepage]] | Michaël Le Barbier                              | MIT               |        2023 |
 | [[fiasco][fiasco]] [fn:4]                  | [[https://github.com/joaotavora/fiasco][homepage]] | João Távora                                     | BSD 2 Clause      |        2020 |
 | [[fiveam][fiveam]]                         | [[https://github.com/lispci/fiveam][homepage]] | Edward Marco Baringer                           | BSD               |        2020 |
-| [[kaputt][kaputt]]                         | [[https://github.com/foretspaisibles/cl-kaputt][homepage]] | Michaël Le Barbier                              | MIT               |        2020 |
 | [[lift][lift]]                           | [[https://github.com/gwkkwg/lift][homepage]] | Gary Warren King                                | MIT               | 2019 [fn:5] |
 | [[lisp-unit][lisp-unit]]                      | [[https://github.com/OdonataResearchLLC/lisp-unit][homepage]] | Thomas M. Hermann                               | MIT               |        2017 |
 | [[lisp-unit2][lisp-unit2]]                     | [[https://github.com/AccelerationNet/lisp-unit2][homepage]] | Russ Tyndall                                    | MIT               |        2018 |
@@ -227,11 +227,11 @@ For those who want the opinionated quick summary. The awards are -
 - I want to track if my functions changed results: *Checkl*
 - Tests that specify suite or tags (does not rely on location in file): *Parachute, Lisp-Unit (tags), Lisp-Unit2(tags), Lift, Clunit2*
 - Heavy duty complex fixtures: *NST* (but there are trade-offs in the shape of the learning curve and performance)
-- Ability to define new assertions: *NST, Kaputt* (but they have their issues in other areas)
+- Ability to define new assertions: *Confidence, NST* (but they have their issues in other areas)
 - Ability to rerun failures only: *Fiasco, Lisp-Unit2* (you can extend Parachute and Fiveam to get this, but it is not there now)
 
 - Favorite Random Data Generator: *Check-it*
-- Can redirect output to a different stream (a): *Clunit2, Fiasco, Kaputt, Lift, Lisp-Unit, Lisp-Unit2 and RT*
+- Can redirect output to a different stream (a): *Clunit2, Confidence, Fiasco, Lift, Lisp-Unit, Lisp-Unit2 and RT*
 
 - Randomized Property Tests: *Check-it with any framework*
 - Choice of [[debugging][Interactive Debugging or Reporting]]: Most frameworks at this point
@@ -249,7 +249,7 @@ For those who want the opinionated quick summary. The awards are -
 - Ease of use and documentation: Most of the frameworks are straightforward. Some have no documentation, others have partial documentation (often documenting only one use case). The documentation may be out of sync with the code. Some get so excited about writing up the implementation details that it becomes difficult to see the forest for the trees. NST has a high learning curve. Prove and Rove will require digging into the source code if you want to do more than simple regression testing. Lift has a lot of undocumented functionality that might be just what you need but you have no way of knowing.
 
 - Tests
-  - Tests should take multiple assertions and report ALL the assertion failures in the test (Looking at you Lift, Kaputt and Xlunit - I put multiple assertions into a test for a reason, please do not lose some of the evidence.)
+  - Tests should take multiple assertions and report ALL the assertion failures in the test (Looking at you Lift, and Xlunit - I put multiple assertions into a test for a reason, please do not lose some of the evidence.)
 	- Are tests [[funcallable][functions or otherwise funcallable]]? (Faré and others requested this in an exchange with Tapiwa, the author of Clunit, back in 2013. At the same time others want or do not want test names in the function namespace. You choose your preference. Those who want funcallable tests typically cite either the ability to program running the test or the ability to go to definion from test name.)
   - Immediate access to source code (Integration with debugger or funcallable tests?)
   - Does a failure or error throw you immediately into the debugger, never into the debugger, and is that optional?
@@ -261,8 +261,8 @@ For those who want the opinionated quick summary. The awards are -
   - Assertions that either automatically explain why the the test failed or [[diagnostic-messages][allow a diagnostic string]] that describes the assertion and what failed. (Have you ever seen a test fail but the report of what it should have been and what the result was look exactly the same? Maybe the test required EQL and you thought it was EQUALP? These might or might not help)
   - Can assertions can access [[closures][variables in a closure containing the test]]? (Most frameworks can, but Clunit, Clunit2, Lisp-Unit, Lisp-Unit2 and NST cannot).
   - Do the assertions have [[assert-expands][macroexpand assertion functions]]? (Clunit, Clunit2, Lisp-Unit, Lisp-Unit2, Prove, Rove and Tap-Unit-Test have this)
-  - Do the assertions have [[floating-point][floating point and rational comparisons]] or do you have to write your own? (Lift, Lisp-Unit, Lisp-Unit2, Kaputt have these functions for you.)
-  - Signal and condition testing or at least be able to validate that the right condition was signalled. (Kaputt, did you forget something?)
+  - Do the assertions have [[floating-point][floating point and rational comparisons]] or do you have to write your own? (Confidence, Lift, Lisp-Unit, Lisp-Unit2, have these functions for you.)
+  - Signal and condition testing or at least be able to validate that the right condition was signalled.
 	- Definable assertions/criteria (can you easily define additional assertions?)
   - Do assertions or tests [[run-on-compile][run on compilation]] (C-c C-c in the source file)?
   - Do the assertions handle [[values-expressions][values expressions]]? Most frameworks accept a values expression but compare just the first value. Fiveam complains about getting a values expression and throws an error. Parachute and NST will compare a single values expression against multiple individual values. Prove will compare a values expression against a list. Lisp-Unit and Lisp-Unit2 (*Update* Clunit2) will actually compare two values expressions value by value.
@@ -321,8 +321,8 @@ I am not including a pie chart describing which library has market share because
 | fiveam      |   323 |
 | clunit      |    11 |
 | clunit2     |     4 |
+| confidence  |     2 |
 | fiasco      |    24 |
-| kaputt      |     2 |
 | lift        |    54 |
 | lisp-unit   |    42 |
 | lisp-unit2  |    21 |
@@ -349,10 +349,10 @@ I am not including a pie chart describing which library has market share because
 | [[cacau][cacau]]         | (6)                           |            | (4)     |
 | [[clunit][clunit]]        | ✅️                            | ✅️         | (4)     |
 | [[clunit2][clunit2]]       | ✅️                            | ✅️         | (4)     |
+| [[confidence][confidence]]        | ❌️ (9)                         | ✅️           | ✅️        |
 | [[fiasco][fiasco]]        | ✅️                            | ✅️         |         |
 | [[fiveam][fiveam]]        | ✅️                            | ✅️         |         |
 | [[gigamonkeys][gigamonkeys]]   | ❌️                             |            |         |
-| [[kaputt][kaputt]]        | ❌️ (9)                         |            |         |
 | [[lift][lift]]          | ✅️                            | ✅️         |         |
 | [[lisp-unit][lisp-unit]]     | (tags) (3)                    |            | (1,4)   |
 | [[lisp-unit2][lisp-unit2]]    | (tags) (3)(5)                 | ✅️ (5)     | (1,4)   |
@@ -376,6 +376,7 @@ I am not including a pie chart describing which library has market share because
 6. Has suites but no real capacity to run them independently - all or nothing
 7. Rove's =run-suite= function will run all the tests in a particular package but does not accept a style parameter and simply prints out the results of each individual test, without summarizing. Rove's =run= function does accept a style parameter but seems to handle only package-inferred systems. I confirm Rove's [[https://github.com/fukamachi/rove/issues/42][issue #42]] that it will not run with non-package inferred systems.
 8. RT does not have suites per se. You can run all the tests that have been defined using the DO-TESTS function. By default it prints to =*standard-output*= but accepts an optional stream parameter which would allow you to redirect the results to a file or other stream of your choice. do-tests will print the results for each individual test and then summarize with something like the following:
+9. Tests are hierarchical and compose results but there is no tagging system. Each suite is a function that can directly be executed.
 
 ** Run on compile, funcallable tests
     <<run-on-compile>><<funcallable>>
@@ -389,10 +390,10 @@ I am not including a pie chart describing which library has market share because
 | [[cacau][cacau]]                  | N              | N                      |
 | [[clunit][clunit]]                 | A              | N                      |
 | [[clunit2][clunit2]]                | A              | N                      |
+| [[confidence][confidence]]         | N              | Y                      |
 | [[fiasco][fiasco]]                 | A              | Y                      |
 | [[fiveam][fiveam]]                 | Optional       | N                      |
 | [[gigamonkeys][gigamonkeys]]            | N              | N                      |
-| [[kaputt][kaputt]]                 | N              | Y                      |
 | [[lift][lift]]                   | A, T(1)        | N                      |
 | [[lisp-unit][lisp-unit]]              | N              | N                      |
 | [[lisp-unit2][lisp-unit2]]             | N              | Y                      |
@@ -424,10 +425,10 @@ I am not including a pie chart describing which library has market share because
 | [[cacau][cacau]]                  | ✅️       | ✅️             | ✅️            |                                    |
 | [[clunit][clunit]]                 | ✅️       | ✅️             | ✅️            | ✅️                                 |
 | [[clunit2][clunit2]]                | ✅️       | ✅️             | ✅️            | ✅️                                 |
+| [[confidence][confidence]]                 | ❌️       |                |               |                                    |
 | [[fiasco][fiasco]]                 | ❌️       |                |               |                                    |
 | [[fiveam][fiveam]]  (a)            | K        | ✅️             | ✅️            |                                    |
 | [[gigamonkeys][gigamonkeys]]            | ❌️       |                |               |                                    |
-| [[kaputt][kaputt]]                 | ❌️       |                |               |                                    |
 | [[lift][lift]]                   | ✅️       | ✅️             |               | inherited from higher level suites |
 | [[lisp-unit][lisp-unit]]              | ❌️       |                |               |                                    |
 | [[lisp-unit2][lisp-unit2]]             | ✅️       |                | ✅️            |                                    |
@@ -459,10 +460,10 @@ Does a failure (not error) trigger the debugger, is it optional, and do assertio
 | [[cacau][cacau]]         | (optional)                | N                                |
 | [[clunit][clunit]]        | (optional)                | with vars                        |
 | [[clunit2][clunit2]]       | (optional)                | with vars                        |
+| [[confidence][confidence]]        | (never)             | with vars                        |
 | [[gigamonkeys][gigamonkeys]]   | (optional)                | N                                |
 | [[fiasco][fiasco]]        | (optional)                | with vars                        |
 | [[fiveam][fiveam]]        | (optional)                | with vars                        |
-| [[kaputt][kaputt]]        | (always)                  | N                                |
 | [[lift][lift]]          | (optional)                | with vars                        |
 | [[lisp-unit][lisp-unit]]     | (optional)                | Y                                |
 | [[lisp-unit2][lisp-unit2]]    | (optional)                | Y                                |
@@ -492,11 +493,11 @@ Also see [[error-reporting][error-reporting]]
 | [[cacau][cacau]]                  | run                 | nil                                                                                                                                  |
 | [[clunit][clunit]]                 | run-test, run-suite | nil                                                                                                                                  |
 | [[clunit2][clunit2]]                | run-test, run-suite | nil                                                                                                                                  |
+| [[confidence][confidence]]                 | name-of-test        | nil                                                                                                                                  |
 | [[fiasco][fiasco]]                 | run-tests           | test-run object                                                                                                                      |
 | [[fiveam][fiveam]]                 | run                 | list of test-passed, test-skipped, test-failure objects                                                                              |
 |                        | run!                | nil                                                                                                                                  |
 | [[gigamonkeys][gigamonkeys]]            | test                | nil                                                                                                                                  |
-| [[kaputt][kaputt]]                 | name-of-test        | nil                                                                                                                                  |
 | [[lift][lift]]                   | run-test, run-tests | results object                                                                                                                       |
 | [[lisp-unit][lisp-unit]]              | run-tests           | test-results-db object                                                                                                               |
 | [[lisp-unit2][lisp-unit2]]             | run-tests           | test-results-db object                                                                                                               |
@@ -528,10 +529,10 @@ Does the framework provide a progress report, is it optional, and does it run ju
 | [[cacau][cacau]]         | optional                    |
 | [[clunit][clunit]]        | optional                    |
 | [[clunit2][clunit2]]       | optional                    |
+| [[confidence][confidence]]        | never           |
 | [[gigamonkeys][gigamonkeys]]   | never                       |
 | [[fiasco][fiasco]]        | optional                    |
 | [[fiveam][fiveam]]        | optional (1)                |
-| [[kaputt][kaputt]]        | Every assert                |
 | [[lift][lift]]          | never                       |
 | [[lisp-unit][lisp-unit]]     | never                       |
 | [[lisp-unit2][lisp-unit2]]    | never                       |
@@ -566,10 +567,10 @@ Does the framework provide a progress report, is it optional, and does it run ju
 | [[cacau][cacau]]         | S, T                      |          |                          |
 | [[clunit][clunit]]        | D                         | Y (auto) |                          |
 | [[clunit2][clunit2]]       | D                         | Y (auto) | Y                        |
+| [[confidence][confidence]]        |                           |          | Y |
 | [[fiasco][fiasco]]        | P(1), A                   |          | Y                        |
 | [[fiveam][fiveam]]        | P(2)                      |          | (3)                      |
 | [[gigamonkeys][gigamonkeys]]   |                           |          |                          |
-| [[kaputt][kaputt]]        |                           |          |                          |
 | [[lift][lift]]          | T                         |          |                          |
 | [[lisp-unit][lisp-unit]]     |                           |          |                          |
 | [[lisp-unit2][lisp-unit2]]    |                           |          | Y                        |
@@ -603,10 +604,10 @@ D - failing dependencies, C - children, P - pending, S - suites, T - tests, A - 
 | [[cacau][cacau]]                  | N              | Y(T or S)   |
 | [[clunit][clunit]]                 | N              | N           |
 | [[clunit2][clunit2]]                | N              | N           |
+| [[confidence][confidence]]                 | N              | N           |
 | [[fiasco][fiasco]]                 | N              | N           |
 | [[fiveam][fiveam]] (a)             | ?              | N           |
 | [[gigamonkeys][gigamonkeys]]            | N              | N           |
-| [[kaputt][kaputt]]                 | N              | N           |
 | [[lift][lift]]                   | Y              | Y           |
 | [[lisp-unit][lisp-unit]]              | Y              | N           |
 | [[lisp-unit2][lisp-unit2]]             | Y              | N           |
@@ -635,10 +636,10 @@ D - failing dependencies, C - children, P - pending, S - suites, T - tests, A - 
 | [[cacau][cacau]]                  | N                             | S                      |
 | [[clunit][clunit]]                 | N                             | S                      |
 | [[clunit2][clunit2]]                | N                             | =*test-output-stream*= |
+| [[confidence][confidence]]                 | N                             | optional parameter     |
 | [[fiasco][fiasco]]                 | N                             | optional parameter     |
 | [[fiveam][fiveam]]                 | Y  =*test-dribble*=           | S                      |
 | [[gigamonkeys][gigamonkeys]]            | N                             | S                      |
-| [[kaputt][kaputt]]                 | N                             | optional parameter     |
 | [[lift][lift]]                   | Y  =*lift-dribble-pathname*=  | optional parameter     |
 | [[lisp-unit][lisp-unit]]              | N                             | optional parameter     |
 | [[lisp-unit2][lisp-unit2]]             | N                             | =*test-stream*=        |
@@ -668,10 +669,10 @@ This table is looking at whether the framework provides [[bounded-equality][floa
 | [[cacau][cacau]]         |             | First value only          | Y                     |
 | [[clunit][clunit]]        |             | First value only          | N                     |
 | [[clunit2][clunit2]] (a)   |             | Y                         | N                     |
+| [[confidence][confidence]]        | Y           | First value only          | Y                     |
 | [[fiasco][fiasco]]        |             | First value only          | Y                     |
 | [[fiveam][fiveam]]        |             | N                         | N                     |
 | [[gigamonkeys][gigamonkeys]]   |             | First value only          | Y                     |
-| [[kaputt][kaputt]]        | Y           | First value only          | Y                     |
 | [[lift][lift]]          |             | First value only          | N                     |
 | [[lisp-unit][lisp-unit]]     | Y           | Y                         | N                     |
 | [[lisp-unit2][lisp-unit2]]    | Y           | Y                         | N                     |
@@ -696,7 +697,7 @@ This table is looking at whether the framework provides [[bounded-equality][floa
 | Name      | compatibility layers   | Customizeable Assertion Functions |
 |-----------+------------------------+-----------------------------------|
 | [[cacau][cacau]]     |                        | Y                                 |
-| [[kaputt][kaputt]]    |                        | Y                                 |
+| [[confidence][confidence]]    |                        | Y                                 |
 | [[parachute][parachute]] | [[fiveam][fiveam]] lisp-unit prove |                                   |
 | [[nst][nst]]       |                        | Y                                 |
 
@@ -778,8 +779,8 @@ Assertions also accept diagnostic strings with variables. I deleted several blan
   (= X Y)           => NIL
 #+end_src
 
-** [[kaputt][kaputt]]
-Into the debugger you go.
+** [[confidence][confidence]]
+Into the debugger you never go.
 #+begin_src lisp
  Test assertion failed:
   (ASSERT-T (= X Y))
@@ -915,10 +916,10 @@ What immediately jumps out is the vast majority are grouped together, then there
 | [[2am][2am]] (not in quicklisp)         |       6.8468 |      12.905 |
 | [[1am][1am]]                            |       6.8821 |      12.870 |
 | [[cacau][cacau]]                          |       7.0334 |      11.609 |
+| [[confidence][confidence]]                         |       7.9049 |      15.731 |
 | [[rt][rt]]                             |       7.0450 |      11.663 |
 | [[unit-test][unit-test]]                      |       7.5560 |      17.880 |
 | [[lisp-unit][lisp-unit]]                      |       7.8594 |      13.345 |
-| [[kaputt][kaputt]]                         |       7.9049 |      15.731 |
 | [[tap-unit-test][tap-unit-test]]                  |       7.9746 |      13.095 |
 | [[should-test][should-test]]                    |       8.1620 |      24.667 |
 | [[com.gigamonkeys.test-framework][com.gigamonkeys.test-framework]] |       8.5220 |      30.627 |
@@ -948,11 +949,11 @@ What immediately jumps out is the vast majority are grouped together, then there
 | [[xptest][xptest]]                         |   3545190064 |
 | [[xlunit][xlunit]]                         |   3547926336 |
 | [[cacau][cacau]]                          |   3559494400 |
+| [[confidence][confidence]]                         |   4034319280 |
 | [[lift][lift]]                           |   3662570128 |
 | [[rt][rt]]                             |   3781963056 |
 | [[unit-test][unit-test]]                      |   3842573536 |
 | [[should-test][should-test]]                    |   4033912496 |
-| [[kaputt][kaputt]]                         |   4034319280 |
 | [[fiasco][fiasco]]                         |   4249190656 |
 | [[tap-unit-test][tap-unit-test]]                  |   4406207680 |
 | [[lisp-unit][lisp-unit]]                      |   4411139200 |
@@ -979,7 +980,7 @@ What immediately jumps out is the vast majority are grouped together, then there
 | [[cacau][cacau]]                          |          0 |
 | [[com.gigamonkeys.test-framework][com.gigamonkeys.test-framework]] |          0 |
 | [[fiveam][fiveam]]                         |          0 |
-| [[kaputt][kaputt]]                         |          0 |
+| [[confidence][confidence]]                         |          0 |
 | [[lift][lift]]                           |          0 |
 | [[lisp-unit2][lisp-unit2]]                     |          0 |
 | [[parachute][parachute]]                      |          0 |
@@ -1245,12 +1246,12 @@ REAL-TIME  10       30.610546  3.024176  3.284612  3.033481  3.061055  0.075138
 RUN-TIME   10       30.627195  3.026633  3.285767  3.035477  3.06272   0.074814
 
 #+end_src
-** [[kaputt][kaputt]]
-Kaputt has no built in capability for running all the tests in a suite or package, so this is based on creating a function that just runs all the tests for uax-15-kaputt-tests.
+** [[confidence][confidence]]
+Confidence has no built in capability for running all the tests in a suite or package, so this is based on creating a function that just runs all the tests for uax-15-confidence-tests.
 
 There is no way to turn off the progress report.
 #+begin_src lisp
-(benchmark:with-timing (10) (uax-15-kaputt-tests:run-all-tests))
+(benchmark:with-timing (10) (uax-15-confidence-tests:run-all-tests))
 -                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE    DEVIATION
 REAL-TIME        10       7.906594    0.776659   0.856658   0.783326   0.790659   0.022548
 RUN-TIME         10       7.904968    0.777959   0.857393   0.782869   0.790497   0.022549
@@ -1567,10 +1568,10 @@ I expect all libraries to have the equivalent of is, signals and maybe finishes.
 | [[assert-p][assert-p]] (1)  | N               | t-p         | condition-error-p |              |
 | [[clunit][clunit]]        | Y               | assert-true | assert-condition  |              |
 | [[clunit2][clunit2]]       | Y               | assert-true | assert-condition  |              |
+| [[confidence][confidence]]        | N               | assert-true |                   |              |
 | [[gigamonkeys][gigamonkeys]]   | N               | check       | expect            |              |
 | [[fiasco][fiasco]]        | Y (P)           | is          | signals           | finishes     |
 | [[fiveam][fiveam]]        | Y (P)           | is          | signals           | finishes     |
-| [[kaputt][kaputt]]        | N               | assert-true |                   |              |
 | [[lift][lift]]          | Y               | ensure      | ensure-condition  |              |
 | [[lisp-unit][lisp-unit]]     | Y               | assert-true | assert-error      |              |
 | [[lisp-unit2][lisp-unit2]]    | Y               | assert-true | assert-error      |              |
@@ -1603,8 +1604,8 @@ One potential advantage of other assertion functions is whether they provide bui
   | [[cacau][cacau]]      | not-t-p      | zero-p      | not-zero-p | nil-p      | not-nil-p      | null-p      | not-null-p      |
 | [[clunit][clunit]]        | assert-false |             |            |            |                |             |                 |
 | [[clunit2][clunit2]]       | assert-false |             |            |            |                |             |                 |
+| [[confidence][confidence]]        |              |             |            | assert-nil |                |             |                 |
 | [[fiveam][fiveam]]        | is-false     |             |            |            |                |             |                 |
-| [[kaputt][kaputt]]        |              |             |            | assert-nil |                |             |                 |
 | [[lift][lift]]          | ensure-null  |             |            |            |                |             |                 |
 | [[lisp-unit][lisp-unit]]     | assert-false |             |            | assert-nil |                |             |                 |
 | [[lisp-unit2][lisp-unit2]]    | assert-false |             |            |            |                |             |                 |
@@ -1626,7 +1627,7 @@ Note to self: Per [[http://clhs.lisp.se/Body/f_null.htm]], null is an empty list
 | [[cacau][cacau]]         | eq-p      | eql-p      | equal-p      | equalp-p      |                 |
 | [[clunit][clunit]]        | assert-eq | assert-eql | assert-equal | assert-equalp | assert-equality |
 | [[clunit2][clunit2]]       | assert-eq | assert-eql | assert-equal | assert-equalp | assert-equality |
-| [[kaputt][kaputt]]        | assert-eq | assert-eql | assert-equal |               |                 |
+| [[confidence][confidence]]        | assert-eq | assert-eql | assert-equal |               |                 |
 | [[lisp-unit][lisp-unit]]     | assert-eq | assert-eql | assert-equal | assert-equalp | assert-equality |
 | [[lisp-unit2][lisp-unit2]]    | assert-eq | assert-eql | assert-equal | assert-equalp | assert-equality |
 | [[nst][nst]]           | assert-eq | assert-eql | assert-equal | assert-equalp | assert-equality |
@@ -1653,7 +1654,7 @@ Note to self: Per [[http://clhs.lisp.se/Body/f_null.htm]], null is an empty list
 |------------+-------------------------------------------------------------------------------------------------------------------------------------------------------|
 | [[clunit][clunit]]     | assert-equality*                                                                                                                                      |
 | [[clunit2][clunit2]]    | assert-equality*                                                                                                                                      |
-| [[kaputt][kaputt]]     | assert-float-is-approximately-equal, assert-float-is-definitely-greater-than, 	assert-float-is-definitely-less-than,  assert-float-is-essentially-equal |
+| [[confidence][confidence]]     | assert-float-is-approximately-equal, assert-float-is-definitely-greater-than, 	assert-float-is-definitely-less-than,  assert-float-is-essentially-equal |
 | [[lisp-unit][lisp-unit]]  | assert-norm-equal,  assert-float-equal,  assert-number-equal,  assert-numerical-equal,  assert-rational-equal,  assert-sigfig-equal,                  |
 | [[lisp-unit2][lisp-unit2]] | assert-norm-equal  assert-float-equal  assert-number-equal  assert-numerical-equal,  assert-rational-equal,  assert-sigfig-equal,                     |
 
@@ -1663,7 +1664,7 @@ Note to self: Per [[http://clhs.lisp.se/Body/f_null.htm]], null is an empty list
 | Library       | Available assertions                        |
 |               |                                             |
 |---------------+---------------------------------------------|
-| [[kaputt][kaputt]]        | assert-set-equal, assert-vector-equal       |
+| [[confidence][confidence]]        | assert-set-equal, assert-vector-equal       |
 | [[lisp-unit][lisp-unit]]     | logically-equal, set-equal                  |
 | [[lisp-unit2][lisp-unit2]]    | logically-equal                             |
 | [[tap-unit-test][tap-unit-test]] | logically-equal, set-equal, unordered-equal |
@@ -1674,7 +1675,7 @@ Note to self: Per [[http://clhs.lisp.se/Body/f_null.htm]], null is an empty list
 | Library       | Available assertions                        |
 |               |                                             |
 |---------------+---------------------------------------------|
-| [[kaputt][kaputt]]        | assert-set-equal, assert-vector-equal       |
+| [[confidence][confidence]]        | assert-set-equal, assert-vector-equal       |
 | [[lisp-unit][lisp-unit]]     | logically-equal, set-equal                  |
 | [[lisp-unit2][lisp-unit2]]    | logically-equal                             |
 | [[tap-unit-test][tap-unit-test]] | logically-equal, set-equal, unordered-equal |
@@ -1685,7 +1686,7 @@ Note to self: Per [[http://clhs.lisp.se/Body/f_null.htm]], null is an empty list
 |---------------+--------------+-------------+-----------+--------------|
 | [[assert-p][assert-p]]      | typep-p      | not-typep-p | values-p  | not-values-p |
 | [[cacau][cacau]]         | typep-p      | not-typep-p | values-p  | not-values-p |
-| [[kaputt][kaputt]]        | assert-type  |             |           |              |
+| [[confidence][confidence]]        | assert-type  |             |           |              |
 | [[lift][lift]]          |              |             |           |              |
 | [[lisp-unit][lisp-unit]]     |              |             |           |              |
 | [[lisp-unit2][lisp-unit2]]    | assert-typep |             |           |              |
@@ -1705,7 +1706,7 @@ Note to self: Per [[http://clhs.lisp.se/Body/f_null.htm]], null is an empty list
 #+ATTR_HTML: :border 2 :rules all :frame border
 | Library | Functions |
 |---------+-----------|
-| [[kaputt][kaputt]]  |   assert-string-equal,assert-string<, assert-string<=, 	assert-string=, assert-string>, 	assert-string>=        |
+| [[confidence][confidence]]  |   assert-string-equal,assert-string<, assert-string<=, 	assert-string=, assert-string>, 	assert-string>=        |
 
 #+CAPTION: Assertion Functions-4 Membership
 #+ATTR_HTML: :border 2 :rules all :frame border
@@ -1713,7 +1714,7 @@ Note to self: Per [[http://clhs.lisp.se/Body/f_null.htm]], null is an empty list
 |---------------+--------------+------------------+---------------+----------------|
 | [[cl-quickcheck][cl-quickcheck]] |              |                  | a-member      |                |
 | [[fiveam][fiveam]]        | is-every     |                  |               |                |
-| [[kaputt][kaputt]]        |              |                  |               | assert-subsetp |
+| [[confidence][confidence]]        |              |                  |               | assert-subsetp |
 | [[lift][lift]]          | ensure-every | ensure-different | ensure-member |                |
 | [[lisp-unit][lisp-unit]]     | set-equal    |                  |               |                |
 | [[lisp-unit2][lisp-unit2]]    | set-equal    |                  |               |                |
@@ -1727,7 +1728,7 @@ Note to self: Per [[http://clhs.lisp.se/Body/f_null.htm]], null is an empty list
   | [[cacau][cacau]]         |               |                | custom-p |
 | [[clunit][clunit]]        |               | assert-expands |          |
 | [[clunit2][clunit2]]       |               | assert-expands |          |
-| [[kaputt][kaputt]]        |               |                | Yes      |
+| [[confidence][confidence]]        |               |                | Yes      |
   | [[lisp-unit][lisp-unit]]     | assert-prints | assert-expands |          |
   | [[lisp-unit2][lisp-unit2]]    | assert-prints | assert-expands |          |
   | [[nst][nst]]           |               |                | Yes      |
@@ -1777,7 +1778,7 @@ Note to self: Per [[http://clhs.lisp.se/Body/f_null.htm]], null is an empty list
 | Name          | Assertions                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
 |---------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | [[cl-quickcheck][cl-quickcheck]] | is=, isnt=                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
-| [[kaputt][kaputt]]        | assert=, assert-p:, 	assert-t                                                                                                                                                                                                                                                                                                                                                                                                                                            |
+| [[confidence][confidence]]        | assert=, assert-p:, 	assert-t                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 | [[lift][lift]]          | ensure-cases, ensure-cases-failure, ensure-expected-no-warning-condition, ensure-failed-error, ensure-no-warning, ensure-not-same, ensure-null-failed-error ensure-random-cases, ensure-random-cases+, ensure-random-cases-failure, ensure-same, ensure-some,	ensure-warning,ensure-expected-condition, ensure-directories-exist, ensure-directory, ensure-error, ensure-failed, 	ensure-function, ensure-generic-function, ensure-no-warning, ensure-null-failed-error |
 | [[lisp-unit][lisp-unit]]     | assert-result, assert-test, check-type                                                                                                                                                                                                                                                                                                                                                                                                                                    |
 | [[lisp-unit2][lisp-unit2]]    | assert-no-error, assert-no-signal, assert-no-warning,   assert-warning, assert-fail, assert-no-warning,	assert-passes?, assert-signal, check-type                                                                                                                                                                                                                                                                                                                                                                                   |
@@ -1803,7 +1804,7 @@ Note to self: Per [[http://clhs.lisp.se/Body/f_null.htm]], null is an empty list
   | [[gigamonkeys][gigamonkeys]]   | (deftest test-name (any-parameters) body)                                       |
   | [[fiasco][fiasco]]        | (deftest test-name (any-parameters) docstring body)                             |
   | [[fiveam][fiveam]]        | (test test-name docstring body)                                                 |
-  | [[kaputt][kaputt]]        | (define-testcase test-name (any-parameters) docstring body)                     |
+  | [[confidence][confidence]]        | (define-testcase test-name (any-parameters) docstring body)                     |
 | [[lift][lift]]          | (addtest (test-suite-name) test-name body)                                      |
   | [[lisp-unit][lisp-unit]]     | (define-test test-name body)                                                    |
   | [[lisp-unit2][lisp-unit2]]    | (define-test test-name (tags) body)                                             |
@@ -1830,10 +1831,10 @@ Note to self: Per [[http://clhs.lisp.se/Body/f_null.htm]], null is an empty list
 | [[2am][2am]]             | (run)    (run '(list of tests)  (name-of-tests)                                                             |
   | [[clunit][clunit]]          | (run-test 'test-name) (run-suite 'suite-name)                                                               |
 | [[clunit2][clunit2]]         | (run-test 'test-name) (run-suite 'suite-name)                                                               |
+| [[confidence][confidence]]          | (test-name)                                                                                                 |
 | [[gigamonkeys][gigamonkeys]]     | (test test-name)                                                                                            |
 | [[fiasco][fiasco]]          | (run-tests 'test-name) (run-package-tests :package package-name)                                            |
 | [[fiveam][fiveam]]          | (run 'test-name) (run! 'test-name) (run! 'suite-name)                                                       |
-| [[kaputt][kaputt]]          | (test-name)                                                                                                 |
 | [[lift][lift]]            | (run-tests :name 'test-name) (run-tests :suite 'suite-name)                                                 |
 | [[lisp-unit][lisp-unit]](b)    | (run-tests :all) (run-tests '(name1 name2 ..) (continue-testing)(c)                                         |
 | [[lisp-unit2][lisp-unit2]]      | (run-tests :tests 'test-name) (run-tests :tags '(tag-names)) (run-tests) (run-tests :package 'package-name) |
@@ -1999,7 +2000,7 @@ Check and see if you have to manually recompile a test when a function being tes
 
 - Make sure the library can have tests with multiple assertions (RT cannot).
 - Does it handle values expressions? Most do but only look at the first value, fiveam does not, the lisp-units actually compare each variable in the values expressions.
-- What happens with multiple assertions where more than one fail? Lift and Kaputt will only report the first failing assertion if there are multiple failing assertions.
+- What happens with multiple assertions where more than one fail? Lift will only report the first failing assertion if there are multiple failing assertions.
 - Ensure that tests can handle loops
 - Can tests handle being inside a closure?
 - Can tests call other tests? Most frameworks allow this, but you tend to get multiple reports rather than consolidated reports. Some frameworks do not allow this.
@@ -4521,40 +4522,45 @@ Many libraries on quicklisp use fiveam. If you have quicklisp, you can get a lis
 
  [[top][top]]
 
-<<kaputt>>
-* kaputt
+<<confidence>>
+* Confidence
 ** Summary
- | [[https://github.com/foretspaisibles/cl-kaputt][homepage]] | Michaël Le Barbier | MIT | 2020 |
+ | [[https://github.com/melusina-org/cl-confidence][homepage]] | Michaël Le Barbier | MIT | 2023 |
 
-Kaputt is a new entry by someone who found the existing frameworks (based on his experience with Stefil and Fiveam) either too complicated, they did not provide enough debugging information to know exactly where the problem is and were not extensible in the sense of adding additional assertions. I am sure that Kaputt meets his needs, but would not meet the needs of other users.
+Confidence is a new entry by someone who found the existing frameworks (based on his experience with Stefil and Fiveam) either too complicated, they did not provide enough debugging information to know exactly where the problem is and were not extensible in the sense of adding additional assertions. I am sure that Confidence meets his needs, but would not meet the needs of other users.
 
-It does report all failing assertions in a test, but throws you into the debugger whether you want to go or not (at least you can hit 'continue'). It has suites but no fixtures and does not allow you to provide user created diagnostic strings for the assertions. On the plus side it has some really nice floating point assertions that are not found elsewhere.
+It does report all failing assertions in a test. It has suites but no fixtures and does not allow you to provide user created diagnostic strings for the assertions. On the plus side it has some really nice floating point assertions that are not found elsewhere.
 ** Assertion Functions
-| assert=                                 |                                      |
-| assert-eq                               | assert-eql                           |
-| assert-equal                            | assert-float-is-approximately-equal  |
-| assert-float-is-definitely-greater-than | assert-float-is-definitely-less-than |
-| assert-float-is-essentially-equal       | assert-nil                           |
-| assert-p:                               | assert-set-equal                     |
-| assert-string-equal                     | assert-string<                       |
-| assert-string<=                         | assert-string=                       |
-| assert-string>                          | assert-string>=                      |
-| assert-subsetp                          | assert-t                             |
-| assert-true                             | assert-type                          |
-| assert-vector-equal                     |                                      |
 
-I am surprised that while Kaputt has various assertions for floats, it does not have an assertion for equalp or condition types.
+| assert-char-equal                       | assert-string-equal                     |
+| assert-char<                            | assert-string-match                     |
+| assert-char<=                           | assert-string<                          |
+| assert-char=                            | assert-string<=                         |
+| assert-char>                            | assert-string=                          |
+| assert-char>=                           | assert-string>                          |
+| assert-condition                        | assert-string>=                         |
+| assert-eq                               | assert-subsetp                          |
+| assert-eql                              | assert-t                                |
+| assert-equal                            | assert-t*                               |
+| assert-equalp                           | assert-type                             |
+| assert-float-is-approximately-equal     | assert-vector-equal                     |
+| assert-float-is-definitely-greater-than | assert<                                 |
+| assert-float-is-definitely-less-than    | assert<=                                |
+| assert-float-is-essentially-equal       | assert=                                 |
+| assert-list-equal                       | assert>                                 |
+| assert-nil                              | assert>=                                |
+| assert-set-equal                        |
 
-Kaputt also provides a macro for defining more assertions.
+Confidence also provides a macro for defining more assertions.
 
 [[top][top]]
 ** Usage
 *** Report Format
-Test failures in Kaputt will throw you immediately into the debugger.
+Test failures in Confidence create a result object. Result object are combined and produce a report.
 *** Basics
-Tests in Kaputt are functions. Unless we are calling multiple tests in the following examples, we will just call the test-case function itself. The empty form after the test name is not really described in the documentation, but can be used in parameterized test cases.
+Tests in Confidence are functions. Unless we are calling multiple tests in the following examples, we will just call the test-case function itself. The empty form after the test name is not really described in the documentation, but can be used in parameterized test cases.
 
-The basic passing test below shows the floating point comparisons built into kaputt.
+The basic passing test below shows the floating point comparisons built into Confidence.
 #+begin_src lisp
   (define-testcase t1 ()
     "describe t1"
@@ -4567,13 +4573,14 @@ The basic passing test below shows the floating point comparisons built into kap
     (assert-equal (values 1 2) (values 1 2)))
 
   (t1)
-    .......
-
-    Test suite ran 7 assertions split across 1 test cases.
-     Success: 7/7 (100%)
-     Failure: 0/7 (0%)
-
-  #+end_src
+  Name: T1
+  Total: 7
+  Success: 7/7 (100%)
+  Failure: 0/7 (0%)
+  Condition: 0/7 (0%)
+  Outcome: Success
+  NIL
+ #+end_src
 	A parameterized test case:
 	#+begin_src lisp
 		(define-testcase t1-p (y); the most basic parameterized
@@ -4582,7 +4589,7 @@ The basic passing test below shows the floating point comparisons built into kap
 
     (t1-p 1)
 	#+end_src
-	Now a basic failing test. This time we are using a more specific assertion (assert-equal..). Unlike some other frameworks, we cannot pass a descriptive string to the assertion. Notice we immediately get thrown into the debugger. This is not optional - in you go.
+	Now a basic failing test. This time we are using a more specific assertion (assert-equal..). Unlike some other frameworks, we cannot pass a descriptive string to the assertion.
 #+begin_src lisp
   (define-testcase t1-fail (); the most basic failing test
     (let ((x 1) (y 2))
@@ -4590,66 +4597,103 @@ The basic passing test below shows the floating point comparisons built into kap
       (assert-equal y 3))
 
   (t1-fail)
-
-  Test assertion failed:
-
-    (ASSERT-EQUAL X Y)
-
-  The assertion (ASSERT-EQUAL A B) is true, iff A and B satisfy the EQUAL assertion function.
-     [Condition of type ASSERTION-FAILED]
-
-  Restarts:
-   0: [CONTINUE] Record a failure for ASSERT-EQUAL and continue testing.
-   1: [IGNORE] Record a success for ASSERT-EQUAL and continue testing.
-   2: [RETRY] Retry ASSERT-EQUAL.
-   3: [SKIP] Skip the rest of test case T1-FAIL and continue testing.
-   4: [RETRY] Retry SLIME REPL evaluation request.
-   5: [*ABORT] Return to SLIME's top level.
-#+end_src
-Take a look at the first restart. we can continue to the next assertion and eventually get a report, in this case reflecting two failures:
-#+begin_src lisp
-(t1-fail)
-EE
-
-Test suite ran 2 assertions split across 1 test cases.
- Success: 0/2 (0%)
- Failure: 2/2 (100%)
-
-List of failed assertions:
- Testcase T1-FAIL:
-    (ASSERT-EQUAL Y 3)
-    (ASSERT-EQUAL X Y)
+  Name: T1-FAIL
+  Total: 2
+  Success: 0/2 (0%)
+  Failure: 2/2 (100%)
+  Condition: 0/2 (0%)
+  Outcome: Failure
+  ================================================================================
+  #<ASSERTION-FAILURE {70066055D3}> is an assertion result of type ASSERTION-FAILURE.
+  Type: :FUNCTION
+  Name: ASSERT-EQUAL
+  Path:
+    T1-FAIL
+  Arguments:
+   Argument #1: 1
+   Argument #2: 2
+  Form: (ASSERT-EQUAL X Y)
+  Outcome: Failure
+  Description: Assert that A and B satisfy the EQUAL predicate.
+    In this call, forms in argument position evaluate as:
+  
+    A: 1
+  
+    B: 2
+  
+  ================================================================================
+  #<ASSERTION-FAILURE {7006605863}> is an assertion result of type ASSERTION-FAILURE.
+  Type: :FUNCTION
+  Name: ASSERT-EQUAL
+  Path:
+    T1-FAIL
+  Arguments:
+   Argument #1: 2
+   Argument #2: 3
+  Form: (ASSERT-EQUAL Y 3)
+  Outcome: Failure
+  Description: Assert that A and B satisfy the EQUAL predicate.
+    In this call, forms in argument position evaluate as:
+  
+    A: 2
+  
+    B: 3
+  
+  NIL
 #+end_src
 
 You do not have to manually recompile a test after a tested function has been modified.
 
 *** Edge Cases: Multiple assertions, loops. closures and calling other tests
 #+begin_src lisp
-  (define-testcase t2 ()
-    "describe t2"
-    (assert-equal 1 2)
-    (assert-equal 2 3)
-    (assert-equal (values 1 2) (values 1 2)))
-
   (t2)
-#+end_src
-Calling the function =(t2)= will throw you into the debugger, but if you keep hitting continue you get these result:
-#+begin_src lisp
-  EE.
-
-  Test suite ran 3 assertions split across 1 test cases.
+  Name: T2
+  Total: 3
   Success: 1/3 (33%)
   Failure: 2/3 (67%)
-
-
-  List of failed assertions:
-  Testcase T2:
-  (ASSERT-EQUAL 2 3)
-  (ASSERT-EQUAL 1 2)
+  Condition: 0/3 (0%)
+  Outcome: Failure
+  ================================================================================
+  #<ASSERTION-FAILURE {700692EF83}> is an assertion result of type ASSERTION-FAILURE.
+  Type: :FUNCTION
+  Name: ASSERT-EQUAL
+  Path:
+    T2
+  Arguments:
+   Argument #1: 1
+   Argument #2: 2
+  Form: (ASSERT-EQUAL 1 2)
+  Outcome: Failure
+  Description: Assert that A and B satisfy the EQUAL predicate.
+    In this call, forms in argument position evaluate as:
+  
+    A: 1
+  
+    B: 2
+  
+  ================================================================================
+  #<ASSERTION-FAILURE {700692F1F3}> is an assertion result of type ASSERTION-FAILURE.
+  Type: :FUNCTION
+  Name: ASSERT-EQUAL
+  Path:
+    T2
+  Arguments:
+   Argument #1: 2
+   Argument #2: 3
+  Form: (ASSERT-EQUAL 2 3)
+  Outcome: Failure
+  Description: Assert that A and B satisfy the EQUAL predicate.
+    In this call, forms in argument position evaluate as:
+  
+    A: 2
+  
+    B: 3
+  
+NIL
 #+end_src
-Kaputt had no problem with the values expression as such, but like almost all the frameworks, it only looked at the first value.
+Confidence had no problem with the values expression as such, but like almost all the frameworks, it only looked at the first value.
 **** Closures
-Kaputt has no problem accessing variables defined in a closure encompassing the test.
+Confidence has no problem accessing variables defined in a closure encompassing the test.
 #+begin_src lisp
 	 (let ((l1 '(#\a #\B #\z))
 					(l2 '(97 66 122)))
@@ -4657,14 +4701,14 @@ Kaputt has no problem accessing variables defined in a closure encompassing the 
 			(loop for x in l1 for y in l2 do
 				(assert-equal (char-code x) y))))
 
-	(t2-loop)
-	...
-
-	Test suite ran 3 assertions split across 1 test cases.
-	 Success: 3/3 (100%)
-	 Failure: 0/3 (0%)
-
-	T
+        (t2-loop)
+        Name: T2-LOOP
+        Total: 3
+        Success: 3/3 (100%)
+        Failure: 0/3 (0%)
+        Condition: 0/3 (0%)
+        Outcome: Success
+        NIL
 #+end_src
 Checking assert= with multiple values.
 #+begin_src lisp
@@ -4672,52 +4716,138 @@ Checking assert= with multiple values.
 			(assert= 1 1 2))
 	T2-WITH-MULTIPLE-VALUES
 	(t2-with-multiple-values)
-	; Evaluation aborted on #<SB-INT:SIMPLE-PROGRAM-ERROR "invalid number of arguments: ~S" {10019D9B93}>.
+(t2-with-multiple-values)
+Name: T2-WITH-MULTIPLE-VALUES
+Total: 1
+Success: 0/1 (0%)
+Failure: 0/1 (0%)
+Condition: 1/1 (100%)
+Outcome: Failure
+================================================================================
+#<ASSERTION-CONDITION {70070524F3}> is an assertion result of type ASSERTION-CONDITION.
+Type: :FUNCTION
+Name: ASSERT=
+Path:
+  T2-WITH-MULTIPLE-VALUES
+Arguments:
+ Argument #1: 1
+ Argument #2: 1
+ Argument #3: 2
+Form: (ASSERT= 1 1 2)
+Outcome: Condition
+Condition: #<SB-INT:SIMPLE-PROGRAM-ERROR "invalid number of arguments: ~S" {7006F4B683}>
+#<SB-INT:SIMPLE-PROGRAM-ERROR "invalid number of arguments: ~S" {7006F..
+  [condition]
+
+Slots with :INSTANCE allocation:
+  FORMAT-CONTROL                 = "invalid number of arguments: ~S"
+  FORMAT-ARGUMENTS               = (3)
+  In this call, forms in argument position evaluate as:
+
+  A: 1
+
+  B: 1
+
+NIL
 #+end_src
-It failed. All the assertions in Kaputt compare two values only.
+It failed. All the assertions in Confidence compare two values only.
 **** Calling another test from a test
-If you call a test within a test in Most other frameworks you will effectively get two reports. Kaputt actually composes the results.
+If you call a test within a test in Most other frameworks you will effectively get two reports. Confidence actually composes the results.
 #+begin_src lisp
   (define-testcase t3 ()
     "describe t3 which is a test that tries to call another test in its body"
     (assert-equal 'a 'a)
     (t1))
   (t3)
-  ........
-
-  Test suite ran 8 assertions split across 2 test cases.
+  Name: T3
+  Total: 8
   Success: 8/8 (100%)
   Failure: 0/8 (0%)
-  T
+  Condition: 0/8 (0%)
+  Outcome: Success
+  NIL
 #+end_src
 If test t3 called test t2, we would have seen the following in the debugger which implies that the assertion failure was in t2, not t3:
 #+begin_src lisp
-  Test assertion failed:
-
-  (ASSERT-EQUAL 1 2)
-
-  The assertion (ASSERT-EQUAL A B) is true, iff A and B satisfy the EQUAL assertion function.
-  [Condition of type ASSERTION-FAILED]
-
-  Restarts:
-  0: [CONTINUE] Record a failure for ASSERT-EQUAL and continue testing.
-  1: [IGNORE] Record a success for ASSERT-EQUAL and continue testing.
-  2: [RETRY] Retry ASSERT-EQUAL.
-  3: [SKIP] Skip the rest of test case T2 and continue testing.
-  4: [SKIP] Skip the rest of test case T3 and continue testing.
-  5: [RETRY] Retry SLIME REPL evaluation request.
-  ...
+  Name: T3
+  Total: 4
+  Success: 2/4 (50%)
+  Failure: 2/4 (50%)
+  Condition: 0/4 (0%)
+  Outcome: Failure
+  ================================================================================
+  Name: T2
+  Total: 3
+  Success: 1/3 (33%)
+  Failure: 2/3 (67%)
+  Condition: 0/3 (0%)
+  Outcome: Failure
+  ================================================================================
+  #<ASSERTION-FAILURE {7007FEADA3}> is an assertion result of type ASSERTION-FAILURE.
+  Type: :FUNCTION
+  Name: ASSERT-EQUAL
+  Path:
+    T3
+      T2
+  Arguments:
+   Argument #1: 1
+   Argument #2: 2
+  Form: (ASSERT-EQUAL 1 2)
+  Outcome: Failure
+  Description: Assert that A and B satisfy the EQUAL predicate.
+    In this call, forms in argument position evaluate as:
+  
+    A: 1
+  
+    B: 2
+  
+  ================================================================================
+  #<ASSERTION-FAILURE {7007FEB013}> is an assertion result of type ASSERTION-FAILURE.
+  Type: :FUNCTION
+  Name: ASSERT-EQUAL
+  Path:
+    T3
+      T2
+  Arguments:
+   Argument #1: 2
+   Argument #2: 3
+  Form: (ASSERT-EQUAL 2 3)
+  Outcome: Failure
+  Description: Assert that A and B satisfy the EQUAL predicate.
+    In this call, forms in argument position evaluate as:
+  
+    A: 2
+  
+    B: 3
 #+end_src
 *** Conditions
-Surprisingly, Kaputt does not have any assertions for different types of conditions.
+Confidence has a macro assert-condition that verifies that a form signals a condition of a certain class. It can also examine the slots of the condition with assertions:
+#+begin_src lisp
+  (define-testcase t4 ()
+    (assert-condition
+        (error 'testing-framework :a "a" :b "b" :c "c")
+        testing-framework
+        (a b)
+      (assert-string= "a" a)
+      (assert-string= "b" b)))
+   
+  (t4)
+  Name: T4
+  Total: 1
+  Success: 1/1 (100%)
+  Failure: 0/1 (0%)
+  Condition: 0/1 (0%)
+  Outcome: Success
+  NIL
+#+end_src
 *** Suites, tags and other multiple test abilities
 **** Lists of tests
-There is no "run-test" like function in Kaputt. If you want to run a list of tests, you need to define a test that funcalls those tests.
+There is no "run-test" like function in Confidence. If you want to run a list of tests, you need to define a test that funcalls those tests.
 **** Suites
 Tests can be nested and will generate a composed summary. This might be considered a "suite" capability.
 
 *** Fixtures and Freezing Data
-		There is no additional capability in Kaputt for fixtures or freezing data.
+		There is no additional capability in Confidence for fixtures or freezing data.
 *** Removing tests
 		None
 *** Sequencing, Random and Failure Only
@@ -4727,45 +4857,10 @@ None other than provided in the debugger.
 *** Random Data Generators
 		None
 ** Discussion
-Kaputt does provide the ability to define more assertions and something that it refers to as protocols but does not expand on in the documentation.
+Confidence does provide the ability to define more assertions.
 
-Looking at the source code, there is a variable named =*testcase-protocol-class*= which defaults to protocol-dotta. The other options are: protocol-verbose, protocol-trace, protocol-count and protocol-record.
 
-- protocol-dotta
-	A dotta protocol reports assertion progress with dots and capital letter E,
-for success and errors respectively. At the end of a testsuite, it prints basic
-counts describing the current testsuite and a detailed failure report.
-- protocol-verbose
-	A verbose protocol owns a STREAM-OUTPUT
--	protocol-trace
-	A trace protocol reports each event sent to it.
--	protocol-count
-	A count protocol counts TESTCASE, ASSERTION, SUCCESS and FAILURE
--	protocol-record
-	A protocol record keeps track of all failures encountered in a test suite
-and prints a detailed list of the failures when the test suite finishes.
-
-If we change the *testcase-protocol-class* to 'protocol-record and run the t2 test (knowing it will have two failing assertions) and keep hitting continue in the debugger, we will get the following report:
-#+begin_src lisp
-(setf *testcase-protocol-class* 'protocol-record)
-
-(t2)
-
-List of failed assertions:
- Testcase T2:
-    (ASSERT-EQUAL 2 3)
-    (ASSERT-EQUAL 1 2)
-#+end_src
-If we used the 'protocol-dotta, we would have seen the additional following information:
-#+begin_src lisp
-EE.
-
-Test suite ran 3 assertions split across 1 test cases.
- Success: 1/3 (33%)
- Failure: 2/3 (67%)
-#+end_src
-
-In summary, Kaputt is interesting, but it will not make me change from another framework. I do think some other frameworks might want to follow its lead in having some float comparision assertions.
+In summary, Confidence is interesting, but it will not make me change from another framework. I do think some other frameworks might want to follow its lead in having some float comparision assertions.
 
 [[top][top]]
 ** Who Uses
@@ -7765,7 +7860,7 @@ It is used by [[https://edicl.github.io/cl-fad/][cl-fad]] and several of the bkn
 ** Summary
  | [[http://git.kpe.io/?p=xlunit.git;a=tree][homepage]] | Kevin RosenBerg | BSD | 2015 |
 
-Xlunit stops at the first failure in a test, so you only get partial failure reporting (joining lift and kaputt in this regard). That, in and of itself would cause me to look elsewhere. Phil Gold's original concern was that while you can create hierarchies of test suites, they are not composable.
+Xlunit stops at the first failure in a test, so you only get partial failure reporting (joining lift in this regard). That, in and of itself would cause me to look elsewhere. Phil Gold's original concern was that while you can create hierarchies of test suites, they are not composable.
 
 ** Assertion Functions
 | assert-condition | assert-eql     | assert-equal |
@@ -8449,7 +8544,7 @@ Different frameworks address different problem sets but before I discuss the pro
 - Unit testing deals with a separate software system or subsystem. (I am not interested in arguing how small the unit needs to be. I leave that up to the TDD missionaries and the TDD haters.) Unit testing can be a part of regression testing - regression tests are often built on suites of unit tests. You might have multiple tests for each function and a suite of tests for every function in a file. As I use the term "unit test", I am talking about how much code is covered, not whether the unit tests are "property based tests" or result testing.
 
 *** Other Terms
-- Assertions - the types of equality tests available. "Assert-eq", "Assert-equal" and "Assert-true" are typical. Some packages provide assertions that have descriptive messages to help debug failures. Some packages (e.g. Kaputt) provide built-in assertions test float comparisions. Some packages allow you to define your own assertions.
+- Assertions - the types of equality tests available. "Assert-eq", "Assert-equal" and "Assert-true" are typical. Some packages provide assertions that have descriptive messages to help debug failures. Some packages (e.g. Confidence) provide built-in assertions test float comparisions. Some packages allow you to define your own assertions.
 
 - Code coverage apparently means different things to different people. I have seen test suites that cover every function, but only with a single simple expected input and 100% code coverage victory has been declared. That is barely a hand wave. As one person has said, that checks that your code is right, but does not check that your code is not wrong. Of course, there are trivial bits of code where it is pointless to try to think about possible different inputs to test.
 
