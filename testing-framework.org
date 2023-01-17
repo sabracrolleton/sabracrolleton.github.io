@@ -373,7 +373,7 @@ I am not including a pie chart describing which library has market share because
 | [[should-test][should-test]]   | package                       |            |         |
 | [[simplet][simplet]]       | ❌️                             |            |         |
 | [[tap-unit-test][tap-unit-test]] | ❌️                             |            | (4)     |
-| [[try][try]]           | ✅️                             | ✅️ (5)      |         |
+| [[try][try]]           | ✅️                             | ✅️ (5)      | ✅️         |
 | [[unit-test][unit-test]]     | ✅️                             | ✅️          |         |
 | [[xlunit][xlunit]]        | ✅️                             | ✅️          |         |
 | [[xptest][xptest]]        | ✅️                             | ❌️          |         |
@@ -535,33 +535,33 @@ Does the framework provide a progress report, is it optional, and does it run ju
 <<progress-reports>>
 #+CAPTION: Overview - Progress Reports
 #+ATTR_HTML: :border 2 :rules all :frame border
-| Library       | Progress Reports                                         |
-|---------------+----------------------------------------------------------|
-| [[1am][1am]]           | Every assert                                             |
-| [[2am][2am]]           | Every assert                                             |
-| [[cacau][cacau]]         | optional                                                 |
-| [[clunit][clunit]]        | optional                                                 |
-| [[clunit2][clunit2]]       | optional                                                 |
-| [[confidence][confidence]]    | never                                                    |
-| [[gigamonkeys][gigamonkeys]]   | never                                                    |
-| [[fiasco][fiasco]]        | optional                                                 |
-| [[fiveam][fiveam]]        | optional (1)                                             |
-| [[lift][lift]]          | never                                                    |
-| [[lisp-unit][lisp-unit]]     | never                                                    |
-| [[lisp-unit2][lisp-unit2]]    | never                                                    |
-| [[nst][nst]]           | Every test                                               |
-| [[parachute][parachute]]     | optional                                                 |
-| [[prove][prove]]         | Every assert                                             |
-| [[ptester][ptester]]       | Every assert                                             |
-| [[rove][rove]]          | Optional                                                 |
-| [[rt][rt]]            | Every test                                               |
-| [[should-test][should-test]]   | Every assert                                             |
-| [[simplet][simplet]]       | Every test                                               |
-| [[tap-unit-test][tap-unit-test]] | never                                                    |
-| [[try][try]]           | Every assert or every assert having an unexpected result |
-| [[unit-test][unit-test]]     | Every test                                               |
-| [[xlunit][xlunit]]        | never                                                    |
-| [[xptest][xptest]]        | never                                                    |
+| Library       | Progress Reports                                                           |
+|---------------+----------------------------------------------------------------------------|
+| [[1am][1am]]           | Every assert                                                               |
+| [[2am][2am]]           | Every assert                                                               |
+| [[cacau][cacau]]         | optional                                                                   |
+| [[clunit][clunit]]        | optional                                                                   |
+| [[clunit2][clunit2]]       | optional                                                                   |
+| [[confidence][confidence]]    | never                                                                      |
+| [[gigamonkeys][gigamonkeys]]   | never                                                                      |
+| [[fiasco][fiasco]]        | optional                                                                   |
+| [[fiveam][fiveam]]        | optional (1)                                                               |
+| [[lift][lift]]          | never                                                                      |
+| [[lisp-unit][lisp-unit]]     | never                                                                      |
+| [[lisp-unit2][lisp-unit2]]    | never                                                                      |
+| [[nst][nst]]           | Every test                                                                 |
+| [[parachute][parachute]]     | optional                                                                   |
+| [[prove][prove]]         | Every assert                                                               |
+| [[ptester][ptester]]       | Every assert                                                               |
+| [[rove][rove]]          | Optional                                                                   |
+| [[rt][rt]]            | Every test                                                                 |
+| [[should-test][should-test]]   | Every assert                                                               |
+| [[simplet][simplet]]       | Every test                                                                 |
+| [[tap-unit-test][tap-unit-test]] | never                                                                      |
+| [[try][try]]           | Optional (Every assert, every assert having an unexpected result, or none) |
+| [[unit-test][unit-test]]     | Every test                                                                 |
+| [[xlunit][xlunit]]        | never                                                                      |
+| [[xptest][xptest]]        | never                                                                      |
 (1) The following will allow fiveam to run without output
 #+begin_src lisp
   (let ((fiveam:*test-dribble*
@@ -1653,20 +1653,20 @@ One potential advantage of other assertion functions is whether they provide bui
 | Library       | False        | Zero        | Not Zero   | Nil        | Not-Nil        | Null*       | Not Null*       |
 |---------------+--------------+-------------+------------+------------+----------------+-------------+-----------------|
 | [[assert-p][assert-p]]      | not-t-p      | zero-p      | not-zero-p | nil-p      | not-nil-p      | null-p      | not-null-p      |
-  | [[cacau][cacau]]      | not-t-p      | zero-p      | not-zero-p | nil-p      | not-nil-p      | null-p      | not-null-p      |
+| [[cacau][cacau]]         | not-t-p      | zero-p      | not-zero-p | nil-p      | not-nil-p      | null-p      | not-null-p      |
 | [[clunit][clunit]]        | assert-false |             |            |            |                |             |                 |
 | [[clunit2][clunit2]]       | assert-false |             |            |            |                |             |                 |
-| [[confidence][confidence]]        |              |             |            | assert-nil |                |             |                 |
+| [[confidence][confidence]]    |              |             |            | assert-nil |                |             |                 |
 | [[fiveam][fiveam]]        | is-false     |             |            |            |                |             |                 |
 | [[lift][lift]]          | ensure-null  |             |            |            |                |             |                 |
 | [[lisp-unit][lisp-unit]]     | assert-false |             |            | assert-nil |                |             |                 |
 | [[lisp-unit2][lisp-unit2]]    | assert-false |             |            |            |                |             |                 |
 | [[nst][nst]]           |              | assert-zero |            |            | assert-non-nil | assert-null |                 |
-| [[parachute][parachute]]     | false        |             |            |   false    |                |             |                 |
+| [[parachute][parachute]]     | false        |             |            | false      |                |             |                 |
 | [[prove][prove]]         | isnt         |             |            |            |                |             |                 |
 | [[rove][rove]]          | ng           |             |            |            |                |             |                 |
 | [[tap-unit-test][tap-unit-test]] | assert-false |             |            |            |                | assert-null | assert-not-null |
-  | [[xlunit][xlunit]]        | assert-false |             |            |            |                |             |                 |
+| [[xlunit][xlunit]]        | assert-false |             |            |            |                |             |                 |
 
 Note to self: Per [[http://clhs.lisp.se/Body/f_null.htm]], null is an empty list or nil, not null in an sql sense.
 
@@ -1679,7 +1679,7 @@ Note to self: Per [[http://clhs.lisp.se/Body/f_null.htm]], null is an empty list
 | [[cacau][cacau]]         | eq-p      | eql-p      | equal-p      | equalp-p      |                 |
 | [[clunit][clunit]]        | assert-eq | assert-eql | assert-equal | assert-equalp | assert-equality |
 | [[clunit2][clunit2]]       | assert-eq | assert-eql | assert-equal | assert-equalp | assert-equality |
-| [[confidence][confidence]]        | assert-eq | assert-eql | assert-equal |               |                 |
+| [[confidence][confidence]]    | assert-eq | assert-eql | assert-equal |               |                 |
 | [[lisp-unit][lisp-unit]]     | assert-eq | assert-eql | assert-equal | assert-equalp | assert-equality |
 | [[lisp-unit2][lisp-unit2]]    | assert-eq | assert-eql | assert-equal | assert-equalp | assert-equality |
 | [[nst][nst]]           | assert-eq | assert-eql | assert-equal | assert-equalp | assert-equality |
@@ -1780,14 +1780,14 @@ Note to self: Per [[http://clhs.lisp.se/Body/f_null.htm]], null is an empty list
 #+ATTR_HTML: :border 2 :rules all :frame border
 | Library       | Prints        | Expands (1)    | Custom   |
 |---------------+---------------+----------------+----------|
-  | [[cacau][cacau]]         |               |                | custom-p |
+| [[cacau][cacau]]         |               |                | custom-p |
 | [[clunit][clunit]]        |               | assert-expands |          |
 | [[clunit2][clunit2]]       |               | assert-expands |          |
-| [[confidence][confidence]]        |               |                | Yes      |
-  | [[lisp-unit][lisp-unit]]     | assert-prints | assert-expands |          |
-  | [[lisp-unit2][lisp-unit2]]    | assert-prints | assert-expands |          |
-  | [[nst][nst]]           |               |                | Yes      |
-  | [[prove][prove]]         |               | is-expand      |          |
+| [[confidence][confidence]]    |               |                | Yes      |
+| [[lisp-unit][lisp-unit]]     | assert-prints | assert-expands |          |
+| [[lisp-unit2][lisp-unit2]]    | assert-prints | assert-expands |          |
+| [[nst][nst]]           |               |                | Yes      |
+| [[prove][prove]]         |               | is-expand      |          |
 | [[rove][rove]]          | is-print      | expands        |          |
 | [[should-test][should-test]]   | print-to      |                |          |
 | [[tap-unit-test][tap-unit-test]] | [[assert-p][assert-p]]rints | assert-expands |          |
@@ -1819,6 +1819,7 @@ Note to self: Per [[http://clhs.lisp.se/Body/f_null.htm]], null is an empty list
 | [[should-test][should-test]]   | signal                         |                              |
 | [[simplet][simplet]]       |                                |                              |
 | [[tap-unit-test][tap-unit-test]] | assert-error                   |                              |
+| [[try][try]]           | signals                        | signals-not                  |
 | [[unit-test][unit-test]]     | test-condition                 |                              |
 | [[xlunit][xlunit]]        | assert-condition               |                              |
 | [[xptest][xptest]]        |                                |                              |
@@ -7996,24 +7997,32 @@ T1A-EXPECTED-FAIL
 #<TRIAL (T1A-EXPECTED-FAIL) EXPECTED-SUCCESS 0.000s ×1 ⋅1>
 #+end_src
 **** Quiet Reports
-The Try function allows you to print only the unexpected events when you invoke the try function. Notice we have a little bit of asymmetry on depending on how the test is called.
+The Try function allows you to report only the trial object summary (by passing :print nil):
 #+begin_src lisp
-    (deftest test0-pass ()
-         (is (= 1 1)))
+  (try 't1-fail :print nil)
+#<TRIAL (T1-FAIL) UNEXPECTED-FAILURE 0.000s ⊠2>
+#+end_src
+or only the unexpected events (by passing :print unexpected).
+#+begin_src lisp
+  (try 'test9-pass-and-fail :print 'unexpected)
 
-    (try 'test0-pass)
-  TEST0-PASS
-    ⋅ (IS (= 1 1))
-  ⋅ TEST0-PASS ⋅1
+TEST9-PASS-AND-FAIL
+  T1B-UNEXPECTED-FAIL
+    ⊠ (IS (= X Y))
+      where
+        X = 1
+        Y = 2
+  ⊠ T1B-UNEXPECTED-FAIL ⊠1 ⋅1
+  T1A-UNEXPECTED-FAIL
+    ⊠ Intentional failure x does not equal y
+      where
+        X = 1
+        Y = 2
+      *PACKAGE* is #<PACKAGE "UAX-15-TRY-TESTS"> and *PRINT-CASE* is :UPCASE
 
-  (try 'test0-pass :print 'unexpected)
-#<TRIAL (TEST0-PASS) EXPECTED-SUCCESS 0.000s ⋅1>
-
-  (try (test0-pass) :print 'unexpected)
-TEST0-PASS
-  ⋅ (IS (= 1 1))
-⋅ TEST0-PASS ⋅1
-#<TRIAL (TEST0-PASS) SKIP 0.000s>
+  ⊠ T1A-UNEXPECTED-FAIL ⊠1 ⋅1
+⊠ TEST9-PASS-AND-FAIL ⊠2 ⋅6
+#<TRIAL (TEST9-PASS-AND-FAIL) UNEXPECTED-FAILURE 0.000s ⊠2 ⋅6>
 #+end_src
 The try function does not allow you to pass parameters to the tests, so you would need to wrap those tests inside another test. For example:
 #+begin_src lisp
@@ -8339,7 +8348,7 @@ None, but the helper libraries can fullfill this well.
 
 
 ** Discussion
-I found try to be easy to use. The only thing that I would ask in addition to its current capabilities is the ability to just get the summary results even if there are unexpected results.
+I found try to be easy to use. I was a bit surprised at the lack of additional assertion comparisons other than the float comparisons, but you can easily use the normal CL comparison functions, so that is not an issue.
 
 [[top][top]]
 
