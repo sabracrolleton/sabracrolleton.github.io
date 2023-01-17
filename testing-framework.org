@@ -134,7 +134,7 @@ The selenium interfaces are here for reference purposes and are not further disc
 | [[cl-fuzz][cl-fuzz]]                   | [[https://github.com/ndantam/cl-fuzz/][homepage]] | Neil T. Dantam      | BSD 2 Clause |        2018 |
 | [[cl-quickcheck][cl-quickcheck]]             | [[https://github.com/mcandre/cl-quickcheck][homepage]] | Andrew Pennebaker   | MIT          |        2020 |
 | [[cover][cover]]                     | [[https://gist.github.com/aamedina/ea994fc8f6e501dd862a2e866c9a08fa][homepage]] | Richard Waters      | MIT          |             |
-| [[hamcrest][hamcrest]]                  | [[https://github.com/40ants/cl-hamcrest][homepage]] | Alexander Artemenko | BSD 3 Clause |        2020 |
+| [[hamcrest][hamcrest]]                  | [[https://github.com/40ants/cl-hamcrest][homepage]] | Alexander Artemenko | BSD 3 Clause |        2022 |
 | [[mockingbird][mockingbird]]               | [[https://github.com/Chream/mockingbird][homepage]] | Christopher Eames   | MIT          |        2017 |
 | portch (not in quicklisp) | [[https://github.com/nallen05/portch][homepage]] | Nick Allen          | BSD 3 Clause |        2009 |
 | [[protest][protest]]                   | [[https://github.com/phoe/protest/][homepage]] | Michał Herda        | LLGPL        |        2020 |
