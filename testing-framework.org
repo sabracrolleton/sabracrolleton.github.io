@@ -1,4 +1,4 @@
-#+TITLE: Comparison of Common Lisp Testing Frameworks (2 Oct 2021 Edition)
+#+TITLE: Comparison of Common Lisp Testing Frameworks (16 Jan 2023 Edition)
  #+AUTHOR:      Sabra Crolleton
  #+DATE:        2021-05-28
  #+EMAIL:       sabra.crolleton!gmail.com
@@ -13,6 +13,8 @@
  #+ATTR_LATEX: :float multicolumn :width
 <<top>>
 * Changelog
+16 Jan 2023 - Updated adding Confidence and Try and deleting Kaputt. Thank you Michaël Le Barbier for actually doing the work of submitting the proposed pull request for Confidence.
+
 2 October 2021 - Updated for changes at the Common Lisp Cookbook on testing. Updated number of issues and pull requests for FiveAM.
 
 13 June 2021 - Updated clunit2 on its huge performance improvement update and new edge case abilities to compare multiple values in values expressions and handle variables declared in closures. Clunit2 is now substantially differentiated from clunit.
@@ -64,7 +66,7 @@ In any event, yes, I will state my opinions, but what you think is important wil
 
 * Testing Libraries Considered
 ** Testing Frameworks
-#+CAPTION: Libraries Considered
+#+CAPTION: Libraries Considered (updated 16 Jan 2023)
 #+ATTR_HTML: :border 2 :rules all :frame border
 #+ATTR_LATEX: :float multicolumn
 | Library                        | Homepage | Author                                          | License           | Last Update |
@@ -72,11 +74,11 @@ In any event, yes, I will state my opinions, but what you think is important wil
 | [[1am][1am]]                            | [[https://github.com/lmj/1am][homepage]] | James Lawrence                                  | MIT               |        2014 |
 | [[2am][2am]] [fn:1]                     | [[https://gitlab.common-lisp.net/dkochmanski/2am][homepage]] | Daniel Kochmański                               | MIT               |        2016 |
 | [[cacau][cacau]]                          | [[https://github.com/noloop/cacau][homepage]] | Noloop                                          | GPL3              |        2020 |
-| [[cardiogram][cardiogram]] [fn:2]              | [[https://gitlab.com/a.aguilar/cardiogram][homepage]] | Abraham Aguilar                                 | MIT               |        2020 |
+| [[cardiogram][cardiogram]]                     | [[https://gitlab.com/a.aguilar/cardiogram][homepage]] | Abraham Aguilar                                 | MIT               |        2020 |
 | [[clunit][clunit]] [fn:3]                  | [[http://tgutu.github.io/clunit/][homepage]] | Tapiwa Gutu                                     | BSD               |        2017 |
-| [[clunit2][clunit2]]                        | [[https://notabug.org/cage/clunit2][homepage]] | Cage (fork of clunit)                           | BSD               |        2021 |
+| [[clunit2][clunit2]]                        | [[https://notabug.org/cage/clunit2][homepage]] | Cage (fork of clunit)                           | BSD               |        2022 |
 | [[com.gigamonkeys.test-framework][com.gigamonkeys.test-framework]] | [[https://github.com/gigamonkey/monkeylib-test-framework][homepage]] | Peter Seibel                                    | BSD               |        2010 |
-| [[confidence][confidence]]                         | [[https://github.com/melusina-org/cl-confidence][homepage]] | Michaël Le Barbier                              | MIT               |        2023 |
+| [[confidence][confidence]]                     | [[https://github.com/melusina-org/cl-confidence][homepage]] | Michaël Le Barbier                              | MIT               |        2023 |
 | [[fiasco][fiasco]] [fn:4]                  | [[https://github.com/joaotavora/fiasco][homepage]] | João Távora                                     | BSD 2 Clause      |        2020 |
 | [[fiveam][fiveam]]                         | [[https://github.com/lispci/fiveam][homepage]] | Edward Marco Baringer                           | BSD               |        2020 |
 | [[lift][lift]]                           | [[https://github.com/gwkkwg/lift][homepage]] | Gary Warren King                                | MIT               | 2019 [fn:5] |
@@ -84,23 +86,24 @@ In any event, yes, I will state my opinions, but what you think is important wil
 | [[lisp-unit2][lisp-unit2]]                     | [[https://github.com/AccelerationNet/lisp-unit2][homepage]] | Russ Tyndall                                    | MIT               |        2018 |
 | [[nst][nst]]                            | [[https://github.com/jphmrst/cl-nst][homepage]] | John Maraist                                    | LLGPL3 latest     |        2021 |
 | [[parachute][parachute]]                      | [[https://github.com/Shinmera/parachute][homepage]] | Nicolas Hafner                                  | zlib              |        2021 |
-| [[prove][prove]]                          | [[https://github.com/fukamachi/prove][homepage]] | Eitaro Fukamachi                                | MIT               |        2020 |
+| [[prove][prove]]  (archived)              | [[https://github.com/fukamachi/prove][homepage]] | Eitaro Fukamachi                                | MIT               |        2020 |
 | [[ptester][ptester]]                        | [[http://git.kpe.io/?p=ptester.git;a=summary][homepage]] | Kevin Layer                                     | LLGPL             |        2016 |
-| [[rove][rove]]                           | [[https://github.com/fukamachi/rove][homepage]] | Eitaro Fukamachi                                | BSD 3 Clause      |        2020 |
+| [[rove][rove]]                           | [[https://github.com/fukamachi/rove][homepage]] | Eitaro Fukamachi                                | BSD 3 Clause      |        2022 |
 | [[rt][rt]]                             | none     | Kevin M. Rosenberg                              | MIT               |        2010 |
 | [[should-test][should-test]]                    | [[https://github.com/vseloved/should-test][homepage]] | Vsevolod Dyomkin                                | MIT               |        2019 |
 | [[simplet][simplet]]                        | [[https://github.com/noloop/simplet][homepage]] | Noloop                                          | GPLv3             |        2019 |
 | stefil [fn:6]                  | [[http://dwim.hu/darcsweb/darcsweb.cgi?r=HEAD%20hu.dwim.stefil;a=summary][homepage]] | Attila Lendvai, Tamas Borbely, Levente Meszaros | BSD/Public Domain |        2018 |
 | [[tap-unit-test][tap-unit-test]] [fn:7]           | [[https://github.com/jhanley634/tap-unit-test][homepage]] | Christopher K. Riesbeck, John Hanley            | MIT               |        2017 |
+| [[try][try]]                            | [[https://github.com/melisgl/try][homepage]] | Gábor Melis                                     | MIT               |        2022 |
 | [[unit-test][unit-test]]                      | [[https://github.com/hanshuebner/unit-test][homepage]] | Manuel Odendahl, Alain Picard                   | MIT               |        2012 |
 | [[xlunit][xlunit]]                         | [[http://git.kpe.io/?p=xlunit.git;a=tree][homepage]] | Kevin RosenBerg                                 | BSD               |        2015 |
 | [[xptest][xptest]]                         | none     | Craig Brozensky                                 | Public Domain     |        2015 |
 
 [fn:1] Not available from QuickLisp
-[fn:2] Cannot get it to work.
+[fn:2] Documentation is not in sync with code
 [fn:3] Looking for new maintainer. Has been forked to clunit2 and you should only consider clunit2.
 [fn:4] Fork of stefil
-[fn:5] Port to Clasp, otherwise 2015
+[fn:5] Port to Clasp, otherwise 2015. Author has stated that it is no longer maintained and he is no longer involved in CL.
 [fn:6] The authors have specified it as obsolete, so it will not be further considered.
 [fn:7] Tap-Unit-Test is a version of lisp-unit with [[http://en.wikipedia.org/wiki/Test_Anything_Protocol][TAP]] formatted reporting.
 
@@ -133,16 +136,17 @@ The selenium interfaces are here for reference purposes and are not further disc
 | [[check-it][check-it]]                  | [[https://github.com/DalekBaldwin/check-it][homepage]] | Kyle Littler        | LLGPL        |        2015 |
 | [[cl-fuzz][cl-fuzz]]                   | [[https://github.com/ndantam/cl-fuzz/][homepage]] | Neil T. Dantam      | BSD 2 Clause |        2018 |
 | [[cl-quickcheck][cl-quickcheck]]             | [[https://github.com/mcandre/cl-quickcheck][homepage]] | Andrew Pennebaker   | MIT          |        2020 |
-| [[cover][cover]]                     | [[https://gist.github.com/aamedina/ea994fc8f6e501dd862a2e866c9a08fa][homepage]] | Richard Waters      | MIT          |             |
+| [[cover][cover]]                     | [[https://gist.github.com/aamedina/ea994fc8f6e501dd862a2e866c9a08fa][homepage]] | Richard Waters      | MIT          |        1991 |
 | [[hamcrest][hamcrest]]                  | [[https://github.com/40ants/cl-hamcrest][homepage]] | Alexander Artemenko | BSD 3 Clause |        2022 |
 | [[mockingbird][mockingbird]]               | [[https://github.com/Chream/mockingbird][homepage]] | Christopher Eames   | MIT          |        2017 |
 | portch (not in quicklisp) | [[https://github.com/nallen05/portch][homepage]] | Nick Allen          | BSD 3 Clause |        2009 |
 | [[protest][protest]]                   | [[https://github.com/phoe/protest/][homepage]] | Michał Herda        | LLGPL        |        2020 |
 | rtch (not in quicklisp)   | [[http://downloads.sourceforge.net/retch/rtch_0.1.3.tar.gz][download]] | David Thompson      | LLGPL        |        2008 |
+| slite                     | [[https://github.com/tdrhq/slite/][homepage]] | Arnold Noronha      | Apache 2.0   |        2022 |
 | [[testbild][testbild]]                  | [[https://github.com/e-user/testbild][homepage]] | Alexander Kahl      | GPLv3        |        2010 |
 | [[test-utils][test-utils]]                | [[https://github.com/inaimathi/test-utils][homepage]] | Leo Zovic           | MIT          |        2020 |
 
-=assert-p=, =assertion-error=, =check-it=, =cl-fuzz=, =cl-quickcheck=, =cover=, =hamcrest=, =protest=, =testbild= and =test-utils= are not, per se, testing frameworks. They are designed to be used in conjunction with other testing frameworks.
+=assert-p=, =assertion-error=, =check-it=, =cl-fuzz=, =cl-quickcheck=, =cover=, =hamcrest=, =protest=, =slite=, =testbild= and =test-utils= are not, per se, testing frameworks. They are designed to be used in conjunction with other testing frameworks.
 
 - =check-it= and =cl-quickcheck= are randomized property-based testing libraries (Quickcheck style). See https://en.wikipedia.org/wiki/QuickCheck
 
@@ -161,6 +165,8 @@ The selenium interfaces are here for reference purposes and are not further disc
 - =protest= is a wrapper around other testing libraries, currently =1am= and =parachute=. It wraps around test assertions and, in case of failure, informs the user of details of the failed test step.
 
 - =rtch= helps organize RT tests based on their position in a directory hierarchy
+
+- =slite= is a Slite stands for SLIme TEst runner (also works with SLY). Slite interactively runs your Common Lisp tests (currently only FiveAM and Parachute are supported). It allows you to see the summary of test failures, jump to test definitions, rerun tests with debugger all from inside Emacs.
 
 - =testbild= provides a common interface for unit testing output, supporting TAP (versions 12 and 13) and xunit styles.
 
@@ -201,6 +207,7 @@ For those who want the opinionated quick summary. The awards are -
   My third choice would be *Lisp-Unit2*.
 
    *(Update 13 June 2021 - based on the latest update of Clunit2, it needs to be included for consideration as well)*
+   *(Update 16 Jan 2023 - maybe consider the two newest entries Confidence and Try)*
 
 - If Only Award: *Lift* If only it reported all failing assertions and did not stop at the first one. Why? Why can't I change this?
 
@@ -302,7 +309,7 @@ For those who want the opinionated quick summary. The awards are -
   - Skip based on implementations
   - also skip tests that exceed a certain time period
 
-- [[benchmarks][Benchmarks]] There were a few surprises here. I tested each framework on uax-15 which has 16 tests and 338760 assertions (all passing) and ran trivial-benchmark with 10 iterations on both the latest SBCL and CCL. Obviously the smaller the code base, the less important speed matters. If speed is important to you, stay away from clunit and nst. (*Note:* 13 June 2021 Update - removing clunit2 from this caveat)
+- [[benchmarks][Benchmarks]] In general, functionality should matter to you more than benchmarks. The timing benchmark provided here is a regression test on UAX-15 with 16 tests containing 343332 assertions run 10 times. While useful for regression tests, this is not necessarily indicative of development testing.
 
 - Asynchronous and parallel testing (not tested in this report)
 - Case safety (Max Mikhanosha asked for this an an exchange with Tapiwa in 2013. Not tested in this report)
@@ -333,6 +340,7 @@ I am not including a pie chart describing which library has market share because
 | rove        |    31 |
 | rt          |    29 |
 | should-test |     3 |
+| try         |     7 |
 | xlunit      |     4 |
 | xptest      |     0 |
 
@@ -345,29 +353,30 @@ I am not including a pie chart describing which library has market share because
 | Name          | Hierarchies/suites/tags/lists | Composable | Reports |
 |---------------+-------------------------------+------------+---------|
 | [[1am][1am]]           | ❌️ (2)(5)                      | ❌️          | ❌️       |
-| [[2am][2am]]           | ✅️                            | ✅️ (5)     | (4)     |
+| [[2am][2am]]           | ✅️                             | ✅️ (5)      | (4)     |
 | [[cacau][cacau]]         | (6)                           |            | (4)     |
-| [[clunit][clunit]]        | ✅️                            | ✅️         | (4)     |
-| [[clunit2][clunit2]]       | ✅️                            | ✅️         | (4)     |
-| [[confidence][confidence]]        | ❌️ (9)                         | ✅️           | ✅️        |
-| [[fiasco][fiasco]]        | ✅️                            | ✅️         |         |
-| [[fiveam][fiveam]]        | ✅️                            | ✅️         |         |
+| [[clunit][clunit]]        | ✅️                             | ✅️          | (4)     |
+| [[clunit2][clunit2]]       | ✅️                             | ✅️          | (4)     |
+| [[confidence][confidence]]    | ❌️ (9)                         | ✅️          | ✅️       |
+| [[fiasco][fiasco]]        | ✅️                             | ✅️          |         |
+| [[fiveam][fiveam]]        | ✅️                             | ✅️          |         |
 | [[gigamonkeys][gigamonkeys]]   | ❌️                             |            |         |
-| [[lift][lift]]          | ✅️                            | ✅️         |         |
+| [[lift][lift]]          | ✅️                             | ✅️          |         |
 | [[lisp-unit][lisp-unit]]     | (tags) (3)                    |            | (1,4)   |
-| [[lisp-unit2][lisp-unit2]]    | (tags) (3)(5)                 | ✅️ (5)     | (1,4)   |
-| [[nst][nst]]           | ✅️                            | ✅️         |         |
-| [[parachute][parachute]]     | ✅️                            | ✅️         | (1)     |
-| [[prove][prove]]         | ✅️                            | ✅️         | (4)     |
+| [[lisp-unit2][lisp-unit2]]    | (tags) (3)(5)                 | ✅️ (5)      | (1,4)   |
+| [[nst][nst]]           | ✅️                             | ✅️          |         |
+| [[parachute][parachute]]     | ✅️                             | ✅️          | (1)     |
+| [[prove][prove]]         | ✅️                             | ✅️          | (4)     |
 | [[ptester][ptester]]       | ❌️                             |            |         |
 | [[rove][rove]]          | (7)                           | (7)        |         |
 | [[rt][rt]]            | package                       | (8)        |         |
 | [[should-test][should-test]]   | package                       |            |         |
 | [[simplet][simplet]]       | ❌️                             |            |         |
 | [[tap-unit-test][tap-unit-test]] | ❌️                             |            | (4)     |
-| [[unit-test][unit-test]]     | ✅️                            | ✅️         |         |
-| [[xlunit][xlunit]]        | ✅️                            | ✅️         |         |
-| [[xptest][xptest]]        | ✅️                            | ❌️          |         |
+| [[try][try]]           | ✅️                             | ✅️ (5)      |         |
+| [[unit-test][unit-test]]     | ✅️                             | ✅️          |         |
+| [[xlunit][xlunit]]        | ✅️                             | ✅️          |         |
+| [[xptest][xptest]]        | ✅️                             | ❌️          |         |
 1. report objects are provided which are expected to be extended by the user
 2. uses a flat list of tests. You can pass any list of test-names to run. See, e.g. macro provided by Phoe in the 1am [[1am-discussion][discussion]].
 3. lisp-unit and lisp-unit2 organize by packages and by tags. You can run all the tests in a package, or all the tests for a list of tags, but they do not have the strict sense of hierarchy that other libraries have.
@@ -390,7 +399,7 @@ I am not including a pie chart describing which library has market share because
 | [[cacau][cacau]]                  | N              | N                      |
 | [[clunit][clunit]]                 | A              | N                      |
 | [[clunit2][clunit2]]                | A              | N                      |
-| [[confidence][confidence]]         | N              | Y                      |
+| [[confidence][confidence]]             | N              | Y                      |
 | [[fiasco][fiasco]]                 | A              | Y                      |
 | [[fiveam][fiveam]]                 | Optional       | N                      |
 | [[gigamonkeys][gigamonkeys]]            | N              | N                      |
@@ -405,6 +414,7 @@ I am not including a pie chart describing which library has market share because
 | [[rt][rt]]                     | N              | N                      |
 | [[should-test][should-test]]            | N              | N                      |
 | [[tap-unit-test][tap-unit-test]]          | N              | N                      |
+| [[try][try]]                    | N              | Y                      |
 | [[unit-test][unit-test]]              | N              | N                      |
 | [[xlunit][xlunit]]                 | T(2)           | N                      |
 | [[xptest][xptest]]                 | N              | N                      |
@@ -420,29 +430,30 @@ I am not including a pie chart describing which library has market share because
 #+ATTR_LATEX: :float multicolumn
 | Library                | Fixtures | Suite Fixtures | Test Fixtures | Multiple Fixtures                  |
 |------------------------+----------+----------------+---------------+------------------------------------|
-| [[1am][1am]]                    | ❌️       |                |               |                                    |
-| [[2am][2am]] (not in quicklisp) | ❌️       |                |               |                                    |
-| [[cacau][cacau]]                  | ✅️       | ✅️             | ✅️            |                                    |
-| [[clunit][clunit]]                 | ✅️       | ✅️             | ✅️            | ✅️                                 |
-| [[clunit2][clunit2]]                | ✅️       | ✅️             | ✅️            | ✅️                                 |
-| [[confidence][confidence]]                 | ❌️       |                |               |                                    |
-| [[fiasco][fiasco]]                 | ❌️       |                |               |                                    |
-| [[fiveam][fiveam]]  (a)            | K        | ✅️             | ✅️            |                                    |
-| [[gigamonkeys][gigamonkeys]]            | ❌️       |                |               |                                    |
-| [[lift][lift]]                   | ✅️       | ✅️             |               | inherited from higher level suites |
-| [[lisp-unit][lisp-unit]]              | ❌️       |                |               |                                    |
-| [[lisp-unit2][lisp-unit2]]             | ✅️       |                | ✅️            |                                    |
-| [[nst][nst]]                    | ✅️       | ✅️             | ✅️            | ✅️                                 |
-| [[parachute][parachute]]              | ✅️       |                | ✅️            |                                    |
-| [[prove][prove]]                  | ❌️       |                |               |                                    |
-| [[ptester][ptester]]                | ❌️       |                |               |                                    |
-| [[rove][rove]]                   | ✅️       | ✅️             | ✅️            | ✅️                                 |
-| [[rt][rt]]                     | ❌️       |                |               |                                    |
-| [[should-test][should-test]]            | ❌️       |                |               |                                    |
-| [[tap-unit-test][tap-unit-test]]          | ❌️       |                |               |                                    |
-| [[unit-test][unit-test]] (b)          | ✅️       | (b)            | (b)           | (b)                                |
-| [[xlunit][xlunit]]                 | ✅️       | ✅️             | ✅️            | ✅️                                 |
-| [[xptest][xptest]]                 | ✅️       |                | ✅️            |                                    |
+| [[1am][1am]]                    | ❌️        |                |               |                                    |
+| [[2am][2am]] (not in quicklisp) | ❌️        |                |               |                                    |
+| [[cacau][cacau]]                  | ✅️        | ✅️              | ✅️             |                                    |
+| [[clunit][clunit]]                 | ✅️        | ✅️              | ✅️             | ✅️                                  |
+| [[clunit2][clunit2]]                | ✅️        | ✅️              | ✅️             | ✅️                                  |
+| [[confidence][confidence]]             | ❌️        |                |               |                                    |
+| [[fiasco][fiasco]]                 | ❌️        |                |               |                                    |
+| [[fiveam][fiveam]]  (a)            | K        | ✅️              | ✅️             |                                    |
+| [[gigamonkeys][gigamonkeys]]            | ❌️        |                |               |                                    |
+| [[lift][lift]]                   | ✅️        | ✅️              |               | inherited from higher level suites |
+| [[lisp-unit][lisp-unit]]              | ❌️        |                |               |                                    |
+| [[lisp-unit2][lisp-unit2]]             | ✅️        |                | ✅️             |                                    |
+| [[nst][nst]]                    | ✅️        | ✅️              | ✅️             | ✅️                                  |
+| [[parachute][parachute]]              | ✅️        |                | ✅️             |                                    |
+| [[prove][prove]]                  | ❌️        |                |               |                                    |
+| [[ptester][ptester]]                | ❌️        |                |               |                                    |
+| [[rove][rove]]                   | ✅️        | ✅️              | ✅️             | ✅️                                  |
+| [[rt][rt]]                     | ❌️        |                |               |                                    |
+| [[should-test][should-test]]            | ❌️        |                |               |                                    |
+| [[tap-unit-test][tap-unit-test]]          | ❌️        |                |               |                                    |
+| [[try][try]]                    | ❌️        |                |               |                                    |
+| [[unit-test][unit-test]] (b)          | ✅️        | (b)            | (b)           | (b)                                |
+| [[xlunit][xlunit]]                 | ✅️        | ✅️              | ✅️             | ✅️                                  |
+| [[xptest][xptest]]                 | ✅️        |                | ✅️             |                                    |
 (a) Not really recommended, but does exist.
 (b) Users are expected to create a subclass of the unit-test class using the =define-test-class= macro.
 
@@ -460,7 +471,7 @@ Does a failure (not error) trigger the debugger, is it optional, and do assertio
 | [[cacau][cacau]]         | (optional)                | N                                |
 | [[clunit][clunit]]        | (optional)                | with vars                        |
 | [[clunit2][clunit2]]       | (optional)                | with vars                        |
-| [[confidence][confidence]]        | (never)             | with vars                        |
+| [[confidence][confidence]]    | (never)                   | with vars                        |
 | [[gigamonkeys][gigamonkeys]]   | (optional)                | N                                |
 | [[fiasco][fiasco]]        | (optional)                | with vars                        |
 | [[fiveam][fiveam]]        | (optional)                | with vars                        |
@@ -476,6 +487,7 @@ Does a failure (not error) trigger the debugger, is it optional, and do assertio
 | [[should-test][should-test]]   | (never)                   | Y                                |
 | [[simplet][simplet]]       | (never)                   | N                                |
 | [[tap-unit-test][tap-unit-test]] | (optional)                | Y                                |
+| [[try][try]]           | optional                  | Y                                |
 | [[unit-test][unit-test]]     | (never)                   | Y                                |
 | [[xlunit][xlunit]]        | (never)                   | Y                                |
 | [[xptest][xptest]]        | (never)                   | N                                |
@@ -493,7 +505,7 @@ Also see [[error-reporting][error-reporting]]
 | [[cacau][cacau]]                  | run                 | nil                                                                                                                                  |
 | [[clunit][clunit]]                 | run-test, run-suite | nil                                                                                                                                  |
 | [[clunit2][clunit2]]                | run-test, run-suite | nil                                                                                                                                  |
-| [[confidence][confidence]]                 | name-of-test        | nil                                                                                                                                  |
+| [[confidence][confidence]]             | name-of-test        | nil                                                                                                                                  |
 | [[fiasco][fiasco]]                 | run-tests           | test-run object                                                                                                                      |
 | [[fiveam][fiveam]]                 | run                 | list of test-passed, test-skipped, test-failure objects                                                                              |
 |                        | run!                | nil                                                                                                                                  |
@@ -511,9 +523,10 @@ Also see [[error-reporting][error-reporting]]
 | [[rt][rt]]                     | do-test             | nil                                                                                                                                  |
 | [[should-test][should-test]]            | test                | hash-table (1)                                                                                                                       |
 | [[tap-unit-test][tap-unit-test]]          | run-tests           | nil                                                                                                                                  |
+| [[try][try]]                    | try                 | trial object                                                                                                                         |
 | [[unit-test][unit-test]]              | run-test            | test-equal-result object                                                                                                             |
-| [[xlunit][xlunit]]                 |  textui-test-run    | test-results-object                                                                                                                  |
-| [[xptest][xptest]]                 |  run-test           | list of test-result objects                                                                                                          |
+| [[xlunit][xlunit]]                 | textui-test-run     | test-results-object                                                                                                                  |
+| [[xptest][xptest]]                 | run-test            | list of test-result objects                                                                                                          |
 
 (1) Should-test: at the lowest level should returns T or NIL and signals information about the failed assertion. This information is aggregated by deftest which will return aggregate information about all the failed assertions in the hash-table at the highest level test will once again aggregate information over all tests.
 
@@ -522,32 +535,33 @@ Does the framework provide a progress report, is it optional, and does it run ju
 <<progress-reports>>
 #+CAPTION: Overview - Progress Reports
 #+ATTR_HTML: :border 2 :rules all :frame border
-| Library       | Progress Reports            |
-|---------------+-----------------------------|
-| [[1am][1am]]           | Every assert                |
-| [[2am][2am]]           | Every assert                |
-| [[cacau][cacau]]         | optional                    |
-| [[clunit][clunit]]        | optional                    |
-| [[clunit2][clunit2]]       | optional                    |
-| [[confidence][confidence]]        | never           |
-| [[gigamonkeys][gigamonkeys]]   | never                       |
-| [[fiasco][fiasco]]        | optional                    |
-| [[fiveam][fiveam]]        | optional (1)                |
-| [[lift][lift]]          | never                       |
-| [[lisp-unit][lisp-unit]]     | never                       |
-| [[lisp-unit2][lisp-unit2]]    | never                       |
-| [[nst][nst]]           | Every test                  |
-| [[parachute][parachute]]     | optional                    |
-| [[prove][prove]]         | Every assert                |
-| [[ptester][ptester]]       | Every assert                |
-| [[rove][rove]]          | Optional                    |
-| [[rt][rt]]            | Every test                  |
-| [[should-test][should-test]]   | Every assert                |
-| [[simplet][simplet]]       | Every test                  |
-| [[tap-unit-test][tap-unit-test]] | never                       |
-| [[unit-test][unit-test]]     | Every test                  |
-| [[xlunit][xlunit]]        | never                       |
-| [[xptest][xptest]]        | never                       |
+| Library       | Progress Reports                                         |
+|---------------+----------------------------------------------------------|
+| [[1am][1am]]           | Every assert                                             |
+| [[2am][2am]]           | Every assert                                             |
+| [[cacau][cacau]]         | optional                                                 |
+| [[clunit][clunit]]        | optional                                                 |
+| [[clunit2][clunit2]]       | optional                                                 |
+| [[confidence][confidence]]    | never                                                    |
+| [[gigamonkeys][gigamonkeys]]   | never                                                    |
+| [[fiasco][fiasco]]        | optional                                                 |
+| [[fiveam][fiveam]]        | optional (1)                                             |
+| [[lift][lift]]          | never                                                    |
+| [[lisp-unit][lisp-unit]]     | never                                                    |
+| [[lisp-unit2][lisp-unit2]]    | never                                                    |
+| [[nst][nst]]           | Every test                                               |
+| [[parachute][parachute]]     | optional                                                 |
+| [[prove][prove]]         | Every assert                                             |
+| [[ptester][ptester]]       | Every assert                                             |
+| [[rove][rove]]          | Optional                                                 |
+| [[rt][rt]]            | Every test                                               |
+| [[should-test][should-test]]   | Every assert                                             |
+| [[simplet][simplet]]       | Every test                                               |
+| [[tap-unit-test][tap-unit-test]] | never                                                    |
+| [[try][try]]           | Every assert or every assert having an unexpected result |
+| [[unit-test][unit-test]]     | Every test                                               |
+| [[xlunit][xlunit]]        | never                                                    |
+| [[xptest][xptest]]        | never                                                    |
 (1) The following will allow fiveam to run without output
 #+begin_src lisp
   (let ((fiveam:*test-dribble*
@@ -567,7 +581,7 @@ Does the framework provide a progress report, is it optional, and does it run ju
 | [[cacau][cacau]]         | S, T                      |          |                          |
 | [[clunit][clunit]]        | D                         | Y (auto) |                          |
 | [[clunit2][clunit2]]       | D                         | Y (auto) | Y                        |
-| [[confidence][confidence]]        |                           |          | Y |
+| [[confidence][confidence]]    |                           |          | Y                        |
 | [[fiasco][fiasco]]        | P(1), A                   |          | Y                        |
 | [[fiveam][fiveam]]        | P(2)                      |          | (3)                      |
 | [[gigamonkeys][gigamonkeys]]   |                           |          |                          |
@@ -583,6 +597,7 @@ Does the framework provide a progress report, is it optional, and does it run ju
 | [[should-test][should-test]]   |                           | N        | Y                        |
 | [[simplet][simplet]]       | P                         |          |                          |
 | [[tap-unit-test][tap-unit-test]] |                           |          |                          |
+| [[try][try]]           | S,T.A                     | Y        | Y                        |
 | [[unit-test][unit-test]]     |                           |          |                          |
 | [[xlunit][xlunit]]        |                           |          |                          |
 | [[xptest][xptest]]        |                           |          |                          |
@@ -604,7 +619,7 @@ D - failing dependencies, C - children, P - pending, S - suites, T - tests, A - 
 | [[cacau][cacau]]                  | N              | Y(T or S)   |
 | [[clunit][clunit]]                 | N              | N           |
 | [[clunit2][clunit2]]                | N              | N           |
-| [[confidence][confidence]]                 | N              | N           |
+| [[confidence][confidence]]             | N              | N           |
 | [[fiasco][fiasco]]                 | N              | N           |
 | [[fiveam][fiveam]] (a)             | ?              | N           |
 | [[gigamonkeys][gigamonkeys]]            | N              | N           |
@@ -619,6 +634,7 @@ D - failing dependencies, C - children, P - pending, S - suites, T - tests, A - 
 | [[rt][rt]]                     | N              | N           |
 | [[should-test][should-test]]            | N              | N           |
 | [[tap-unit-test][tap-unit-test]]          | Y              | N           |
+| [[try][try]]                    | Y              | N           |
 | [[unit-test][unit-test]]              | N              | N           |
 | [[xlunit][xlunit]]                 | N              | N           |
 | [[xptest][xptest]]                 | N              | N           |
@@ -629,31 +645,32 @@ D - failing dependencies, C - children, P - pending, S - suites, T - tests, A - 
 #+CAPTION: Dribble and Output Streams
 #+ATTR_HTML: :border 2 :rules all :frame border
 #+ATTR_LATEX: :float multicolumn
-| Library                | Dribble                       | output streams         |
-|------------------------+-------------------------------+------------------------|
-| [[1am][1am]]                    | N                             | S                      |
-| [[2am][2am]] (not in quicklisp) | N                             | S                      |
-| [[cacau][cacau]]                  | N                             | S                      |
-| [[clunit][clunit]]                 | N                             | S                      |
-| [[clunit2][clunit2]]                | N                             | =*test-output-stream*= |
-| [[confidence][confidence]]                 | N                             | optional parameter     |
-| [[fiasco][fiasco]]                 | N                             | optional parameter     |
-| [[fiveam][fiveam]]                 | Y  =*test-dribble*=           | S                      |
-| [[gigamonkeys][gigamonkeys]]            | N                             | S                      |
-| [[lift][lift]]                   | Y  =*lift-dribble-pathname*=  | optional parameter     |
-| [[lisp-unit][lisp-unit]]              | N                             | optional parameter     |
-| [[lisp-unit2][lisp-unit2]]             | N                             | =*test-stream*=        |
-| [[nst][nst]]                    | N                             | optional parameter     |
-| [[parachute][parachute]]              | N                             | =(setf output)=        |
-| [[prove][prove]]                  | N                             | =*test-result-output*= |
-| [[ptester][ptester]]                | N                             | S                      |
-| [[rove][rove]]                   | N                             | =*report-stream*=      |
-| [[rt][rt]]                     | N                             | optional parameter     |
-| [[should-test][should-test]]            | N                             | =*test-output*=        |
-| [[tap-unit-test][tap-unit-test]]          | N                             | S                      |
-| [[unit-test][unit-test]]              | N                             | S                      |
-| [[xlunit][xlunit]]                 | N                             | S                      |
-| [[xptest][xptest]]                 | N                             | S                      |
+| Library                | Dribble                      | output streams         |
+|------------------------+------------------------------+------------------------|
+| [[1am][1am]]                    | N                            | S                      |
+| [[2am][2am]] (not in quicklisp) | N                            | S                      |
+| [[cacau][cacau]]                  | N                            | S                      |
+| [[clunit][clunit]]                 | N                            | S                      |
+| [[clunit2][clunit2]]                | N                            | =*test-output-stream*= |
+| [[confidence][confidence]]             | N                            | optional parameter     |
+| [[fiasco][fiasco]]                 | N                            | optional parameter     |
+| [[fiveam][fiveam]]                 | Y  =*test-dribble*=          | S                      |
+| [[gigamonkeys][gigamonkeys]]            | N                            | S                      |
+| [[lift][lift]]                   | Y  =*lift-dribble-pathname*= | optional parameter     |
+| [[lisp-unit][lisp-unit]]              | N                            | optional parameter     |
+| [[lisp-unit2][lisp-unit2]]             | N                            | =*test-stream*=        |
+| [[nst][nst]]                    | N                            | optional parameter     |
+| [[parachute][parachute]]              | N                            | =(setf output)=        |
+| [[prove][prove]]                  | N                            | =*test-result-output*= |
+| [[ptester][ptester]]                | N                            | S                      |
+| [[rove][rove]]                   | N                            | =*report-stream*=      |
+| [[rt][rt]]                     | N                            | optional parameter     |
+| [[should-test][should-test]]            | N                            | =*test-output*=        |
+| [[tap-unit-test][tap-unit-test]]          | N                            | S                      |
+| [[try][try]]                    | N                            | optional parameter     |
+| [[unit-test][unit-test]]              | N                            | S                      |
+| [[xlunit][xlunit]]                 | N                            | S                      |
+| [[xptest][xptest]]                 | N                            | S                      |
 Where S is =*standard-output*=
 
 ** Edge Cases: Float Testing, Value Expressions and Closure Variables
@@ -669,7 +686,7 @@ This table is looking at whether the framework provides [[bounded-equality][floa
 | [[cacau][cacau]]         |             | First value only          | Y                     |
 | [[clunit][clunit]]        |             | First value only          | N                     |
 | [[clunit2][clunit2]] (a)   |             | Y                         | N                     |
-| [[confidence][confidence]]        | Y           | First value only          | Y                     |
+| [[confidence][confidence]]    | Y           | First value only          | Y                     |
 | [[fiasco][fiasco]]        |             | First value only          | Y                     |
 | [[fiveam][fiveam]]        |             | N                         | N                     |
 | [[gigamonkeys][gigamonkeys]]   |             | First value only          | Y                     |
@@ -684,6 +701,7 @@ This table is looking at whether the framework provides [[bounded-equality][floa
 | [[rt][rt]]            |             | N                         | N                     |
 | [[should-test][should-test]]   |             | First value only          | N                     |
 | [[tap-unit-test][tap-unit-test]] |             | Y                         | N                     |
+| [[try][[try]]          | Y           | Y                         | Y                     |
 | [[unit-test][unit-test]]     |             | First value only          | Y                     |
 | [[xlunit][xlunit]]        |             | First value only          | Y                     |
 | [[xptest][xptest]]        |             | relies on CL predicates   | Y                     |
@@ -694,12 +712,12 @@ This table is looking at whether the framework provides [[bounded-equality][floa
 ** Compatibility and Customizable Assertions
 #+CAPTION: Overview-4 Misc
 #+ATTR_HTML: :border 2 :rules all :frame border
-| Name      | compatibility layers   | Customizeable Assertion Functions |
-|-----------+------------------------+-----------------------------------|
-| [[cacau][cacau]]     |                        | Y                                 |
-| [[confidence][confidence]]    |                        | Y                                 |
-| [[parachute][parachute]] | [[fiveam][fiveam]] lisp-unit prove |                                   |
-| [[nst][nst]]       |                        | Y                                 |
+| Name       | compatibility layers   | Customizeable Assertion Functions |
+|------------+------------------------+-----------------------------------|
+| [[cacau][cacau]]      |                        | Y                                 |
+| [[confidence][confidence]] |                        | Y                                 |
+| [[parachute][parachute]]  | [[fiveam][fiveam]] lisp-unit prove |                                   |
+| [[nst][nst]]        |                        | Y                                 |
 
 (a) Running suites without tests or tests without test functions will result in tests marked PENDING rather than success or fail
 
@@ -709,10 +727,10 @@ This table is looking at whether the framework provides [[bounded-equality][floa
 #+ATTR_HTML: :border 2 :rules all :frame border
 | Name  | Async | Thread Ready | Package Inferred |
 |-------+-------+--------------+------------------|
-| [[1am][1am]] |       | X            |                  |
-| [[2am][2am]] |       | X            |                  |
+| [[1am][1am]]   |       | X            |                  |
+| [[2am][2am]]   |       | X            |                  |
 | [[cacau][Cacau]] | X     |              |                  |
-| [[rove][Rove]] |       | X  (1)       |    X             |
+| [[rove][Rove]]  |       | X  (1)       | X                |
 (1) Tycho Garen reported in February 2021 that "Rove doesn't seem to work when multi-threaded results effectively. It's listed in the readme, but I was able to write really trivial tests that crashed the test harness."
 
 [[top][top]]
@@ -881,6 +899,29 @@ Assertions also accept diagnostic strings but no variables
   T1-FAIL-34: (= X Y) failed:
   Expected T but saw NIL
 #+end_src
+** [[try][try]]
+#+begin_src lisp
+(deftest t1-fail ()
+  (let ((x 1) (y 2))
+   (is (equal 1 2))
+    (is (= x y)
+        :msg "Intentional failure x does not equal y"
+        :ctx ("*PACKAGE* is ~S and *PRINT-CASE* is ~S~%"
+             *package* *print-case*))))
+
+  (try 't1-fail :print 'unexpected)
+T1-FAIL
+  ⊠ (IS (EQUAL 1 2))
+  ⊠ Intentional failure x does not equal y
+    where
+      X = 1
+      Y = 2
+    *PACKAGE* is #<PACKAGE "UAX-15-TRY-TESTS"> and *PRINT-CASE* is :UPCASE
+
+⊠ T1-FAIL ⊠2
+#<TRIAL (T1-FAIL) UNEXPECTED-FAILURE 0.000s ⊠2>
+
+#+end_src
 
 ** [[unit-test][unit-test]]
 Assertions also accept diagnostic strings but no variables
@@ -895,81 +936,93 @@ Assertions also accept diagnostic strings but no variables
 * Benchmarking
 <<benchmarks>>
 
-This is really simple benchmarking using SBCL version 2.1.4 on a linux server and CCL version 1.12 LinuxX8664. I used each framework and applied them to uax-15 which has 16 tests and 338760 assertions (and they all pass). The tests were stripped to the minimum. No diagnostic strings were used and for the frameworks which allowed it, the test was set to no progress reporting and overall summary only. All of the assertions pass, so any real world test with failing assertions generating failure reports will be different.
+First some points about what I have discovered about benchmarking these frameworks:
 
-Based on this one application, from a speed perspective, there was a host of frameworks in a pack, with Rove and Prove at the back, then NST and Clunit not even on the same continent. (*13 June 2021 Update:* Clunit2 has resolved clunit's performance deficit.)  (Strangely enough, while the other frameworks were slower under cc, Clunit and NST improved.) Fiveam is in the pack so long as it runs in a terminal or some non-emacs editor. If running in emacs it runs into an emacs issue with long lines. You will see the difference in the fiveam report.
+1. In general, functionality and comfort will drive your framework decision not benchmarks.
 
-Your context will be important as to whether these benchmarks are at all meaningful to you.
+2. That said, bad benchmarks can say one of four things:
+
+   a. I did not fully understand the best way to use the framework. As an example, my first naive version of the test for [[confidence][confidence]] had a runtime of 742 seconds. The author showed me how to rewrite the tests and it dropped to 24 seconds. This could very well be the explanation for the bad results of [[nst][nst]]. (If someone experienced with nst would like to re-write that benchmark test, please let me know.)
+
+   b. There is a problem in the framework code. The author of [[clunit2][clunit2]] cut the run time from the original runtime of 600 seconds to 14 seconds.
+
+   c. If your framework reports using what emacs thinks is long lines, run the tests in a terminal, do not run it in an emacs repl. As an example, fiveam's runtime was 10 seconds, but real-time (total time to get a result in the emacs repl was 37 minutes).
+
+   d. There might be something of interest for the SBCL and CCL developers. See, e.g. the wildly different result between the results for try and prove.
+
+The benchmarks are based on a regression test, not development or functional testing. All the benchmark times below were done in a terminal window with SBCL version 2.3.0 and CCL version 1.12.1 on a linux server. I tried to rewrite the tests for [[https://github.com/sabracrolleton/uax-15][UAX-15]] for each framework. The uax-15 tests have 16 separate tests with a total of 343332 assertions (all of which pass) and the assertions are all straight-forward. The tests were stripped to the minimum. No diagnostic strings were used. For the frameworks which allowed it, the test was set to no progress reporting and overall summary only. Trivial-benchmark was used with 10 repetitions for each test. (Since Cacau does not run tests again unless they are recompiled, I have multiplied a single run by 10 to get some kind of comparable.)
+
+Since all of the assertions pass, any real world test with failing assertions generating failure reports will be different.
+
+Unsurprisingly, the simplest frameworks were the fastest. Your context will be important as to whether these benchmarks are at all meaningful to you.
+
 <<stacked-ranking-benchmarks>>
 ** Stack Ranking
-What immediately jumps out is the vast majority are grouped together, then there are a few outliers that are just way worse than the pack. For consistency, every benchmark was done on SBCL 2.1.4 in a terminal (to avoid emacs issues) except as noted to show the emacs effect.
+Considering that the benchmark is based on 10 test runs of 16 tests with 343332 passing assertions (3433320 total assertions, 160 tests), test speed on regression tests are not going to drive your decision.  Development and functional testing will obviously have a different result.
 
 
-#+CAPTION: Order by Benchmark Runtime (lower is better)
+#+CAPTION: Summary of Regression Test Benchmark (lower is better) (updated 16 Jan 2023
 #+ATTR_HTML: :border 2 :rules all :frame border
 #+ATTR_LATEX: :float multicolumn
-| Library                        | SBCL RunTime | CCL Runtime |
-|--------------------------------+--------------+-------------|
-| [[xptest][xptest]]                         |       6.5151 |      11.397 |
-| [[xlunit][xlunit]]                         |       6.5840 |      11.618 |
-| [[lift][lift]]                           |       6.6040 |      11.605 |
-| [[2am][2am]] (not in quicklisp)         |       6.8468 |      12.905 |
-| [[1am][1am]]                            |       6.8821 |      12.870 |
-| [[cacau][cacau]]                          |       7.0334 |      11.609 |
-| [[confidence][confidence]]                         |       7.9049 |      15.731 |
-| [[rt][rt]]                             |       7.0450 |      11.663 |
-| [[unit-test][unit-test]]                      |       7.5560 |      17.880 |
-| [[lisp-unit][lisp-unit]]                      |       7.8594 |      13.345 |
-| [[tap-unit-test][tap-unit-test]]                  |       7.9746 |      13.095 |
-| [[should-test][should-test]]                    |       8.1620 |      24.667 |
-| [[com.gigamonkeys.test-framework][com.gigamonkeys.test-framework]] |       8.5220 |      30.627 |
-| [[ptester][ptester]]                        |       9.0088 |      22.307 |
-| [[fiasco][fiasco]]                         |       9.6013 |      28.807 |
-| [[clunit2][clunit2]] (b1)                   |      10.3766 |      26.347 |
-| [[lisp-unit2][lisp-unit2]] (a)                 |      10.7883 |             |
-| [[fiveam][fiveam]]                         |      11.1790 |      18.647 |
-| [[parachute][parachute]]                      |      11.7699 |      35.020 |
-| [[clunit2][clunit2]] (b2)                   |      13.3833 |      32.582 |
-| [[rove][rove]]                           |      18.2223 |      41.800 |
-| [[prove][prove]]                          |      31.2611 |     116.864 |
-| [[nst][nst]]                            |     522.5623 |     490.843 |
-| [[clunit][clunit]]                         |     601.0652 |     272.858 |
-
-(a) CCL decided it was not friends with Lisp-Unit2 and did not compile it.
-(b1) 13 June 2021 Update - testing using assert-true
-(b2) 13 June 2021 Update - testing using assert-equal
+| Library       | SBCL RunTime | CCL Runtime |
+|---------------+--------------+-------------|
+| [[xptest][xptest]]        |       5.8903 |     11.7284 |
+| [[xlunit][xlunit]]        |       5.9102 |     11.7532 |
+| [[cacau][cacau]]         |       6.0173 |     11.6543 |
+| [[lift][lift]]          |       6.0686 |     11.9706 |
+| [[1am][1am]]           |       6.1541 |     13.6843 |
+| [[ptester][ptester]]       |       6.2000 |     12.5130 |
+| [[rt][rt]]            |       6.2079 |     11.9097 |
+| [[2am][2am]]           |       6.2408 |     14.0614 |
+| [[unit-test][unit-test]]     |       6.3616 |     17.6696 |
+| [[tap-unit-test][tap-unit-test]] |       6.9988 |     13.2284 |
+| [[lisp-unit][lisp-unit]]     |       7.1250 |     13.4544 |
+| [[should-test][should-test]]   |       7.1710 |     25.1831 |
+| [[gigamonkeys][gigamonkeys]]   |       7.8872 |     30.7511 |
+| [[fiasco][fiasco]]        |       8.8940 |     38.4574 |
+| [[lisp-unit2][lisp-unit2]]    |       9.2966 |     30.2440 |
+| [[parachute][parachute]]     |       9.9155 |     40.3792 |
+| [[fiveam][fiveam]]        |      10.1231 |     19.1292 |
+| [[rove][rove]]          |      11.8615 |     35.8269 |
+| [[cardiogram][cardiogram]]    |      13.3693 |     29.2526 |
+| [[clunit2][clunit2]]       |      14.3416 |     35.9992 |
+| [[try][try]]           |      14.6188 |    177.8841 |
+| [[confidence][confidence]]    |      24.7286 |     56.8546 |
+| [[prove][prove]]         |      30.5618 |    132.1456 |
+| [[nst][nst]]           |     517.8853 |    500.4885 |
 
 #+CAPTION: Order by Benchmark Bytes Consed (lower is better)
 #+ATTR_HTML: :border 2 :rules all :frame border
 #+ATTR_LATEX: :float multicolumn
 | Library                        | Bytes Consed |
 |--------------------------------+--------------|
-| [[2am][2am]] (not in quicklisp)         |   3541592704 |
-| [[1am][1am]]                            |   3541621392 |
-| [[xptest][xptest]]                         |   3545190064 |
-| [[xlunit][xlunit]]                         |   3547926336 |
-| [[cacau][cacau]]                          |   3559494400 |
-| [[confidence][confidence]]                         |   4034319280 |
-| [[lift][lift]]                           |   3662570128 |
-| [[rt][rt]]                             |   3781963056 |
-| [[unit-test][unit-test]]                      |   3842573536 |
-| [[should-test][should-test]]                    |   4033912496 |
-| [[fiasco][fiasco]]                         |   4249190656 |
-| [[tap-unit-test][tap-unit-test]]                  |   4406207680 |
-| [[lisp-unit][lisp-unit]]                      |   4411139200 |
-| [[fiveam][fiveam]]                         |   4680219840 |
-| [[com.gigamonkeys.test-framework][com.gigamonkeys.test-framework]] |   4950815168 |
-| [[lisp-unit2][lisp-unit2]]                     |   5127796976 |
-| [[ptester][ptester]]                        |   5195902592 |
+| [[2am][2am]] (not in quicklisp)         |   3361006176 |
+| [[1am][1am]]                            |   3361283232 |
+| [[xptest][xptest]]                         |   3363654192 |
+| [[xlunit][xlunit]]                         |   3367157968 |
+| [[cacau][cacau]]                          |   3383879200 |
+| [[lift][lift]]                           |   3480602800 |
+| [[rt][rt]]                             |   3586779376 |
+| [[unit-test][unit-test]]                      |   3668546192 |
+| [[ptester][ptester]]                        |   3690505472 |
+| [[should-test][should-test]]                    |   3859488496 |
+| [[cardiogram][cardiogram]]                     |   3965584752 |
+| [[fiasco][fiasco]]                         |   4077786880 |
+| [[tap-unit-test][tap-unit-test]]                  |   4217541312 |
+| [[lisp-unit][lisp-unit]]                      |   4222413456 |
+| [[confidence][confidence]]                     |   4338353600 |
+| [[fiveam][fiveam]]                         |   4512244000 |
+| [[com.gigamonkeys.test-framework][com.gigamonkeys.test-framework]] |   4788180016 |
+| [[lisp-unit2][lisp-unit2]]                     |   4939787968 |
 | [[clunit][clunit]]                         |   5262303120 |
-| [[parachute][parachute]]                      |   5357258016 |
-| [[rove][rove]]                           |   8960510816 |
-| [[clunit2][clunit2]] (a)                    |  13401972672 |
-| [[prove][prove]]                          |  14124826480 |
+| [[parachute][parachute]]                      |   5212345824 |
+| [[rove][rove]]                           |   7427051216 |
+| [[try][try]]                            |   9019833552 |
+| [[clunit2][clunit2]] (a)                    |  15407395920 |
+| [[prove][prove]]                          |  14018185696 |
 | [[clunit2][clunit2]] (b)                    |  15377667616 |
-| [[nst][nst]]                            | 319321472704 |
-(a) 13 June 2021 Update using assert-true
-(b) 13 June 2021 Update using assert-equal
+| [[nst][nst]]                            | 306684151680 |
+
 
 #+CAPTION: Order by Benchmark Eval calls (lower is better)
 #+ATTR_HTML: :border 2 :rules all :frame border
@@ -980,7 +1033,7 @@ What immediately jumps out is the vast majority are grouped together, then there
 | [[cacau][cacau]]                          |          0 |
 | [[com.gigamonkeys.test-framework][com.gigamonkeys.test-framework]] |          0 |
 | [[fiveam][fiveam]]                         |          0 |
-| [[confidence][confidence]]                         |          0 |
+| [[confidence][confidence]]                     |          0 |
 | [[lift][lift]]                           |          0 |
 | [[lisp-unit2][lisp-unit2]]                     |          0 |
 | [[parachute][parachute]]                      |          0 |
@@ -992,14 +1045,15 @@ What immediately jumps out is the vast majority are grouped together, then there
 | [[xlunit][xlunit]]                         |          0 |
 | [[xptest][xptest]]                         |          0 |
 | [[clunit2][clunit2]]  (a)                   |          0 |
-| [[2am][2am]] (not in quicklisp)         |         10 |
+| [[2am][2am]] (not in quicklisp)         |          0 |
 | [[fiasco][fiasco]]                         |         10 |
-| [[lisp-unit][lisp-unit]]                      |         10 |
+| [[lisp-unit][lisp-unit]]                      |        160 |
 | [[tap-unit-test][tap-unit-test]]                  |        160 |
 | [[clunit][clunit]]                         |        320 |
 | [[rt][rt]]                             |        480 |
-| [[nst][nst]]                            |    6768780 |
-(a) 13 June 2021 Update
+| [[nst][nst]]                            |    6860220 |
+|                                |            |
+
 
 
 Now the detailed report.
@@ -1008,71 +1062,94 @@ Now the detailed report.
 #+begin_src lisp
   (benchmark:with-timing (10) (uax-15-1am-tests::run))
 
-  Success: 16 tests, 338760 checks.
+  Success: 16 tests, 343332 checks.
+
   -                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
-  REAL-TIME        10       10.889917   1.013326   1.153324   1.076658   1.088992     0.042165
-  RUN-TIME         10       9.661734    0.942873   0.983157   0.966447   0.966173     0.014798
-  USER-RUN-TIME    10       9.262606    0.909559   0.950976   0.922516   0.926261     0.012376
-  SYSTEM-RUN-TIME  10       0.399142    0.026377   0.050109   0.039822   0.039914     0.007806
+  REAL-TIME        10       9.609976    0.88333    1.05333    0.943332   0.960998     0.050641
+  RUN-TIME         10       6.154181    0.607383   0.64799    0.610502   0.615418     0.011578
+  USER-RUN-TIME    10       6.117711    0.601297   0.631522   0.609088   0.611771     0.008027
+  SYSTEM-RUN-TIME  10       0.036479    0          0.016462   0.003285   0.003648     0.004761
   PAGE-FAULTS      10       0           0          0          0          0            0.0
-  GC-RUN-TIME      10       974.403     82.634     111.238    96.93      97.4403      9.298019
-  BYTES-CONSED     10       4870658256  487053200  487078096  487066720  487065820.0  7454.81
+  GC-RUN-TIME      10       99.246      6.092      39.833     6.396      9.9246       9.983065
+  BYTES-CONSED     10       3361283232  336076080  336267312  336108464  336128320.0  50528.4
   EVAL-CALLS       10       0           0          0          0          0            0.0
 #+end_src
 The CCL version:
 #+begin_src lisp
--          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
-REAL-TIME  10       12.877645  1.277734  1.307823  1.285777  1.287764  0.00831
-RUN-TIME   10       12.870041  1.276389  1.306837  1.285161  1.287004  0.008351
+       SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
+REAL-TIME  10       25.275585  2.384657  2.649059  2.491271  2.527559  0.080996
+RUN-TIME   10       13.684325  1.337679  1.436498  1.360898  1.368432  0.028661
+
 #+end_src
 ** [[2am][2am]]
 2am seems to have no way to turn off the progress reports. As with the 1am benchmark, the benchmark below was done running in a terminal window. The same test running in a emacs REPL took roughly six times longer due to how emacs mishandles long lines.
 #+begin_src lisp
   (benchmark:with-timing (10) (uax-15-2am-tests::run))
-  Did 16 tests (0 crashed), 338760 checks.
-  Pass: 338760 (100%)
-  Fail: 0 ( 0%)
+
   -                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
-  REAL-TIME        10       8.389924    0.729993   0.906659   0.839992   0.838992     0.049081
-  RUN-TIME         10       6.846887    0.674877   0.730084   0.680101   0.684689     0.015464
-  USER-RUN-TIME    10       6.79029     0.664879   0.713442   0.675069   0.679029     0.012428
-  SYSTEM-RUN-TIME  10       0.056611    0          0.016639   0.006661   0.005661     0.005376
+  REAL-TIME        10       9.886643    0.899998   1.073331   0.993331   0.988664     0.043823
+  RUN-TIME         10       6.240839    0.618159   0.648082   0.620287   0.624084     0.008487
+  USER-RUN-TIME    10       6.214425    0.614933   0.644856   0.618156   0.621442     0.008304
+  SYSTEM-RUN-TIME  10       0.026427    0          0.00694    0.003034   0.002643     0.002041
   PAGE-FAULTS      10       0           0          0          0          0            0.0
-  GC-RUN-TIME      10       272.862     20.824     65.941     24.247     27.2862      13.023412
-  BYTES-CONSED     10       3541592704  354158208  354162800  354158736  354159260.0  1253.5916
+  GC-RUN-TIME      10       147.903     11.379     36.216     11.669     14.7903      7.227465
+  BYTES-CONSED     10       3361006176  336067904  336158016  336087456  336100600.0  27877.61
   EVAL-CALLS       10       0           0          0          0          0            0.0
 #+end_src
 The CCL version
 #+begin_src lisp
--          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
-REAL-TIME  10       12.906069  1.278402  1.332574  1.28587   1.290607  0.014833
-RUN-TIME   10       12.905263  1.278475  1.334017  1.281963  1.290526  0.015472
+  -      SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
+  REAL-TIME  10       29.176336  2.674119  3.128804  2.907567  2.917634  0.11941
+  RUN-TIME   10       14.061409  1.364417  1.471937  1.403766  1.406141  0.03288
+
 #+end_src
 ** [[cacau][cacua]]
-Since Cacau does not run tests unless they are recompiled, we have simply multiplied a single run by 10 to get some kind of comparable here. Running at the minimum reporting.
+Since Cacau does not run tests unless they are recompiled, you need to multiply numbers below by 10 to get some kind of comparable here. Running at the minimum reporting.
 #+begin_src lisp
-    (benchmark:with-timing (10) (uax-15-cacau-tests::run :reporter :min))
--                SAMPLES  TOTAL(10x)      MINIMUM   MAXIMUM    MEDIAN    AVERAGE   DEVIATION
-REAL-TIME        10       7.03327    0         0.703327   0         0.070333  0.210998
-RUN-TIME         10       7.03341    0.000018  0.703049   0.000021  0.070334  0.210905
-USER-RUN-TIME    10       6.86598    0.000017  0.686321   0.000021  0.06866   0.205887
-SYSTEM-RUN-TIME  10       0.16734    0.000001  0.016721   0.000001  0.001673  0.005016
-PAGE-FAULTS      10       0          0         0          0         0         0.0
-GC-RUN-TIME      10       572.44     0         57.244     0         5.7244    17.1732
-BYTES-CONSED     10       3576325600 0         357534400  0         35763256  107257040.0
-EVAL-CALLS       10       0          0         0          0         0         0.0
+  (benchmark:with-timing (10) (uax-15-cacau-tests::run :reporter :min))
+  -                SAMPLES  TOTAL      MINIMUM    MAXIMUM    MEDIAN     AVERAGE    DEVIATION
+  REAL-TIME        1        0.603331   0.603331   0.603331   0.603331   0.603331   0.0
+  RUN-TIME         1        0.601739   0.601739   0.601739   0.601739   0.601739   0.0
+  USER-RUN-TIME    1        0.581692   0.581692   0.581692   0.581692   0.581692   0.0
+  SYSTEM-RUN-TIME  1        0.020046   0.020046   0.020046   0.020046   0.020046   0.0
+  PAGE-FAULTS      1        0          0          0          0          0          0.0
+  GC-RUN-TIME      1        24.25      24.25      24.25      24.25      24.25      0.0
+  BYTES-CONSED     1        338387920  338387920  338387920  338387920  338387920  0.0
+  EVAL-CALLS       1        0          0          0          0          0          0.0
+
 #+end_src
 The CCL version (total multiplied by 10 get try to get a comparable)
 #+begin_src lisp
--          SAMPLES  TOTAL     MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
-REAL-TIME  1        11.63139  1.163139  1.163139  1.163139  1.163139  0
-RUN-TIME   1        11.6093   1.16093   1.16093   1.16093   1.16093   0
+  -          SAMPLES  TOTAL     MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
+  REAL-TIME  1        1.168082  1.168082  1.168082  1.168082  1.168082  0
+  RUN-TIME   1        1.165435  1.165435  1.165435  1.165435  1.165435  0
 #+end_src
+
+** [[cardiogram][cardiogram]]
+*** sbcl
+#+begin_src lisp
+  -                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
+REAL-TIME        10       15.639978   1.529998   1.61333    1.553331   1.563998     0.025854
+RUN-TIME         10       13.36939    1.289864   1.409203   1.324704   1.336939     0.03158
+USER-RUN-TIME    10       9.034622    0.860167   0.933511   0.897475   0.903462     0.020972
+SYSTEM-RUN-TIME  10       4.334774    0.392391   0.479334   0.426708   0.433477     0.025352
+PAGE-FAULTS      10       0           0          0          0          0            0.0
+GC-RUN-TIME      10       883.805     70.762     112.345    85.737     88.3805      13.442876
+BYTES-CONSED     10       3965584752  396493296  396752736  396527616  396558460.0  73038.71
+EVAL-CALLS       10       0           0          0          0          0            0.0
+#+end_src
+*** ccl
+#+begin_src lisp
+  -          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
+REAL-TIME  10       31.406332  3.098291  3.187677  3.141698  3.140633  0.02607
+RUN-TIME   10       29.252617  2.900375  2.954562  2.923258  2.925262  0.017778
+#+end_src
+
 ** [[clunit][clunit]]
 Clunit has always had a concern about performance. Running this benchmark was painful. Unlike fiveam, which should not be run in a REPL in emacs on tests with lots of assertions because of emacs' issues with long lines, clunit has no one to blame but itself. But look at the CCL results compared to the SBCL results. Clunit was the only framework faster under CCL than SBCL. Still unacceptably slow, but ...
 Wwith SBCL in a terminal.
 #+begin_src lisp
-  Passed: 338760/338760 all tests passed
+
   -                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE    DEVIATION
   REAL-TIME        10       601.4108    57.19953   64.00593   59.65935   60.141087  2.303678
   RUN-TIME         10       601.0652    57.161556  63.96824   59.62751   60.106518  2.301759
@@ -1098,460 +1175,434 @@ I ran the new improved clunit2 two ways and there is a performance difference to
 First I let CL equal do the comparision and then clunit2 just checked whether the assertion was true (assert-true) which was how all the other frameworks were also tested.
 
 #+begin_src lisp
--                SAMPLES  TOTAL        MINIMUM     MAXIMUM     MEDIAN      AVERAGE       DEVIATION
-REAL-TIME        10       10.376591    1.023326    1.066659    1.029992    1.037659      0.015279
-RUN-TIME         10       10.367396    1.022475    1.065339    1.028659    1.03674       0.015162
-USER-RUN-TIME    10       10.057592    0.995536    1.019138    1.002031    1.005759      0.008744
-SYSTEM-RUN-TIME  10       0.309821     0.016781    0.046708    0.029969    0.030982      0.008953
-PAGE-FAULTS      10       0            0           0           0           0             0.0
-GC-RUN-TIME      10       999.48       91.007      122.793     92.142      99.948        12.148087
-BYTES-CONSED     10       13401972672  1340051456  1340265440  1340209264  1340197200.0  65795.266
-EVAL-CALLS       10       0            0           0           0           0             0.0
+  -                SAMPLES  TOTAL        MINIMUM     MAXIMUM     MEDIAN      AVERAGE     DEVIATION
+  REAL-TIME        10       14.846632    1.366663    1.749995    1.389997    1.484663    0.138653
+  RUN-TIME         10       14.341602    1.36469     1.746867    1.375746    1.43416     0.113668
+  USER-RUN-TIME    10       13.959459    1.327791    1.650369    1.35222     1.395946    0.095244
+  SYSTEM-RUN-TIME  10       0.382167     0.020135    0.096501    0.029916    0.038217    0.021336
+  PAGE-FAULTS      10       0            0           0           0           0           0.0
+  GC-RUN-TIME      10       1396.363     79.062      426.267     94.67       139.6363    102.216064
+  BYTES-CONSED     10       15407395920  1540473248  1542494352  1540569936  1540739592  586165.7
+  EVAL-CALLS       10       0            0           0           0           0           0.0
+
 #+end_src
 The CCL version:
 #+begin_src lisp
--          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
-REAL-TIME  10       26.267895  2.592513  2.656461  2.627074  2.626789  0.015478
-RUN-TIME   10       26.34661   2.602268  2.665974  2.631869  2.634661  0.015835
+  -          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
+  REAL-TIME  10       36.061737  3.571143  3.670895  3.591581  3.606174  0.031347
+  RUN-TIME   10       35.999214  3.565532  3.666779  3.587588  3.599922  0.031904
 #+end_src
-I then speculated whether using assert-equal would increase performance on the ground that you are only testing once - =assert-equal= replaces both the CL =equal= function and the clunit2 =assert-true= function). Interestingly that actually slowed things down slightly.
+
+** [[confidence][confidence]]
+Confidence has no built in capability for running all the tests in a suite or package, so this is based on creating a function that just runs all the tests for uax-15-confidence-tests.
+
+There is no way to turn off the progress report.
+*** sbcl
 #+begin_src lisp
--                SAMPLES  TOTAL        MINIMUM     MAXIMUM     MEDIAN      AVERAGE       DEVIATION
-REAL-TIME        10       13.389882    1.309988    1.483321    1.313322    1.338988      0.051165
-RUN-TIME         10       13.383314    1.31106     1.481517    1.315183    1.338331      0.050361
-USER-RUN-TIME    10       13.023996    1.27605     1.415059    1.288964    1.3024        0.038748
-SYSTEM-RUN-TIME  10       0.359333     0.013431    0.066453    0.023397    0.035933      0.017299
-PAGE-FAULTS      10       0            0           0           0           0             0.0
-GC-RUN-TIME      10       1186.3       93.469      256.883     97.418      118.63        47.99955
-BYTES-CONSED     10       15377667616  1537414496  1540026832  1537518864  1537766800.0  755227.9
-EVAL-CALLS       10       0            0           0           0           0             0.0
+  -                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE    DEVIATION
+REAL-TIME        10       24.766607   2.373328   2.619993   2.449995   2.476661   0.074266
+RUN-TIME         10       24.728697   2.370314   2.620167   2.44499    2.47287    0.074612
+USER-RUN-TIME    10       24.206568   2.333738   2.529879   2.408485   2.420657   0.061988
+SYSTEM-RUN-TIME  10       0.52216     0.033206   0.119802   0.043091   0.052216   0.025093
+PAGE-FAULTS      10       0           0          0          0          0          0.0
+GC-RUN-TIME      10       2399.87     157.192    422.991    199.997    239.987    77.71274
+BYTES-CONSED     10       4338353600  430977312  457204272  431014240  433835360  7812895.0
+EVAL-CALLS       10       0           0          0          0          0          0.0
+
 #+end_src
-The CCL version:
+
+*** ccl
 #+begin_src lisp
--          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
-REAL-TIME  10       32.504135  3.207461  3.299608  3.244852  3.250414  0.0254
-RUN-TIME   10       32.58276   3.221215  3.292748  3.254175  3.258276  0.021464
+  -          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
+REAL-TIME  10       56.97802   4.964914  6.698658  5.584261  5.697802  0.544525
+RUN-TIME   10       56.854607  4.940436  6.691704  5.57673   5.685461  0.55132
 #+end_src
+
 ** [[fiasco][fiasco]]
 With progress reporting turned off
 #+begin_src lisp
-(setf *print-test-run-progress* nil)
-(in-package :uax-15-fiasco-suite)
-(benchmark:with-timing (10) (run-package-tests))
--                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
-REAL-TIME        10       9.606572    0.913324   1.026656   0.939991   0.960657     0.041225
-RUN-TIME         10       9.601316    0.911867   1.025575   0.939456   0.960132     0.040784
-USER-RUN-TIME    10       9.234909    0.88525    0.992281   0.902122   0.923491     0.036895
-SYSTEM-RUN-TIME  10       0.366417    0.023392   0.053293   0.033323   0.036642     0.009047
-PAGE-FAULTS      10       0           0          0          0          0            0.0
-GC-RUN-TIME      10       1397.089    97.043     213.176    120.03     139.7089     38.06595
-BYTES-CONSED     10       4249190656  424657984  426455728  424685488  424919070.0  545014.2
-EVAL-CALLS       10       10          1          1          1          1            0.0
-NIL
+  (setf *print-test-run-progress* nil)
+  (in-package :uax-15-fiasco-suite)
+  (benchmark:with-timing (10) (run-package-tests))
+  -                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE    DEVIATION
+  REAL-TIME        10       8.906644    0.836663   1.036664   0.873331   0.890664   0.055253
+  RUN-TIME         10       8.894009    0.833614   1.035559   0.87176    0.889401   0.055545
+  USER-RUN-TIME    10       8.567723    0.821425   0.982309   0.835402   0.856772   0.046346
+  SYSTEM-RUN-TIME  10       0.326294    0.009906   0.05325    0.036599   0.032629   0.012558
+  PAGE-FAULTS      10       0           0          0          0          0          0.0
+  GC-RUN-TIME      10       1226.872    82.416     269.812    99.856     122.6872   54.588013
+  BYTES-CONSED     10       4077786880  407500144  409297696  407538304  407778688  543070.25
+  EVAL-CALLS       10       10          1          1          1          1          0.0
 #+end_src
 The CCL version:
 #+begin_src lisp
--          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
-REAL-TIME  10       28.8267    2.806652  2.952852  2.882208  2.88267   0.043738
-RUN-TIME   10       28.806755  2.809196  2.948668  2.878305  2.880676  0.041971
+  -          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
+  REAL-TIME  10       38.544464  3.658651  4.815928  3.764052  3.854446  0.323914
+  RUN-TIME   10       38.457424  3.651049  4.807069  3.759031  3.845742  0.3241
 #+end_src
 ** [[fiveam][fiveam]]
 With progress reporting turned off:
 #+begin_src lisp
-(benchmark:with-timing (10)
- (let ((fiveam:*test-dribble* (make-broadcast-stream)))
-      (run 'uax-15-fiveam)))
--                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE    DEVIATION
-REAL-TIME        10       11.189935   1.069995   1.169993   1.109993   1.118994   0.030038
-RUN-TIME         10       11.179056   1.069764   1.170402   1.107926   1.117906   0.029854
-USER-RUN-TIME    10       10.824186   1.029703   1.114896   1.081201   1.082419   0.025603
-SYSTEM-RUN-TIME  10       0.354886    0.023378   0.060391   0.027252   0.035489   0.011385
-PAGE-FAULTS      10       0           0          0          0          0          0.0
-GC-RUN-TIME      10       1477.345    99.423     203.254    134.299    147.7345   30.82203
-BYTES-CONSED     10       4680219840  467997648  468051088  468022496  468021984  14806.843
-EVAL-CALLS       10       0           0          0          0          0          0.0
+  (benchmark:with-timing (10)
+                         (let ((fiveam:*test-dribble* (make-broadcast-stream)))
+                           (run 'uax-15-fiveam)))
+  -                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE    DEVIATION
+  REAL-TIME        10       10.133307   0.976664   1.06333    1.006664   1.013331   0.025777
+  RUN-TIME         10       10.123116   0.977754   1.062285   1.005493   1.012312   0.025377
+  USER-RUN-TIME    10       9.826661    0.958934   1.025672   0.964349   0.982666   0.023269
+  SYSTEM-RUN-TIME  10       0.29648     0.013407   0.043277   0.029962   0.029648   0.008991
+  PAGE-FAULTS      10       0           0          0          0          0          0.0
+  GC-RUN-TIME      10       887.548     56.765     130.141    83.046     88.7548    21.552885
+  BYTES-CONSED     10       4512244000  451134320  451410384  451200752  451224400  74965.13
+  EVAL-CALLS       10       0           0          0          0          0          0.0
+
 #+end_src
 
 If you do not have progress reporting turned off, besides wasting a huge amount of screen space and time, it creates interesting issues based on what you are running fiveam on. Emacs has known problems with long lines and fiveam's progress reporting in a benchmark like this creates lots of long line. It gets even worse if you set the =run= keyword parameter =:print-names= to nil.
 
 Rule of thumb for big test systems and fiveam. Run it from a terminal, not an emacs REPL.
 
-First, this is SBCL running in a terminal with progress reporting on:
-#+begin_src lisps
-(benchmark:with-timing (10) (run 'uax-15-fiveam))
--                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
-REAL-TIME        10       11.683272   1.106661   1.26666    1.13666    1.168327     0.050315
-RUN-TIME         10       11.433937   1.096922   1.217642   1.132014   1.143394     0.035098
-USER-RUN-TIME    10       11.09766    1.073696   1.167503   1.098376   1.109766     0.025922
-SYSTEM-RUN-TIME  10       0.336295    0.00979    0.050139   0.036583   0.03363      0.011926
-PAGE-FAULTS      10       0           0          0          0          0            0.0
-GC-RUN-TIME      10       1364.435    103.005    181.628    128.838    136.4435     26.518356
-BYTES-CONSED     10       4680267008  468008608  468062224  468021680  468026700.0  14802.947
-EVAL-CALLS       10       0           0          0          0          0            0.0
-
-NIL
-#+end_src
 The CCL version
 #+begin_src lisp
--          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
-REAL-TIME  10       19.297316  1.917268  1.957064  1.926189  1.929732  0.01028
-RUN-TIME   10       19.291763  1.917065  1.958334  1.92539   1.929176  0.010841
+  -          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
+  REAL-TIME  10       19.166885  1.904093  1.946594  1.914582  1.916688  0.011433
+  RUN-TIME   10       19.129244  1.90118   1.94372   1.911262  1.912924  0.011477
 #+end_src
-Now look at the run using SBCL in emacs base case:
-#+begin_src lisp
-(benchmark:with-timing (10) (run 'uax-15-fiveam))
 
--                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE    DEVIATION
-REAL-TIME        10       46.182957   1.386656   12.649892  1.473321   4.618296   4.85889
-RUN-TIME         10       14.597167   1.404305   1.512524   1.453036   1.459717   0.032735
-USER-RUN-TIME    10       14.132159   1.355067   1.462705   1.408331   1.413216   0.0275
-SYSTEM-RUN-TIME  10       0.465011    0.009331   0.083569   0.046587   0.046501   0.020562
-PAGE-FAULTS      10       0           0          0          0          0          0.0
-GC-RUN-TIME      10       1565.843    98.467     248.256    145.087    156.5843   48.0745
-BYTES-CONSED     10       6191647200  619003152  619415568  619130784  619164720  108128.414
-EVAL-CALLS       10       0           0          0          0          0          0.0
-#+end_src
-While setting the =run= keyword parameter =:print-names= to nil is supposed to help performance, it seems to actually make the emacs long line problem worse. See, eg. this result:
-#+begin_src lisp
-(benchmark:with-timing (10) (run 'uax-15-fiveam :print-names nil))
-
--                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
-REAL-TIME        10       2252.024    1.399989   1121.9193  1.47332    225.2024     377.6827
-RUN-TIME         10       14.941372   1.409806   1.746217   1.479273   1.494137     0.090286
-USER-RUN-TIME    10       14.448811   1.389841   1.64304    1.422158   1.444881     0.069076
-SYSTEM-RUN-TIME  10       0.492585    0.009959   0.103179   0.046558   0.049258     0.024733
-PAGE-FAULTS      10       0           0          0          0          0            0.0
-GC-RUN-TIME      10       1904.724    115.29     417.308    179.123    190.4724     80.48869
-BYTES-CONSED     10       6191383968  619016352  619290080  619130000  619138370.0  80104.17
-#+end_src
 ** [[gigamonkeys][gigamonkeys]]
 Gigamonkeys does not do progress reporting
 #+begin_src lisp
   (benchmark:with-timing (10) (test-package))
-
--                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
-REAL-TIME        10       8.509921    0.846659   0.856659   0.849992   0.850992     0.003
-RUN-TIME         10       8.522091    0.848863   0.860674   0.850513   0.852209     0.003309
-USER-RUN-TIME    10       8.502139    0.846733   0.854092   0.849976   0.850214     0.002381
-SYSTEM-RUN-TIME  10       0.019971    0          0.006631   0.000002   0.001997     0.002203
-PAGE-FAULTS      10       0           0          0          0          0            0.0
-GC-RUN-TIME      10       330.405     31.881     35.916     32.204     33.0405      1.41741
-BYTES-CONSED     10       4950815168  495054096  495089584  495087440  495081500.0  13706.401
-EVAL-CALLS       10       0           0          0          0          0            0.0
+  -                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
+  REAL-TIME        10       7.893314    0.783331   0.813332   0.786665   0.789331     0.008406
+  RUN-TIME         10       7.887205    0.780954   0.816817   0.785493   0.78872      0.009683
+  USER-RUN-TIME    10       7.850746    0.777678   0.796806   0.785181   0.785075     0.005411
+  SYSTEM-RUN-TIME  10       0.036482    0          0.02001    0.000027   0.003648     0.005858
+  PAGE-FAULTS      10       0           0          0          0          0            0.0
+  GC-RUN-TIME      10       190.862     14.962     40.392     16.909     19.0862      7.12733
+  BYTES-CONSED     10       4788180016  478635504  479903744  478708672  478818000.0  363684.38
+  EVAL-CALLS       10       0           0          0          0          0            0.0
 #+end_src
 The CCL version
 #+begin_src lisp
--          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
-REAL-TIME  10       30.610546  3.024176  3.284612  3.033481  3.061055  0.075138
-RUN-TIME   10       30.627195  3.026633  3.285767  3.035477  3.06272   0.074814
+  -          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
+  REAL-TIME  10       19.166885  1.904093  1.946594  1.914582  1.916688  0.011433
+  RUN-TIME   10       19.129244  1.90118   1.94372   1.911262  1.912924  0.011477
+#+end_src
 
-#+end_src
-** [[confidence][confidence]]
-Confidence has no built in capability for running all the tests in a suite or package, so this is based on creating a function that just runs all the tests for uax-15-confidence-tests.
-
-There is no way to turn off the progress report.
-#+begin_src lisp
-(benchmark:with-timing (10) (uax-15-confidence-tests:run-all-tests))
--                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE    DEVIATION
-REAL-TIME        10       7.906594    0.776659   0.856658   0.783326   0.790659   0.022548
-RUN-TIME         10       7.904968    0.777959   0.857393   0.782869   0.790497   0.022549
-USER-RUN-TIME    10       7.795143    0.761309   0.82076    0.774808   0.779514   0.015074
-SYSTEM-RUN-TIME  10       0.10984     0          0.036632   0.006663   0.010984   0.010646
-PAGE-FAULTS      10       0           0          0          0          0          0.0
-GC-RUN-TIME      10       411.1       31.975     98.302     36.429     41.11      19.192804
-BYTES-CONSED     10       4034319280  403009904  407150416  403012320  403431928  1239563.6
-EVAL-CALLS       10       0           0          0          0          0          0.0
-#+end_src
-The CCL version:
-#+begin_src lisp
--          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
-REAL-TIME  10       15.73      1.551425  1.603039  1.561077  1.573     0.019737
-RUN-TIME   10       15.730825  1.551544  1.602959  1.561094  1.573082  0.019757
-#+end_src
 ** [[lift][lift]]
 Lift says that there were 16 successful tests, but does not specify the number of successful assertions, so no progress reports..
 #+begin_src lisp
-(benchmark:with-timing (10) (run-tests :suite 'uax-lift-15))
--                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
-REAL-TIME        10       6.60661     0.653326   0.693328   0.656661   0.660661     0.011136
-RUN-TIME         10       6.604042    0.652423   0.693389   0.657587   0.660404     0.011164
-USER-RUN-TIME    10       6.590675    0.652425   0.683388   0.657588   0.659068     0.008398
-SYSTEM-RUN-TIME  10       0.01338     0          0.01       0          0.001338     0.003049
-PAGE-FAULTS      10       0           0          0          0          0            0.0
-GC-RUN-TIME      10       278.852     23.49      40.71      27.184     27.8852      4.50024
-BYTES-CONSED     10       3662570128  365002000  377114400  365003264  366257020.0  3620682.0
-EVAL-CALLS       10       0           0          0          0          0            0.0
+  (benchmark:with-timing (10) (run-tests :suite 'uax-lift-15))
+  -                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE    DEVIATION
+  REAL-TIME        10       6.076652    0.596666   0.666665   0.599999   0.607665   0.019779
+  RUN-TIME         10       6.068622    0.596521   0.664457   0.601027   0.606862   0.019258
+  USER-RUN-TIME    10       6.035427    0.593182   0.644546   0.599972   0.603543   0.013911
+  SYSTEM-RUN-TIME  10       0.03322     0          0.019911   0.000003   0.003322   0.005932
+  PAGE-FAULTS      10       0           0          0          0          0          0.0
+  GC-RUN-TIME      10       189.801     14.242     51.038     14.762     18.9801    10.741669
+  BYTES-CONSED     10       3480602800  347045776  356690112  347112656  348060280  2876791.8
+  EVAL-CALLS       10       0           0          0          0          0          0.0
+
 #+end_src
 The CCL version of the benchmark resulted in this:
 #+begin_src lisp
   (benchmark:with-timing (10) (run-tests :suite 'uax-lift-15))
-
--          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
-REAL-TIME  10       11.619499  1.15895   1.172787  1.159915  1.16195   0.003887
-RUN-TIME   10       11.604948  1.156783  1.170432  1.158835  1.160495  0.003818
+  -          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
+  REAL-TIME  10       11.987319  1.186334  1.216747  1.196841  1.198732  0.008089
+  RUN-TIME   10       11.970636  1.185057  1.215185  1.195852  1.197064  0.008253
 #+end_src
 ** [[lisp-unit][lisp-unit]]
 No progress reports
 #+begin_src lisp
-(benchmark:with-timing (10) (run-tests))
--                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE    DEVIATION
-REAL-TIME        10       7.866596    0.769993   0.816659   0.776658   0.78666    0.016124
-RUN-TIME         10       7.859482    0.771481   0.813944   0.77546    0.785948   0.015153
-USER-RUN-TIME    10       7.762971    0.765489   0.797356   0.772805   0.776297   0.008726
-SYSTEM-RUN-TIME  10       0.096526    0          0.026643   0.009915   0.009653   0.009454
-PAGE-FAULTS      10       0           0          0          0          0          0.0
-GC-RUN-TIME      10       444.581     35.22      63.385     37.716     44.4581    10.282556
-BYTES-CONSED     10       4411139200  440744928  444310816  440759072  441113920  1065665.8
-EVAL-CALLS       10       160         16         16         16         16         0.0
+  (benchmark:with-timing (10) (run-tests))
+  -                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
+  REAL-TIME        10       7.129982    0.699998   0.786665   0.703331   0.712998     0.025186
+  RUN-TIME         10       7.125096    0.699222   0.788776   0.7028     0.71251      0.026041
+  USER-RUN-TIME    10       7.068603    0.692563   0.765489   0.699554   0.70686      0.019895
+  SYSTEM-RUN-TIME  10       0.056505    0.000003   0.023286   0.003277   0.00565      0.00699
+  PAGE-FAULTS      10       0           0          0          0          0            0.0
+  GC-RUN-TIME      10       260.177     19.339     60.275     21.956     26.0177      11.598406
+  BYTES-CONSED     10       4222413456  421806272  425655232  421847136  422241340.0  1138669.0
+  EVAL-CALLS       10       160         16         16         16         16           0.0
 #+end_src
 Now the CCL version:
 #+begin_src lisp
--          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
-REAL-TIME  10       13.336789  1.326142  1.349726  1.330619  1.333679  0.007343
-RUN-TIME   10       13.344638  1.323655  1.347442  1.330136  1.334464  0.008201
-NIL
+  -          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
+  REAL-TIME  10       13.487027  1.339966  1.362137  1.349544  1.348703  0.007266
+  RUN-TIME   10       13.454422  1.337902  1.359824  1.343596  1.345442  0.007124
 #+end_src
 ** [[lisp-unit2][list-unit2]]
 No progress reports
 #+begin_src lisp
   (benchmark:with-timing (10) (run-tests))
   -                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
-  REAL-TIME        10       10.796587   1.036659   1.369989   1.043326   1.079659     0.097198
-  RUN-TIME         10       10.788351   1.033685   1.36925    1.04422    1.078835     0.097286
-  USER-RUN-TIME    10       10.555075   1.017118   1.282673   1.026415   1.055508     0.076476
-  SYSTEM-RUN-TIME  10       0.23329     0.010035   0.086577   0.013448   0.023329     0.021721
-  PAGE-FAULTS      10       0           0          0          0          0            0.0
-  GC-RUN-TIME      10       1076.758    66.774     399.308    75.839     107.6758     97.46117
-  BYTES-CONSED     10       5127796976  512756560  512800544  512778608  512779700.0  13773.206
-  EVAL-CALLS       10       0           0          0          0          0            0.0
+REAL-TIME        10       9.306638    0.899997   0.956663   0.923331   0.930664     0.019709
+RUN-TIME         10       9.29662     0.90105    0.953252   0.924323   0.929662     0.018766
+USER-RUN-TIME    10       9.126992    0.895342   0.93455    0.908129   0.912699     0.01386
+SYSTEM-RUN-TIME  10       0.169641    0.00335    0.033231   0.016619   0.016964     0.010221
+PAGE-FAULTS      10       0           0          0          0          0            0.0
+GC-RUN-TIME      10       512.84      32.691     73.531     42.772     51.284       15.129883
+BYTES-CONSED     10       4939787968  493387600  498633408  493461152  493978780.0  1552274.1
+EVAL-CALLS       10       0           0          0          0          0            0.0
 #+end_src
-No CCL version because CCL decide not to compile lisp-unit2.
-** [[nst][nst]]
-NST's results were surprisingly bad. I ran tests with and without :cache being set on each fixture and it did not seem to make much of a difference.
+Now the CCL version:
 #+begin_src lisp
-(benchmark:with-timing (10) (nst-cmd :run :uax-15-nst))
--                SAMPLES  TOTAL         MINIMUM      MAXIMUM      MEDIAN       AVERAGE        DEVIATION
-REAL-TIME        10       522.56226     52.202904    52.3729      52.24624     52.25623       0.048742
-RUN-TIME         10       522.1588      52.14377     52.32057     52.210835    52.215885      0.047927
-USER-RUN-TIME    10       520.0237      51.92075     52.0908      51.99614     52.00237       0.046089
-SYSTEM-RUN-TIME  10       2.135158      0.186492     0.236569     0.209909     0.213516       0.01544
-PAGE-FAULTS      10       0             0            0            0            0              0.0
-GC-RUN-TIME      10       16532.35      1629.216     1679.521     1656.667     1653.2349      17.045515
-BYTES-CONSED     10       319321472704  31931030448  31942032624  31931048176  31932148000.0  3295139.8
-EVAL-CALLS       10       6768780       676878       676878       676878       676878         0.0
+  -          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
+  REAL-TIME  10       30.287363  2.994757  3.274799  3.001426  3.028736  0.082134
+  RUN-TIME   10       30.244043  2.990828  3.270884  2.996805  3.024404  0.082271
+#+end_src
+
+** [[nst][nst]]
+NST's results were surprisingly bad. I ran tests with and without :cache being set on each fixture and it did not seem to make much of a difference. At this point I do not know if the issue is with NST or an error between chair and keyboard.
+#+begin_src lisp
+  (benchmark:with-timing (10) (nst-cmd :run :uax-15-nst))
+  -                SAMPLES  TOTAL         MINIMUM      MAXIMUM      MEDIAN       AVERAGE      DEVIATION
+  REAL-TIME        10       516.88855     51.526524    51.85985     51.67986     51.688854    0.105207
+  RUN-TIME         10       517.8853      51.65252     51.97778     51.795273    51.788532    0.090498
+  USER-RUN-TIME    10       515.4022      51.376358    51.718292    51.56273     51.540226    0.092005
+  SYSTEM-RUN-TIME  10       2.483108      0.206179     0.282712     0.258424     0.248311     0.027323
+  PAGE-FAULTS      10       0             0            0            0            0            0.0
+  GC-RUN-TIME      10       11704.455     1081.936     1224.102     1173.542     1170.4456    33.417885
+  BYTES-CONSED     10       306684151680  30666874416  30677103952  30667547952  30668415168  2911205.3
+  EVAL-CALLS       10       6860220       686022       686022       686022       686022       0.0
 #+end_src
 The CCL version:
 #+begin_src lisp
--          SAMPLES  TOTAL      MINIMUM   MAXIMUM    MEDIAN     AVERAGE    DEVIATION
-REAL-TIME  10       490.6759   48.98529  49.147766  49.05929   49.067593  0.040534
-RUN-TIME   10       490.84375  49.00008  49.194897  49.082294  49.084373  0.048305
+  -          SAMPLES  TOTAL     MINIMUM   MAXIMUM    MEDIAN    AVERAGE    DEVIATION
+  REAL-TIME  10       501.6569  49.96337  50.555893  50.08843  50.16569   0.18232
+  RUN-TIME   10       500.4885  49.85959  50.36908   49.97486  50.048847  0.165674
 #+end_src
 ** [[parachute][parachute]]
 <<benchmarking-parachute>>
 Progress reporting turned off by using the quiet report.
 #+begin_src lisp
   (benchmark:with-timing (10) (test 'suite :report 'quiet))
-
-  SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
-  REAL-TIME        10       11.783255   1.133325   1.303324   1.149992   1.178326     0.056906
-  RUN-TIME         10       11.76993    1.133041   1.300795   1.147235   1.176993     0.05646
-  USER-RUN-TIME    10       11.237235   1.079734   1.240937   1.098715   1.123724     0.047878
-  SYSTEM-RUN-TIME  10       0.532717    0.029905   0.086578   0.049991   0.053272     0.016382
+  -                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
+  REAL-TIME        10       9.929974    0.913331   1.089997   0.969997   0.992997     0.063411
+  RUN-TIME         10       9.91559     0.912637   1.089303   0.970189   0.991559     0.062786
+  USER-RUN-TIME    10       9.403031    0.879351   1.042706   0.916937   0.940303     0.056901
+  SYSTEM-RUN-TIME  10       0.512589    0.02995    0.073216   0.046596   0.051259     0.014293
   PAGE-FAULTS      10       0           0          0          0          0            0.0
-  GC-RUN-TIME      10       2197.263    187.204    323.411    198.264    219.7263     38.07161
-  BYTES-CONSED     10       5357258016  528976624  596222960  529004640  535725800.0  20165728.0
+  GC-RUN-TIME      10       1677.654    106.9      267.475    143.608    167.7654     51.604637
+  BYTES-CONSED     10       5212345824  512596848  598222384  512680656  521234600.0  25662644.0
   EVAL-CALLS       10       0           0          0          0          0            0.0
+
 #+end_src
 The same benchmark with CCL:
 #+begin_src lisp
--          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
-REAL-TIME  10       35.034126  3.446474  3.589289  3.496444  3.503413  0.038255
-RUN-TIME   10       35.019848  3.44557   3.593415  3.491784  3.501985  0.040734
-NIL
+  -          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
+  REAL-TIME  10       40.437767  4.010897  4.063527  4.042738  4.043777  0.013439
+  RUN-TIME   10       40.37925   4.007424  4.053993  4.037376  4.037925  0.011995
+  NIL
 #+end_src
 ** [[prove][prove]]
 <<benchmarking-prove>>
 The prove tests were done with the =*default-reporter*= set to =:dot= because there is no way to turn off the progress reporting. The times were surprisingly slow (not clunit slow, but roughly five times longer than the other frameworks), with no real difference between running in a terminal window or in an emacs REPL.
 #+begin_src lisp
-(benchmark:with-timing (10) (run-all-uax-15))
-                SAMPLES  TOTAL        MINIMUM     MAXIMUM     MEDIAN      AVERAGE     DEVIATION
-REAL-TIME        10       53.35967     4.923303    5.596632    5.359966    5.335967    0.191425
-RUN-TIME         10       31.261152    3.050384    3.377765    3.100676    3.126115    0.091643
-USER-RUN-TIME    10       30.215063    2.950801    3.197486    2.983159    3.021506    0.070946
-SYSTEM-RUN-TIME  10       1.046104     0.075742    0.180281    0.093283    0.10461     0.029117
-PAGE-FAULTS      10       0            0           0           0           0           0.0
-GC-RUN-TIME      10       2573.17      169.012     522.004     217.099     257.317     96.44223
-BYTES-CONSED     10       14124826480  1405710432  1439239664  1405725840  1412482648  10476879.0
-EVAL-CALLS       10       0            0           0           0           0           0.0
+  (benchmark:with-timing (10) (run-all-uax-15))
+  -                SAMPLES  TOTAL        MINIMUM     MAXIMUM     MEDIAN      AVERAGE       DEVIATION
+  REAL-TIME        10       66.02316     6.323317    6.976648    6.516648    6.602316      0.192082
+  RUN-TIME         10       30.561893    2.896409    3.223873    3.053162    3.056189      0.099394
+  USER-RUN-TIME    10       29.63921     2.823159    3.153962    2.939861    2.963921      0.092085
+  SYSTEM-RUN-TIME  10       0.922708     0.069913    0.133064    0.079994    0.092271      0.020397
+  PAGE-FAULTS      10       0            0           0           0           0             0.0
+  GC-RUN-TIME      10       2216.068     137.512     437.243     197.665     221.6068      81.27371
+  BYTES-CONSED     10       14018185696  1394824144  1428527632  1395103136  1401818600.0  10494809.0
+  EVAL-CALLS       10       0            0           0           0           0             0.0
+
 #+end_src
 The CCL version:
 #+begin_src lisp
--          SAMPLES  TOTAL      MINIMUM    MAXIMUM    MEDIAN     AVERAGE    DEVIATION
-REAL-TIME  10       116.92284  11.292191  12.127493  11.640758  11.692284  0.26381
-RUN-TIME   10       116.86357  11.283448  12.121286  11.633533  11.686357  0.264158
+  -          SAMPLES  TOTAL      MINIMUM    MAXIMUM    MEDIAN     AVERAGE    DEVIATION
+  REAL-TIME  10       229.77249  12.113011  57.055473  12.571996  22.97725   16.502855
+  RUN-TIME   10       132.14566  12.067512  16.609463  12.487875  13.214567  1.402868
 #+end_src
 ** [[ptester][ptester]]
 The benchmarking was done with a single function (ptester-tests) that called all the tests. Progess reporting cannot be turned off.
 #+begin_src lisp
--                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
-REAL-TIME        10       9.003254    0.879991   0.919993   0.899992   0.900325     0.015738
-RUN-TIME         10       9.0088      0.879493   0.92187    0.898636   0.90088      0.015573
-USER-RUN-TIME    10       8.855853    0.876179   0.899495   0.881767   0.885585     0.007137
-SYSTEM-RUN-TIME  10       0.152978    0.000027   0.043389   0.003385   0.015298     0.014619
-PAGE-FAULTS      10       0           0          0          0          0            0.0
-GC-RUN-TIME      10       339.523     19.892     53.051     29.351     33.9523      10.742064
-BYTES-CONSED     10       5195902592  519572448  519605984  519591104  519590270.0  12074.577
-EVAL-CALLS       10       0           0          0          0          0            0.0
+  -                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
+  REAL-TIME        10       6.209992    0.613333   0.663334   0.616665   0.620999     0.014303
+  RUN-TIME         10       6.20006     0.611543   0.660918   0.615629   0.620006     0.013763
+  USER-RUN-TIME    10       6.150195    0.604901   0.630972   0.614696   0.61502      0.006247
+  SYSTEM-RUN-TIME  10       0.049889    0          0.029945   0.003299   0.004989     0.008579
+  PAGE-FAULTS      10       0           0          0          0          0            0.0
+  GC-RUN-TIME      10       166.527     12.391     45.026     13.742     16.6527      9.467175
+  BYTES-CONSED     10       3690505472  369001712  369094144  369043328  369050560.0  26112.266
+  EVAL-CALLS       10       0           0          0          0          0            0.0
+
 #+end_src
 The CCL version:
 #+begin_src lisp
--          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
-REAL-TIME  10       22.3047    2.07826   2.369612  2.307167  2.23047   0.118142
-RUN-TIME   10       22.307024  2.072661  2.370712  2.302883  2.230702  0.118646
+  -          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
+  REAL-TIME  10       12.558413  1.240772  1.280743  1.251957  1.255841  0.010159
+  RUN-TIME   10       12.513009  1.239555  1.27798   1.24801   1.251301  0.009971
 #+end_src
 ** [[rove][rove]]
 <<benchmarking-rove>>
-I ran into an as yet unidentified issue with rove and SBCL. Several attempts to run the benchmark on SBCL triggered heap exhaustion during garbage collection (even on a clean SBCL instance). Below are the results for the one clean run of 10 iterations that I did get.
 
 #+begin_src lisp
-(benchmark:with-timing (10) (run :uax-15-rove-tests :style :none))
-
--                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
-REAL-TIME        10       18.219845   1.536653   2.41998    1.69332    1.821984     0.266849
-RUN-TIME         10       18.222372   1.536997   2.420086   1.693447   1.822237     0.266392
-USER-RUN-TIME    10       16.82601    1.466989   2.123462   1.60346    1.682601     0.193403
-SYSTEM-RUN-TIME  10       1.396386    0.049999   0.296627   0.10344    0.139639     0.074402
-PAGE-FAULTS      10       0           0          0          0          0            0.0
-GC-RUN-TIME      10       6424.622    381.013    1233.202   516.577    642.4622     253.83493
-BYTES-CONSED     10       8960510816  895972464  896586032  895994096  896051100.0  178432.86
-EVAL-CALLS       10       130         13         13         13         13           0.0
+  (benchmark:with-timing (10) (run :uax-15-rove-tests :style :none))
+  -                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
+  REAL-TIME        10       11.879972   1.139999   1.223331   1.189997   1.187997     0.025957
+  RUN-TIME         10       11.86156    1.138402   1.223247   1.187435   1.186156     0.026327
+  USER-RUN-TIME    10       11.185844   1.068141   1.144235   1.126029   1.118584     0.021292
+  SYSTEM-RUN-TIME  10       0.675742    0.03663    0.09343    0.06979    0.067574     0.017528
+  PAGE-FAULTS      10       0           0          0          0          0            0.0
+  GC-RUN-TIME      10       2986.486    259.002    332.193    304.989    298.6486     24.707445
+  BYTES-CONSED     10       7427051216  740502400  762046592  740546112  742705150.0  6447249.0
+  EVAL-CALLS       10       9           0          9          0          0.9          2.7
 #+end_src
-I did not have the same problem running the same benchmark test with CCL, but obviously apples and oranges. Here is the CCL benchmark.
+Now the CCL versioin
 #+begin_src lisp
-    (benchmark:with-timing (10) (run :uax-15-rove-tests :style :none))
--          SAMPLES  TOTAL      MINIMUM  MAXIMUM   MEDIAN    AVERAGE   DEVIATION
-REAL-TIME  10       41.76701   3.8768   4.341102  4.16477   4.176701  0.132818
-RUN-TIME   10       41.799763  3.87051  4.346589  4.170243  4.179976  0.135506
+  (benchmark:with-timing (10) (run :uax-15-rove-tests :style :none))
+  -          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
+  REAL-TIME  10       35.897484  3.53852   3.666501  3.562608  3.589748  0.044875
+  RUN-TIME   10       35.826942  3.532155  3.660664  3.558934  3.582694  0.045938
 #+end_src
 ** [[rt][rt]]
 Rt reports only the tests, not the assertions.
 #+begin_src lisp
-(benchmark:with-timing (10) (do-tests))
+  (benchmark:with-timing (10) (do-tests))
   -                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
-  REAL-TIME        10       7.053279    0.696661   0.739993   0.699995   0.705328     0.01284
-  RUN-TIME         10       7.045017    0.695458   0.737783   0.698051   0.704502     0.012506
-  USER-RUN-TIME    10       6.97191     0.684028   0.73121    0.695708   0.697191     0.012348
-  SYSTEM-RUN-TIME  10       0.073117    0          0.026694   0.003303   0.007312     0.0084
+  REAL-TIME        10       6.216662    0.613332   0.643333   0.616665   0.621666     0.009689
+  RUN-TIME         10       6.207924    0.610565   0.640804   0.618108   0.620792     0.009539
+  USER-RUN-TIME    10       6.118069    0.598097   0.630868   0.610568   0.611807     0.00845
+  SYSTEM-RUN-TIME  10       0.089871    0          0.020013   0.003355   0.008987     0.007601
   PAGE-FAULTS      10       0           0          0          0          0            0.0
-  GC-RUN-TIME      10       287.186     23.124     55.806     24.106     28.7186      9.336387
-  BYTES-CONSED     10       3781963056  378147840  378340736  378182688  378196300.0  50474.535
+  GC-RUN-TIME      10       219.521     16.74      44.619     18.213     21.9521      7.871968
+  BYTES-CONSED     10       3586779376  358638608  358705088  358675856  358677950.0  17602.818
   EVAL-CALLS       10       480         48         48         48         48           0.0
+
 #+end_src
 Now CCL version:
 #+begin_src lisp
--          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
-REAL-TIME  10       11.663611  1.155944  1.180289  1.166971  1.166361  0.006513
-RUN-TIME   10       11.68608   1.157109  1.18317   1.169409  1.168608  0.006879
+  -          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
+  REAL-TIME  10       11.99317   1.183099  1.219643  1.194585  1.199317  0.012819
+  RUN-TIME   10       11.909768  1.180592  1.202258  1.190041  1.190977  0.006007
 #+end_src
 ** [[should-test][should-test]]
 Should-test prints out the name of each test with OK.
 #+begin_src lisp
   (benchmark:with-timing (10) (test))
--                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
-REAL-TIME        10       8.156594    0.803326   0.896659   0.806659   0.815659     0.027082
-RUN-TIME         10       8.16205     0.802968   0.897908   0.808052   0.816205     0.02732
-USER-RUN-TIME    10       8.122097    0.798071   0.877938   0.80472    0.81221      0.022233
-SYSTEM-RUN-TIME  10       0.039968    0          0.019971   0.000005   0.003997     0.006101
-PAGE-FAULTS      10       0           0          0          0          0            0.0
-GC-RUN-TIME      10       440.966     33.525     112.947    38.192     44.0966      23.066162
-BYTES-CONSED     10       4033912496  403038928  406439808  403043248  403391230.0  1016250.75
-EVAL-CALLS       10       0           0          0          0          0            0.0
+  -                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
+  REAL-TIME        10       7.179996    0.709999   0.766666   0.713332   0.718        0.016343
+  RUN-TIME         10       7.171032    0.709636   0.768002   0.711339   0.717103     0.017043
+  USER-RUN-TIME    10       7.12796     0.703418   0.751316   0.7081     0.712796     0.013232
+  SYSTEM-RUN-TIME  10       0.043095    0          0.016688   0.003242   0.00431      0.004734
+  PAGE-FAULTS      10       0           0          0          0          0            0.0
+  GC-RUN-TIME      10       167.82      12.366     53.552     12.436     16.782       12.267456
+  BYTES-CONSED     10       3859488496  385585888  388806016  385627600  385948860.0  952933.5
+  EVAL-CALLS       10       0           0          0          0          0            0.0
 #+end_src
 The CCL version
 #+begin_src lisp
--          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
-REAL-TIME  10       24.659025  2.453905  2.483674  2.463236  2.465902  0.008501
-RUN-TIME   10       24.66664   2.456116  2.481225  2.466268  2.466664  0.007466
+  -          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
+  REAL-TIME  10       25.263529  2.514491  2.538153  2.52439   2.526353  0.007306
+  RUN-TIME   10       25.18316   2.508538  2.532314  2.518607  2.518316  0.006587
 #+end_src
 ** [[tap-unit-test][tap-unit-test]]
 No progress reporting.
 #+begin_src lisp
   (benchmark:with-timing (10) (run-tests))
-                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE    DEVIATION
-REAL-TIME        10       7.973262    0.776659   0.929992   0.779994   0.797326   0.044442
-RUN-TIME         10       7.974663    0.77693    0.932383   0.781873   0.797466   0.045228
-USER-RUN-TIME    10       7.891431    0.761086   0.909074   0.775958   0.789143   0.040629
-SYSTEM-RUN-TIME  10       0.083247    0          0.033295   0.003331   0.008325   0.010865
-PAGE-FAULTS      10       0           0          0          0          0          0.0
-GC-RUN-TIME      10       484.082     33.188     154.321    35.693     48.4082    35.405758
-BYTES-CONSED     10       4406207680  440607680  440635344  440620080  440620768  8083.716
-EVAL-CALLS       10       160         16         16         16         16         0.0
+  -                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
+  REAL-TIME        10       7.009999    0.686666   0.736665   0.693334   0.701        0.014761
+  RUN-TIME         10       6.998872    0.688417   0.734644   0.694193   0.699887     0.013857
+  USER-RUN-TIME    10       6.949086    0.687007   0.718025   0.689829   0.694909     0.010584
+  SYSTEM-RUN-TIME  10       0.049802    0.000008   0.016621   0.003327   0.00498      0.004523
+  PAGE-FAULTS      10       0           0          0          0          0            0.0
+  GC-RUN-TIME      10       152.373     7.746      40.42      11.712     15.2373      9.486478
+  BYTES-CONSED     10       4217541312  421678080  421820960  421733744  421754140.0  41600.227
+  EVAL-CALLS       10       160         16         16         16         16           0.0
+
 #+end_src
 The CCL version:
 #+begin_src lisp
--          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
-REAL-TIME  10       13.113791  1.305049  1.321753  1.310286  1.311379  0.005856
-RUN-TIME   10       13.095441  1.304772  1.315464  1.30753   1.309544  0.003755
+  -          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
+  REAL-TIME  10       13.258068  1.311242  1.367641  1.322649  1.325807  0.01496
+  RUN-TIME   10       13.228476  1.309399  1.364858  1.319752  1.322848  0.014998
 #+end_src
+
+** try
+First the SBCL version
+#+begin_src lisp
+  -                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
+REAL-TIME        10       14.643297   1.453329   1.529996   1.456663   1.46433      0.022113
+RUN-TIME         10       14.618829   1.449815   1.530918   1.454007   1.461883     0.023133
+USER-RUN-TIME    10       14.588861   1.447368   1.514259   1.452136   1.458886     0.018746
+SYSTEM-RUN-TIME  10       0.030001    0          0.016658   0.000004   0.003        0.005039
+PAGE-FAULTS      10       0           0          0          0          0            0.0
+GC-RUN-TIME      10       208.982     16.999     54.556     17.101     20.8982      11.22053
+BYTES-CONSED     10       9019833552  901957296  902012768  901979472  901983360.0  15399.991
+EVAL-CALLS       10       0           0          0          0          0            0.0
+#+end_src
+Now the CCL Version
+#+begin_src lisp
+-          SAMPLES  TOTAL      MINIMUM   MAXIMUM    MEDIAN     AVERAGE    DEVIATION
+REAL-TIME  10       178.21579  17.72332  17.91731   17.834017  17.82158   0.06565
+RUN-TIME   10       177.88414  17.69016  17.892391  17.789274  17.788414  0.066341
+#+end_src
+
 ** [[unit-test][unit-test]]
 Progress reporting on tests, not assertions
 #+begin_src lisp
-(benchmark:with-timing (10) (run-all-tests))
--                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
-REAL-TIME        10       7.549933    0.71666    0.856659   0.729994   0.754993     0.047004
-RUN-TIME         10       7.556039    0.717151   0.857157   0.73066    0.755604     0.047087
-USER-RUN-TIME    10       7.37959     0.706391   0.821589   0.717151   0.737959     0.039426
-SYSTEM-RUN-TIME  10       0.176461    0.000002   0.049935   0.013322   0.017646     0.013324
-PAGE-FAULTS      10       0           0          0          0          0            0.0
-GC-RUN-TIME      10       850.624     52.211     190.571    63.007     85.0624      41.03387
-BYTES-CONSED     10       3842573536  381252624  411219072  381259776  384257340.0  8987242.0
-EVAL-CALLS       10       0           0          0          0          0            0.0
+  (benchmark:with-timing (10) (run-all-tests))
+  -                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
+  REAL-TIME        10       6.373335    0.613332   0.710001   0.629999   0.637334     0.026658
+  RUN-TIME         10       6.361601    0.613024   0.708814   0.628271   0.63616      0.02653
+  USER-RUN-TIME    10       6.28175     0.610608   0.702157   0.618595   0.628175     0.026044
+  SYSTEM-RUN-TIME  10       0.079867    0.000004   0.016669   0.00665    0.007987     0.005205
+  PAGE-FAULTS      10       0           0          0          0          0            0.0
+  GC-RUN-TIME      10       327.129     18.211     57.563     28.737     32.7129      12.666767
+  BYTES-CONSED     10       3668546192  363377264  397349504  363448128  366854620.0  10165068.0
+  EVAL-CALLS       10       0           0          0          0          0            0.0
+
 #+end_src
 The CCL version:
 #+begin_src lisp
--          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
-REAL-TIME  10       17.873028  1.676715  2.000257  1.68315   1.787303  0.129952
-RUN-TIME   10       17.880577  1.6739    2.00028   1.686198  1.788058  0.129957
+  -          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
+  REAL-TIME  10       17.734257  1.730896  1.833714  1.737197  1.773426  0.045684
+  RUN-TIME   10       17.669695  1.724412  1.830537  1.729753  1.766969  0.045973
 #+end_src
 ** [[xlunit][xlunit]]
 Xlunit does progress reports only on the tests, not the assertions.
 #+begin_src lisp
-(benchmark:with-timing (10) (xlunit:textui-test-run (xlunit:get-suite uax-15)))
--                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
-REAL-TIME        10       6.579943    0.649994   0.693328   0.653327   0.657994     0.012311
-RUN-TIME         10       6.584024    0.651812   0.693726   0.653186   0.658402     0.012139
-USER-RUN-TIME    10       6.547395    0.642397   0.670408   0.653116   0.65474      0.007082
-SYSTEM-RUN-TIME  10       0.03665     0          0.023319   0.000003   0.003665     0.007213
-PAGE-FAULTS      10       0           0          0          0          0            0.0
-GC-RUN-TIME      10       246.993     19.932     50.002     23.138     24.6993      8.570283
-BYTES-CONSED     10       3547926336  354158256  359179296  354160208  354792640.0  1513466.4
-EVAL-CALLS       10       0           0          0          0          0            0.0
+  (benchmark:with-timing (10) (xlunit:textui-test-run (xlunit:get-suite uax-15)))
+  -                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
+  REAL-TIME        10       5.916651    0.586665   0.609998   0.586666   0.591665     0.008465
+  RUN-TIME         10       5.910279    0.585645   0.610623   0.58654    0.591028     0.008659
+  USER-RUN-TIME    10       5.880327    0.582374   0.598663   0.585712   0.588033     0.005418
+  SYSTEM-RUN-TIME  10       0.029973    0          0.013315   0.000023   0.002997     0.004059
+  PAGE-FAULTS      10       0           0          0          0          0            0.0
+  GC-RUN-TIME      10       102.22      8.052      17.68      8.219      10.222       3.462927
+  BYTES-CONSED     10       3367157968  336039856  340887936  336103936  336715800.0  1445466.0
+  EVAL-CALLS       10       0           0          0          0          0            0.0
+
 #+end_src
 The CCL version:
 #+begin_src lisp
--          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
-REAL-TIME  10       11.600723  1.148456  1.19076   1.156022  1.160072  0.011422
-RUN-TIME   10       11.617545  1.148918  1.190917  1.159512  1.161754  0.011414
+  -          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
+  REAL-TIME  10       11.781408  1.159445  1.203044  1.176365  1.178141  0.010789
+  RUN-TIME   10       11.753234  1.158247  1.200881  1.171458  1.175323  0.01094
 #+end_src
 ** [[xptest][xptest]]
 #+begin_src lisp
-(benchmark:with-timing (10) (report-result (run-test *uax-15-suite*)))
-
- -                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
-REAL-TIME        10       6.513276    0.643327   0.689994   0.646661   0.651328     0.013098
-RUN-TIME         10       6.515137    0.643435   0.689399   0.647958   0.651514     0.012776
-USER-RUN-TIME    10       6.49848     0.640105   0.679408   0.647958   0.649848     0.010321
-SYSTEM-RUN-TIME  10       0.01668     0          0.009991   0.000003   0.001668     0.00307
-PAGE-FAULTS      10       0           0          0          0          0            0.0
-GC-RUN-TIME      10       253.887     20.3       51.813     23.71      25.3887      8.99575
-BYTES-CONSED     10       3545190064  354157152  357744240  354158784  354519000.0  1075096.0
-EVAL-CALLS       10       0           0          0          0          0            0.0
+  (benchmark:with-timing (10) (report-result (run-test *uax-15-suite*)))
+  -                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
+  REAL-TIME        10       5.899985    0.583332   0.629999   0.586665   0.589998     0.013499
+  RUN-TIME         10       5.89038     0.580846   0.626912   0.584578   0.589038     0.012844
+  USER-RUN-TIME    10       5.860286    0.577223   0.616916   0.582145   0.586029     0.010817
+  SYSTEM-RUN-TIME  10       0.030112    0.000034   0.00999    0.003309   0.003011     0.003122
+  PAGE-FAULTS      10       0           0          0          0          0            0.0
+  GC-RUN-TIME      10       111.974     7.402      41.731     7.481      11.1974      10.193354
+  BYTES-CONSED     10       3363654192  336079376  338668864  336105504  336365400.0  768173.25
+  EVAL-CALLS       10       0           0          0          0          0            0.0
 #+end_src
 The CCL version:
 #+begin_src lisp
--          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
-REAL-TIME  10       11.375671  1.133088  1.148804  1.136425  1.137567  0.004255
-RUN-TIME   10       11.397292  1.133247  1.151431  1.139366  1.139729  0.004538
+  -          SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
+  REAL-TIME  10       11.744589  1.165611  1.195676  1.172062  1.174459  0.008469
+  RUN-TIME   10       11.728494  1.164599  1.192888  1.170583  1.172849  0.007959
 #+end_src
 
 [[top][top]]
@@ -1561,32 +1612,33 @@ RUN-TIME   10       11.397292  1.133247  1.151431  1.139366  1.139729  0.004538
 I expect all libraries to have the equivalent of is, signals and maybe finishes. This table just validates that assumption AND whether assertions accept an optional diagnostic string.
 #+CAPTION: Assertion Functions-1a
 #+ATTR_HTML: :border 2 :rules all :frame border
-| Library       | Optional string | Is  (a)     | signals           | finishes (b) |
-|---------------+-----------------+-------------+-------------------+--------------|
-| [[1am][1am]]           | N               | is          | signals           |              |
-| [[2am][2am]]           | Y (P)           | is          | signals           | finishes     |
-| [[assert-p][assert-p]] (1)  | N               | t-p         | condition-error-p |              |
-| [[clunit][clunit]]        | Y               | assert-true | assert-condition  |              |
-| [[clunit2][clunit2]]       | Y               | assert-true | assert-condition  |              |
-| [[confidence][confidence]]        | N               | assert-true |                   |              |
-| [[gigamonkeys][gigamonkeys]]   | N               | check       | expect            |              |
-| [[fiasco][fiasco]]        | Y (P)           | is          | signals           | finishes     |
-| [[fiveam][fiveam]]        | Y (P)           | is          | signals           | finishes     |
-| [[lift][lift]]          | Y               | ensure      | ensure-condition  |              |
-| [[lisp-unit][lisp-unit]]     | Y               | assert-true | assert-error      |              |
-| [[lisp-unit2][lisp-unit2]]    | Y               | assert-true | assert-error      |              |
-| [[nst][nst]]           | N               | :true       | :err              |              |
-| [[parachute][parachute]]     | Y (P)           | is          | fail              | finish       |
-| [[prove][prove]]         | Y               | is, ok      | is-error          |              |
-| [[ptester][ptester]]  (2)  |                 | test        | test-error        |              |
-| [[rove][rove]]          | Y               | ok          | signals           |              |
-| [[rt][rt]]       (2)  |                 |             |                   |              |
-| [[should-test][should-test]]   | Y               | be          | signals           |              |
-| [[simplet][simplet]]  (2)  |                 |             |                   |              |
-| [[tap-unit-test][tap-unit-test]] | Y               | assert-true | assert-error      |              |
-| [[unit-test][unit-test]]     | Y               | test-assert | test-condition    |              |
-| [[xlunit][xlunit]]        | Y               | assert-true | assert-condition  |              |
-| [[xptest][xptest]]    (2) |                 |             |                   |              |
+| Library       | Optional string | Is  (a)     | signals              | finishes (b) |
+|---------------+-----------------+-------------+----------------------+--------------|
+| [[1am][1am]]           | N               | is          | signals              |              |
+| [[2am][2am]]           | Y (P)           | is          | signals              | finishes     |
+| [[assert-p][assert-p]] (1)  | N               | t-p         | condition-error-p    |              |
+| [[clunit][clunit]]        | Y               | assert-true | assert-condition     |              |
+| [[clunit2][clunit2]]       | Y               | assert-true | assert-condition     |              |
+| [[confidence][confidence]]    | N               | assert-true |                      |              |
+| [[gigamonkeys][gigamonkeys]]   | N               | check       | expect               |              |
+| [[fiasco][fiasco]]        | Y (P)           | is          | signals              | finishes     |
+| [[fiveam][fiveam]]        | Y (P)           | is          | signals              | finishes     |
+| [[lift][lift]]          | Y               | ensure      | ensure-condition     |              |
+| [[lisp-unit][lisp-unit]]     | Y               | assert-true | assert-error         |              |
+| [[lisp-unit2][lisp-unit2]]    | Y               | assert-true | assert-error         |              |
+| [[nst][nst]]           | N               | :true       | :err                 |              |
+| [[parachute][parachute]]     | Y (P)           | is          | fail                 | finish       |
+| [[prove][prove]]         | Y               | is, ok      | is-error             |              |
+| [[ptester][ptester]]  (2)  |                 | test        | test-error           |              |
+| [[rove][rove]]          | Y               | ok          | signals              |              |
+| [[rt][rt]]       (2)  |                 |             |                      |              |
+| [[should-test][should-test]]   | Y               | be          | signals              |              |
+| [[simplet][simplet]]  (2)  |                 |             |                      |              |
+| [[tap-unit-test][tap-unit-test]] | Y               | assert-true | assert-error         |              |
+| [[try][try]]           | Y               | is          | signals, signals-not | verdict      |
+| [[unit-test][unit-test]]     | Y               | test-assert | test-condition       |              |
+| [[xlunit][xlunit]]        | Y               | assert-true | assert-condition     |              |
+| [[xptest][xptest]]    (2) |                 |             |                      |              |
 
 (a) "is" asserts that the form evaluates to not nil
 (b) "finishes" asserts that the body of the test does not signal aany condition
@@ -1650,13 +1702,14 @@ Note to self: Per [[http://clhs.lisp.se/Body/f_null.htm]], null is an empty list
 <<bounded-equality>>
 #+CAPTION: Assertion Functions-2c Bounded Equality
 #+ATTR_HTML: :border 2 :rules all :frame border
-| Library    | Available assertions                                                                                                                                  |
-|------------+-------------------------------------------------------------------------------------------------------------------------------------------------------|
-| [[clunit][clunit]]     | assert-equality*                                                                                                                                      |
-| [[clunit2][clunit2]]    | assert-equality*                                                                                                                                      |
-| [[confidence][confidence]]     | assert-float-is-approximately-equal, assert-float-is-definitely-greater-than, 	assert-float-is-definitely-less-than,  assert-float-is-essentially-equal |
-| [[lisp-unit][lisp-unit]]  | assert-norm-equal,  assert-float-equal,  assert-number-equal,  assert-numerical-equal,  assert-rational-equal,  assert-sigfig-equal,                  |
-| [[lisp-unit2][lisp-unit2]] | assert-norm-equal  assert-float-equal  assert-number-equal  assert-numerical-equal,  assert-rational-equal,  assert-sigfig-equal,                     |
+| Library    | Available assertions                                                                                                                                     |
+|------------+----------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [[clunit][clunit]]     | assert-equality*                                                                                                                                         |
+| [[clunit2][clunit2]]    | assert-equality*                                                                                                                                         |
+| [[confidence][confidence]] | assert-float-is-approximately-equal, assert-float-is-definitely-greater-than, 	assert-float-is-definitely-less-than,  assert-float-is-essentially-equal |
+| [[lisp-unit][lisp-unit]]  | assert-norm-equal,  assert-float-equal,  assert-number-equal,  assert-numerical-equal,  assert-rational-equal,  assert-sigfig-equal,                     |
+| [[lisp-unit2][lisp-unit2]] | assert-norm-equal  assert-float-equal  assert-number-equal  assert-numerical-equal,  assert-rational-equal,  assert-sigfig-equal,                        |
+| try        | float-~=, float-~<, float-~> |
 
 
 #+CAPTION: Assertion Functions-2d other Equality
@@ -1710,15 +1763,17 @@ Note to self: Per [[http://clhs.lisp.se/Body/f_null.htm]], null is an empty list
 
 #+CAPTION: Assertion Functions-4 Membership
 #+ATTR_HTML: :border 2 :rules all :frame border
-| Library       | Every        | Different        | Member        | Contains       |
-|---------------+--------------+------------------+---------------+----------------|
-| [[cl-quickcheck][cl-quickcheck]] |              |                  | a-member      |                |
-| [[fiveam][fiveam]]        | is-every     |                  |               |                |
-| [[confidence][confidence]]        |              |                  |               | assert-subsetp |
-| [[lift][lift]]          | ensure-every | ensure-different | ensure-member |                |
-| [[lisp-unit][lisp-unit]]     | set-equal    |                  |               |                |
-| [[lisp-unit2][lisp-unit2]]    | set-equal    |                  |               |                |
-| [[tap-unit-test][tap-unit-test]] | set-equal    |                  |               |                |
+| Library       | Every        | Different        | Member             | Contains       |
+|---------------+--------------+------------------+--------------------+----------------|
+| [[cl-quickcheck][cl-quickcheck]] |              |                  | a-member           |                |
+| [[fiveam][fiveam]]        | is-every     |                  |                    |                |
+| [[confidence][confidence]]    |              |                  |                    | assert-subsetp |
+| [[lift][lift]]          | ensure-every | ensure-different | ensure-member      |                |
+| [[lisp-unit][lisp-unit]]     | set-equal    |                  |                    |                |
+| [[lisp-unit2][lisp-unit2]]    | set-equal    |                  |                    |                |
+| [[tap-unit-test][tap-unit-test]] | set-equal    |                  |                    |                |
+| [[try][try]]           | match-values | mismatch%        | different-elements |                |
+|               |              |                  |                    |                |
 
 <<assert-expands>><<assert-prints>><<assert-custom>>
 #+CAPTION: Assertion Functions-4 (Prints, Macro Expansion and Custom)
@@ -1797,29 +1852,30 @@ Note to self: Per [[http://clhs.lisp.se/Body/f_null.htm]], null is an empty list
 |---------------+---------------------------------------------------------------------------------|
 | [[1am][1am]]           | (test test-name body)                                                           |
 | [[2am][2am]]           | (test test-name body)                                                           |
-  | [[cacau][cacau]]         | (deftest "test-name" (any-parameters go here) body)                             |
-  | [[cardiogram][cardiogram]]    | (deftest name (<options>*) <docstring>* <form>*)                                |
-  | [[clunit][clunit]]        | (deftest test-name (suite-name-if-any) docstring body)                    |
-  | [[clunit2][clunit2]]       | (deftest test-name (suite-name-if-any) docstring body)                         |
-  | [[gigamonkeys][gigamonkeys]]   | (deftest test-name (any-parameters) body)                                       |
-  | [[fiasco][fiasco]]        | (deftest test-name (any-parameters) docstring body)                             |
-  | [[fiveam][fiveam]]        | (test test-name docstring body)                                                 |
-  | [[confidence][confidence]]        | (define-testcase test-name (any-parameters) docstring body)                     |
+| [[cacau][cacau]]         | (deftest "test-name" (any-parameters go here) body)                             |
+| [[cardiogram][cardiogram]]    | (deftest name (<options>*) <docstring>* <form>*)                                |
+| [[clunit][clunit]]        | (deftest test-name (suite-name-if-any) docstring body)                          |
+| [[clunit2][clunit2]]       | (deftest test-name (suite-name-if-any) docstring body)                          |
+| [[gigamonkeys][gigamonkeys]]   | (deftest test-name (any-parameters) body)                                       |
+| [[fiasco][fiasco]]        | (deftest test-name (any-parameters) docstring body)                             |
+| [[fiveam][fiveam]]        | (test test-name docstring body)                                                 |
+| [[confidence][confidence]]    | (define-testcase test-name (any-parameters) docstring body)                     |
 | [[lift][lift]]          | (addtest (test-suite-name) test-name body)                                      |
-  | [[lisp-unit][lisp-unit]]     | (define-test test-name body)                                                    |
-  | [[lisp-unit2][lisp-unit2]]    | (define-test test-name (tags) body)                                             |
+| [[lisp-unit][lisp-unit]]     | (define-test test-name body)                                                    |
+| [[lisp-unit2][lisp-unit2]]    | (define-test test-name (tags) body)                                             |
 | [[nst][nst]]           | (def-test (t1 :group name :fixtures (fixture-names)) body)                      |
-  | [[parachute][parachute]]     | (define-test test-name [:parent parent-name] [(:fixture if any)] body)          |
-  | [[prove][prove]]         | (deftest name body)                                                             |
-  | [[ptester][ptester]]       | (test value form) (test-error) (test-no-error) (test-warning) (test-no-warning) |
-  | [[rove][rove]]          | (deftest test-name body)                                                        |
+| [[parachute][parachute]]     | (define-test test-name [:parent parent-name] [(:fixture if any)] body)          |
+| [[prove][prove]]         | (deftest name body)                                                             |
+| [[ptester][ptester]]       | (test value form) (test-error) (test-no-error) (test-warning) (test-no-warning) |
+| [[rove][rove]]          | (deftest test-name body)                                                        |
 | [[rt][rt]]            | (deftest test-name function value)                                              |
 | [[should-test][should-test]]   | (deftest name body)                                                             |
 | [[simplet][simplet]]       | (test string body)                                                              |
-  | [[tap-unit-test][tap-unit-test]] | (define-test test-name docstring body)                                          |
+| [[tap-unit-test][tap-unit-test]] | (define-test test-name docstring body)                                          |
+| [[try][try]]           | (deftest test-name parameters body                                              |
 | [[unit-test][unit-test]]     | (deftest :unit unit-name :name test-name body)                                  |
-  | [[xlunit][xlunit]]        | (def-test-method method-name ((class-name) run-on-compilation) body)            |
-  | [[xptest][xptest]]        | (defmethod method-name ((suite-name fixture-name)) body)                        |
+| [[xlunit][xlunit]]        | (def-test-method method-name ((class-name) run-on-compilation) body)            |
+| [[xptest][xptest]]        | (defmethod method-name ((suite-name fixture-name)) body)                        |
 
 [[top][top]]
 ** Running Tests
@@ -1829,9 +1885,9 @@ Note to self: Per [[http://clhs.lisp.se/Body/f_null.htm]], null is an empty list
 |-----------------+-------------------------------------------------------------------------------------------------------------|
 | [[1am][1am]]       (a)   | (test-name) (run) ; (run) runs all tests                                                                    |
 | [[2am][2am]]             | (run)    (run '(list of tests)  (name-of-tests)                                                             |
-  | [[clunit][clunit]]          | (run-test 'test-name) (run-suite 'suite-name)                                                               |
+| [[clunit][clunit]]          | (run-test 'test-name) (run-suite 'suite-name)                                                               |
 | [[clunit2][clunit2]]         | (run-test 'test-name) (run-suite 'suite-name)                                                               |
-| [[confidence][confidence]]          | (test-name)                                                                                                 |
+| [[confidence][confidence]]      | (test-name)                                                                                                 |
 | [[gigamonkeys][gigamonkeys]]     | (test test-name)                                                                                            |
 | [[fiasco][fiasco]]          | (run-tests 'test-name) (run-package-tests :package package-name)                                            |
 | [[fiveam][fiveam]]          | (run 'test-name) (run! 'test-name) (run! 'suite-name)                                                       |
@@ -1840,15 +1896,16 @@ Note to self: Per [[http://clhs.lisp.se/Body/f_null.htm]], null is an empty list
 | [[lisp-unit2][lisp-unit2]]      | (run-tests :tests 'test-name) (run-tests :tags '(tag-names)) (run-tests) (run-tests :package 'package-name) |
 | [[nst][nst]]             | (nst-cmd :run test-name)                                                                                    |
 | [[parachute][parachute]] (d)   | (test test-name &optional :report report-type)                                                              |
-  | [[prove][prove]]           | (run-test 'test-name)                                                                                       |
-  | [[ptester][ptester]]         |  at compilation of (with-tests (:name "test-name") )                                                        |
+| [[prove][prove]]           | (run-test 'test-name)                                                                                       |
+| [[ptester][ptester]]         | at compilation of (with-tests (:name "test-name") )                                                         |
 | [[rove][rove]]            | (run-test 'test-name) (run-suite)                                                                           |
 | [[rt][rt]]        (b)   | (do-test test-name) (do-tests); (do-tests) runs all tests                                                   |
 | [[should-test][should-test]] (b) | (test) (test :test test-name)                                                                               |
 | [[simplet][simplet]]         | (run)                                                                                                       |
-  | [[tap-unit-test][tap-unit-test]]   |  (run-tests test-name1 test-name2) (run-tests)                                                              |
+| [[tap-unit-test][tap-unit-test]]   | (run-tests test-name1 test-name2) (run-tests)                                                               |
+| [[try][try]]             | (test-name), (try 'test-name), (funcall 'test-name)                                                         |
 | [[unit-test][unit-test]]       | (run-test test-name)(run-all-tests)                                                                         |
-| [[xlunit][xlunit]]          |  (xlunit:textui-test-run (xlunit:get-suite suite-name))                                                                                                          |
+| [[xlunit][xlunit]]          | (xlunit:textui-test-run (xlunit:get-suite suite-name))                                                      |
 | [[xptest][xptest]]          | (run-test test-name)(run-test suite-name)                                                                   |
 (a) Shuffles tests
 (b) runs tests in the order they were defined
@@ -1887,37 +1944,39 @@ Note to self: Per [[http://clhs.lisp.se/Body/f_null.htm]], null is an empty list
 | [[lift][lift]]          | (remove-test :suite x)(remove-test :test-case x) |
 | [[lisp-unit][lisp-unit]]     | (remove-tests) (remove-tags)                     |
 | [[lisp-unit2][lisp-unit2]]    | (uninstall-test) (undefine-test)                 |
-  | [[parachute][parachute]]     | (remove-test, remove-all-tests-in-package)       |
+| [[parachute][parachute]]     | (remove-test, remove-all-tests-in-package)       |
 | [[prove][prove]]         | (remove-test) (remove-test-all)                  |
-  | [[rt][rt]]            | (rem-test) (rem-all-tests)                       |
+| [[rt][rt]]            | (rem-test) (rem-all-tests)                       |
 | [[tap-unit-test][tap-unit-test]] | (remove-tests)                                   |
+| [[try][try]]           | FMAKUNBOUND, UNINTERN                            |
 | [[xlunit][xlunit]]        | (remove-test)                                    |
 | [[xptest][xptest]]        | (remove-test)                                    |
 [[top][top]]
 ** Suites
 #+CAPTION: Suite Functions
 #+ATTR_HTML: :border 2 :rules all :frame border
-| Name          | Suites                                                       |
-|---------------+--------------------------------------------------------------|
-| [[2am][2am]]           | (suite name (optional sub-suite)                             |
-| [[clunit][clunit]]        | (defsuite name (parent) (undefsuite name)                    |
-| [[clunit2][clunit2]]       | (defsuite name (parent) (undefsuite name)                    |
-| [[fiasco][fiasco]]        | (define-test-package package-name)  (defsuite suite-name)    |
-| [[fiveam][fiveam]]        | (def-suite :name-of-suite)                                   |
-| [[lift][lift]]          | (deftestsuite name-of-suite (super-test-suite)(slots)        |
+| Name          | Suites                                                        |
+|---------------+---------------------------------------------------------------|
+| [[2am][2am]]           | (suite name (optional sub-suite)                              |
+| [[clunit][clunit]]        | (defsuite name (parent) (undefsuite name)                     |
+| [[clunit2][clunit2]]       | (defsuite name (parent) (undefsuite name)                     |
+| [[fiasco][fiasco]]        | (define-test-package package-name)  (defsuite suite-name)     |
+| [[fiveam][fiveam]]        | (def-suite :name-of-suite)                                    |
+| [[lift][lift]]          | (deftestsuite name-of-suite (super-test-suite)(slots)         |
 | [[lisp-unit][lisp-unit]]     | packages and tags (tags are specified in the test definition) |
-| [[lisp-unit2][lisp-unit2]]    | :tags are specified in test definitions                      |
-| [[nst][nst]]           | (def-test-group)                                             |
-| [[parachute][parachute]]     | (define-test suite)                                          |
-| [[prove][prove]]         | (subtest ...)                                                |
-| [[ptester][ptester]]       | just the use of =(with-tests ...)+                           |
-| [[rt][rt]]            | the package is the only unit above tests                     |
-| [[should-test][should-test]]   | the package is the only unit above tests                     |
-| [[simplet][simplet]]       | (suite string body)                                          |
-| [[tap-unit-test][tap-unit-test]] | the package is the only unit above tests                     |
-| [[unit-test][unit-test]]     | [effectively tags in the deftest macro before the test-name] |
-| [[xlunit][xlunit]]        | (defclass test-case-name (test-case)(body))                  |
-| [[xptest][xptest]]        | (make-test-suite suite-name docstring body)                  |
+| [[lisp-unit2][lisp-unit2]]    | :tags are specified in test definitions                       |
+| [[nst][nst]]           | (def-test-group)                                              |
+| [[parachute][parachute]]     | (define-test suite)                                           |
+| [[prove][prove]]         | (subtest ...)                                                 |
+| [[ptester][ptester]]       | just the use of =(with-tests ...)+                            |
+| [[rt][rt]]            | the package is the only unit above tests                      |
+| [[should-test][should-test]]   | the package is the only unit above tests                      |
+| [[simplet][simplet]]       | (suite string body)                                           |
+| [[tap-unit-test][tap-unit-test]] | the package is the only unit above tests                      |
+| [[try][try]]           | just include subtests in a deftest form                       |
+| [[unit-test][unit-test]]     | [effectively tags in the deftest macro before the test-name]  |
+| [[xlunit][xlunit]]        | (defclass test-case-name (test-case)(body))                   |
+| [[xptest][xptest]]        | (make-test-suite suite-name docstring body)                   |
 
 [[top][top]]
 
@@ -2811,7 +2870,7 @@ cl-minify-css-test
 [[top][top]]
 ** Summary
  | [[https://gitlab.com/a.aguilar/cardiogram][homepage]] | Abraham Aguilar | MIT | 2020 |
-Cardiogram starts off with immediate problems. The documentation does not match up with the code and its test-system does not comply (Xach flagged this and the author has not yet responded). I cannot get it to work and cannot recommend it.
+Cardiogram starts off with immediate problems. The documentation does not match up with the code, even on simple things like "true" in the documentation is "is-true" in the code. I got the benchmarking to work but I am not going to try to reverse engineer all the other points discussed with other frameworks.
 * checkl
 [[top][top]]
 ** Summary
@@ -3867,7 +3926,350 @@ None
  ("monkeylib-text-output")
 
 [[top][top]]
-<<
+
+<<confidence>>
+* Confidence
+** Summary
+ | [[https://github.com/melusina-org/cl-confidence][homepage]] | Michaël Le Barbier | MIT | 2023 |
+
+Confidence is a new entry by someone who found the existing frameworks (based on his experience with Stefil and Fiveam) either too complicated, they did not provide enough debugging information to know exactly where the problem is and were not extensible in the sense of adding additional assertions. I am sure that Confidence meets his needs, but would not meet the needs of other users.
+
+It does report all failing assertions in a test. It has suites but no fixtures and does not allow you to provide user created diagnostic strings for the assertions. On the plus side it has some really nice floating point assertions that are not found elsewhere.
+** Assertion Functions
+
+| assert-char-equal                       | assert-string-equal                     |
+| assert-char<                            | assert-string-match                     |
+| assert-char<=                           | assert-string<                          |
+| assert-char=                            | assert-string<=                         |
+| assert-char>                            | assert-string=                          |
+| assert-char>=                           | assert-string>                          |
+| assert-condition                        | assert-string>=                         |
+| assert-eq                               | assert-subsetp                          |
+| assert-eql                              | assert-t                                |
+| assert-equal                            | assert-t*                               |
+| assert-equalp                           | assert-type                             |
+| assert-float-is-approximately-equal     | assert-vector-equal                     |
+| assert-float-is-definitely-greater-than | assert<                                 |
+| assert-float-is-definitely-less-than    | assert<=                                |
+| assert-float-is-essentially-equal       | assert=                                 |
+| assert-list-equal                       | assert>                                 |
+| assert-nil                              | assert>=                                |
+| assert-set-equal                        |
+
+Confidence also provides a macro for defining more assertions.
+
+[[top][top]]
+** Usage
+*** Report Format
+Test failures in Confidence create a result object. Result object are combined and produce a report.
+*** Basics
+Tests in Confidence are functions. Unless we are calling multiple tests in the following examples, we will just call the test-case function itself. The empty form after the test name is not really described in the documentation, but can be used in parameterized test cases.
+
+The basic passing test below shows the floating point comparisons built into Confidence.
+#+begin_src lisp
+  (define-testcase t1 ()
+    "describe t1"
+    (assert-t (=  1 1))
+    (assert-string< "abc" "def")
+    (assert-float-is-approximately-equal 5.100000 5.1000001)
+    (assert-float-is-essentially-equal 5.100000 5.1000001)
+    (assert-float-is-definitely-greater-than 5.100001 5.100000)
+    (assert-float-is-definitely-less-than 5.100000 5.100001)
+    (assert-equal (values 1 2) (values 1 2)))
+
+  (t1)
+  Name: T1
+  Total: 7
+  Success: 7/7 (100%)
+  Failure: 0/7 (0%)
+  Condition: 0/7 (0%)
+  Outcome: Success
+  NIL
+ #+end_src
+	A parameterized test case:
+	#+begin_src lisp
+		(define-testcase t1-p (y); the most basic parameterized
+			(let ((x 1))
+				(assert-equal x y)))
+
+    (t1-p 1)
+	#+end_src
+	Now a basic failing test. This time we are using a more specific assertion (assert-equal..). Unlike some other frameworks, we cannot pass a descriptive string to the assertion.
+#+begin_src lisp
+  (define-testcase t1-fail (); the most basic failing test
+    (let ((x 1) (y 2))
+      (assert-equal x y)
+      (assert-equal y 3))
+
+  (t1-fail)
+  Name: T1-FAIL
+  Total: 2
+  Success: 0/2 (0%)
+  Failure: 2/2 (100%)
+  Condition: 0/2 (0%)
+  Outcome: Failure
+  ================================================================================
+  #<ASSERTION-FAILURE {70066055D3}> is an assertion result of type ASSERTION-FAILURE.
+  Type: :FUNCTION
+  Name: ASSERT-EQUAL
+  Path:
+    T1-FAIL
+  Arguments:
+   Argument #1: 1
+   Argument #2: 2
+  Form: (ASSERT-EQUAL X Y)
+  Outcome: Failure
+  Description: Assert that A and B satisfy the EQUAL predicate.
+    In this call, forms in argument position evaluate as:
+
+    A: 1
+
+    B: 2
+
+  ================================================================================
+  #<ASSERTION-FAILURE {7006605863}> is an assertion result of type ASSERTION-FAILURE.
+  Type: :FUNCTION
+  Name: ASSERT-EQUAL
+  Path:
+    T1-FAIL
+  Arguments:
+   Argument #1: 2
+   Argument #2: 3
+  Form: (ASSERT-EQUAL Y 3)
+  Outcome: Failure
+  Description: Assert that A and B satisfy the EQUAL predicate.
+    In this call, forms in argument position evaluate as:
+
+    A: 2
+
+    B: 3
+
+  NIL
+#+end_src
+
+You do not have to manually recompile a test after a tested function has been modified.
+
+*** Edge Cases: Multiple assertions, loops. closures and calling other tests
+#+begin_src lisp
+  (t2)
+  Name: T2
+  Total: 3
+  Success: 1/3 (33%)
+  Failure: 2/3 (67%)
+  Condition: 0/3 (0%)
+  Outcome: Failure
+  ================================================================================
+  #<ASSERTION-FAILURE {700692EF83}> is an assertion result of type ASSERTION-FAILURE.
+  Type: :FUNCTION
+  Name: ASSERT-EQUAL
+  Path:
+    T2
+  Arguments:
+   Argument #1: 1
+   Argument #2: 2
+  Form: (ASSERT-EQUAL 1 2)
+  Outcome: Failure
+  Description: Assert that A and B satisfy the EQUAL predicate.
+    In this call, forms in argument position evaluate as:
+
+    A: 1
+
+    B: 2
+
+  ================================================================================
+  #<ASSERTION-FAILURE {700692F1F3}> is an assertion result of type ASSERTION-FAILURE.
+  Type: :FUNCTION
+  Name: ASSERT-EQUAL
+  Path:
+    T2
+  Arguments:
+   Argument #1: 2
+   Argument #2: 3
+  Form: (ASSERT-EQUAL 2 3)
+  Outcome: Failure
+  Description: Assert that A and B satisfy the EQUAL predicate.
+    In this call, forms in argument position evaluate as:
+
+    A: 2
+
+    B: 3
+
+NIL
+#+end_src
+Confidence had no problem with the values expression as such, but like almost all the frameworks, it only looked at the first value.
+**** Closures
+Confidence has no problem accessing variables defined in a closure encompassing the test.
+#+begin_src lisp
+	 (let ((l1 '(#\a #\B #\z))
+					(l2 '(97 66 122)))
+		(define-testcase t2-loop ()
+			(loop for x in l1 for y in l2 do
+				(assert-equal (char-code x) y))))
+
+        (t2-loop)
+        Name: T2-LOOP
+        Total: 3
+        Success: 3/3 (100%)
+        Failure: 0/3 (0%)
+        Condition: 0/3 (0%)
+        Outcome: Success
+        NIL
+#+end_src
+Checking assert= with multiple values.
+#+begin_src lisp
+(define-testcase t2-with-multiple-values ()
+			(assert= 1 1 2))
+	T2-WITH-MULTIPLE-VALUES
+	(t2-with-multiple-values)
+(t2-with-multiple-values)
+Name: T2-WITH-MULTIPLE-VALUES
+Total: 1
+Success: 0/1 (0%)
+Failure: 0/1 (0%)
+Condition: 1/1 (100%)
+Outcome: Failure
+================================================================================
+#<ASSERTION-CONDITION {70070524F3}> is an assertion result of type ASSERTION-CONDITION.
+Type: :FUNCTION
+Name: ASSERT=
+Path:
+  T2-WITH-MULTIPLE-VALUES
+Arguments:
+ Argument #1: 1
+ Argument #2: 1
+ Argument #3: 2
+Form: (ASSERT= 1 1 2)
+Outcome: Condition
+Condition: #<SB-INT:SIMPLE-PROGRAM-ERROR "invalid number of arguments: ~S" {7006F4B683}>
+#<SB-INT:SIMPLE-PROGRAM-ERROR "invalid number of arguments: ~S" {7006F..
+  [condition]
+
+Slots with :INSTANCE allocation:
+  FORMAT-CONTROL                 = "invalid number of arguments: ~S"
+  FORMAT-ARGUMENTS               = (3)
+  In this call, forms in argument position evaluate as:
+
+  A: 1
+
+  B: 1
+
+NIL
+#+end_src
+It failed. All the assertions in Confidence compare two values only.
+**** Calling another test from a test
+If you call a test within a test in Most other frameworks you will effectively get two reports. Confidence actually composes the results.
+#+begin_src lisp
+  (define-testcase t3 ()
+    "describe t3 which is a test that tries to call another test in its body"
+    (assert-equal 'a 'a)
+    (t1))
+  (t3)
+  Name: T3
+  Total: 8
+  Success: 8/8 (100%)
+  Failure: 0/8 (0%)
+  Condition: 0/8 (0%)
+  Outcome: Success
+  NIL
+#+end_src
+If test t3 called test t2, we would have seen the following in the debugger which implies that the assertion failure was in t2, not t3:
+#+begin_src lisp
+  Name: T3
+  Total: 4
+  Success: 2/4 (50%)
+  Failure: 2/4 (50%)
+  Condition: 0/4 (0%)
+  Outcome: Failure
+  ================================================================================
+  Name: T2
+  Total: 3
+  Success: 1/3 (33%)
+  Failure: 2/3 (67%)
+  Condition: 0/3 (0%)
+  Outcome: Failure
+  ================================================================================
+  #<ASSERTION-FAILURE {7007FEADA3}> is an assertion result of type ASSERTION-FAILURE.
+  Type: :FUNCTION
+  Name: ASSERT-EQUAL
+  Path:
+    T3
+      T2
+  Arguments:
+   Argument #1: 1
+   Argument #2: 2
+  Form: (ASSERT-EQUAL 1 2)
+  Outcome: Failure
+  Description: Assert that A and B satisfy the EQUAL predicate.
+    In this call, forms in argument position evaluate as:
+
+    A: 1
+
+    B: 2
+
+  ================================================================================
+  #<ASSERTION-FAILURE {7007FEB013}> is an assertion result of type ASSERTION-FAILURE.
+  Type: :FUNCTION
+  Name: ASSERT-EQUAL
+  Path:
+    T3
+      T2
+  Arguments:
+   Argument #1: 2
+   Argument #2: 3
+  Form: (ASSERT-EQUAL 2 3)
+  Outcome: Failure
+  Description: Assert that A and B satisfy the EQUAL predicate.
+    In this call, forms in argument position evaluate as:
+
+    A: 2
+
+    B: 3
+#+end_src
+*** Conditions
+Confidence has a macro assert-condition that verifies that a form signals a condition of a certain class. It can also examine the slots of the condition with assertions:
+#+begin_src lisp
+  (define-testcase t4 ()
+    (assert-condition
+        (error 'testing-framework :a "a" :b "b" :c "c")
+        testing-framework
+        (a b)
+      (assert-string= "a" a)
+      (assert-string= "b" b)))
+
+  (t4)
+  Name: T4
+  Total: 1
+  Success: 1/1 (100%)
+  Failure: 0/1 (0%)
+  Condition: 0/1 (0%)
+  Outcome: Success
+  NIL
+#+end_src
+*** Suites, tags and other multiple test abilities
+**** Lists of tests
+There is no "run-test" like function in Confidence. If you want to run a list of tests, you need to define a test that funcalls those tests.
+**** Suites
+Tests can be nested and will generate a composed summary. This might be considered a "suite" capability.
+
+*** Fixtures and Freezing Data
+		There is no additional capability in Confidence for fixtures or freezing data.
+*** Removing tests
+		None
+*** Sequencing, Random and Failure Only
+Tests will be called in sequence and there is no random shuffling or skipping ability.
+*** Skip Capability
+None other than provided in the debugger.
+*** Random Data Generators
+		None
+** Discussion
+Confidence does provide the ability to define more assertions.
+
+
+In summary, Confidence is interesting, but it will not make me change from another framework. I do think some other frameworks might want to follow its lead in having some float comparision assertions.
+
+[[top][top]]
+** Who Uses
+
 * fiasco
 ** Summary
  | [[https://github.com/joaotavora/fiasco][homepage]] | João Távora | BSD 2 Clause | 2020 |
@@ -4521,349 +4923,6 @@ Many libraries on quicklisp use fiveam. If you have quicklisp, you can get a lis
 #+end_src
 
  [[top][top]]
-
-<<confidence>>
-* Confidence
-** Summary
- | [[https://github.com/melusina-org/cl-confidence][homepage]] | Michaël Le Barbier | MIT | 2023 |
-
-Confidence is a new entry by someone who found the existing frameworks (based on his experience with Stefil and Fiveam) either too complicated, they did not provide enough debugging information to know exactly where the problem is and were not extensible in the sense of adding additional assertions. I am sure that Confidence meets his needs, but would not meet the needs of other users.
-
-It does report all failing assertions in a test. It has suites but no fixtures and does not allow you to provide user created diagnostic strings for the assertions. On the plus side it has some really nice floating point assertions that are not found elsewhere.
-** Assertion Functions
-
-| assert-char-equal                       | assert-string-equal                     |
-| assert-char<                            | assert-string-match                     |
-| assert-char<=                           | assert-string<                          |
-| assert-char=                            | assert-string<=                         |
-| assert-char>                            | assert-string=                          |
-| assert-char>=                           | assert-string>                          |
-| assert-condition                        | assert-string>=                         |
-| assert-eq                               | assert-subsetp                          |
-| assert-eql                              | assert-t                                |
-| assert-equal                            | assert-t*                               |
-| assert-equalp                           | assert-type                             |
-| assert-float-is-approximately-equal     | assert-vector-equal                     |
-| assert-float-is-definitely-greater-than | assert<                                 |
-| assert-float-is-definitely-less-than    | assert<=                                |
-| assert-float-is-essentially-equal       | assert=                                 |
-| assert-list-equal                       | assert>                                 |
-| assert-nil                              | assert>=                                |
-| assert-set-equal                        |
-
-Confidence also provides a macro for defining more assertions.
-
-[[top][top]]
-** Usage
-*** Report Format
-Test failures in Confidence create a result object. Result object are combined and produce a report.
-*** Basics
-Tests in Confidence are functions. Unless we are calling multiple tests in the following examples, we will just call the test-case function itself. The empty form after the test name is not really described in the documentation, but can be used in parameterized test cases.
-
-The basic passing test below shows the floating point comparisons built into Confidence.
-#+begin_src lisp
-  (define-testcase t1 ()
-    "describe t1"
-    (assert-t (=  1 1))
-    (assert-string< "abc" "def")
-    (assert-float-is-approximately-equal 5.100000 5.1000001)
-    (assert-float-is-essentially-equal 5.100000 5.1000001)
-    (assert-float-is-definitely-greater-than 5.100001 5.100000)
-    (assert-float-is-definitely-less-than 5.100000 5.100001)
-    (assert-equal (values 1 2) (values 1 2)))
-
-  (t1)
-  Name: T1
-  Total: 7
-  Success: 7/7 (100%)
-  Failure: 0/7 (0%)
-  Condition: 0/7 (0%)
-  Outcome: Success
-  NIL
- #+end_src
-	A parameterized test case:
-	#+begin_src lisp
-		(define-testcase t1-p (y); the most basic parameterized
-			(let ((x 1))
-				(assert-equal x y)))
-
-    (t1-p 1)
-	#+end_src
-	Now a basic failing test. This time we are using a more specific assertion (assert-equal..). Unlike some other frameworks, we cannot pass a descriptive string to the assertion.
-#+begin_src lisp
-  (define-testcase t1-fail (); the most basic failing test
-    (let ((x 1) (y 2))
-      (assert-equal x y)
-      (assert-equal y 3))
-
-  (t1-fail)
-  Name: T1-FAIL
-  Total: 2
-  Success: 0/2 (0%)
-  Failure: 2/2 (100%)
-  Condition: 0/2 (0%)
-  Outcome: Failure
-  ================================================================================
-  #<ASSERTION-FAILURE {70066055D3}> is an assertion result of type ASSERTION-FAILURE.
-  Type: :FUNCTION
-  Name: ASSERT-EQUAL
-  Path:
-    T1-FAIL
-  Arguments:
-   Argument #1: 1
-   Argument #2: 2
-  Form: (ASSERT-EQUAL X Y)
-  Outcome: Failure
-  Description: Assert that A and B satisfy the EQUAL predicate.
-    In this call, forms in argument position evaluate as:
-  
-    A: 1
-  
-    B: 2
-  
-  ================================================================================
-  #<ASSERTION-FAILURE {7006605863}> is an assertion result of type ASSERTION-FAILURE.
-  Type: :FUNCTION
-  Name: ASSERT-EQUAL
-  Path:
-    T1-FAIL
-  Arguments:
-   Argument #1: 2
-   Argument #2: 3
-  Form: (ASSERT-EQUAL Y 3)
-  Outcome: Failure
-  Description: Assert that A and B satisfy the EQUAL predicate.
-    In this call, forms in argument position evaluate as:
-  
-    A: 2
-  
-    B: 3
-  
-  NIL
-#+end_src
-
-You do not have to manually recompile a test after a tested function has been modified.
-
-*** Edge Cases: Multiple assertions, loops. closures and calling other tests
-#+begin_src lisp
-  (t2)
-  Name: T2
-  Total: 3
-  Success: 1/3 (33%)
-  Failure: 2/3 (67%)
-  Condition: 0/3 (0%)
-  Outcome: Failure
-  ================================================================================
-  #<ASSERTION-FAILURE {700692EF83}> is an assertion result of type ASSERTION-FAILURE.
-  Type: :FUNCTION
-  Name: ASSERT-EQUAL
-  Path:
-    T2
-  Arguments:
-   Argument #1: 1
-   Argument #2: 2
-  Form: (ASSERT-EQUAL 1 2)
-  Outcome: Failure
-  Description: Assert that A and B satisfy the EQUAL predicate.
-    In this call, forms in argument position evaluate as:
-  
-    A: 1
-  
-    B: 2
-  
-  ================================================================================
-  #<ASSERTION-FAILURE {700692F1F3}> is an assertion result of type ASSERTION-FAILURE.
-  Type: :FUNCTION
-  Name: ASSERT-EQUAL
-  Path:
-    T2
-  Arguments:
-   Argument #1: 2
-   Argument #2: 3
-  Form: (ASSERT-EQUAL 2 3)
-  Outcome: Failure
-  Description: Assert that A and B satisfy the EQUAL predicate.
-    In this call, forms in argument position evaluate as:
-  
-    A: 2
-  
-    B: 3
-  
-NIL
-#+end_src
-Confidence had no problem with the values expression as such, but like almost all the frameworks, it only looked at the first value.
-**** Closures
-Confidence has no problem accessing variables defined in a closure encompassing the test.
-#+begin_src lisp
-	 (let ((l1 '(#\a #\B #\z))
-					(l2 '(97 66 122)))
-		(define-testcase t2-loop ()
-			(loop for x in l1 for y in l2 do
-				(assert-equal (char-code x) y))))
-
-        (t2-loop)
-        Name: T2-LOOP
-        Total: 3
-        Success: 3/3 (100%)
-        Failure: 0/3 (0%)
-        Condition: 0/3 (0%)
-        Outcome: Success
-        NIL
-#+end_src
-Checking assert= with multiple values.
-#+begin_src lisp
-(define-testcase t2-with-multiple-values ()
-			(assert= 1 1 2))
-	T2-WITH-MULTIPLE-VALUES
-	(t2-with-multiple-values)
-(t2-with-multiple-values)
-Name: T2-WITH-MULTIPLE-VALUES
-Total: 1
-Success: 0/1 (0%)
-Failure: 0/1 (0%)
-Condition: 1/1 (100%)
-Outcome: Failure
-================================================================================
-#<ASSERTION-CONDITION {70070524F3}> is an assertion result of type ASSERTION-CONDITION.
-Type: :FUNCTION
-Name: ASSERT=
-Path:
-  T2-WITH-MULTIPLE-VALUES
-Arguments:
- Argument #1: 1
- Argument #2: 1
- Argument #3: 2
-Form: (ASSERT= 1 1 2)
-Outcome: Condition
-Condition: #<SB-INT:SIMPLE-PROGRAM-ERROR "invalid number of arguments: ~S" {7006F4B683}>
-#<SB-INT:SIMPLE-PROGRAM-ERROR "invalid number of arguments: ~S" {7006F..
-  [condition]
-
-Slots with :INSTANCE allocation:
-  FORMAT-CONTROL                 = "invalid number of arguments: ~S"
-  FORMAT-ARGUMENTS               = (3)
-  In this call, forms in argument position evaluate as:
-
-  A: 1
-
-  B: 1
-
-NIL
-#+end_src
-It failed. All the assertions in Confidence compare two values only.
-**** Calling another test from a test
-If you call a test within a test in Most other frameworks you will effectively get two reports. Confidence actually composes the results.
-#+begin_src lisp
-  (define-testcase t3 ()
-    "describe t3 which is a test that tries to call another test in its body"
-    (assert-equal 'a 'a)
-    (t1))
-  (t3)
-  Name: T3
-  Total: 8
-  Success: 8/8 (100%)
-  Failure: 0/8 (0%)
-  Condition: 0/8 (0%)
-  Outcome: Success
-  NIL
-#+end_src
-If test t3 called test t2, we would have seen the following in the debugger which implies that the assertion failure was in t2, not t3:
-#+begin_src lisp
-  Name: T3
-  Total: 4
-  Success: 2/4 (50%)
-  Failure: 2/4 (50%)
-  Condition: 0/4 (0%)
-  Outcome: Failure
-  ================================================================================
-  Name: T2
-  Total: 3
-  Success: 1/3 (33%)
-  Failure: 2/3 (67%)
-  Condition: 0/3 (0%)
-  Outcome: Failure
-  ================================================================================
-  #<ASSERTION-FAILURE {7007FEADA3}> is an assertion result of type ASSERTION-FAILURE.
-  Type: :FUNCTION
-  Name: ASSERT-EQUAL
-  Path:
-    T3
-      T2
-  Arguments:
-   Argument #1: 1
-   Argument #2: 2
-  Form: (ASSERT-EQUAL 1 2)
-  Outcome: Failure
-  Description: Assert that A and B satisfy the EQUAL predicate.
-    In this call, forms in argument position evaluate as:
-  
-    A: 1
-  
-    B: 2
-  
-  ================================================================================
-  #<ASSERTION-FAILURE {7007FEB013}> is an assertion result of type ASSERTION-FAILURE.
-  Type: :FUNCTION
-  Name: ASSERT-EQUAL
-  Path:
-    T3
-      T2
-  Arguments:
-   Argument #1: 2
-   Argument #2: 3
-  Form: (ASSERT-EQUAL 2 3)
-  Outcome: Failure
-  Description: Assert that A and B satisfy the EQUAL predicate.
-    In this call, forms in argument position evaluate as:
-  
-    A: 2
-  
-    B: 3
-#+end_src
-*** Conditions
-Confidence has a macro assert-condition that verifies that a form signals a condition of a certain class. It can also examine the slots of the condition with assertions:
-#+begin_src lisp
-  (define-testcase t4 ()
-    (assert-condition
-        (error 'testing-framework :a "a" :b "b" :c "c")
-        testing-framework
-        (a b)
-      (assert-string= "a" a)
-      (assert-string= "b" b)))
-   
-  (t4)
-  Name: T4
-  Total: 1
-  Success: 1/1 (100%)
-  Failure: 0/1 (0%)
-  Condition: 0/1 (0%)
-  Outcome: Success
-  NIL
-#+end_src
-*** Suites, tags and other multiple test abilities
-**** Lists of tests
-There is no "run-test" like function in Confidence. If you want to run a list of tests, you need to define a test that funcalls those tests.
-**** Suites
-Tests can be nested and will generate a composed summary. This might be considered a "suite" capability.
-
-*** Fixtures and Freezing Data
-		There is no additional capability in Confidence for fixtures or freezing data.
-*** Removing tests
-		None
-*** Sequencing, Random and Failure Only
-Tests will be called in sequence and there is no random shuffling or skipping ability.
-*** Skip Capability
-None other than provided in the debugger.
-*** Random Data Generators
-		None
-** Discussion
-Confidence does provide the ability to define more assertions.
-
-
-In summary, Confidence is interesting, but it will not make me change from another framework. I do think some other frameworks might want to follow its lead in having some float comparision assertions.
-
-[[top][top]]
-** Who Uses
 
 [[top][top]]
 <<lift>>
@@ -7092,11 +7151,11 @@ You can do better with other frameworks.
 ** Summary
  | [[https://github.com/fukamachi/rove][homepage]] | Eitaro Fukamachi | BSD 3 Clause | 2020 |
 
-If you use package-inferred systems, there may be more capabilities than if you do not. Without a package-inferred system, you get no consolidated summary of all the tests. It does have fixtures that can be used once per package or once per test, but there is no ability to use different fixtures with respect to different tests and no composable fixtures. In addition,signal testing seems incomplete compared to other frameworks.
+If you use package-inferred systems, there may be more capabilities than if you do not. Without a package-inferred system, you get no consolidated summary of all the tests and you may have to write your tests differently than if you have a package-inferred system. It does have fixtures that can be used once per package or once per test, but there is no ability to use different fixtures with respect to different tests and no composable fixtures. In addition,signal testing seems incomplete compared to other frameworks.
 
 As noted in the functionality tables, there have been reports that rove crashes with multithreaded results. See [[https://tychoish.com/post/programming-in-the-common-lisp-ecosystem/][https://tychoish.com/post/programming-in-the-common-lisp-ecosystem/]]: "rove doesn't seem to work when multi-threaded results effectively. It's listed in the readme, but I was able to write really trivial tests that crashed the test harness."
 
-As mentioned in the [[benchmarking-rove][Benchmarking]] section, I ran into an as yet unidentified issue with rove and SBCL. Several attempts to run the benchmark (10 iterations) on SBCL triggered heap exhaustion during garbage collection (even on a clean SBCL instance).
+Rove is sensitive to how you write the tests, at least if compiled with BSCL. The first way I wrote the tests triggered memory errors I could not recover from (but only in SBCL, not with CCL). The second way I wrote the tests worked perfectly fine. Your mileage may vary.
 
 Compared to Prove, Rove does have better failure reporting, is faster (but still not even in the middle of the pack)  and has added fixtures. It is still missing some of the capabilities that that Prove has such as time limits on tests as well as test functions such as is-type, likes and is-values expression capabilities.
 
@@ -7734,6 +7793,563 @@ Tap-unit-test has a =make-random-state= function for generating random data. See
 Basically lisp-unit and lisp-unit2 have moved on and tap-unit-test exists for historical reasons. There are enough syntactic differences that if someone is using it for an existing code base, pulling it out of quicklisp could be a breakage. No one is using it As far as I can tell.
 
 [[top][top]]
+<<try>>
+* try
+[[top][top]]
+** Summary
+#+ATTR_HTML: :border 2 :rules all :frame border
+#+ATTR_LATEX: :float multicolumn
+ | [[https://github.com/melisgl/try][homepage]] | Gábor Melis | MIT | 2022 |
+Try's self description is:
+
+"Try is what we get if we make tests functions and build a test framework on top of the condition system as Stefil did but also address the issue of rerunning and replaying, make the IS check more capable, use the types of the condition hierarchy to parameterize what to debug, print, rerun, and finally document the whole thing."
+
+"Try is a library for unit testing with equal support for interactive and non-interactive workflows. Tests are functions, and almost everything else is a condition, whose types feature prominently in parameterization."
+
+** Assertion Functions
+| is                      |                           |                         |                           |   |
+| expected-result-success | unexpected-result-success | expected-result-failure | unexpected-result-failure |   |
+
+
+[[top][top]]
+** Usage
+*** Basics and Report Format
+**** Interactive
+The default format is interactive and throws you into the debugger. Each defined test is a lisp function that records its execution in "trial" objects.
+
+***** Basic Passing Test
+Here we define a test that takes one parameter and then call the test with a parameter we know will pass and see the results.
+#+begin_src lisp
+  (deftest test1-pass (x)
+       (is (= x 1)))
+#+end_src
+We can either funcall the test or just call it directly (test1-pass 1)
+#+begin_src lisp
+  (test1-pass 1)
+
+TEST1-PASS
+  ⋅ (IS (= X 1))
+⋅ TEST1-PASS ⋅1
+#<TRIAL (TEST1-PASS 1) EXPECTED-SUCCESS 0.000s ⋅1>
+#+end_src
+The first line shows the beginning of a defined test, the second the successful assertion, the third the cumulative test result and the fourth indicates what was recorded in the trial object. If you look at the last three lines, the dot before the 1 is a "marker" that indicates an a "category" of expected success and the 1 represents the number of expected successes actually found.
+
+The total list of categories and their markers is:
+#+begin_src lisp
+  ((abort*             :marker "⊟")
+   (unexpected-failure :marker "⊠")
+   (unexpected-success :marker "⊡")
+   (skip               :marker "-")
+   (expected-failure   :marker "×")
+   (expected-success   :marker "⋅"))
+#+end_src
+
+***** Basic Failing Test
+The following has two assertions, both of which fail. In this case we will funcall the test and it will throw us into the debugger with restarts. We would get the same result if we just called it as a normal function (t1-fail):
+#+begin_src lisp
+  (deftest t1-fail ()
+  (let ((x 1) (y 2))
+   (is (equal 1 2))
+    (is (= x y)
+        :msg "Intentional failure x does not equal y"
+        :ctx ("*PACKAGE* is ~S and *PRINT-CASE* is ~S~%"
+             *package* *print-case*))))
+
+  (funcall 't1-fail)
+
+  UNEXPECTED-FAILURE in check:
+  (IS (EQUAL 1 2))
+   [Condition of type UNEXPECTED-RESULT-FAILURE]
+
+Restarts:
+ 0: [RECORD-EVENT] Record the event and continue.
+ 1: [FORCE-EXPECTED-SUCCESS] Change outcome to TRY:EXPECTED-RESULT-SUCCESS.
+ 2: [FORCE-UNEXPECTED-SUCCESS] Change outcome to TRY:UNEXPECTED-RESULT-SUCCESS.
+ 3: [FORCE-EXPECTED-FAILURE] Change outcome to TRY:EXPECTED-RESULT-FAILURE.
+ 4: [ABORT-CHECK] Change outcome to TRY:RESULT-ABORT*.
+ 5: [SKIP-CHECK] Change outcome to TRY:RESULT-SKIP.
+ 6: [RETRY-CHECK] Retry check.
+ 7: [ABORT-TRIAL] Record the event and abort trial UAX-15-TRY-TESTS::T1-FAIL.
+ 8: [SKIP-TRIAL] Record the event and skip trial UAX-15-TRY-TESTS::T1-FAIL.
+ 9: [RETRY-TRIAL] Record the event and retry trial UAX-15-TRY-TESTS::T1-FAIL.
+ 10: [SET-TRY-DEBUG] Supply a new value for :DEBUG of TRY:TRY.
+ 11: [RETRY] Retry SLIME REPL evaluation request.
+ 12: [*ABORT] Return to SLIME's top level.
+ 13: [ABORT] abort thread (#<THREAD "new-repl-thread" RUNNING {1002487C03}>)
+
+Backtrace:
+  0: (TRY::SIGNAL-OUTCOME T FAILURE (:CHECK (IS (EQUAL 1 2)) :ELAPSED-SECONDS 0 :CAPTURES NIL ...))
+  1: ((FLET "DEFTEST" :IN T1-FAIL) #<unused argument>)
+  2: (TRY::CALL-TEST)
+  3: (T1-FAIL)
+#+end_src
+If you call restart 13 to abort, the REPL prints out the following:
+#+begin_src lisp
+  T1-FAIL
+  ⊟ non-local exit
+⊟ T1-FAIL ⊟1
+#+end_src
+You can see the markers summarizing the conditions being triggered in the line items and the net result.
+
+Now lets tell it that we expect failure
+#+begin_src lisp
+  (deftest t1-expected-fail ()
+    (with-failure-expected (t)
+        (let ((x 1) (y 2))
+          (is (equal 1 2))
+          (is (= x y)
+              :msg "Intentional failure x does not equal y"
+              :ctx ("*PACKAGE* is ~S and *PRINT-CASE* is ~S~%"
+                    ,*package* *print-case*)))))
+
+  (funcall 't1-expected-fail)
+
+T1-EXPECTED-FAIL
+  × (IS (EQUAL 1 2))
+  × Intentional failure x does not equal y
+    where
+      X = 1
+      Y = 2
+    *PACKAGE* is #<PACKAGE "UAX-15-TRY-TESTS"> and *PRINT-CASE* is :UPCASE
+
+⋅ T1-EXPECTED-FAIL ×2
+#<TRIAL (T1-EXPECTED-FAIL) EXPECTED-SUCCESS 0.000s ×2>
+#+end_src
+Again you see the markers showing the conditions triggers, that there were two failures and both were expected.
+
+Now a version where we have two assertions, the first one fails unexpectedly and the second passes:
+#+begin_src lisp
+  (deftest t1b-unexpected-fail ()
+        (let ((x 1) (y 2))
+          (is (= x y))
+          (is (equal 1 x))))
+
+  (t1b-unexpected-fail)
+  UNEXPECTED-FAILURE in check:
+  (IS (= X Y))
+where
+  X = 1
+  Y = 2
+   [Condition of type UNEXPECTED-RESULT-FAILURE]
+
+Restarts:
+ 0: [RECORD-EVENT] Record the event and continue.
+ 1: [FORCE-EXPECTED-SUCCESS] Change outcome to TRY:EXPECTED-RESULT-SUCCESS.
+ 2: [FORCE-UNEXPECTED-SUCCESS] Change outcome to TRY:UNEXPECTED-RESULT-SUCCESS.
+ 3: [FORCE-EXPECTED-FAILURE] Change outcome to TRY:EXPECTED-RESULT-FAILURE.
+ 4: [ABORT-CHECK] Change outcome to TRY:RESULT-ABORT*.
+ 5: [SKIP-CHECK] Change outcome to TRY:RESULT-SKIP.
+ 6: [RETRY-CHECK] Retry check.
+ 7: [ABORT-TRIAL] Record the event and abort trial UAX-15-TRY-TESTS::T1B-UNEXPECTED-FAIL.
+ 8: [SKIP-TRIAL] Record the event and skip trial UAX-15-TRY-TESTS::T1B-UNEXPECTED-FAIL.
+ 9: [RETRY-TRIAL] Record the event and retry trial UAX-15-TRY-TESTS::T1B-UNEXPECTED-FAIL.
+ 10: [SET-TRY-DEBUG] Supply a new value for :DEBUG of TRY:TRY.
+ 11: [RETRY] Retry SLIME REPL evaluation request.
+ 12: [*ABORT] Return to SLIME's top level.
+ 13: [ABORT] abort thread (#<THREAD "new-repl-thread" RUNNING {1009C947E3}>)
+#+end_src
+If we choose RECORD-EVENT, we get the following:
+#+begin_src lisp
+  T1B-UNEXPECTED-FAIL
+  ⊠ (IS (= X Y))
+    where
+      X = 1
+      Y = 2
+  ⋅ (IS (EQUAL 1 X))
+⊠ T1B-UNEXPECTED-FAIL ⊠1 ⋅1
+#<TRIAL (T1B-UNEXPECTED-FAIL) UNEXPECTED-FAILURE 161.676s ⊠1 ⋅1>
+#+end_src
+The last line shows two categories of results, one unexpected failure (indicated by the ⊠)  and one expected success.
+
+If we choose SKIP-CHECK, we get:
+#+begin_src lisp
+  T1B-UNEXPECTED-FAIL
+  - (IS (= X Y))
+  ⋅ (IS (EQUAL 1 X))
+⋅ T1B-UNEXPECTED-FAIL -1 ⋅1
+#<TRIAL (T1B-UNEXPECTED-FAIL) EXPECTED-SUCCESS 10.917s -1 ⋅1>
+#+end_src
+Now the markers show one failure that was skipped and one expected success.
+
+Now a version where we have two assertions and we expect one specifically to fail:
+#+begin_src lisp
+  (deftest t1a-expected-fail ()
+        (let ((x 1) (y 2))
+          (is (equal 1 x))
+          (with-failure-expected (t)
+          (is (= x y)
+              :msg "Intentional failure x does not equal y"
+              :ctx ("*PACKAGE* is ~S and *PRINT-CASE* is ~S~%"
+                    *package* *print-case*)))))
+T1A-EXPECTED-FAIL
+
+(t1a-expected-fail)
+T1A-EXPECTED-FAIL
+  ⋅ (IS (EQUAL 1 X))
+  × Intentional failure x does not equal y
+    where
+      X = 1
+      Y = 2
+    *PACKAGE* is #<PACKAGE "UAX-15-TRY-TESTS"> and *PRINT-CASE* is :UPCASE
+
+⋅ T1A-EXPECTED-FAIL ×1 ⋅1
+#<TRIAL (T1A-EXPECTED-FAIL) EXPECTED-SUCCESS 0.000s ×1 ⋅1>
+#+end_src
+**** Quiet Reports
+The Try function allows you to print only the unexpected events when you invoke the try function. Notice we have a little bit of asymmetry on depending on how the test is called.
+#+begin_src lisp
+    (deftest test0-pass ()
+         (is (= 1 1)))
+
+    (try 'test0-pass)
+  TEST0-PASS
+    ⋅ (IS (= 1 1))
+  ⋅ TEST0-PASS ⋅1
+
+  (try 'test0-pass :print 'unexpected)
+#<TRIAL (TEST0-PASS) EXPECTED-SUCCESS 0.000s ⋅1>
+
+  (try (test0-pass) :print 'unexpected)
+TEST0-PASS
+  ⋅ (IS (= 1 1))
+⋅ TEST0-PASS ⋅1
+#<TRIAL (TEST0-PASS) SKIP 0.000s>
+#+end_src
+The try function does not allow you to pass parameters to the tests, so you would need to wrap those tests inside another test. For example:
+#+begin_src lisp
+  (deftest test6-pass (x y)
+    (is (= x 1))
+    (is (= y 2))
+    (is (not (= x y))))
+
+  (deftest test7 ()
+    (test6-pass 1 2)
+    (test1-pass 1))
+
+  (try 'test7 :print 'unexpected)
+#<TRIAL (TEST7) EXPECTED-SUCCESS 0.000s ⋅4>
+#+end_src
+As you can see from the result, it indicated that there were 4 expected successes in the total combination of tests.
+
+If we had not used :print 'unexpected the result would have looked like:
+#+begin_src lisp
+  (try 'test7)
+
+TEST7
+  TEST6-PASS
+    ⋅ (IS (= X 1))
+    ⋅ (IS (= Y 2))
+    ⋅ (IS (NOT (= X Y)))
+  ⋅ TEST6-PASS ⋅3
+  TEST5-PASS
+    ⋅ (IS (= X 1))
+  ⋅ TEST5-PASS ⋅1
+⋅ TEST7 ⋅4
+#<TRIAL (TEST7) EXPECTED-SUCCESS 0.000s ⋅4>
+#+end_src
+Running try on its version of the uax-15 test suite would (a) have printed 343332 lines of successful assertions and the trial object would show the first version running in the emacs slime REPL and the second in a terminal (both under SBCL 2.3.0)
+#+begin_src lisp
+..... 343332 lines later ...
+#<TRIAL (UAX-SUITE) EXPECTED-SUCCESS 31.773s ⋅343332>
+
+..... 343332 lines later ...
+#<TRIAL (UAX-SUITE) EXPECTED-SUCCESS 10.887s ⋅343332>
+#+end_src
+You can see the time discrepancy: Almost 32 seconds in the REPL to run the test and print every assertion and almost 11 seconds in the terminal. Now with :print 'unexpected, we get the following (first in the emacs REPL and then in a terminal:
+#+begin_src lisp
+  (try 'uax-suite :print 'unexpected)
+
+#<TRIAL (UAX-SUITE) EXPECTED-SUCCESS 1.527s ⋅343332>
+
+#<TRIAL (UAX-SUITE) EXPECTED-SUCCESS 1.460s ⋅343332>
+#+end_src
+And the test run is down from 32 secs to 1.5 seconds.
+***** Print Compactly
+If we set the \*print-compactly* variable to t, and run try without the :print 'unexpected, try would have printed out a single dot for each assertion and the result for the running the uax-15 suite would have been (again, first in the emacs REPL and then running in a terminal):
+#+begin_src lisp
+  ..... name of test ... lots of dots representing passing assertions, concluding in
+
+#<TRIAL (UAX-SUITE) EXPECTED-SUCCESS 1.990s ⋅343332>
+
+#<TRIAL (UAX-SUITE) EXPECTED-SUCCESS 1.900s ⋅343332>
+#+end_src
+So printing the dots only saved us 30 seconds of wasted time in the REPL and 8 seconds in the terminal.
+**** Failure reports only
+Lets create a test which calls tests we know will fail and tests we know will not fail:
+#+begin_src lisp
+  (deftest t1a-unexpected-fail ()
+        (let ((x 1) (y 2))
+          (is (= x y)
+              :msg "Intentional failure x does not equal y"
+              :ctx ("*PACKAGE* is ~S and *PRINT-CASE* is ~S~%"
+                    ,*package* *print-case*))
+          (is (equal 1 x))))
+
+  (deftest t1b-unexpected-fail ()
+        (let ((x 1) (y 2))
+          (is (= x y))
+          (is (equal 1 x))))
+
+  (deftest test8-pass-and-fail ()
+                    (t1b-unexpected-fail)
+                    (test7)
+                    (t1a-unexpected-fail))
+#+end_src
+Now we call try with test8-pass-and-fail with the :print 'unexpected parameters
+#+begin_src lisp
+  (try 'test8-pass-and-fail :print 'unexpected)
+TEST8-PASS-AND-FAIL
+  T1B-UNEXPECTED-FAIL
+    ⊠ (IS (= X Y))
+      where
+        X = 1
+        Y = 2
+  ⊠ T1B-UNEXPECTED-FAIL ⊠1 ⋅1
+  T1A-UNEXPECTED-FAIL
+    ⊠ Intentional failure x does not equal y
+      where
+        X = 1
+        Y = 2
+      *PACKAGE* is #<PACKAGE "UAX-15-TRY-TESTS"> and *PRINT-CASE* is :UPCASE
+
+  ⊠ T1A-UNEXPECTED-FAIL ⊠1 ⋅1
+⊠ TEST8-PASS-AND-FAIL ⊠2 ⋅6
+#<TRIAL (TEST8-PASS-AND-FAIL) UNEXPECTED-FAILURE 0.003s ⊠2 ⋅6>
+#+end_src
+As expected the net result (last line) is 2 unexpected failures and 6 expected successes. We do not get thrown into the debugger and we only get details of the unexpected failures.
+
+**** Streams and Printer
+The try function acceptsa key parameters :stream and :printer to redirect the report printing.
+**** Other Reports
+The following shows the condition classes of events which can be signaled and printed:
+#+begin_src lisp
+(let ((*debug* nil)
+      (*print* '(not trial-start))
+      (*describe* nil))
+  (with-test (verdict-abort*)
+    (with-test (expected-verdict-success))
+    (with-expected-outcome ('failure)
+      (with-test (unexpected-verdict-success)))
+    (handler-bind (((and verdict success) #'force-expected-failure))
+      (with-test (expected-verdict-failure)))
+    (handler-bind (((and verdict success) #'force-unexpected-failure))
+      (with-test (unexpected-verdict-failure)))
+    (with-test (verdict-skip)
+      (skip-trial))
+    (is t :msg "EXPECTED-RESULT-SUCCESS")
+    (with-failure-expected ('failure)
+      (is t :msg "UNEXPECTED-RESULT-SUCCESS")
+      (is nil :msg "EXPECTED-RESULT-FAILURE"))
+    (is nil :msg "UNEXPECTED-RESULT-FAILURE")
+    (with-skip ()
+      (is nil :msg "RESULT-SKIP"))
+    (handler-bind (((and result success) #'abort-check))
+      (is t :msg "RESULT-ABORT*"))
+    (catch 'foo
+      (with-test (nlx-test)
+        (throw 'foo nil)))
+    (error "UNHANDLED-ERROR")))
+.. VERDICT-ABORT*                       ; TRIAL-START
+..   ⋅ EXPECTED-VERDICT-SUCCESS
+..   ⊡ UNEXPECTED-VERDICT-SUCCESS
+..   × EXPECTED-VERDICT-FAILURE
+..   ⊠ UNEXPECTED-VERDICT-FAILURE
+..   - VERDICT-SKIP
+..   ⋅ EXPECTED-RESULT-SUCCESS
+..   ⊡ UNEXPECTED-RESULT-SUCCESS
+..   × EXPECTED-RESULT-FAILURE
+..   ⊠ UNEXPECTED-RESULT-FAILURE
+..   - RESULT-SKIP
+..   ⊟ RESULT-ABORT*
+..   NLX-TEST                           ; TRIAL-START
+..     ⊟ non-local exit                 ; NLX
+..   ⊟ NLX-TEST ⊟1                      ; VERDICT-ABORT*
+..   ⊟ "UNHANDLED-ERROR" (SIMPLE-ERROR)
+.. ⊟ VERDICT-ABORT* ⊟3 ⊠1 ⊡1 -1 ×1 ⋅1
+..
+==> #<TRIAL (WITH-TEST (VERDICT-ABORT*)) ABORT* 0.004s ⊟3 ⊠1 ⊡1 -1 ×1 ⋅1>
+#+end_src
+**** Duration
+The try global variable \*print-duration* defaults to nil. If set to true, the number of second spent during execution on each assertion is also printed. E.g.
+#+begin_src lisp
+  (let ((*print-duration* t)
+      (*debug* nil)
+      (*describe* nil))
+  (with-test (timed)
+    (is (progn (sleep 0.3) t))
+    (is (progn (sleep 0.2) t))
+    (error "xxx")))
+..        TIMED
+..  0.300   ⋅ (IS (PROGN (SLEEP 0.3) T))
+..  0.200   ⋅ (IS (PROGN (SLEEP 0.2) T))
+..          ⊟ ""xxx (SIMPLE-ERROR)
+..  0.504 ⊟ TIMED ⊟1 ⋅2
+..
+==> #<TRIAL (WITH-TEST (TIMED)) ABORT* 0.504s ⊟1 ⋅2>
+#+end_src
+*** Edge Cases: Values expressions, loops. closures and calling other tests
+**** Values expressions
+Try handles values expressions with no problem.
+#+begin_src lisp
+  (is (match-values (values (1+ 5) "sdf")
+      (= * 0)
+      (string= * "sdf")))
+#+end_src
+
+**** Now looping and closures
+Try has no problem with loops or finding variables that have been set in a closure containing the test.
+#+begin_src lisp
+
+#+end_src
+**** Calling a test inside another test
+Try has no problem with calling tests inside other tests.
+#+begin_src lisp
+(let ((x 1))
+   (deftest test3-pass ()
+      (is (= x 1))
+      (is (funcall 'test2 1)))
+   (funcall 'test3-pass))
+
+TEST3-PASS
+  ⋅ (IS (= X 1))
+  ⋅ (IS (= X Y))
+  ⋅ (IS (FUNCALL 'TEST2 1))
+⋅ TEST3-PASS ⋅3
+#<TRIAL (TEST3-PASS) EXPECTED-SUCCESS 0.000s ⋅3>
+#+end_src
+*** Float Tests
+Try has an extensive library of float comparisons. I will just quote from the documentation:
+
+"Float comparisons following   [[https://randomascii.wordpress.com/2012/02/25/comparing-floating-point-numbers-2012-edition/][https://randomascii.wordpress.com/2012/02/25/comparing-floating-point-numbers-2012-edition/]]
+
+    [function] FLOAT-~= X Y &KEY (MAX-DIFF-IN-VALUE \*MAX-DIFF-IN-VALUE*) (MAX-DIFF-IN-ULP \*MAX-DIFF-IN-ULP*)
+
+    Return whether two numbers, X and Y, are approximately equal either according to MAX-DIFF-IN-VALUE or MAX-DIFF-IN-ULP.
+
+    If the absolute value of the difference of two floats is not greater than MAX-DIFF-IN-VALUE, then they are considered equal.
+
+    If two floats are of the same sign and the number of representable floats (ULP, unit in the last place) between them is less than MAX-DIFF-IN-ULP, then they are considered equal.
+
+    If neither X nor Y are floats, then the comparison is done with =. If one of them is a DOUBLE-FLOAT, then the other is converted to a double float, and the comparison takes place in double float space. Else, both are converted to SINGLE-FLOAT and the comparison takes place in single float space.
+
+    [variable] \*MAX-DIFF-IN-VALUE* 1.0e-16
+
+    The default value of the MAX-DIFF-IN-VALUE argument of FLOAT-~=.
+
+    [variable] \*MAX-DIFF-IN-ULP* 2
+
+    The default value of the MAX-DIFF-IN-ULP argument of FLOAT-~=.
+
+    [function] FLOAT-~< X Y &KEY (MAX-DIFF-IN-VALUE \*MAX-DIFF-IN-VALUE*) (MAX-DIFF-IN-ULP \*MAX-DIFF-IN-ULP*)
+
+    Return whether X is approximately less than Y. Equivalent to <, but it also allows for approximate equality according to FLOAT-~=.
+
+    [function] FLOAT-~> X Y &KEY (MAX-DIFF-IN-VALUE \*MAX-DIFF-IN-VALUE*) (MAX-DIFF-IN-ULP \*MAX-DIFF-IN-ULP*)
+
+    Return whether X is approximately greater than Y. Equivalent to >, but it also allows for approximate equality according to FLOAT-~=."
+
+
+*** Suites, tags and other multiple test abilities
+**** Lists of tests
+Try can handle lists of tests and the function list-package-tests will return a list of the try tests in a package.
+#+begin_src lisp
+  (test '(t1 t2))
+
+  (list-package-tests)
+#+end_src
+**** Suites
+Test suites in try are just tests that callother tests
+#+begin_src lisp
+  (deftest test6-pass (x y)
+    (is (= x 1))
+    (is (= y 2))
+    (is (not (= x y))))
+
+  (deftest test7 ()
+    (test6-pass 1 2)
+    (test1-pass 1))
+#+end_src
+Now we can call test7 and get the results for test6 and test1
+#+begin_src lisp
+  (test7)
+TEST7
+  TEST6-PASS
+    ⋅ (IS (= X 1))
+    ⋅ (IS (= Y 2))
+    ⋅ (IS (NOT (= X Y)))
+  ⋅ TEST6-PASS ⋅3
+  TEST1-PASS
+    ⋅ (IS (= X 1))
+  ⋅ TEST1-PASS ⋅1
+⋅ TEST7 ⋅4
+#<TRIAL (TEST7) EXPECTED-SUCCESS 0.003s ⋅4>
+#+end_src
+
+*** Replay Events and Defer Descriptions
+Try has a replay-events function which reprocesses the events wich where collected in a trial object. It does not re-run the tests, it just signals the events collected in the trial object for further processing. For example, you ran a large test without :print 'unexpected and need to winnow through the output to find just the failing tests. You can replay and just get the unexpected results:
+#+begin_src lisp
+  (replay-events ! :print 'unexpected)
+#+end_src
+As you might expect, the variable ! passed in is the most recent trial. !! or !!! would be second or third most recent respectively.
+
+The function (recent-trial &optional (n 0)) will return the Nth most recent trial or NIL if there are not enough trials recorded. Every TRIAL returned by TRY gets pushed onto a list of trials, but only \*N-RECENT-TRIALS* are kept.
+
+
+[[top][top]]
+*** Fixtures and Freezing Data
+Per the documentation, Try has no direct support for fixtures. One suggestion is writing macros like the following:
+#+begin_src lisp
+(defvar *server* nil)
+
+(defmacro with-xxx (&body body)
+  `(flet ((,with-xxx-body ()
+            ,@body))
+     (if *server*
+         (with-xxx-body)
+         (with-server (make-expensive-server)
+           (with-xxx-body)))))
+#+end_src
+
+*** Removing tests
+Try tests can be deleted by FMAKUNBOUND, UNINTERN, or by redefining the function with DEFUN. Tests defined in a given package can be listed with LIST-PACKAGE-TESTS.
+
+*** Sequencing, Random and Failure Only
+While tests and the forms inside tests normally follow a sequential order, try allows you to shuffle the list of forms inside the body of a test.
+
+#+begin_src lisp
+(loop repeat 3 do
+  (with-shuffling ()
+    (prin1 1)
+    (prin1 2)))
+.. 122112
+=> NIL
+#+end_src
+*** Skip Capability
+As we already saw when looking at tests that had failures, you can look at the conditions triggered and decide to skip an assertion result.
+
+The following shows a test that skips the test (server-available-p).
+#+begin_src lisp
+(deftest my-suite ()
+  (with-skip ((not (server-available-p)))
+    (test-server)))
+#+end_src
+
+*** Random Data Generators
+None, but the helper libraries can fullfill this well.
+
+
+** Discussion
+I found try to be easy to use. The only thing that I would ask in addition to its current capabilities is the ability to just get the summary results even if there are unexpected results.
+
+[[top][top]]
+
+** Who uses try
+The following list is just pulling the results =(ql:who-depends-on :try)= and adding their homepage urls.
+- [[https://github.com/melisgl/named-readtables][named-readtables]]
+- [[https://github.com/melisgl/journal][journal]]
+- [[https://github.com/melisgl/mgl-pax][mgl-pax/test]]
+- [[https://github.com/antimer/lmdb/blob/master/lmdb.asd][lmdb]]
+
 
 <<unit-test>>
 * unit-test
