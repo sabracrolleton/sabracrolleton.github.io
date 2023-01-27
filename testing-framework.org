@@ -1,4 +1,4 @@
-#+TITLE: Comparison of Common Lisp Testing Frameworks (16 Jan 2023 Edition)
+#+TITLE: Comparison of Common Lisp Testing Frameworks (27 Jan 2023 Edition)
  #+AUTHOR:      Sabra Crolleton
  #+DATE:        2021-05-28
  #+EMAIL:       sabra.crolleton!gmail.com
@@ -13,6 +13,8 @@
  #+ATTR_LATEX: :float multicolumn :width
 <<top>>
 * Changelog
+27 Jan 2023 - Adding input from Pierre Neidhardt: adding vocabulary criteria, correcting that Lisp-Unit2 does have progress reports.
+
 16 Jan 2023 - Updated adding Confidence and Try and deleting Kaputt. Thank you Michaël Le Barbier for actually doing the work of submitting the proposed pull request for Confidence.
 
 2 October 2021 - Updated for changes at the Common Lisp Cookbook on testing. Updated number of issues and pull requests for FiveAM.
@@ -47,6 +49,12 @@ Some testing frameworks insist on [[progress-reports][tracking progress by print
 
 Some frameworks cannot find lexical variables declared in a closure containing the test. Most people will not care, but if you use closures, you might.
 
+Some people find that whether you use deftest v. define-test or similar vocabulary terms makes a difference. As Pierre Neidhardt said: `define-test` and `assert-false` are well chosen words
+because:
+
+ - They are full, legible words, which is more Lispy (as opposed to "deftest").
+ - Emacs colors them properly by default.
+
 Other contexts are best served by other libraries. Complex fixture requirements might drive you towards something like [[nst][NST]], the need to define your own bespoke assertions might be served by [[should-test][should-test]] or [[confidence][confidence]]. Numerical comparisons might lead you to use [[lisp-unit][lisp-unit]], [[lisp-unit2][lisp-unit2]] or [[confidence][confidence]] (or just writing your own). For macro-expansion testing, [[clunit][clunit]], [[clunit2][clunit2]], [[lisp-unit][lisp-unit]], [[lisp-unit2][lisp-unit2]] and [[rove][rove]] have specific assertion functions. Your situation should govern which testing framework you use, not your project skeleton or market share.
 
 I occasionally hear "extensibility" used as a buzzword applied to a framework. I'm not sure what it means to people. Consider the following example in =sxql=, which is not a testing framework but which included this macro in its own test file to simplify its use of =prove= -
@@ -60,7 +68,7 @@ I occasionally hear "extensibility" used as a buzzword applied to a framework. I
        '("SELECT (? + ?)" (1 1))
        "field")
 #+end_src
-How hard is that to do in any framework? This is Common Lisp.
+This is not hard to do, but may not be as composable.
 
 In any event, yes, I will state my opinions, but what you think is important will drive your preferences in testing frameworks.
 
@@ -198,13 +206,11 @@ The selenium interfaces are here for reference purposes and are not further disc
 ** Opinionated Awards
 
 For those who want the opinionated quick summary. The awards are -
-- Best General Purpose: *Parachute*
+- Best General Purpose: *Parachute*, *Lisp-Unit2*.
 
   It hits almost everything on my wish list - optional progress reports and debugging, good suite setup and reporting, good default error-reporting and the ability to provide diagnostic strings with variables, the ability to skip failing test dependencies, to set time limits on tests, to report the time for each test and decent fixture capability. It does not have the built-in ability to re-run just the last failing tests, but that is a relatively easy add-on. The bigger limitation is that while fixtures are easy to setup, fixtures for parent tests (suites) do not apply to nested child tests. While it is not the fastest, it is in the pack as opposed to the also-rans.
 
-  My second pick would be *Fiasco*, but I like Parachute's fixture capability and suite setup better.
-
-  My third choice would be *Lisp-Unit2*.
+  My next pick would be *Fiasco*, but I like Parachute and Lisp-Unit2's fixture capability and suite setup better.
 
    *(Update 13 June 2021 - based on the latest update of Clunit2, it needs to be included for consideration as well)*
    *(Update 16 Jan 2023 - maybe consider the two newest entries Confidence and Try)*
@@ -217,17 +223,17 @@ For those who want the opinionated quick summary. The awards are -
 
 - Ability to reuse tests in multiple suites: *Lisp-Unit2* (because of composable tags)
 
-- If you need tests to take parameters: *Fiasco*
+- If you need tests to take parameters: *Fiasco* and *Confidence*
 
-- If you need progress reporting to be optional: *Parachute, Fiasco, or Clunit2*
+- If you need progress reporting to be optional: *Parachute, Lisp-Unit2, Fiasco, or Clunit2*
 
-- Favorite Hierarchy Setup (nestable suites): *Parachute*
+- Favorite Hierarchy Setup (nestable suites): *Parachute* and *Lisp-Unit2* (which has a different setup using tags)
 
   Everything is a test and its =:parents= all the way up; can easily specify parents at the child level.
 
   Honorable mentions - *2am and Lift*
 
-- Assertions that take diagnostic comments with variables: *Parachute, Fiasco, 2am, Fiveam, Lift, Clunit2* This is something that I like for debugging purposes along with whatever reporting comes built in with the framework. See [[error-reporting][error-reporting]]
+- Assertions that take diagnostic comments with variables: *Parachute, Fiasco, 2am, Fiveam, Lift, Clunit2, Confidence* This is something that I like for debugging purposes along with whatever reporting comes built in with the framework. See [[error-reporting][error-reporting]]
 
 - Values expression testing: *Lisp-Unit2, Lisp-Unit, Parachute*, (*Update* *Clunit2* as well)
 
@@ -283,6 +289,7 @@ For those who want the opinionated quick summary. The awards are -
 - Easy to setup and clean up [[fixtures][Fixtures]]
   - Composable fixtures (fixtures for multiple test suites can be composed into a single fixture)
   - Freezing existing data while a test temporarily changes it
+  - Systems that can wrap around tests, allowing you to pass local variables around.
 
 - Compilation: Some people want the ability to compile before running tests for two reasons. First, deferred compilation can seriously slow down extensive tests. Second, getting compile errors and warnings at the test run stage can be hard to track down in the middle of a lot of test output. Other people want deferred compilation (running the test compiles it, so no pre-compilation step required) and tested functions which have changed will get picked up when running the test.
 
@@ -381,7 +388,7 @@ I am not including a pie chart describing which library has market share because
 2. uses a flat list of tests. You can pass any list of test-names to run. See, e.g. macro provided by Phoe in the 1am [[1am-discussion][discussion]].
 3. lisp-unit and lisp-unit2 organize by packages and by tags. You can run all the tests in a package, or all the tests for a list of tags, but they do not have the strict sense of hierarchy that other libraries have.
 4. [[http://testanything.org][TAP Formatted]] Reports are available
-5. Because tests are functions, tests can call other functions so you can create ad-hoc suites or hierarchies but they are not likely to be composable.
+5. Because tests are functions, tests can call other functions so you can create ad-hoc suites or hierarchies.
 6. Has suites but no real capacity to run them independently - all or nothing
 7. Rove's =run-suite= function will run all the tests in a particular package but does not accept a style parameter and simply prints out the results of each individual test, without summarizing. Rove's =run= function does accept a style parameter but seems to handle only package-inferred systems. I confirm Rove's [[https://github.com/fukamachi/rove/issues/42][issue #42]] that it will not run with non-package inferred systems.
 8. RT does not have suites per se. You can run all the tests that have been defined using the DO-TESTS function. By default it prints to =*standard-output*= but accepts an optional stream parameter which would allow you to redirect the results to a file or other stream of your choice. do-tests will print the results for each individual test and then summarize with something like the following:
@@ -389,6 +396,8 @@ I am not including a pie chart describing which library has market share because
 
 ** Run on compile, funcallable tests
     <<run-on-compile>><<funcallable>>
+
+There are multiple benefits to tests being funcallable. One of them being that you can "go to the test definition" easily.
 #+CAPTION: Run on Compile and Funcallable Tests
 #+ATTR_HTML: :border 2 :rules all :frame border
 #+ATTR_LATEX: :float multicolumn
@@ -434,7 +443,7 @@ I am not including a pie chart describing which library has market share because
 | [[2am][2am]] (not in quicklisp) | ❌️        |                |               |                                    |
 | [[cacau][cacau]]                  | ✅️        | ✅️              | ✅️             |                                    |
 | [[clunit][clunit]]                 | ✅️        | ✅️              | ✅️             | ✅️                                  |
-| [[clunit2][clunit2]]                | ✅️        | ✅️              | ✅️             | ✅️                                  |
+| [[clunit2][clunit2]]                | ✅️        | ✅️    (c)       | ✅️             | ✅️                                  |
 | [[confidence][confidence]]             | ❌️        |                |               |                                    |
 | [[fiasco][fiasco]]                 | ❌️        |                |               |                                    |
 | [[fiveam][fiveam]]  (a)            | K        | ✅️              | ✅️             |                                    |
@@ -443,7 +452,7 @@ I am not including a pie chart describing which library has market share because
 | [[lisp-unit][lisp-unit]]              | ❌️        |                |               |                                    |
 | [[lisp-unit2][lisp-unit2]]             | ✅️        |                | ✅️             |                                    |
 | [[nst][nst]]                    | ✅️        | ✅️              | ✅️             | ✅️                                  |
-| [[parachute][parachute]]              | ✅️        |                | ✅️             |                                    |
+| [[parachute][parachute]]              | ✅️        | (d)            | ✅️             |  ✅️                                    |
 | [[prove][prove]]                  | ❌️        |                |               |                                    |
 | [[ptester][ptester]]                | ❌️        |                |               |                                    |
 | [[rove][rove]]                   | ✅️        | ✅️              | ✅️             | ✅️                                  |
@@ -456,6 +465,8 @@ I am not including a pie chart describing which library has market share because
 | [[xptest][xptest]]                 | ✅️        |                | ✅️             |                                    |
 (a) Not really recommended, but does exist.
 (b) Users are expected to create a subclass of the unit-test class using the =define-test-class= macro.
+(c) Only one fixture per suite
+(d) Child tests do not inherit fixtures applied to the parent. You would have to wrap both parent and child in a with-fixtures macro.
 
 [[top][top]]
 
@@ -548,7 +559,7 @@ Does the framework provide a progress report, is it optional, and does it run ju
 | [[fiveam][fiveam]]        | optional (1)                                                               |
 | [[lift][lift]]          | never                                                                      |
 | [[lisp-unit][lisp-unit]]     | never                                                                      |
-| [[lisp-unit2][lisp-unit2]]    | never                                                                      |
+| [[lisp-unit2][lisp-unit2]]    | optional                                                                   |
 | [[nst][nst]]           | Every test                                                                 |
 | [[parachute][parachute]]     | optional                                                                   |
 | [[prove][prove]]         | Every assert                                                               |
@@ -707,6 +718,42 @@ This table is looking at whether the framework provides [[bounded-equality][floa
 | [[xptest][xptest]]        |             | relies on CL predicates   | Y                     |
 (a) Updated 13 June 2021
 
+
+** Vocabulary - Define and Assert
+[[top][top]]
+<<vocabulary>>
+This table is looking at whether the framework uses define- and assert- which provide makes it easier to read as Emacs will color them. This is important to at least one group that commented on earlier versions of this report.
+#+CAPTION: Vocabulary
+#+ATTR_HTML: :border 2 :rules all :frame border
+| Name          | Define-         | Assert-                                                                                                                                                                   |
+|---------------+-----------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| [[1am][1am]]           |                 |                                                                                                                                                                           |
+| [[2am][2am]]           |                 |                                                                                                                                                                           |
+| [[cacau][cacau]]         |                 |                                                                                                                                                                           |
+| [[clunit][clunit]]        |                 | assert-true, assert-condition                                                                                                                                             |
+| [[clunit2][clunit2]]    |                 | assert-true, assert-condition                                                                                                                                             |
+| [[confidence][confidence]]    | define-testcase | assert-true, assert-p, assert-t                                                                                                                                           |
+| [[fiasco][fiasco]]        |                 |                                                                                                                                                                           |
+| [[fiveam][fiveam]]        |                 |                                                                                                                                                                           |
+| [[gigamonkeys][gigamonkeys]]   |                 |                                                                                                                                                                           |
+| [[lift][lift]]          |                 |                                                                                                                                                                           |
+| [[lisp-unit][lisp-unit]]     | define-test     | asset-true, assert-error, assert-result, assert-test, check-type                                                                                                          |
+| [[lisp-unit2][lisp-unit2]]    | define-test     | assert=, assert/=, asssert-char=,	assert-char-equal,assert-char/=, assert-char-not-equal, assert-eq, 	 assert-eql, assert-equal, assert-equality,	assert-equalp, assert-error, assert-expands, assert-fail,	assert-false, assert-float-equal, assert-no-error, assert-no-signal, assert-no-warning, assert-norm-equal, assert-number-equal, assert-numerical-equal, assert-passes?, assert-prints, assert-rational-equal, assert-sigfig-equal, assert-signal, assert-string=, assert-string-equal, assert-string/=, assert-string-not-equal,  assert-true, assert-typep, assert-warning, assertion-fail, assertion-pass, check-type, logically-equal |
+| [[nst][nst]]           |                 |                                                                                                                                                                           |
+| [[parachute][parachute]]     | define-test     |                                                                                                                                                                           |
+| [[prove][prove]]         |                 |                                                                                                                                                                           |
+| [[ptester][ptester]]       |                 |                                                                                                                                                                           |
+| [[rove][rove]]          |                 |                                                                                                                                                                           |
+| [[rt][rt]]            |                 |                                                                                                                                                                           |
+| [[should-test][should-test]]   |                 |                                                                                                                                                                           |
+| [[tap-unit-test][tap-unit-test]] | define-test     | assert-true, assert-error                                                                                                                                                 |
+| [[try][[try]]          |                 |                                                                                                                                                                           |
+| [[unit-test][unit-test]]     |                 |                                                                                                                                                                           |
+| [[xlunit][xlunit]]        |                 | assert-true, assert-condition                                                                                                                                             |
+| [[xptest][xptest]]        | defmethod       |                                                                                                                                                                           |
+
+
+
 [[top][top]]
 
 ** Compatibility and Customizable Assertions
@@ -721,7 +768,7 @@ This table is looking at whether the framework provides [[bounded-equality][floa
 
 (a) Running suites without tests or tests without test functions will result in tests marked PENDING rather than success or fail
 
-** Claims Not Test
+** Claims Not Tested
 <<not-test>>
 #+CAPTION: Overview-5 Claims Not Tested
 #+ATTR_HTML: :border 2 :rules all :frame border
@@ -1708,7 +1755,7 @@ Note to self: Per [[http://clhs.lisp.se/Body/f_null.htm]], null is an empty list
 | [[clunit2][clunit2]]    | assert-equality*                                                                                                                                         |
 | [[confidence][confidence]] | assert-float-is-approximately-equal, assert-float-is-definitely-greater-than, 	assert-float-is-definitely-less-than,  assert-float-is-essentially-equal |
 | [[lisp-unit][lisp-unit]]  | assert-norm-equal,  assert-float-equal,  assert-number-equal,  assert-numerical-equal,  assert-rational-equal,  assert-sigfig-equal,                     |
-| [[lisp-unit2][lisp-unit2]] | assert-norm-equal  assert-float-equal  assert-number-equal  assert-numerical-equal,  assert-rational-equal,  assert-sigfig-equal,                        |
+| [[lisp-unit2][lisp-unit2]] | assert-norm-equal,  assert-float-equal,  assert-number-equal,  assert-numerical-equal,  assert-rational-equal,  assert-sigfig-equal,                     |
 | try        | float-~=, float-~<, float-~> |
 
 
@@ -1719,7 +1766,7 @@ Note to self: Per [[http://clhs.lisp.se/Body/f_null.htm]], null is an empty list
 |---------------+---------------------------------------------|
 | [[confidence][confidence]]        | assert-set-equal, assert-vector-equal       |
 | [[lisp-unit][lisp-unit]]     | logically-equal, set-equal                  |
-| [[lisp-unit2][lisp-unit2]]    | logically-equal                             |
+| [[lisp-unit2][lisp-unit2]]    | logically-equal,  assert=, assert/=, asssert-char=,	assert-char-equal,assert-char/=, assert-char-not-equal, assert-string=, assert-string-equal, assert-string/=, assert-string-not-equal                           |
 | [[tap-unit-test][tap-unit-test]] | logically-equal, set-equal, unordered-equal |
 |               |                                             |
 
@@ -5698,29 +5745,103 @@ Many libraries on quicklisp use Lisp-Unit. If you have quicklisp, you can get a 
 ** Summary
  | [[https://github.com/AccelerationNet/lisp-unit2][homepage]] | Russ Tyndall | MIT | 2018 |
 
-I generally like Lisp-Unit2. Phil Gold's original concerns about Lisp-Unit back in 2007 was its failure to scale. Specifically he pointed to non-composable test reports, the fact that you could not get just failure reports, so the failures were lost in the reporting of successful reports, and there is no count of failed tests. I think those have been addressed with the tags capabilities.
+I really like Lisp-Unit2. Phil Gold's original concerns about Lisp-Unit back in 2007 was its failure to scale. Specifically he pointed to non-composable test reports, the fact that you could not get just failure reports, so the failures were lost in the reporting of successful reports, and there is no count of failed tests. I think those have been addressed with the tags capabilities.
 
 Unlike the situation with Clunit and Clunit2 which are almost identical, Lisp-Unit and Lisp-Unit2 have definitely diverged over the years.
 Lisp-unit2 has fixtures and can run just the previously failing tests and you can turn on debugging for failures as well as errors.
 It does not have progress reports which might bother some people.  If you need floating point tests, those are built-in.
 
-It will report all the assertion failures in a test, gives the opportunity to provide user generated diagnostic messages in assertions and has a tags system that allows different ways to re-use tests not found in the typical hierarchical setup. It can re-run failed tests and interactive debugging is optional. I did find the fixture structure to be confusing and it does not have progress reporting which some people really like. I did have an issue compiling it with CCL but have not tracked it down sufficiently to see if it is a bug to be reported.
+It will report all the assertion failures in a test, gives the opportunity to provide user generated diagnostic messages in assertions and has a tags system that allows different ways to re-use tests not found in the typical hierarchical setup. It can re-run failed tests and interactive debugging is optional. I did find the fixture structure to be confusing.
+
 ** Assertion Functions
-| assert-eq              | assert-eql          | assert-equal        |
-| assert-equality        | assert-equalp       | assert-error        |
-| assert-expands         | assert-fail         | assert-false        |
-| assert-float-equal     | assert-no-error     | assert-no-signal    |
-| assert-no-warning      | assert-norm-equal   | assert-number-equal |
-| assert-numerical-equal | assert-passes?      | assert-prints       |
-| assert-rational-equal  | assert-sigfig-equal | assert-signal       |
-| assert-true            | assert-typep        | assert-warning      |
-| assertion-fail         | assertion-pass      | check-type          |
-| logically-equal        |                     |                     |
+Lisp-unit2 has more assertions than just about anyone. Using the correct assertions will increase speed and efficiency. Whether that matters will, of course, depend on your test case.
+
+| assert=                 | assert/=            |                     |
+| asssert-char=           | assert-char-equal   | assert-char/=       |
+| assert-char-not-equal   |                     |                     |
+| assert-eq               | assert-eql          | assert-equal        |
+| assert-equality         | assert-equalp       | assert-error        |
+| assert-expands          | assert-fail         | assert-false        |
+| assert-float-equal      | assert-no-error     | assert-no-signal    |
+| assert-no-warning       | assert-norm-equal   | assert-number-equal |
+| assert-numerical-equal  | assert-passes?      | assert-prints       |
+| assert-rational-equal   | assert-sigfig-equal | assert-signal       |
+| assert-string=          | assert-string-equal | assert-string/=     |
+| assert-string-not-equal |                     |                     |
+| assert-true             | assert-typep        | assert-warning      |
+| assertion-fail          | assertion-pass      | check-type          |
+| logically-equal         |                     |                     |
 
 [[top][top]]
 ** Usage
 If you store the results of a test run, you can call =rerun-failures= on those results to just rerun the failing tests rather than go through all the tests again.
 *** Report Format
+You can choose to run one test or more than one test. When running more than one test, you can choose to have the summary provided at the end or have progress summary reports generated during the test run.
+
+As an example, the following will generate summary reports during a test run:
+#+begin_src lisp
+    (run-tests :package :uax-15-lisp-unit2-tests :run-contexts #'with-summary-context)
+
+
+  ------- STARTING Testing: UAX-15-LISP-UNIT2-TESTS
+
+  Starting: UAX-15-LISP-UNIT2-TESTS::PART0-NFKC
+  UAX-15-LISP-UNIT2-TESTS::PART0-NFKC - PASSED (0.01s) : 100 assertions passed
+
+  Starting: UAX-15-LISP-UNIT2-TESTS::PART1-NFKC
+  UAX-15-LISP-UNIT2-TESTS::PART1-NFKC - PASSED (0.29s) : 68116 assertions passed
+
+  .....
+
+  Starting: UAX-15-LISP-UNIT2-TESTS::PART2-NFD
+  UAX-15-LISP-UNIT2-TESTS::PART2-NFD - PASSED (0.04s) : 9220 assertions passed
+
+  Starting: UAX-15-LISP-UNIT2-TESTS::PART3-NFD
+  UAX-15-LISP-UNIT2-TESTS::PART3-NFD - PASSED (0.01s) : 880 assertions passed
+
+  Test Summary for :UAX-15-LISP-UNIT2-TESTS (16 tests 1.08 sec)
+    | 343332 assertions total
+    | 343332 passed
+    | 0 failed
+    | 0 execution errors
+    | 0 warnings
+    | 0 empty
+    | 0 missing tests
+
+  -------   ENDING Testing: UAX-15-LISP-UNIT2-TESTS
+#+end_src
+Wrap it with print summary and Remove the internal call to with-summary-context will put the summary at the end:
+#+begin_src lisp
+  (print-summary (run-tests :package :uax-15-lisp-unit2-tests))
+UAX-15-LISP-UNIT2-TESTS::PART0-NFKC - PASSED (0.01s) : 100 assertions passed
+UAX-15-LISP-UNIT2-TESTS::PART1-NFKC - PASSED (0.18s) : 68116 assertions passed
+UAX-15-LISP-UNIT2-TESTS::PART2-NFKC - PASSED (0.04s) : 7376 assertions passed
+UAX-15-LISP-UNIT2-TESTS::PART3-NFKC - PASSED (0.01s) : 704 assertions passed
+UAX-15-LISP-UNIT2-TESTS::PART0-NFKD - PASSED (0.00s) : 100 assertions passed
+UAX-15-LISP-UNIT2-TESTS::PART1-NFKD - PASSED (0.16s) : 68116 assertions passed
+UAX-15-LISP-UNIT2-TESTS::PART2-NFKD - PASSED (0.04s) : 7376 assertions passed
+UAX-15-LISP-UNIT2-TESTS::PART3-NFKD - PASSED (0.00s) : 704 assertions passed
+UAX-15-LISP-UNIT2-TESTS::PART0-NFC - PASSED (0.01s) : 125 assertions passed
+UAX-15-LISP-UNIT2-TESTS::PART1-NFC - PASSED (0.22s) : 85145 assertions passed
+UAX-15-LISP-UNIT2-TESTS::PART2-NFC - PASSED (0.05s) : 9220 assertions passed
+UAX-15-LISP-UNIT2-TESTS::PART3-NFC - PASSED (0.01s) : 880 assertions passed
+UAX-15-LISP-UNIT2-TESTS::PART0-NFD - PASSED (0.01s) : 125 assertions passed
+UAX-15-LISP-UNIT2-TESTS::PART1-NFD - PASSED (0.18s) : 85145 assertions passed
+UAX-15-LISP-UNIT2-TESTS::PART2-NFD - PASSED (0.05s) : 9220 assertions passed
+UAX-15-LISP-UNIT2-TESTS::PART3-NFD - PASSED (0.01s) : 880 assertions passed
+
+Test Summary for :UAX-15-LISP-UNIT2-TESTS (16 tests 0.96 sec)
+  | 343332 assertions total
+  | 343332 passed
+  | 0 failed
+  | 0 execution errors
+  | 0 warnings
+  | 0 empty
+  | 0 missing tests
+#<TEST-RESULTS-DB Tests:(16) Passed:(343332) Failed:(0) Errors:(0) Warnings:(0) {10067D9AF3}>
+#+end_src
+
+
 The variable =*debugger-hook*= is set by default to =#<FUNCTION SWANK:SWANK-DEBUGGER-HOOK>=. If you want to stay out of interactive debugging, set =*debugger-hook*= to nil.
 
 You could allow the system to put you in the debugger using the =with-failure-debugging= wrapper or provide that wrapper to the keyword parameter =:run-contexts= when call =run-tests= as in the following two examples
@@ -6060,12 +6181,7 @@ Lisp-unit2 has various functions for generating random data. See examples below:
 #+end_src
 
 ** Discussion
-Hmm. My CCL version 1.12 LinuxX8664 decided not to compile Lisp-Unit2 with the following error:
-#+begin_src lisp
-Read error between positions 2071 and 2506 in /home/sabra/quicklisp/dists/quicklisp/software/lisp-unit2-20180131-git/interop.lisp.
-> Error: Reader error: No external symbol named "*SYSTEMS-BEING-OPERATED*" in package #<Package "ASDF/OPERATE"> .
-> While executing: CCL::%PARSE-TOKEN, in process listener(1).
-#+end_src
+Lisp-Unit2 is very good. Atlas Engineering put it at the [[https://github.com/atlas-engineer/nyxt/issues/2199#issuecomment-1146808213][top of their list]]
 [[top][top]]
 ** Who Uses Lift-Unit2
 Many libraries on quicklisp use Lisp-Unit2. If you have quicklisp, you can get a list of those with:
@@ -6419,7 +6535,7 @@ Maybe it is just me, but every time I tried to redefine a test, I triggered a ha
 ** Summary
 #+ATTR_HTML: :border 2 :rules all :frame border
 #+ATTR_LATEX: :float multicolumn
- | [[https://github.com/Shinmera/parachute][homepage]]                                      | Nicolas Hafner | zlib          | 2021           |
+ | [[https://github.com/Shinmera/parachute][homepage]]                                      | Nicolas Hafner | zlib          | 2022           |
 
 It hits almost everything on my wish list - optionality on progress reports and debugging, good suite setup and reporting, good default error-reporting and the ability to provide diagnostic strings with variables, skip failing dependencies, set time limits on long running tests and has decent fixture capability. It does not have the built-in ability to re-run just the last failing tests, but that is a relatively easy add-on. (see [[parachute-discussion][Discussion]]) The bigger limitation is that fixtures at a parent test level (suite level) do not apply to nested child tests. While it is not the fastest, it is in the pack as opposed to the also-rans.
 
@@ -6502,6 +6618,41 @@ was expected to be equal under TYPEP.
 #<PLAIN 5, FAILED results>
 #+end_src
 If you start looking at summary reports for nested tests and notice that the number of test results is not greater than the number of assertions, just remember that a nested test is itself considered an assertion and will pass if all its assertions pass or fail if any of its assertions fail.
+**** Summary Report
+The difference between the summary report and the plain report is that the summary report suppresses the progress reports.
+#+begin_src lisp
+  (test 't1-fail :report 'summary)
+
+;; Summary:
+Passed:     0
+Failed:     4
+Skipped:    0
+
+;; Failures:
+   4/   4 tests failed in UAX-15-PARACHUTE-TESTS::T1-FAIL
+The test form   2
+evaluated to    2
+when            1
+was expected to be equal under =.
+
+The test form   2
+evaluated to    2
+when            1
+was expected to be equal under EQUAL.
+
+The test form   y
+evaluated to    2
+when            1
+was expected to be equal under =.
+Intentional failure 1 does not equal 2
+
+The test form   (capture-error (error 'floating-point-overflow))
+evaluated to    [floating-point-overflow] arithmetic error floating-point-overflow signalled
+when            division-by-zero
+was expected to be equal under TYPEP.
+
+#<SUMMARY 5, FAILED results>
+#+end_src
 **** Interactive
 The interactive report which throws you into the debugger:
 #+begin_src lisp
@@ -6742,7 +6893,108 @@ evaluated to    1
 when            2
 was expected to be equal under =.
 #+end_src
-So effectively you cannot set suite level fixtures with Parachute. In case you were trying to reconcile the failure counts, there was only 1 assertion that failed. However two tests failed at the child-test-1 level - the assertion on =*my-param*= and, therefore, child-test-1 itself. Two tests failed at the parent-test-1 level - child-test-1 and, therefore, parent-test-1 itself.
+In case you were trying to reconcile the failure counts, there was only 1 assertion that failed. However two tests failed at the child-test-1 level - the assertion on =*my-param*= and, therefore, child-test-1 itself. Two tests failed at the parent-test-1 level - child-test-1 and, therefore, parent-test-1 itself.
+
+While you cannot set parent-child inheritable fixtures, you can wrap a fixture around multiple tests. Consider the following:
+#+begin_src lisp
+    (defclass class-A ()
+    ((a :initarg :a :initform 0 :accessor a)
+     (b :initarg :b :initform 0 :accessor b)))
+
+  (defparameter *some-existing-data-parameter*
+    (make-instance 'class-A :a 17.3 :b -12))
+
+  (with-fixtures '(*some-existing-data-parameter*)
+                          (define-test t-fix1
+                            (is = -12 (b *some-existing-data-parameter*))
+                            (is = 17.3 (a *some-existing-data-parameter*)))
+                          (define-test t-fix2
+                            (is = 17.3 (a *some-existing-data-parameter*))
+                            (is = -12 (b *some-existing-data-parameter*))))
+
+  (test 't-fix1)
+        ？ UAX-15-PARACHUTE-TESTS::T-FIX1
+  0.000 ✔   (is = -12 (b *some-existing-data-parameter*))
+  0.000 ✔   (is = 17.3 (a *some-existing-data-parameter*))
+  0.007 ✔ UAX-15-PARACHUTE-TESTS::T-FIX1
+
+;; Summary:
+Passed:     2
+Failed:     0
+Skipped:    0
+#<PLAIN 3, PASSED results>
+
+  (test 't-fix2)
+        ？ UAX-15-PARACHUTE-TESTS::T-FIX2
+  0.000 ✔   (is = 17.3 (a *some-existing-data-parameter*))
+  0.000 ✔   (is = -12 (b *some-existing-data-parameter*))
+  0.007 ✔ UAX-15-PARACHUTE-TESTS::T-FIX2
+
+;; Summary:
+Passed:     2
+Failed:     0
+Skipped:    0
+#<PLAIN 3, PASSED results>
+
+  (with-fixtures '(*some-existing-data-parameter*)
+                          (define-test t-parent-fix3
+                            (is = -12 (b *some-existing-data-parameter*))
+                            (is = 17.3 (a *some-existing-data-parameter*)))
+                          (define-test t-child-fix3 :parent t-parent-fix3
+                            (is = 12 (abs (b *some-existing-data-parameter*)))))
+
+  (test 't-parent-fix3)
+        ？ UAX-15-PARACHUTE-TESTS::T-PARENT-FIX3
+  0.000 ✔   (is = -12 (b *some-existing-data-parameter*))
+  0.000 ✔   (is = 17.3 (a *some-existing-data-parameter*))
+        ？   UAX-15-PARACHUTE-TESTS::T-CHILD-FIX3
+  0.000 ✔     (is = 12 (abs (b *some-existing-data-parameter*)))
+  0.003 ✔   UAX-15-PARACHUTE-TESTS::T-CHILD-FIX3
+  0.010 ✔ UAX-15-PARACHUTE-TESTS::T-PARENT-FIX3
+
+;; Summary:
+Passed:     3
+Failed:     0
+Skipped:    0
+#<PLAIN 5, PASSED results>
+
+(test 't-child-fix3)
+        ？ UAX-15-PARACHUTE-TESTS::T-CHILD-FIX3
+  0.000 ✔   (is = 12 (abs (b *some-existing-data-parameter*)))
+  0.000 ✔ UAX-15-PARACHUTE-TESTS::T-CHILD-FIX3
+
+;; Summary:
+Passed:     1
+Failed:     0
+Skipped:    0
+#<PLAIN 2, PASSED results>
+#+end_src
+You can also nest with-fixtures:
+#+begin_src lisp
+  (defparameter *some-int* 3)
+
+  (with-fixtures '(*some-int*)
+    (with-fixtures '(*some-existing-data-parameter*)
+      (define-test t-parent-fix5
+        (is = -12 (b *some-existing-data-parameter*))
+        (is = 3 *some-int*))
+      (define-test t-child-fix5 :parent t-parent-fix5
+                   (is = 12
+                       (abs (b *some-existing-data-parameter*)))
+                   (is = 3 *some-int*))))
+
+(test 't-child-fix5)
+        ？ UAX-15-PARACHUTE-TESTS::T-CHILD-FIX5
+  0.000 ✔   (is = 12 (abs (b *some-existing-data-parameter*)))
+  0.000 ✔   (is = 3 *some-int*)
+  0.007 ✔ UAX-15-PARACHUTE-TESTS::T-CHILD-FIX5
+
+;; Summary:
+Passed:     2
+Failed:     0
+Skipped:    0
+#<PLAIN 3, PASSED results>
+#+end_src
 *** Removing tests
 Parachute can remove specific tests with =remove-test= or all the tests in a package with =remove-all-tests-in-package=.
 #+begin_src lisp
