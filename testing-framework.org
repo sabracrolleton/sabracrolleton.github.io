@@ -13,7 +13,7 @@
  #+ATTR_LATEX: :float multicolumn :width
 <<top>>
 * Changelog
-27 Jan 2023 - Adding input from Pierre Neidhardt: adding vocabulary criteria, correcting that Lisp-Unit2 does have progress reports.
+27 Jan 2023 - Adding input from Pierre Neidhardt: adding vocabulary criteria, correcting that Lisp-Unit2 does have progress reports. Adding some additional examples for Parachute and Lisp-Unit2.
 
 16 Jan 2023 - Updated adding Confidence and Try and deleting Kaputt. Thank you Michaël Le Barbier for actually doing the work of submitting the proposed pull request for Confidence.
 
@@ -206,9 +206,13 @@ The selenium interfaces are here for reference purposes and are not further disc
 ** Opinionated Awards
 
 For those who want the opinionated quick summary. The awards are -
-- Best General Purpose: *Parachute*, *Lisp-Unit2*.
+- Best General Purpose: *Parachute* followed by *Lisp-Unit2*.
 
-  It hits almost everything on my wish list - optional progress reports and debugging, good suite setup and reporting, good default error-reporting and the ability to provide diagnostic strings with variables, the ability to skip failing test dependencies, to set time limits on tests, to report the time for each test and decent fixture capability. It does not have the built-in ability to re-run just the last failing tests, but that is a relatively easy add-on. The bigger limitation is that while fixtures are easy to setup, fixtures for parent tests (suites) do not apply to nested child tests. While it is not the fastest, it is in the pack as opposed to the also-rans.
+  Parachute hits almost everything on my wish list - optional progress reports and debugging, good suite setup and reporting, good default error-reporting and the ability to provide diagnostic strings with variables, the ability to skip failing test dependencies, to set time limits on tests, to report the time for each test and decent fixture capability. It does not have the built-in ability to re-run just the last failing tests, but that is a relatively easy add-on. The bigger limitation is that while fixtures are easy to setup, fixtures for parent tests (suites) do not apply to nested child tests. While it is not the fastest, it is in the pack as opposed to the also-rans.
+
+  Atlas Engineering makes a strong case for Lisp-Unit2 [[https://github.com/atlas-engineer/nyxt/issues/2199#issuecomment-1146808213][here]].
+
+  My use cases give Parachute a slight edge because I can get more detail on assertions within a test than with Lisp-Unit2. Atlas Engineering's use cases give Lisp-Unit2 a slight edge because its tests are functions. Your choice will depend on your use case.
 
   My next pick would be *Fiasco*, but I like Parachute and Lisp-Unit2's fixture capability and suite setup better.
 
@@ -814,6 +818,16 @@ Assertions also accept diagnostic strings with variables
   Returned: NIL
 #+end_src
 
+** [[confidence][confidence]]
+Into the debugger you never go.
+#+begin_src lisp
+ Test assertion failed:
+  (ASSERT-T (= X Y))
+In this call, the composed forms in argument position evaluate as:
+  (= X Y) => NIL
+The assertion (ASSERT-T EXPR) is true, iff EXPR is a true generalised boolean.
+#+end_src
+
 ** [[fiasco][fiasco]]
 Assertions also accept diagnostic strings with variables
 #+begin_src lisp
@@ -842,16 +856,6 @@ Assertions also accept diagnostic strings with variables. I deleted several blan
   X                 => 1
   Y                 => 2
   (= X Y)           => NIL
-#+end_src
-
-** [[confidence][confidence]]
-Into the debugger you never go.
-#+begin_src lisp
- Test assertion failed:
-  (ASSERT-T (= X Y))
-In this call, the composed forms in argument position evaluate as:
-  (= X Y) => NIL
-The assertion (ASSERT-T EXPR) is true, iff EXPR is a true generalised boolean.
 #+end_src
 
 ** [[lift][lift]]
