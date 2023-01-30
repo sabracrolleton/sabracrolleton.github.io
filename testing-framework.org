@@ -208,7 +208,7 @@ The selenium interfaces are here for reference purposes and are not further disc
 For those who want the opinionated quick summary. The awards are -
 - Best General Purpose: *Parachute* followed by *Lisp-Unit2*.
 
-  Parachute hits almost everything on my wish list - optional progress reports and debugging, good suite setup and reporting, good default error-reporting and the ability to provide diagnostic strings with variables, the ability to skip failing test dependencies, to set time limits on tests, to report the time for each test and decent fixture capability. It does not have the built-in ability to re-run just the last failing tests, but that is a relatively easy add-on. The bigger limitation is that while fixtures are easy to setup, fixtures for parent tests (suites) do not apply to nested child tests. While it is not the fastest, it is in the pack as opposed to the also-rans.
+  Parachute hits almost everything on my wish list - optional progress reports and debugging, good suite setup and reporting, good default error-reporting and the ability to provide diagnostic strings with variables, the ability to skip failing test dependencies, to set time limits on tests, to report the time for each test and decent fixture capability. It does not have the built-in ability to re-run just the last failing tests, but that is a relatively easy add-on. While it is not the fastest, it is in the pack as opposed to the also-rans.
 
   Atlas Engineering makes a strong case for Lisp-Unit2 [[https://github.com/atlas-engineer/nyxt/issues/2199#issuecomment-1146808213][here]].
 
@@ -1963,6 +1963,31 @@ Note to self: Per [[http://clhs.lisp.se/Body/f_null.htm]], null is an empty list
 (b) runs tests in the order they were defined
 (c) continue-testing runs tests that have been defined, but not yet run
 (d) can be a quoted list of test names
+
+Universal interactive "run test at point" for Emacs environment.
+
+If the framework allows to programmatically run an individual test, then it's possible to run the test at point by adding a little Emacs snippet. The example below if specific for Lisp-Unit2 ([[https://github.com/atlas-engineer/nyxt/issues/2199#issuecomment-1146808213][snippet source]]).
+
+#+begin_src lisp
+(defun ambrevar/sly-run-lisp-unit-test-at-point (&optional raw-prefix-arg)
+  "See `sly-compile-defun' for RAW-PREFIX-ARG."
+  (interactive "P")
+   (call-interactively 'sly-compile-defun)
+  (let ((name `(quote ,(intern (sly-qualify-cl-symbol-name (sly-parse-toplevel-form))))))
+    (sly-eval-async
+        `(cl:string-trim "
+
+?"
+                         (cl:with-output-to-string (s)
+                                                   (cl:let ((lisp-unit2:*test-stream* s))
+                                                           (lisp-unit2:run-tests :tests ,name :run-contexts 'lisp-unit2:with-summary-context))))
+      (lambda (results)
+        (switch-to-buffer-other-window  (get-buffer-create "*Test Results*"))
+        (erase-buffer)
+        (insert results)))))
+
+(define-key lisp-mode-map (kbd "C-c C-v") 'ambrevar/sly-run-lisp-unit-test-at-point)
+#+end_src
 
 ** Fixture Functions
 #+CAPTION: Fixtures
@@ -6541,7 +6566,7 @@ Maybe it is just me, but every time I tried to redefine a test, I triggered a ha
 #+ATTR_LATEX: :float multicolumn
  | [[https://github.com/Shinmera/parachute][homepage]]                                      | Nicolas Hafner | zlib          | 2022           |
 
-It hits almost everything on my wish list - optionality on progress reports and debugging, good suite setup and reporting, good default error-reporting and the ability to provide diagnostic strings with variables, skip failing dependencies, set time limits on long running tests and has decent fixture capability. It does not have the built-in ability to re-run just the last failing tests, but that is a relatively easy add-on. (see [[parachute-discussion][Discussion]]) The bigger limitation is that fixtures at a parent test level (suite level) do not apply to nested child tests. While it is not the fastest, it is in the pack as opposed to the also-rans.
+It hits almost everything on my wish list - optionality on progress reports and debugging, good suite setup and reporting, good default error-reporting and the ability to provide diagnostic strings with variables, skip failing dependencies, set time limits on long running tests and has decent fixture capability. It does not have the built-in ability to re-run just the last failing tests, but that is a relatively easy add-on (see [[parachute-discussion][Discussion]]). While it is not the fastest, it is in the pack as opposed to the also-rans.
 
 The name of a test is coerced into a string internally, so test names are not functions that can be called on their own.
 
@@ -6549,7 +6574,7 @@ There are three types of reports: quiet, plain (the default) and interactive (th
 
 Parachute does allow you to set time limits for tests and will report the times for tests.
 
-My wish list would be for (1) the ability of fixtures to apply down the list of nested child tests and (2) for there to be a built-in ability for tests to keep a list of the last tests that failed so that you could just run those over again after you think you have fixed all your bugs.
+My wish list would be for there to be a built-in ability for tests to keep a list of the last tests that failed so that you could just run those over again after you think you have fixed all your bugs.
 
 ** Assertion Functions
 | true      | false       | fail    | is     | isnt |
@@ -6623,7 +6648,7 @@ was expected to be equal under TYPEP.
 #+end_src
 If you start looking at summary reports for nested tests and notice that the number of test results is not greater than the number of assertions, just remember that a nested test is itself considered an assertion and will pass if all its assertions pass or fail if any of its assertions fail.
 **** Summary Report
-The difference between the summary report and the plain report is that the summary report suppresses the progress reports.
+The difference between the summary report and the plain report is that the summary report suppresses the progress reports. See also =parachute:largescale= if a percentage report with the first five test failures (if any) is desired.
 #+begin_src lisp
   (test 't1-fail :report 'summary)
 
@@ -6656,6 +6681,35 @@ when            division-by-zero
 was expected to be equal under TYPEP.
 
 #<SUMMARY 5, FAILED results>
+
+  (test 't1-fail :report 'largescale)
+
+Total:           5
+Passed:          0 (  0%)
+Failed:          5 (100%)
+Skipped:         0 (  0%)
+
+;; Failures: (limited to 5)
+The test form   2
+evaluated to    2
+when            1
+was expected to be equal under =.
+
+The test form   2
+evaluated to    2
+when            1
+was expected to be equal under EQUAL.
+
+The test form   y
+evaluated to    2
+when            1
+was expected to be equal under =.
+Intentional failure 1 does not equal 2
+
+The test form   (capture-error (error 'floating-point-overflow))
+evaluated to    [floating-point-overflow] arithmetic error floating-point-overflow signalled
+when            division-by-zero
+was expected to be equal under TYPEP.
 #+end_src
 **** Interactive
 The interactive report which throws you into the debugger:
@@ -6864,42 +6918,33 @@ Running test T6-F1 ..
     Skip: 0 ( 0%)
     Fail: 0 ( 0%)
 #+end_src
-Unfortunately, fixtures are not visible at the child test level. This is shown in the following example.
+See also =define-fixture-capture= and =define-fixture-restore= on symbols that name databases, and then annotating your tests with =:fix (db-name)=. The only constraint right now is that fixtures are not inherited, meaning if you run the child test directly, it will not trigger the fixture.
 #+begin_src lisp
   (defparameter *my-param* 1)
-  (define-test parent-test-1
-      (with-fixtures '(*my-param*)
-        (setf *my-param* 2)
-        (is = 2 *my-param*)))
+  (define-test parent-test-1 :fix '*my-param*
+    (setf *my-param* 2)
+    (is = 2 *my-param*))
+
   (define-test child-test-1 :parent parent-test-1
     (is = 2 *my-param*)
     (is eq 'a 'a))
 
 (test 'parent-test-1)
-        ？ TF-PARACHUTE::PARENT-TEST-1
-  0.000 ✔   (is = 2 *my-param*)
-        ？   TF-PARACHUTE::CHILD-TEST-1
-  0.000 ✘     (is = 2 *my-param*)
-  0.000 ✔     (is eq 'a 'a)
-  0.000 ✘   TF-PARACHUTE::CHILD-TEST-1
-  0.003 ✘ TF-PARACHUTE::PARENT-TEST-1
+  ？ TF-PARACHUTE::PARENT-TEST-1
+0.000 ✔   (is = 2 *my-param*)
+？   TF-PARACHUTE::CHILD-TEST-1
+0.000 ✔     (is = 2 *my-param*)
+0.000 ✔     (is eq 'a 'a)
+0.030 ✔   TF-PARACHUTE::CHILD-TEST-1
+0.050 ✔ TF-PARACHUTE::PARENT-TEST-1
 
 ;; Summary:
-Passed:     2
-Failed:     1
+Passed:     3
+Failed:     0
 Skipped:    0
-
-;; Failures:
-   1/   2 tests failed in TF-PARACHUTE::PARENT-TEST-1
-   1/   2 tests failed in TF-PARACHUTE::CHILD-TEST-1
-The test form   *my-param*
-evaluated to    1
-when            2
-was expected to be equal under =.
+#<TEST:PLAIN 5, PASSED results>
 #+end_src
-In case you were trying to reconcile the failure counts, there was only 1 assertion that failed. However two tests failed at the child-test-1 level - the assertion on =*my-param*= and, therefore, child-test-1 itself. Two tests failed at the parent-test-1 level - child-test-1 and, therefore, parent-test-1 itself.
-
-While you cannot set parent-child inheritable fixtures, you can wrap a fixture around multiple tests. Consider the following:
+You can wrap a fixture around multiple tests. Consider the following:
 #+begin_src lisp
     (defclass class-A ()
     ((a :initarg :a :initform 0 :accessor a)
