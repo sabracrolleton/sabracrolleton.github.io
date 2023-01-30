@@ -1,4 +1,4 @@
-#+TITLE: Comparison of Common Lisp Testing Frameworks (27 Jan 2023 Edition)
+#+TITLE: Comparison of Common Lisp Testing Frameworks (30 Jan 2023 Edition)
  #+AUTHOR:      Sabra Crolleton
  #+DATE:        2021-05-28
  #+EMAIL:       sabra.crolleton!gmail.com
@@ -13,6 +13,8 @@
  #+ATTR_LATEX: :float multicolumn :width
 <<top>>
 * Changelog
+30 Jan 2023 - Updated for some new functionality in Parachute with respect to parent fixtures now being inherited by children and added a useful editor customization.
+
 27 Jan 2023 - Adding input from Pierre Neidhardt: adding vocabulary criteria, correcting that Lisp-Unit2 does have progress reports. Adding some additional examples for Parachute and Lisp-Unit2.
 
 16 Jan 2023 - Updated adding Confidence and Try and deleting Kaputt. Thank you Michaël Le Barbier for actually doing the work of submitting the proposed pull request for Confidence.
@@ -456,7 +458,7 @@ There are multiple benefits to tests being funcallable. One of them being that y
 | [[lisp-unit][lisp-unit]]              | ❌️        |                |               |                                    |
 | [[lisp-unit2][lisp-unit2]]             | ✅️        |                | ✅️             |                                    |
 | [[nst][nst]]                    | ✅️        | ✅️              | ✅️             | ✅️                                  |
-| [[parachute][parachute]]              | ✅️        | (d)            | ✅️             |  ✅️                                    |
+| [[parachute][parachute]]              | ✅️        |  ✅️                | ✅️             |  ✅️                                    |
 | [[prove][prove]]                  | ❌️        |                |               |                                    |
 | [[ptester][ptester]]                | ❌️        |                |               |                                    |
 | [[rove][rove]]                   | ✅️        | ✅️              | ✅️             | ✅️                                  |
@@ -470,7 +472,7 @@ There are multiple benefits to tests being funcallable. One of them being that y
 (a) Not really recommended, but does exist.
 (b) Users are expected to create a subclass of the unit-test class using the =define-test-class= macro.
 (c) Only one fixture per suite
-(d) Child tests do not inherit fixtures applied to the parent. You would have to wrap both parent and child in a with-fixtures macro.
+
 
 [[top][top]]
 
