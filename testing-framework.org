@@ -1964,6 +1964,31 @@ Note to self: Per [[http://clhs.lisp.se/Body/f_null.htm]], null is an empty list
 (c) continue-testing runs tests that have been defined, but not yet run
 (d) can be a quoted list of test names
 
+Universal interactive "run test at point" for Emacs environment.
+
+If the framework allows to programmatically run an individual test, then it's possible to run the test at point by adding a little Emacs snippet. The example below if specific for Lisp-Unit2 ([[https://github.com/atlas-engineer/nyxt/issues/2199#issuecomment-1146808213][snippet source]]).
+
+#+begin_src lisp
+(defun ambrevar/sly-run-lisp-unit-test-at-point (&optional raw-prefix-arg)
+  "See `sly-compile-defun' for RAW-PREFIX-ARG."
+  (interactive "P")
+   (call-interactively 'sly-compile-defun)
+  (let ((name `(quote ,(intern (sly-qualify-cl-symbol-name (sly-parse-toplevel-form))))))
+    (sly-eval-async
+        `(cl:string-trim "
+
+?"
+                         (cl:with-output-to-string (s)
+                                                   (cl:let ((lisp-unit2:*test-stream* s))
+                                                           (lisp-unit2:run-tests :tests ,name :run-contexts 'lisp-unit2:with-summary-context))))
+      (lambda (results)
+        (switch-to-buffer-other-window  (get-buffer-create "*Test Results*"))
+        (erase-buffer)
+        (insert results)))))
+
+(define-key lisp-mode-map (kbd "C-c C-v") 'ambrevar/sly-run-lisp-unit-test-at-point)
+#+end_src
+
 ** Fixture Functions
 #+CAPTION: Fixtures
 #+ATTR_HTML: :border 2 :rules all :frame border
