@@ -1,4 +1,4 @@
-#+TITLE: Comparison of Common Lisp Testing Frameworks (30 Jan 2023 Edition)
+#+TITLE: Comparison of Common Lisp Testing Frameworks (18 Feb 2023 Edition)
  #+AUTHOR:      Sabra Crolleton
  #+DATE:        2021-05-28
  #+EMAIL:       sabra.crolleton!gmail.com
@@ -13,6 +13,8 @@
  #+ATTR_LATEX: :float multicolumn :width
 <<top>>
 * Changelog
+18 Feb 2023 - Added a build-up and tear down example for Parachute fixtures.
+
 30 Jan 2023 - Updated for some new functionality in Parachute with respect to parent fixtures now being inherited by children and added a useful editor customization.
 
 27 Jan 2023 - Adding input from Pierre Neidhardt: adding vocabulary criteria, correcting that Lisp-Unit2 does have progress reports. Adding some additional examples for Parachute and Lisp-Unit2.
@@ -51,8 +53,7 @@ Some testing frameworks insist on [[progress-reports][tracking progress by print
 
 Some frameworks cannot find lexical variables declared in a closure containing the test. Most people will not care, but if you use closures, you might.
 
-Some people find that whether you use deftest v. define-test or similar vocabulary terms makes a difference. As Pierre Neidhardt said: `define-test` and `assert-false` are well chosen words
-because:
+Some people find that whether you use deftest v. define-test or similar vocabulary terms makes a difference. As Pierre Neidhardt said: `define-test` and `assert-false` are well chosen words because:
 
  - They are full, legible words, which is more Lispy (as opposed to "deftest").
  - Emacs colors them properly by default.
@@ -6572,7 +6573,7 @@ It hits almost everything on my wish list - optionality on progress reports and 
 
 The name of a test is coerced into a string internally, so test names are not functions that can be called on their own.
 
-There are three types of reports: quiet, plain (the default) and interactive (throwing you into the debugger).
+There are four types of reports: quiet, plain (the default), summary and interactive (throwing you into the debugger).
 
 Parachute does allow you to set time limits for tests and will report the times for tests.
 
@@ -6586,11 +6587,12 @@ As with other frameworks, finish simply indicates that the test does not produce
 [[top][top]]
 ** Usage
 *** Report Format
-Parachute provides three types of reports at the moment. Each returns a test-result object as well as printing a report to stream.
+Parachute provides four types of reports at the moment. Each returns a test-result object as well as printing a report to stream.
 
 - Quiet for when you just want the summary
 - Interactive for when you want to go into the debugger on failures, and
-- Plain (the default) for the nice progress report with checks and timing and ...
+- Plain (the default) for the nice progress report with checks and timing and
+- Summary (plain but without the progress report)
 
 So a basic failing test to show the differences in reporting. We are passing the third assertion a string after the two tested items which can help diagnose failures, followed by the two variables being compared, and then running it to show the default failure report.
 #+begin_src lisp
@@ -6793,7 +6795,7 @@ Parachute has no problem with loops or finding variables that have been set in a
 #+end_src
 **** Calling a test inside another test
 #+begin_src lisp
-(define-test t3 ; a test that tries to call another test in its body
+(define-test t3 ; a test that calls another test in its body
     (true (eql 'a 'a))
     (test 't2))
 
@@ -6899,7 +6901,7 @@ Now the classic fixture - create a data set for some series of tests and clean i
 (defparameter *some-existing-data-parameter*
   (make-instance 'class-A :a 17.3 :b -12))
 
-(def-fixture f1 ()
+(define-fixture f1 ()
   (let ((old-parameter *some-existing-data-parameter*))
     (setf *some-existing-data-parameter*
         (make-instance 'class-A :a 100 :b -100))
@@ -6946,6 +6948,80 @@ Failed:     0
 Skipped:    0
 #<TEST:PLAIN 5, PASSED results>
 #+end_src
+**** Build Up and Tear Down Example
+Possibly more interesting is the following example which demonstrates building up and tearing down a test environment extending beyond the lisp environment. Suppose I want to create 3 databases that will be used in a suite of tests, then drop the databases at the end of the tests.
+
+First we need a predicate that takes a symbol and decides if that symbol meets some criteria.
+#+begin_src lisp
+  (defun names-global-database-p (symbol)
+    (member symbol '(db1 db2 db3)))
+#+end_src
+Now creating the functions that create and drop the database.
+#+begin_src lisp
+  (defun create-test-db (symbol)
+    (with-test-connection
+      (pomo:create-database symbol)))
+
+  (defun drop-test-db (symbol)
+    (with-test-connection
+      (pomo:drop-database symbol)))
+#+end_src
+Now we set up define-fixture-capture and define-fixture-restore. They will take a symbol, apply the predicate and, if t, create (or drop) a database where the name has some relation to the symbol. In this particular case, we do not need the value parameter for define-fixture-restore.
+#+begin_src lisp
+  (define-fixture-capture database (symbol)
+    (when (names-global-database-p symbol)
+      (values (create-test-db symbol) T)))
+
+  (define-fixture-restore database (symbol db)
+    (declare (ignore db))
+    (when (names-global-database-p symbol)
+      (drop-test-db symbol)))
+#+end_src
+Now we can define the parent test of the suite:
+#+begin_src lisp
+  (define-test db-suite
+  :fix (db1 db2 db3)
+  (with-test-connection
+    (true (pomo:database-exists-p 'db1))
+    (true (pomo:database-exists-p 'db2))
+    (true (pomo:database-exists-p 'db3))))
+#+end_src
+And now a child of the parent:
+#+begin_src lisp
+  (define-test db-suite-child1
+    :parent db-suite
+    (with-test-connection
+      (true (pomo:database-exists-p 'db1))
+      (true (pomo:database-exists-p 'db2))
+      (true (pomo:database-exists-p 'db3))))
+#+end_src
+Now if we run (test 'db-suite), it will create the three databases, run the tests in the parent, then run the tests in the child, and then drop the databases:
+#+begin_src lisp
+          ？ POSTMODERN-KITSCH-TESTS::DB-SUITE
+  0.000 ✔   (true (database-exists-p 'db1))
+  0.000 ✔   (true (database-exists-p 'db2))
+  0.000 ✔   (true (database-exists-p 'db3))
+        ？   POSTMODERN-KITSCH-TESTS::DB-SUITE-CHILD1
+  0.000 ✔     (true (database-exists-p 'db1))
+  0.000 ✔     (true (database-exists-p 'db2))
+  0.000 ✔     (true (database-exists-p 'db3))
+  0.030 ✔   POSTMODERN-KITSCH-TESTS::DB-SUITE-CHILD1
+  0.480 ✔ POSTMODERN-KITSCH-TESTS::DB-SUITE
+
+;; Summary:
+Passed:     6
+Failed:     0
+Skipped:    0
+#<PLAIN 8, PASSED results>
+#+end_src
+We can now validate outside the db-suite of tests that all the databases have been dropped:
+#+begin_src lisp
+  (with-test-connection (pomo:database-exists-p 'db1))
+NIL
+1
+#+end_src
+And they have.
+**** Wrapping around Multiple Tests
 You can wrap a fixture around multiple tests. Consider the following:
 #+begin_src lisp
     (defclass class-A ()
@@ -7053,8 +7129,8 @@ Parachute can remove specific tests with =remove-test= or all the tests in a pac
 
 (remove-all-tests-in-package optional-package-name)
 #+end_src
-*** Sequencing, Random and Failure Only
-While tests normally follow a sequential order, parachute allows you to specify to either shuffle the assertions in a test or shuffle the tests within a suite.
+*** Sequencing, Random, Dependencies and Failure Only
+While tests normally follow a sequential order, parachute allows you to specify to either shuffle the assertions in a test or shuffle the tests within a suite by setting :serial to NIL.
 
 #+begin_src lisp
   (define-test shuffle
@@ -7062,6 +7138,22 @@ While tests normally follow a sequential order, parachute allows you to specify 
     ...)
 
 (define-test shuffle-suite :serial NIL)
+#+end_src
+You can also shuffle the tests within a test using with-shuffling.
+#+begin_src lisp
+  (define-test random-2
+      (let ((a 0))
+        (with-shuffling
+            (is = 1 (incf a))
+          (is = 2 (incf a))
+          (is = 3 (incf a)))))
+#+end_src
+
+You can specify that running a test depending on the success of another test. In the following example, test3 will only run if test1 is successful and test2 is not successful.
+#+begin_src lisp
+  (define-test test3
+  :depends-on (:and test1 (:not test2))
+  (of-type number (+ 2 3)))
 #+end_src
 *** Skip Capability
 Parachute has multiple skip abilities including skipping based on assertions, tests or implementations.
