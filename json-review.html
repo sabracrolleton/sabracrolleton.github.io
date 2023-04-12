@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2023-04-12 Wed 10:13 -->
+<!-- 2023-04-12 Wed 13:16 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Review of CL JSON Libraries UPDATED 12 Apr 2023</title>
@@ -47,11 +47,11 @@
 <ul>
 <li><a href="#changelog">Changelog</a>
 <ul>
-<li><a href="#orgfab2782">12 Apr 2023</a></li>
-<li><a href="#org344fbbb">1 Feb 2022</a></li>
-<li><a href="#orgd48f029">19 Jan 2022</a></li>
-<li><a href="#orgfe3eae3">18 Jan 2022</a></li>
-<li><a href="#orgc6f204a">15 Jan 2022</a></li>
+<li><a href="#orgf37f0fc">12 Apr 2023</a></li>
+<li><a href="#org8f7a722">1 Feb 2022</a></li>
+<li><a href="#org58d5d83">19 Jan 2022</a></li>
+<li><a href="#orga26faf9">18 Jan 2022</a></li>
+<li><a href="#org7fcfb18">15 Jan 2022</a></li>
 </ul>
 </li>
 <li><a href="#introduction">Introduction</a>
@@ -361,9 +361,9 @@
 <h2 id="changelog">Changelog</h2>
 <div class="outline-text-2" id="text-changelog">
 </div>
-<div id="outline-container-orgfab2782" class="outline-3">
-<h3 id="orgfab2782">12 Apr 2023</h3>
-<div class="outline-text-3" id="text-orgfab2782">
+<div id="outline-container-orgf37f0fc" class="outline-3">
+<h3 id="orgf37f0fc">12 Apr 2023</h3>
+<div class="outline-text-3" id="text-orgf37f0fc">
 <p>
 com.inuoe.jzon (aka jzon) is now in quicklisp. Both jzon and shasht have had active development. The versions used are the github repositories as of 11 Apr 2023. Benchmarking has been updated.
 </p>
@@ -381,39 +381,43 @@ A summary of changes in jzon:
 <li>New :allow-trailing-comma, and block comment support for :allow-comments in order to allow for parsing jwcc data (<a href="https://nigeltao.github.io/blog/2021/json-with-commas-comments.html">https://nigeltao.github.io/blog/2021/json-with-commas-comments.html</a>)</li>
 <li>Much more detailed errors across the board when a parse error occurs</li>
 </ol>
+
+<p>
+Changes in shasht include adding read-level and read-length limits to address potential security concerns. (These are set to nil by default).
+</p>
 </div>
 </div>
 
-<div id="outline-container-org344fbbb" class="outline-3">
-<h3 id="org344fbbb">1 Feb 2022</h3>
-<div class="outline-text-3" id="text-org344fbbb">
+<div id="outline-container-org8f7a722" class="outline-3">
+<h3 id="org8f7a722">1 Feb 2022</h3>
+<div class="outline-text-3" id="text-org8f7a722">
 <p>
 Picks up updates in shasht and now includes warnings on libraries with safety 0 (<code>jsown</code>, <code>jonathan</code>, <code>st-json</code>).
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgd48f029" class="outline-3">
-<h3 id="orgd48f029">19 Jan 2022</h3>
-<div class="outline-text-3" id="text-orgd48f029">
+<div id="outline-container-org58d5d83" class="outline-3">
+<h3 id="org58d5d83">19 Jan 2022</h3>
+<div class="outline-text-3" id="text-org58d5d83">
 <p>
 Updated shasht for fixes in character, 2D arrays, and nil handling. Fixed some typos, including a missing earmuff.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgfe3eae3" class="outline-3">
-<h3 id="orgfe3eae3">18 Jan 2022</h3>
-<div class="outline-text-3" id="text-orgfe3eae3">
+<div id="outline-container-orga26faf9" class="outline-3">
+<h3 id="orga26faf9">18 Jan 2022</h3>
+<div class="outline-text-3" id="text-orga26faf9">
 <p>
 Corrected JSON conformity tests on <code>boost-json</code>, <code>cl-json</code>, <code>json-lib</code>, <code>shasht</code>, <code>st-json</code>, <code>trivial-json-codec</code> and <code>yason</code>. If <code>*read-default-float-format*</code> is set to <code>'single-float</code>, those libraries would refuse to accept:  <code>"[123e65]"</code>, <code>"[123e45]"</code> and <code>"[123.456e78]"</code>. If <code>*read-default-float-format*</code> is set to <code>'double-float</code>, then those JSON strings would be correctly accepted. Net result: with that caveat, <a href="#boost-json">boost-json</a>, <a href="#cl-json">cl-json</a>, <a href="#com.gigamonkeys.json">com.gigamonkeys.json</a>, <a href="#com.inuoe.jzon">com.inuoe.jzon</a>, <a href="#json-lib">json-lib</a>, <a href="#shasht">shasht</a>, <a href="#st-json">st-json</a> and <a href="#yason">yason</a> all score 95/95 on the JSON strings that must be accepted. See <a href="#must-accept">Standard Conformity - Must Accept</a>.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgc6f204a" class="outline-3">
-<h3 id="orgc6f204a">15 Jan 2022</h3>
-<div class="outline-text-3" id="text-orgc6f204a">
+<div id="outline-container-org7fcfb18" class="outline-3">
+<h3 id="org7fcfb18">15 Jan 2022</h3>
+<div class="outline-text-3" id="text-org7fcfb18">
 <p>
 Complete rewrite of 1st edition.
 </p>
@@ -9573,9 +9577,9 @@ This may or may not have been what you wanted.
 </div>
 
 
-<div id="outline-container-org744a00b" class="outline-5">
-<h5 id="org744a00b">Encoding Objects</h5>
-<div class="outline-text-5" id="text-org744a00b">
+<div id="outline-container-org05790f2" class="outline-5">
+<h5 id="org05790f2">Encoding Objects</h5>
+<div class="outline-text-5" id="text-org05790f2">
 <p>
 com.inuoe.jzon actually uses the :type of each slot to determine what to do with nil. Consider the following where two slots have no specified type, two have a list type and two have an array type. Specifically, consider the resulting difference between value-list0 and value-array0 when writing the object out:
 </p>
@@ -12080,9 +12084,9 @@ In order to facilitate extending the serialization facilities of shasht there ar
 In order to ease the serialization of objects and arrays there is with-json-object and with-json-array. Both of these macros take an output stream as the first argument then enable indentation and automatic handling of all delimiter tokens. Inside the body of with-json-object the function (print-json-key-value key value output-stream) should be used to output a key value pair. Inside the body of with-json-array the function (print-json-value value output-stream) should be used to output a single value. Example usage can be seen in the source code.
 </p>
 </div>
-<div id="outline-container-org4b12b0c" class="outline-5">
-<h5 id="org4b12b0c">Encoding Objects</h5>
-<div class="outline-text-5" id="text-org4b12b0c">
+<div id="outline-container-orgb13671d" class="outline-5">
+<h5 id="orgb13671d">Encoding Objects</h5>
+<div class="outline-text-5" id="text-orgb13671d">
 <p>
 Shasht actually uses the :type of each slot to determine what to do with nil. Consider the following where two slots have no specified type, two have a list type and two have an array type:
 </p>
@@ -14780,9 +14784,9 @@ The following summary table was generated by trivial-benchmarks from the librari
 <h4 id="decoding-benchmark-detail-by-library12">1.2 MB JSON File</h4>
 <div class="outline-text-4" id="text-decoding-benchmark-detail-by-library12">
 </div>
-<div id="outline-container-orgdfa9753" class="outline-5">
-<h5 id="orgdfa9753">Boost-json</h5>
-<div class="outline-text-5" id="text-orgdfa9753">
+<div id="outline-container-orgecae93f" class="outline-5">
+<h5 id="orgecae93f">Boost-json</h5>
+<div class="outline-text-5" id="text-orgecae93f">
 <div class="org-src-container">
 <pre class="src src-ascii">-               SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE    DEVIATION
 REAL-TIME        100      1.619998   0.013333  0.033334  0.016667  0.0162     0.002539
@@ -14799,9 +14803,9 @@ EVAL-CALLS       100      0          0         0         0         0          0.
 </div>
 </div>
 
-<div id="outline-container-org60109d2" class="outline-5">
-<h5 id="org60109d2">Cl-json</h5>
-<div class="outline-text-5" id="text-org60109d2">
+<div id="outline-container-orga45d4ec" class="outline-5">
+<h5 id="orga45d4ec">Cl-json</h5>
+<div class="outline-text-5" id="text-orga45d4ec">
 <div class="org-src-container">
 <pre class="src src-ascii">-                SAMPLES  TOTAL       MINIMUM   MAXIMUM   MEDIAN    AVERAGE     DEVIATION
 REAL-TIME        100      4.063327    0.036666  0.05      0.04      0.040633    0.003007
@@ -14818,9 +14822,9 @@ EVAL-CALLS       100      0           0         0         0         0           
 </div>
 </div>
 
-<div id="outline-container-orgb510e94" class="outline-5">
-<h5 id="orgb510e94">Com.gigamonkeys.json</h5>
-<div class="outline-text-5" id="text-orgb510e94">
+<div id="outline-container-org153c86e" class="outline-5">
+<h5 id="org153c86e">Com.gigamonkeys.json</h5>
+<div class="outline-text-5" id="text-org153c86e">
 <div class="org-src-container">
 <pre class="src src-ascii">-                SAMPLES  TOTAL       MINIMUM   MAXIMUM   MEDIAN    AVERAGE     DEVIATION
 REAL-TIME        100      2.81333     0.026665  0.06      0.026667  0.028133    0.004277
@@ -14837,9 +14841,9 @@ EVAL-CALLS       100      0           0         0         0         0           
 </div>
 </div>
 
-<div id="outline-container-orgd528454" class="outline-5">
-<h5 id="orgd528454">Com.inuoe.jzon</h5>
-<div class="outline-text-5" id="text-orgd528454">
+<div id="outline-container-orga339043" class="outline-5">
+<h5 id="orga339043">Com.inuoe.jzon</h5>
+<div class="outline-text-5" id="text-orga339043">
 <div class="org-src-container">
 <pre class="src src-ascii">-                SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE    DEVIATION
 REAL-TIME        100      1.326664   0.009999  0.023334  0.013333  0.013267   0.00221
@@ -14856,9 +14860,9 @@ EVAL-CALLS       100      0          0         0         0         0          0.
 </div>
 </div>
 
-<div id="outline-container-org3d65277" class="outline-5">
-<h5 id="org3d65277">Jonathan</h5>
-<div class="outline-text-5" id="text-org3d65277">
+<div id="outline-container-org9a86640" class="outline-5">
+<h5 id="org9a86640">Jonathan</h5>
+<div class="outline-text-5" id="text-org9a86640">
 <div class="org-src-container">
 <pre class="src src-ascii">-                SAMPLES  TOTAL          MINIMUM      MAXIMUM      MEDIAN       AVERAGE        DEVIATION
 REAL-TIME        100      227.00395      2.186708     2.359995     2.260044     2.27004        0.039442
@@ -14875,9 +14879,9 @@ EVAL-CALLS       100      0              0            0            0            
 </div>
 </div>
 
-<div id="outline-container-org76c090a" class="outline-5">
-<h5 id="org76c090a">Json-lib</h5>
-<div class="outline-text-5" id="text-org76c090a">
+<div id="outline-container-org7c8ba7e" class="outline-5">
+<h5 id="org7c8ba7e">Json-lib</h5>
+<div class="outline-text-5" id="text-org7c8ba7e">
 <div class="org-src-container">
 <pre class="src src-ascii">-                SAMPLES  TOTAL       MINIMUM   MAXIMUM   MEDIAN    AVERAGE     DEVIATION
 REAL-TIME        100      5.79335     0.053333  0.08      0.056667  0.057934    0.004157
@@ -14894,9 +14898,9 @@ EVAL-CALLS       100      0           0         0         0         0           
 </div>
 </div>
 
-<div id="outline-container-orgf69d517" class="outline-5">
-<h5 id="orgf69d517">Json-streams</h5>
-<div class="outline-text-5" id="text-orgf69d517">
+<div id="outline-container-orgacde426" class="outline-5">
+<h5 id="orgacde426">Json-streams</h5>
+<div class="outline-text-5" id="text-orgacde426">
 <div class="org-src-container">
 <pre class="src src-ascii">-                SAMPLES  TOTAL       MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
 REAL-TIME        100      9.97336     0.093333  0.12      0.1       0.099734  0.00358
@@ -14913,9 +14917,9 @@ EVAL-CALLS       100      0           0         0         0         0         0.
 </div>
 </div>
 
-<div id="outline-container-orgd787f7b" class="outline-5">
-<h5 id="orgd787f7b">Jsown</h5>
-<div class="outline-text-5" id="text-orgd787f7b">
+<div id="outline-container-orgc17aff3" class="outline-5">
+<h5 id="orgc17aff3">Jsown</h5>
+<div class="outline-text-5" id="text-orgc17aff3">
 <div class="org-src-container">
 <pre class="src src-ascii">-                SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE    DEVIATION
 REAL-TIME        100      1.203332   0.009999  0.043333  0.01      0.012033   0.004025
@@ -14931,9 +14935,9 @@ EVAL-CALLS       100      0          0         0         0         0          0.
 </div>
 </div>
 
-<div id="outline-container-org2f660a5" class="outline-5">
-<h5 id="org2f660a5">Shasht</h5>
-<div class="outline-text-5" id="text-org2f660a5">
+<div id="outline-container-orgb0675a3" class="outline-5">
+<h5 id="orgb0675a3">Shasht</h5>
+<div class="outline-text-5" id="text-orgb0675a3">
 <div class="org-src-container">
 <pre class="src src-ascii">-                SAMPLES  TOTAL       MINIMUM   MAXIMUM   MEDIAN    AVERAGE     DEVIATION
 REAL-TIME        100      2.060005    0.016666  0.046666  0.02      0.0206      0.004253
@@ -14950,9 +14954,9 @@ EVAL-CALLS       100      0           0         0         0         0           
 </div>
 </div>
 
-<div id="outline-container-org2227c7c" class="outline-5">
-<h5 id="org2227c7c">St-json</h5>
-<div class="outline-text-5" id="text-org2227c7c">
+<div id="outline-container-orgf211ed0" class="outline-5">
+<h5 id="orgf211ed0">St-json</h5>
+<div class="outline-text-5" id="text-orgf211ed0">
 <div class="org-src-container">
 <pre class="src src-ascii">-                SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE    DEVIATION
 REAL-TIME        100      2.720009   0.023333  0.05      0.026667  0.0272     0.002737
@@ -14969,9 +14973,9 @@ EVAL-CALLS       100      0          0         0         0         0          0.
 </div>
 </div>
 
-<div id="outline-container-org268ff24" class="outline-5">
-<h5 id="org268ff24">Yason</h5>
-<div class="outline-text-5" id="text-org268ff24">
+<div id="outline-container-orgbd26c82" class="outline-5">
+<h5 id="orgbd26c82">Yason</h5>
+<div class="outline-text-5" id="text-orgbd26c82">
 <div class="org-src-container">
 <pre class="src src-ascii">-                SAMPLES  TOTAL       MINIMUM   MAXIMUM   MEDIAN    AVERAGE     DEVIATION
 REAL-TIME        100      5.169989    0.049999  0.08      0.05      0.0517      0.003844
@@ -14993,9 +14997,9 @@ EVAL-CALLS       100      0           0         0         0         0           
 <div class="outline-text-4" id="text-decoding-benchmark-detail-by-library98">
 </div>
 
-<div id="outline-container-org9ce6dfd" class="outline-5">
-<h5 id="org9ce6dfd">Boost-json</h5>
-<div class="outline-text-5" id="text-org9ce6dfd">
+<div id="outline-container-orgc71daa3" class="outline-5">
+<h5 id="orgc71daa3">Boost-json</h5>
+<div class="outline-text-5" id="text-orgc71daa3">
 <div class="org-src-container">
 <pre class="src src-ascii">-                SAMPLES  TOTAL       MINIMUM   MAXIMUM   MEDIAN    AVERAGE     DEVIATION
 REAL-TIME        100      16.600002   0.143332  0.263332  0.159999  0.166       0.022166
@@ -15012,9 +15016,9 @@ EVAL-CALLS       100      0           0         0         0         0           
 </div>
 </div>
 
-<div id="outline-container-orge1c5ee7" class="outline-5">
-<h5 id="orge1c5ee7">Cl-json</h5>
-<div class="outline-text-5" id="text-orge1c5ee7">
+<div id="outline-container-org9fbf92f" class="outline-5">
+<h5 id="org9fbf92f">Cl-json</h5>
+<div class="outline-text-5" id="text-org9fbf92f">
 <div class="org-src-container">
 <pre class="src src-ascii">-                SAMPLES  TOTAL        MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
 REAL-TIME        100      43.343338    0.39       0.500001   0.43       0.433433     0.028302
@@ -15031,9 +15035,9 @@ EVAL-CALLS       100      0            0          0          0          0       
 </div>
 </div>
 
-<div id="outline-container-orgd2b95fa" class="outline-5">
-<h5 id="orgd2b95fa">Com.gigamonkeys.json</h5>
-<div class="outline-text-5" id="text-orgd2b95fa">
+<div id="outline-container-org245b59b" class="outline-5">
+<h5 id="org245b59b">Com.gigamonkeys.json</h5>
+<div class="outline-text-5" id="text-org245b59b">
 <div class="org-src-container">
 <pre class="src src-ascii">-                SAMPLES  TOTAL        MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
 REAL-TIME        100      31.760002    0.256665   0.430001   0.316666   0.3176       0.03324
@@ -15050,9 +15054,9 @@ EVAL-CALLS       100      0            0          0          0          0       
 </div>
 </div>
 
-<div id="outline-container-orge6f3e7b" class="outline-5">
-<h5 id="orge6f3e7b">Com.inuoe.jzon</h5>
-<div class="outline-text-5" id="text-orge6f3e7b">
+<div id="outline-container-orgfd1901f" class="outline-5">
+<h5 id="orgfd1901f">Com.inuoe.jzon</h5>
+<div class="outline-text-5" id="text-orgfd1901f">
 <div class="org-src-container">
 <pre class="src src-ascii">-                SAMPLES  TOTAL       MINIMUM   MAXIMUM   MEDIAN    AVERAGE     DEVIATION
 REAL-TIME        100      7.853333    0.076665  0.083334  0.076667  0.078533    0.002227

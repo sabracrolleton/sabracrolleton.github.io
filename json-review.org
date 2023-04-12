@@ -31,6 +31,8 @@ com.inuoe.jzon (aka jzon) is now in quicklisp. Both jzon and shasht have had act
 7. New :allow-trailing-comma, and block comment support for :allow-comments in order to allow for parsing jwcc data (https://nigeltao.github.io/blog/2021/json-with-commas-comments.html)
 8. Much more detailed errors across the board when a parse error occurs
 
+Changes in shasht include adding read-level and read-length limits to address potential security concerns. (These are set to nil by default).
+
 ** 1 Feb 2022
 Picks up updates in shasht and now includes warnings on libraries with safety 0 (=jsown=, =jonathan=, =st-json=).
 
