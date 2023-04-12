@@ -1,5 +1,5 @@
 #+AUTHOR: Sabra Crolleton
-#+TITLE: Review of CL JSON Libraries UPDATED 1 Feb 2022
+#+TITLE: Review of CL JSON Libraries UPDATED 12 Apr 2023
 
 #+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
 
@@ -18,13 +18,30 @@
 :PROPERTIES:
 :CUSTOM_ID: changelog
 :END:
-1 Feb 2022 - Picks up updates in shasht and now includes warnings on libraries with safety 0 (=jsown=, =jonathan=, =st-json=).
+** 12 Apr 2023
+com.inuoe.jzon (aka jzon) is now in quicklisp. Both jzon and shasht have had active development. The versions used are the github repositories as of 11 Apr 2023. Benchmarking has been updated.
 
-19 Jan 2022 - Updated shasht for fixes in character, 2D arrays, and nil handling. (If you rely on Quicklisp versions, expect these improvements in the next Quicklisp version, but they are up on GitHub now.) Fixed some typos, including a missing earmuff.
+ A summary of changes in jzon:
+1. incremental parsing and writing are now implemented
+2. The issue with empty object on pathname has been 'fixed' - we now coerce to namestring
+3. Float<->JSON encoding/decoding have both been substantially improved in terms of speed, accuracy, and portability across lisp implementations (bundled float encoder/decoder)
+4. Parsing is now safe on the stack regardless of object nesting setting
+5. Parsing performance improvements across the board for a variety of file sizes/varieties
+6. Coerce strings to simple-base-string when possible for 1/4 memory usage on SBCL (ASCII vs UTF32 encoding) with minimal overhead.
+7. New :allow-trailing-comma, and block comment support for :allow-comments in order to allow for parsing jwcc data (https://nigeltao.github.io/blog/2021/json-with-commas-comments.html)
+8. Much more detailed errors across the board when a parse error occurs
 
-18 Jan 2022 - Corrected JSON conformity tests on =boost-json=, =cl-json=, =json-lib=, =shasht=, =st-json=, =trivial-json-codec= and =yason=. If =*read-default-float-format*= is set to ='single-float=, those libraries would refuse to accept:  ="[123e65]"=, ="[123e45]"= and ="[123.456e78]"=. If =*read-default-float-format*= is set to ='double-float=, then those JSON strings would be correctly accepted. Net result: with that caveat, [[#boost-json][boost-json]], [[#cl-json][cl-json]], [[#com.gigamonkeys.json][com.gigamonkeys.json]], [[#com.inuoe.jzon][com.inuoe.jzon]], [[#json-lib][json-lib]], [[#shasht][shasht]], [[#st-json][st-json]] and [[#yason][yason]] all score 95/95 on the JSON strings that must be accepted. See [[#must-accept][Standard Conformity - Must Accept]].
+** 1 Feb 2022
+Picks up updates in shasht and now includes warnings on libraries with safety 0 (=jsown=, =jonathan=, =st-json=).
 
-15 Jan 2022 - Complete rewrite of 1st edition.
+** 19 Jan 2022
+Updated shasht for fixes in character, 2D arrays, and nil handling. Fixed some typos, including a missing earmuff.
+
+** 18 Jan 2022
+Corrected JSON conformity tests on =boost-json=, =cl-json=, =json-lib=, =shasht=, =st-json=, =trivial-json-codec= and =yason=. If =*read-default-float-format*= is set to ='single-float=, those libraries would refuse to accept:  ="[123e65]"=, ="[123e45]"= and ="[123.456e78]"=. If =*read-default-float-format*= is set to ='double-float=, then those JSON strings would be correctly accepted. Net result: with that caveat, [[#boost-json][boost-json]], [[#cl-json][cl-json]], [[#com.gigamonkeys.json][com.gigamonkeys.json]], [[#com.inuoe.jzon][com.inuoe.jzon]], [[#json-lib][json-lib]], [[#shasht][shasht]], [[#st-json][st-json]] and [[#yason][yason]] all score 95/95 on the JSON strings that must be accepted. See [[#must-accept][Standard Conformity - Must Accept]].
+
+** 15 Jan 2022
+Complete rewrite of 1st edition.
 
 * Introduction
 :PROPERTIES:
@@ -49,17 +66,17 @@ CL currently has at least twelve libraries that address importing and exporting 
  | [[#boost-json][boost-json]]             | Jeffrey Massung                             | Apache  | [[https://github.com/cl-boost/json][homepage]]  | No         | 16 Dec 2021 |
  | [[#cl-json][cl-json]]                | Henrik Hjelte, Boris Smilga, Robert Goldman | MIT     | [[https://github.com/hankhero/cl-json][homepage]]  | Yes        | 7 Nov 2014  |
  | [[#com.gigamonkeys.json][com.gigamonkeys.json]]   | Peter Seibel                                | BSD-3   | [[https://github.com/gigamonkey/monkeylib-json][homepage ]] | Yes        | 15 Apr 2017 |
- | [[#com.inuoe.jzon][com.inuoe.jzon]]         | Wilfredo Velázquez-Rodríguez                | MIT     | [[https://github.com/Zulu-Inuoe/jzon][homepage]]  | No         | 30 Nov 2021 |
+ | [[#com.inuoe.jzon][com.inuoe.jzon]]         | Wilfredo Velázquez-Rodríguez                | MIT     | [[https://github.com/Zulu-Inuoe/jzon][homepage]]  | Yes        | 20 Mar 2023 |
  | [[#jonathan][jonathan]]               | Rudolph Miller                              | MIT     | [[https://github.com/Rudolph-Miller/jonathan][homepage]]  | Yes        | 1 Sep 2020  |
- | [[#json-lib][json-lib]]               | Alex Nygren                                 | MIT     | [[https://github.com/KinaKnowledge/json-lib][homepage]]  | No         | 19 Dec 2021 |
+ | [[#json-lib][json-lib]]               | Alex Nygren                                 | MIT     | [[https://github.com/KinaKnowledge/json-lib][homepage]]  | Yes        | 22 Oct 2022 |
  | [[#json-streams][json-streams]]           | Thomas Bakketun, Stian Sletner              | GPL3    | [[http://github.com/rotatef/json-streams][homepage]]  | Yes        | 12 Oct 2017 |
  | [[#jsown][jsown]]                  | Aad Versteden                               | MIT     | [[https://github.com/madnificent/jsown][homepage]]  | Yes        | 4 Feb 2020  |
- | [[#shasht][shasht]]                 | Tarn W. Burton                              | MIT     | [[https://github.com/yitzchak/shasht][homepage]]  | Yes        | 19 Jan 2022 |
+ | [[#shasht][shasht]]                 | Tarn W. Burton                              | MIT     | [[https://github.com/yitzchak/shasht][homepage]]  | Yes        | 23 Feb 2023 |
  | [[#st-json][st-json]]                | Marijn Haverbeke                            | zlib    | [[https://github.com/marijnh/ST-JSON][homepage]]  | Yes        | 28 Jun 2021 |
- | [[#trivial-json-codec][trivial-json-codec]] (2) | Eric Diethelm                               | MIT     | [[https://gitlab.com/ediethelm/trivial-json-codec][homepage]]  | Yes        |  8 Mar 2020 |
- | [[#yason][yason]]  (1)             | Hans Huebner                                | BSD     | [[https://github.com/phmarek/yason][homepage]]  | Yes        | 27 Aug 2021 |
+ | [[#trivial-json-codec][trivial-json-codec]] (2) | Eric Diethelm                               | MIT     | [[https://gitlab.com/ediethelm/trivial-json-codec][homepage]]  | Yes        |  26 Apr 2022 |
+ | [[#yason][yason]]  (1)             | Hans Huebner                                | BSD     | [[https://github.com/phmarek/yason][homepage]]  | Yes        | 2 Feb 2023  |
 
-- (1) IMPORTANT: Notice the GitHub location has moved. Hans Huebner's old GitHub location will automatically redirect to Phil Marek's, but Quicklisp is not (as of the time of this writing) pulling code from the new GitHub location.
+- (1) IMPORTANT: Notice the GitHub location has moved. Hans Huebner's old GitHub location will automatically redirect to Phil Marek's.
 - (2) trivial-json-codec seems more targeted at decoding from JSON to CL than serializing to JSON. Its main purpose is in serializing JSON data to CLOS hierarchical objects.
 
 #+CAPTION: Dependencies
@@ -70,7 +87,7 @@ CL currently has at least twelve libraries that address importing and exporting 
  | [[#boost-json][boost-json]]             |                                                                                           |
  | [[cl-json][cl-json]]                |                                                                                           |
  | [[#com.gigamonkeys.json][com.gigamonkeys.json]]   |                                                                                           |
- | [[#com.inuoe.jzon][com.inuoe.jzon]]         | closer-mop, flexi-streams                                                                 |
+ | [[#com.inuoe.jzon][com.inuoe.jzon]]         | closer-mop, flexi-streams, trivial-gray-streams, uiop and float-features (except when using ECL) |
  | [[#jonathan][jonathan]]               | cl-syntax, cl-syntax-annot, fast-io, trivial-types, babel, proc-parse, cl-ppcre, cl-annot |
  | [[#json-lib][json-lib]]               | alexandria, str, parse-float, cl-fad, babel                                               |
  | [[#json-streams][json-streams]]           |                                                                                           |
@@ -107,19 +124,19 @@ We should also talk a bit about some helper libraries.
 As can be expected, the libraries do much of the same if you have basic needs. However, differences exist and should be considered in choosing which library is right for any particular project. Many applications are asymmetric in how they will use these libraries, so consider the strengths and weakness given the needs of your case. Library links are to the libraries' individual sections below.
 
 - *Overall:* I quite like the newcomers [[#shasht][shasht]] and [[#com.inuoe.jzon][com.inuoe.jzon]]. [[cl-json][cl-json]] and [[#yason][yason]] are still the work horses if you need fine control, but speed is not their forte.
-- *Decoding or Parsing Speed:* Speed is not everything, but seems to be important to a lot of readers. If you are parsing compliant data and are just looking for speed, look at [[#jsown][jsown]], [[#com.inuoe.jzon][com.inuoe.jzon]] (not in Quicklisp) or [[#shasht][shasht]]. [[#jonathan][Jonathan]] is faster on tiny strings but starts to slow down with nested objects and eventually, depending on the size of the JSON object, becomes orders of magnitude slower than the other libraries. The effect was seen faster under SBCL but as data file size increased, it was also obvious under CCL and ECL as well. See [[#read-times][read-times]]
+- *Decoding or Parsing Speed:* Speed is not everything, but seems to be important to a lot of readers. If you are parsing compliant data and are just looking for speed, look at [[#jsown][jsown]], [[#com.inuoe.jzon][com.inuoe.jzon]] or [[#shasht][shasht]]. [[#jonathan][Jonathan]] is faster on tiny strings but starts to slow down with nested objects and eventually, depending on the size of the JSON object, becomes orders of magnitude slower than the other libraries. The effect was seen faster under SBCL but as data file size increased, it was also obvious under CCL and ECL as well. See [[#read-times][read-times]]
 - *Encoding Speed:* If you mostly need to encode lisp data to JSON and are just looking for speed, I would look at [[#com.inuoe.jzon][com.inuoe.jzon]], [[#shasht][shasht]] or depending on your data, [[#jonathan][jonathan]] or [[#st-json][st-json]]. See [[#write-times][write-times]]
-- *Safety 0* Three libraries (=jsown=, jonathan and st-json) have optimize set for safety 0 to increase speed. This has bitten some users hard in the past, so you have been warned.
+- *Safety 0* Three libraries (=jsown=, jonathan and st-json) have optimize set for safety 0 to increase speed. This has bitten some users hard in the past, so you have been warned. If you restrict  safety to 2 or 3 on SBCL, [[#jonathan][Jonathan]] is unable to parse floats. See [[https://github.com/rudolph-miller/jonathan/issues/66][https://github.com/rudolph-miller/jonathan/issues/66]]
 - *Unicode Handling:* Most of the libraries can handle unicode. However, if you have unicode surrogate pairs, you need to choose from [[#com.inuoe.jzon][com.inuoe.jzon]], [[#jonathan][jonathan]], [[#json-streams][json-streams]], [[#jsown][jsown]], [[#shasht][shasht]], [[#st-json][st-json]] or [[#yason][yason]]. See [[#decode-unicode][Decoding Unicode]].
 - *Extracting Subsets:* If you want to extract a subset of JSON data without paying attention to everything else, [[#jsown-filters][jsown]] is the choice. [[#jonathan][Jonathan]] allows you to get a key:value pair, but I could only use it one level deep. Obviously every library can import all the JSON data into some CL datastructure and then use standard CL functionality to get whatever subset you want.
 - *Handling all proper JSON forms:* If you remember to set \star{}read-default-float-format* to 'double-float, there is no clear winner. [[#boost-json][boost-json]], [[cl-json][cl-json]], [[#com.gigamonkeys.json][com.gigamonkeys.json]], [[#com.inuoe.jzon][com.inuoe.jzon]], [[#json-lib][json-lib]], [[#shasht][shasht]], [[#st-json][st-json]] and [[#yason][yason]] all score 95/95 on the JSON standard conformity tests that must be met. If \star{}read-default-float-format* is set to to 'single-float, only [[#com.inuoe.jzon][com.inuoe.jzon]] and [[#com.gigamonkeys.json][com.gigamonkeys.json]] have perfect scores. See [[#must-accept][Must Accept]].
-- *Handling potentially invalid data:* See [[#standard-conformity][Standard Conformity and Dealing with Malformed Data]]. I think [[#com.inuoe.jzon][com.inuoe.jzon]] is the winner, unfortunately it is not in Quicklisp if that is a requirement.
+- *Handling potentially invalid data:* See [[#standard-conformity][Standard Conformity and Dealing with Malformed Data]]. I think [[#com.inuoe.jzon][com.inuoe.jzon]] is the winner..
 - *Proper Distinction Between NULL/Nil/False:* [[#com.inuoe.jzon][Com.inuoe.jzon]], [[#shasht][shasht]] and [[#st-json][st-json]] get it right out of the box. [[#jonathan][jonathan]] and [[#yason][yason]] provide the ability to get there with setting a simple variable.
 - *CLOS Abilities - Decoding:* [[#trivial-json-codec][Trivial-json-codec]] can decode objects to standard pre-defined classes. [[#boost-json-decoding-to-clos][Boost-json]] can decode JSON objects to a boost-json:json-object which is a standard object. [[cl-json][Cl-json]] has the ability to decode JSON objects into a "fluid-class" CLOS object. (Note, this is thread unsafe if you have not already prepped classes for every expected JSON object. If you define your own classes with a lispclass member, this can be avoided so long as every class is defined that way.) Personally I prefer being able to define my own classes. Trivial-json-codec then just dumps the JSON data into your classes. If you use [[#yason][yason]], I would also use the helper library [[json-mop][json-mop]]. ([[#com.inuoe.jzon][com.inuoe.jzon]] decodes JSON to hash-tables, so does not have decoding to CLOS abilities out of the box.) See [[#decode-to-clos][Decoding to CLOS]]
 - *CLOS Abilities - Encoding:* On the encoding side, [[cl-json][cl-json]], [[#com.inuoe.jzon][com.inuoe.jzon]], [[#shasht][shasht]] and [[#trivial-json-codec][trivial-json-codec]] are able to encode CLOS objects to JSON out of the box. The rest of the libraries require that you write your own methods for your clos classes - which is not necessarily that difficult, but not something you get out of the box. If you like [[#yason][yason]], there are two helper libraries: [[json-mop][json-mop]] or [[herodotus][herodotus]]. I have a preference for [[json-mop][json-mop]] with the caveat that, at the moment, you cannot redefine classes. There is also a [[cl-json][cl-json]] helper library, [[define-json-expander][define-json-expander]], which defines classses which can be used by cl-json to help move data back and forth. See [[#encoding-objects][Encoding Objects]]
 - *Encoding different lisp types:* [[#shasht][shasht]] and [[#com.inuoe.jzon][com.inuoe.jzon]] were the best at encoding different lisp data types. For example, they were the only library able to handle structs without the user having to define a new method. There is a trade-off between handling multiple lisp types and symmetry. If you do not have a 1:1 matching but rather have a many:1 matching, there may be complications doing a round trip between JSON and CL and getting exactly the same data type or structure you started with. See [[#encoding][Encoding]] or [[#encoding-data-structures][Encoding Data Structures]].
-- *Incremental Encoding:* [[#cl-json-incremental][cl-json]], [[#jonathan-incremental][jonathan]], [[#json-streams-incremental][json-streams]], [[#jsown-incremental][jsown]], [[#shasht-incremental][shasht]], [[#st-json-incremental][st-json]] and [[#yason-incremental][yason]] all have the capability to do incremental encoding. You can see small examples in their individual sections at the links in the previous sentence. I found [[#shasht-incremental][shasht]] a little easier. [[#jzon-incremental][com.inuoe.jzon]] is actively working on the capability. See [[#incremental-encoding][Incremental Encoding Discussion]] for more detail.
-- *Security issues:* Security issues are always a potential problem if you are getting data from uncontrolled sources. Malware disguised in the data will likely either be properly formed JSON strings that try to overload the system by overloading libraries using keywords as hash symbols or improperly formed JSON strings that exhaust the stack. See the [[#security][Security discussion]] for more information. In cases facing data from uncontrolled sources, I would look first at [[#com.inuoe.jzon][com.inuoe.jzon]] , then maybe at [[#shasht][shasht]] and [[#jonathan][jonathan]]. I would suggest that all libraries put some type of limit on parsing depth of JSON objects or arrays. At this point only [[#com.inuoe.jzon][com.inuoe.jzon]], [[#json-lib][json-lib]], [[#json-streams][json-streams]] and [[#trivial-json-codec][trivial-json-codec]] have such limits, all of which are configurable. See [[#security][security]].
+- *Incremental Encoding:* [[#cl-json-incremental][cl-json]], [[#jzon-incremental][com.inuoe.jzon]]  [[#jonathan-incremental][jonathan]], [[#json-streams-incremental][json-streams]], [[#jsown-incremental][jsown]], [[#shasht-incremental][shasht]], [[#st-json-incremental][st-json]] and [[#yason-incremental][yason]] all have the capability to do incremental encoding. You can see small examples in their individual sections at the links in the previous sentence. I found [[#shasht-incremental][shasht]] a little easier. See [[#incremental-encoding][Incremental Encoding Discussion]] for more detail.
+- *Security issues:* Security issues are always a potential problem if you are getting data from uncontrolled sources. Malware disguised in the data will likely either be properly formed JSON strings that try to overload the system by overloading libraries using keywords as hash symbols or improperly formed JSON strings that exhaust the stack. See the [[#security][Security discussion]] for more information. In cases facing data from uncontrolled sources, I would look first at [[#com.inuoe.jzon][com.inuoe.jzon]] , then maybe at [[#shasht][shasht]]. I would suggest that all libraries put some type of limit on parsing depth of JSON objects or arrays. At this point only [[#com.inuoe.jzon][com.inuoe.jzon]], [[#json-lib][json-lib]], [[#json-streams][json-streams]] and [[#trivial-json-codec][trivial-json-codec]] have such limits, all of which are configurable. See [[#security][security]].
 - *Symmetry or "Round Tripping":* Symmetric treatment is important to some users. In this area, libraries tend to have issues with NULL/Nil/False as well as whether keys should be symbols or strings. Symmetry is easier going from Jason to CL and back. It is definitely harder if you go from CL to JSON and back to CL and you do not limit your CL data types. (CL has more data types so you do not have a 1:1 match). Your choices are to limit your CL data types or using libraries which allow you to precisely specify the CL datatype you want at that point. Overall, I think the symmetry winner is [[#shasht][shasht]], but your fact pattern may drive a different answer. See [[#symmetry][symmetry discussion]].
 
 At the end of the day, your particular data and requirements will determine which library is best for any particular application. Webapps may have tiny bits of JSON going back and forth while other uses will be asymmetric - gigabytes of JSON getting imported and little or occasional amounts getting exported or vice versa. You may have different needs depending on whether the JSON encoded data is strictly controlled or it is coming in from unknown sources. In one test, yason:encode choked on a list which included a keyword :NULL in an unexpected location. Cl-json just encoded it as the string "null" and st-json encoded it as 'null' (not a string). In testing for your use, if you get JSON data from uncontrolled sources, deliberately feed badly formed data and see how the library reacts. Some will throw recoverable conditions (depending on the error) while others may actually lock up a thread.
@@ -641,7 +658,7 @@ Jsown has the ability, once a JSON object has been parsed into a jsown object, t
 :PROPERTIES:
 :CUSTOM_ID: decoding-nil
 :END:
-This is a test of how the library function for reading from a string handles nil. Errors are not surprising. What was surprising was shasht:read-json hanging when given a nil.
+This is a test of how the library function for reading from a string handles nil. Errors are not surprising.
 #+CAPTION: Reading NIL
 #+ATTR_HTML: :border 2 :rules all :frame border
 #+ATTR_LATEX: :float multicolumn
@@ -781,7 +798,7 @@ Just to see what the libraries did with pathnames, using #P"/home/sabra" as samp
 | boost-json           | json-encode    | "/home/sabra"                                     |
 | cl-json              | encode-json    | Not of a type which can be encoded by encode-json |
 | com.gigamonkeys.json | write-json     | hangs                                             |
-| com.inuoe.jzon       | stringify      | {}                                                |
+| com.inuoe.jzon       | stringify      | "/home/sabra"                                     |
 | jonathan             | to-json        | No applicable method                              |
 | json-lib             | stringify      | null                                              |
 | json-streams         | json-stringify | Fell through etypecase expression                 |
@@ -1399,7 +1416,7 @@ Suppose you do not yet have a specific lisp data structure with all the data you
 | boost-json           | No       |
 | cl-json              | [[#cl-json-incremental][Yes]]      |
 | com.gigamonkeys.json | No       |
-| com.inuoe.jzon       | No (1)   |
+| com.inuoe.jzon       | [[#jzon-incremental][Yes]]      |
 | jonathan             | [[#jonathan-incremental][Yes]]      |
 | json-lib             | No       |
 | [[#json-streams][json-streams]]         | [[#json-streams-incremental][Yes]]      |
@@ -1662,11 +1679,11 @@ Redditor lokedhs has pointed out that "I'd be careful about using any JSON libra
   (cl-json:decode-json-from-string "{\"alpha-omega\": 1}")
 #+end_src
 
-Boost-json and Jonathan also does seem to have this as a potential issue. Boost-json decodes JSON objects to a CLOS object with slot-value names interned in the boost-json package.
+Boost-json and Jonathan also seem to have this as a potential issue. Boost-json decodes JSON objects to a CLOS object with slot-value names interned in the boost-json package.
 
 com.gigamonkeys.json, com.inuoe.jzon, json, json-lib, json-streams, jsown, shasht and st-json do not intern the keywords. Yason doesn't intern the keywords in the library but the test files do, giving you the impression that it assumes that will be normal practice.
 
-You will see in the next section when it talks about malformed data that certain strings can also hang the system or exhaust the stack (typically by opening thousands of JSON arrays or objects and never closing them). Com.inuoe.jzon, json-lib and json-streams have maximum level limits that can be used to prevent this type of overloading from happening.
+You will see in the next section when it talks about malformed data that certain strings can also hang the system or exhaust the stack (typically by opening thousands of JSON arrays or objects and never closing them). Com.inuoe.jzon, json-lib, json-streams and shasht have maximum level limits that can be used to prevent this type of overloading from happening.
 
 * Standard Conformity and Dealing with Malformed Data
 :PROPERTIES:
@@ -1781,7 +1798,7 @@ Only three libraries did not hang or trigger stack exhaustion on strings designe
 :PROPERTIES:
 :CUSTOM_ID: read-times
 :END:
-Ok. We are going to show read benchmarking results using SBCL, CCL and ECL because the changes in the results for jonathan were so different.
+Ok. We are going to show read benchmarking results using SBCL, CCL and ECL because the changes in the results for jonathan were so different. Some other libraries also showed some interesting differences with shasht actually taking the speed lead on larger files when using ECL.
 
 Jsown maintains its crown as the fastest parser *on SBCL* (assuming no errors in the file). It is beaten slightly by jonathan on tiny strings, but jonathan shows a slow-down with certain nested JSON objects that gets progressively worse as string sizes increase. This effect is more immediate under SBCL where it starts slowing down < 12.7k data. The effect is obvious even under CCL and ECL by the time you get to 227k JSON data objects and by the time you get over 1MB JSON data objects, jonathan is orders of magnitude slower than all other libraries, not just jsown.
 
@@ -1795,199 +1812,209 @@ yason-alist and yason-plist are shorthand for (yason:parse data :object-as :alis
 #+end_src
 
 #+begin_src ascii
-                                JSON Read Times (SBCL tiny JSON object)
-                     0                  6.147095e-6                  1.229419e-5
+                                  JSON Read Times (SBCL 2.3.2 tiny JSON object)
+                     0                 5.8130204e-6                 1.1626041e-5
                      ˫----------------------------+----------------------------˧
-          boost-json █████████████████████████▎
-             cl-json ████████████████████████████████████▎
-com.gigamonkeys.json ███████████████████████▎
+          boost-json ████████████████████████▎
+             cl-json ████████████████████████████████▊
+com.gigamonkeys.json ███████████████████████▋
             jonathan ███████▍
-      com.inuoe.jzon ███████████▍
-            json-lib █████████████████████████████████▌
+      com.inuoe.jzon ███████▌
+            json-lib ███████████████████████████████▍
         json-streams ███████████████████████████████████████████████████████████
-               jsown ████████▏
-              shasht █████████████▊
-             st-json ████████████████████████████████▏
-  trivial-json-codec ████████████████▉
-               yason ████████████████████████████████████▉
-         yason-alist ███████████████████████████████████▏
-         yason-plist ███████████████████████████████████▎
+               jsown ███████▉
+              shasht ███████████▉
+             st-json ██████████████████████████████▊
+               yason █████████████████████████████████████▋
 
 
-                                JSON Read Times (CCL tiny JSON object)
-                     0                  3.137722E-5                  6.275444E-5
+                                JSON Read Times (CCL 1.12.1 tiny JSON object)
+                       0                 3.1699197E-5                 6.3398395E-5
                      ˫----------------------------+----------------------------˧
-          boost-json ███████████████▉
-             cl-json ██████████████████▋
-com.gigamonkeys.json █████████████████▌
+          boost-json ███████████████▏
+             cl-json ██████████████████▎
+com.gigamonkeys.json █████████████████▍
             jonathan ███▏
-      com.inuoe.jzon █████▋
-            json-lib ███████████████████████████████████████████████████████████
-        json-streams █████████████████████████████████████████▍
+      com.inuoe.jzon ██████▊
+            json-lib ██████████████████████████████████████████████████████████
+        json-streams ██████████████████████████████████████████▎
                jsown █████▎
-              shasht ██████████▏
-             st-json ████████████████▍
-               yason █████████████████▎
+              shasht ██████████▎
+             st-json ████████████████▌
+               yason ██████████████████▌
 
-                                JSON Read Times (ECL tiny JSON object)
-                     0                 1.3122593e-4                 2.6245185e-4
+                                JSON Read Times (ECL 21.2.1 tiny JSON object)
+                     0                 1.7382258e-4                 3.4764517e-4
                      ˫----------------------------+----------------------------˧
-          boost-json ███████▍
-             cl-json ██████████████████████████▋
-com.gigamonkeys.json █████████▋
-            jonathan █▋
-      com.inuoe.jzon █████▍
-            json-lib █████████▊
-        json-streams ███████████████████████████████████████████████████████████
-               jsown ██▋
-              shasht █████████████▎
-             st-json █████████▊
-               yason ████████▌
+          boost-json █████████████▎
+             cl-json ████████▎
+com.gigamonkeys.json ████▊
+            jonathan ████▏
+      com.inuoe.jzon ██████▍
+            json-lib ██████████████████████▎
+        json-streams ███████████████████████████████████▊
+               jsown ███████████████████████████████████████████████████████████
+              shasht █████▌
+             st-json ████▉
+               yason ███████▍
+
+
 #+end_src
 The read times start to look different with respect to nested JSON objects as the file sizes increase. The next chart is a 2.7k JSON nested object. With SBCL, jonathan is slightly behind JSON, but still looking good compared to the rest of the libraries. The JSON dataset for charts between 2.7k and 221k are all from a Nobel prize dataset which can be found at [[http://api.nobelprize.org/v1/prize.json][http://api.nobelprize.org/v1/prize.json]]. The 2.7k data is just 2021. The 12.9k data is 2017-2021 and the 221k data are all years. We are dropping trivial-json-codec out at this point because it claims the data is invalid.
 #+begin_src ascii
-                                JSON Read Times (SBCL 2.7k JSON object)
-                     0                 1.3253705e-4                  2.650741e-4
+                                  JSON Read Times (SBCL 2.3.2 2.7k JSON object)
+                     0                 1.2616655e-4                  2.523331e-4
                      ˫----------------------------+----------------------------˧
-          boost-json ████████████▉
-             cl-json █████████████████████████████████▌
-com.gigamonkeys.json ██████████████████▏
-            jonathan ██████▏
-      com.inuoe.jzon ██████████████▌
-            json-lib ████████████████████████████████████████▌
+          boost-json ███████████▍
+             cl-json █████████████████████████████▋
+com.gigamonkeys.json █████████████████▎
+            jonathan █████▌
+      com.inuoe.jzon █████████▌
+            json-lib ████████████████████████████████████▋
         json-streams ███████████████████████████████████████████████████████████
-               jsown ███▊
-              shasht █████████████▊
-             st-json ██████████████▏
-               yason ██████████████████████████████████████████▊
-         yason-alist █████████████████████████████████████████▍
-         yason-plist █████████████████████████████████████████▍
+               jsown ███▌
+              shasht █████████████▍
+             st-json ████████████▍
+               yason ███████████████████████████████████████████▋
 
-                                JSON Read Times (CCL 2.7k JSON object)
-                     0                   4.59796E-4                   9.19592E-4
+
+
+                                JSON Read Times (CCL 1.12.1 2.7k JSON object)
+                     0                 4.6838302E-4                 9.3676604E-4
                      ˫----------------------------+----------------------------˧
           boost-json █████████████▋
-             cl-json ████████████████████████████▎
-com.gigamonkeys.json █████████████████▎
+             cl-json ████████████████████████████▏
+com.gigamonkeys.json █████████████████▍
             jonathan ███▍
-      com.inuoe.jzon ██████████▌
-            json-lib ███████████████████████████████████████████████████████████
-        json-streams ██████████████████████████████████████████████████████████▏
-               jsown ███████▍
-              shasht ████████▏
-             st-json █████████████▏
-               yason ███████████████████████████▏
-
-                                JSON Read Times (ECL 2.7k JSON object)
-                     0                 0.0029186574                 0.0058373148
-                     ˫----------------------------+----------------------------˧
-          boost-json █████▍
-             cl-json ████████▌
-com.gigamonkeys.json ███████████▏
-            jonathan █▌
-      com.inuoe.jzon ████▋
-            json-lib █████████████████▋
+      com.inuoe.jzon █████████▊
+            json-lib █████████████████████████████████████████████████████████▌
         json-streams ███████████████████████████████████████████████████████████
-               jsown ████▌
-              shasht ███▍
-             st-json █████▉
-               yason ███████████▎
+               jsown ███████▍
+              shasht ███████▉
+             st-json ████████████▋
+               yason ███████████████████████████▎
+
+
+
+                                JSON Read Times (ECL 21.2.1 2.7k JSON object)
+                     0                  0.010292258                  0.020584516
+                     ˫----------------------------+----------------------------˧
+          boost-json █▌
+             cl-json ███▌
+com.gigamonkeys.json ███▉
+            jonathan █▎
+      com.inuoe.jzon █▉
+            json-lib █████▋
+        json-streams ███████████████████████████████████████████████████████████
+               jsown ██▊
+              shasht █▎
+             st-json ████████▋
+               yason ███████████▊
+
+
 #+end_src
 Now we increase the size to a 12.9k JSON nested object. Using SBCL, jsown is by itself and jonathan has fallen behind four other libraries. On the other hand, jonathan is still faster with CCL and ECL.
 #+begin_src ascii
-                                JSON Read Times (SBCL 12.9k JSON object)
-                     0                 6.402964e-4                  0.0012805928
+                                JSON Read Times (SBCL 2.3.2 12.9k JSON object)
+                     0                 6.1594247e-4                 0.0012318849
                      ˫----------------------------+----------------------------˧
-          boost-json █████████████▏
-             cl-json █████████████████████████████████▋
-com.gigamonkeys.json █████████████████▉
-            jonathan ████████████████▍
-      com.inuoe.jzon ██████████████▌
-            json-lib ███████████████████████████████████████▌
+          boost-json ███████████▍
+             cl-json █████████████████████████████▊
+com.gigamonkeys.json ████████████████▉
+            jonathan █████████████████▉
+      com.inuoe.jzon █████████▍
+            json-lib ███████████████████████████████████▉
         json-streams ███████████████████████████████████████████████████████████
-               jsown ███▋
-              shasht █████████████▊
-             st-json █████████████▉
-               yason ██████████████████████████████████████████▌
-         yason-alist ████████████████████████████████████████▊
-         yason-plist ████████████████████████████████████████▉
+               jsown ███▌
+              shasht █████████████▏
+             st-json ████████████▏
+               yason ██████████████████████████████████████████▋
 
-                                JSON Read Times (CCL 12.9k JSON object)
-                     0                  0.0022879406                 0.004575881
+
+
+                                JSON Read Times (CCL 1.12.1  12.9k JSON object)
+                     0                  0.0022662715                 0.004532543
                      ˫----------------------------+----------------------------˧
-          boost-json █████████████▎
-             cl-json ███████████████████████████▋
-com.gigamonkeys.json ████████████████▍
-            jonathan ███████▍
-      com.inuoe.jzon ██████████▌
-            json-lib ███████████████████████████████████████████████████████████
-        json-streams █████████████████████████████████████████████████████████▍
+          boost-json █████████████▋
+             cl-json ████████████████████████████▍
+com.gigamonkeys.json ████████████████▉
+            jonathan ██████▌
+      com.inuoe.jzon █████████▋
+            json-lib █████████████████████████████████████████████████████████▉
+        json-streams ███████████████████████████████████████████████████████████
                jsown ███████▏
-              shasht ████████▏
-             st-json ████████████▊
-               yason ██████████████████████████▎
+              shasht ████████▎
+             st-json ████████████▉
+               yason ███████████████████████████▌
 
-                                JSON Read Times (ECL 12.9k JSON object)
-                     0                   0.02525251                   0.05050502
+
+
+                                JSON Read Times (ECL 21.2.1 12.9k JSON object)
+                     0                  0.018946955                   0.03789391
                      ˫----------------------------+----------------------------˧
-          boost-json ███▍
-             cl-json ███▍
-com.gigamonkeys.json ████▏
-            jonathan █▎
-      com.inuoe.jzon █████████████▍
-            json-lib ██████▏
+          boost-json █████▎
+             cl-json ████████████▍
+com.gigamonkeys.json █████▋
+            jonathan █████▍
+      com.inuoe.jzon █████▋
+            json-lib ████████████████████████▊
         json-streams ███████████████████████████████████████████████████████████
-               jsown ██▊
-              shasht █████▋
-             st-json █▉
-               yason █████████▍
+               jsown ███████▊
+              shasht ████████▏
+             st-json █████▎
+               yason ████████▍
+
 #+end_src
 Now we jump up to the 221k JSON object and jonathan is really falling behind with SBCL and suddenly starts struggling under CCL and ECL for unknown reasons.
 #+begin_src ascii
-                                JSON Read Times (SBCL 221k JSON object)
-                     0                   0.03486486                   0.06972972
+                                JSON Read Times (SBCL 2.3.2 221k JSON object)
+                     0                  0.030821392                  0.061642785
                      ˫----------------------------+----------------------------˧
-          boost-json ████▏
-             cl-json ██████████▋
-com.gigamonkeys.json █████▊
-            jonathan ███████████████████████████████████████████████████████████
-      com.inuoe.jzon ████▉
-            json-lib █████████████▌
-        json-streams ████████████████████▌
+          boost-json ███▊
+             cl-json █████████▊
+com.gigamonkeys.json █████▉
+            jonathan ██████████████████████████████████████████████████████████
+      com.inuoe.jzon ███▎
+            json-lib ████████████▍
+        json-streams ███████████████████▋
                jsown █▎
-              shasht ████▋
-             st-json ████▍
-               yason ██████████████▎
+              shasht ████▌
+             st-json ████▏
+               yason ██████████████▋
 
-                               JSON Read Times (CCL 221k JSON object)
-                     0                  0.045712363                  0.091424726
-                     ˫----------------------------+----------------------------˧
-          boost-json ███████████▌
-             cl-json ██████████████████████▉
-com.gigamonkeys.json █████████████████▌
-            jonathan ███████████████████████████████████████████████████████████
-      com.inuoe.jzon ███████████▉
-            json-lib ███████████████████████████████████████████████████████▏
-        json-streams ███████████████████████████████████████████████▉
-               jsown ██████▍
-              shasht ██████████████████▍
-             st-json ██████████▉
-               yason ██████████████████████████████▉
 
-                               JSON Read Times ECL 221k JSON object
-                     0                   0.13347456                   0.26694912
+                               JSON Read Times (CCL 1.12.1  221k JSON object)
+                     0                     0.0410785                    0.082157
                      ˫----------------------------+----------------------------˧
-          boost-json ████████████████▋
-             cl-json █████████████▊
-com.gigamonkeys.json ███████████▍
-            jonathan █████████████████████████████████████████████████▏
-      com.inuoe.jzon █████████▌
-            json-lib ███████████████▊
-        json-streams ████████████████████████████████████████████████████▋
-               jsown ██████████████████████████████████████████████████████████
-              shasht ████▊
-             st-json █████████████▌
-               yason ███████████████████▎
+          boost-json ████████████▉
+             cl-json ██████████████████████████▏
+com.gigamonkeys.json ██████████████████████▎
+            jonathan █████████████████████████████████████████████████████▉
+      com.inuoe.jzon ██████████████▊
+            json-lib ███████████████████████████████████████████████████████████
+        json-streams █████████████████████████████████████████████████████▋
+               jsown ███████▍
+              shasht ███████████████████████▉
+             st-json ████████████▏
+               yason ████████████████████████████████▉
+
+
+
+                               JSON Read Times ECL 21.2.1 221k JSON object
+                     0                   0.17499994                   0.34999987
+                     ˫----------------------------+----------------------------˧
+          boost-json ██████████▎
+             cl-json █████████████▎
+com.gigamonkeys.json █████████▉
+            jonathan ██████████████████████████████████████████▏
+      com.inuoe.jzon █████████▎
+            json-lib ███████████████████▊
+        json-streams ███████████████████████████████████████████████████████████
+               jsown ██████████████████████████▏
+              shasht ████▉
+             st-json █████▉
+               yason ███████████████████████████▌
+
 #+end_src
 Switching to trivial-benchmarking numbers and just taking the cumulative timing and consing for 20 runs of these three JSON strings and just comparing jonathan v. com.inuoe.jzon. Obviously the first thing that jumps out is the garbage collection while jonathan parses the 221k JSON string. Look at the relative increase. The largest string is 8162% larger than the smallest, but jonathan's run time increases by 100000% and the bytes consed increases by 576000%. At the same time com.inuoe.jzon's increases slightly less than the increase in string size.
 #+CAPTION: Jonathan Parsing (SBCL)
@@ -1998,11 +2025,11 @@ Switching to trivial-benchmarking numbers and just taking the cumulative timing 
 | File Size (Bytes) |        2715 |       12961 |      221618 |             8162% |
 |                   | Total (sec) | Total (sec) | Total (sec) |                   |
 |-------------------+-------------+-------------+-------------+-------------------|
-| RUN-TIME          |    0.001276 |    0.009836 |    1.320854 |           103515% |
-| USER-RUN-TIME     |    0.001174 |    0.009696 |    1.233804 |           105094% |
-| SYSTEM-RUN-TIME   |    0.000105 |    0.000145 |    0.087132 |            82983% |
-| GC-RUN-TIME       |           0 |           0 |     217.427 |                   |
-| BYTES-CONSED      |     1754032 |    37784576 | 10100294512 |           575832% |
+| RUN-TIME          |    0.000993 |    0.008474 |    1.261165 |           127005% |
+| USER-RUN-TIME     |    0.000970 |    0.008460 |    1.184836 |           122251% |
+| SYSTEM-RUN-TIME   |    0.000004 |    0.000023 |    0.076502 |          1912550% |
+| GC-RUN-TIME       |           0 |           0 |     155.651 |                   |
+| BYTES-CONSED      |     1811312 |    37779888 | 10098760112 |           557538% |
 
 #+CAPTION: Com.inuoe.jzon Parsing (SBCL)
 #+ATTR_HTML: :border 2 :rules all :frame border
@@ -2012,114 +2039,179 @@ Switching to trivial-benchmarking numbers and just taking the cumulative timing 
 | File Size (Bytes) |        2715 |       12961 |      221618 |             8162% |
 |                   | Total (sec) | Total (sec) | Total (sec) |                   |
 |-------------------+-------------+-------------+-------------+-------------------|
-| RUN-TIME          |    0.002695 |    0.012667 |    0.138126 |             5125% |
-| USER-RUN-TIME     |    0.002694 |    0.012666 |     0.13813 |             5127% |
+| RUN-TIME          |    0.001822 |    0.004031 |    0.071345 |             3915% |
+| USER-RUN-TIME     |    0.001822 |    0.004031 |    0.071326 |             3915% |
 | SYSTEM-RUN-TIME   |           0 |           0 |           0 |                 0 |
 | GC-RUN-TIME       |           0 |           0 |           0 |                 0 |
-| BYTES-CONSED      |      504800 |     2246960 |    37353184 |             7399% |
+| BYTES-CONSED      |      426640 |     1839472 |    30431056 |             4311% |
 
 Now looking at parsing a 1.2 MB JSON string with nested objects, jonathan is orders of magnitude slower than all the other libraries regardless of which compiler is used. The JSON dataset can be found at [[https://github.com/mledoze/countries/blob/master/countries.json][https://github.com/mledoze/countries/blob/master/countries.json]].
 #+begin_src ascii
-                                JSON Read Times (SBCL 1.2MB JSON object)
-                     0                     1.193597                     2.387194
+                                JSON Read Times (SBCL 2.3.2 1.2MB JSON object)
+                     0                    1.0532565                     2.106513
                      ˫----------------------------+----------------------------˧
           boost-json ▌
              cl-json █▏
 com.gigamonkeys.json ▊
-            jonathan ███████████████████████████████████████████████████████████
-      com.inuoe.jzon ██▏
+            jonathan ██████████████████████████████████████████████████████████
+      com.inuoe.jzon ▍
             json-lib █▋
-        json-streams ██▍
+        json-streams ██▌
                jsown ▍
               shasht ▋
              st-json ▊
                yason █▌
-         yason-alist █▍
-         yason-plist █▍
 
-CCL results not included since it had an issue with some of the unicode in the file.
+CCL results not included since CCL had an issue with some of the unicode in the file.
 
-                                JSON Read Times (ECL 1.2MB JSON object)
-                     0                          2.0                          4.0
+                                JSON Read Times (ECL ECL 21.2.1  1.2MB JSON object)
+                     0                          3.5                          7.0
                      ˫----------------------------+----------------------------˧
           boost-json █▍
-             cl-json █████████▏
-com.gigamonkeys.json ████████▏
-            jonathan ███████████████████████████████████████████████████████████
-      com.inuoe.jzon █████▌
-            json-lib █████▎
-        json-streams ██████████████▊
-               jsown ██▍
-              shasht █▋
-             st-json █▋
-               yason █████████▊
-
-#+end_src
-If we drop jonathan and look at the remaining libraries and add in results for yason decoding to plists and alists, it looks like this:
-#+begin_src ascii
-
-                                JSON Read Times (SBCL 1.2 MB JSON object)
-                     0                   0.04651775                    0.0930355
-                     ˫----------------------------+----------------------------˧
-          boost-json ███████████▍
-             cl-json ██████████████████████████████▎
-com.gigamonkeys.json ███████████████████▍
-      com.inuoe.jzon ██████████████████████████████████████████████████████▉
-            json-lib █████████████████████████████████████████▎
-        json-streams ██████████████████████████████████████████████████████████
-               jsown ███████▍
-              shasht ███████████████▋
-             st-json ███████████████████▍
-               yason ████████████████████████████████████▍
-         yason-alist █████████████████████████████████▉
-         yason-plist █████████████████████████████████▉
-#+end_src
-Interestingly, if we go up to a 9.8 MB file (still on the small side) downloaded from [[https://www.vizgr.org/historical-events/search.php?format=json&begin_date=-3000000&end_date=20151231&lang=en][https://www.vizgr.org/historical-events/search.php?format=json&begin_date=-3000000&end_date=20151231&lang=en]], we see substantial improvement from jzon (com.inoue.jzon) and some slowing down from gigamonkeys. I am going to guess that there is something different in the structure of the files which jzon handles faster than the 1.2 MB file. Again, trivial-json-codec rejected the data as invalid, so it is left out.
-#+begin_src ascii
-                                JSON Read Times (SBCL 9.8MB JSON object)
-                     0                    8.908338                     17.816675
-                     ˫----------------------------+----------------------------˧
-          boost-json ▊
              cl-json █▉
+com.gigamonkeys.json █▉
+            jonathan ███████████████████████████████████████████████████████████
+      com.inuoe.jzon █████▏
+            json-lib ████▎
+        json-streams ████████▍
+               jsown █▉
+              shasht █▌
+             st-json █▍
+               yason █▉
+
+
+#+end_src
+If we drop jonathan and look at the remaining libraries, it looks like this:
+#+begin_src ascii
+                                JSON Read Times
+                     0                  0.045177087                  0.090354174
+                     ˫----------------------------+----------------------------˧
+          boost-json ██████████▎
+             cl-json ███████████████████████████▍
+com.gigamonkeys.json ██████████████████▍
+      com.inuoe.jzon ████████▌
+            json-lib █████████████████████████████████████▌
+        json-streams ███████████████████████████████████████████████████████████
+               jsown ███████▍
+              shasht █████████████▍
+             st-json █████████████████▎
+               yason ███████████████████████████████████▎
+
+                                JSON Read Times (ECL 21.2.1  1.2MB JSON object)
+                       0                   0.49999994                    0.9999999
+                     ˫----------------------------+----------------------------˧
+          boost-json ██████████▋
+             cl-json ████████████████████▋
+com.gigamonkeys.json ████████████████▊
+      com.inuoe.jzon ████████████████████████████████▌
+            json-lib ███████████████████████▋
+        json-streams ███████████████████████████████████████████████████████████
+               jsown ███████████████████▋
+              shasht █████████▋
+             st-json █████████▏
+               yason █████████████▎
+
+
+#+end_src
+Moving up to a 9.8 MB file (still on the small side) downloaded from [[https://www.vizgr.org/historical-events/search.php?format=json&begin_date=-3000000&end_date=20151231&lang=en][https://www.vizgr.org/historical-events/search.php?format=json&begin_date=-3000000&end_date=20151231&lang=en]],  Yason's standard parsing into a hash complained that there was a duplicate key in the data, so we are using yason's parsing into an alist instead.
+
+*With Jonathan*
+#+begin_src ascii
+                                  JSON Read Times (SBCL 2.3.2 9.8 MB JSON object)
+                     0                    8.069131                     16.138262
+                     ˫----------------------------+----------------------------˧
+          boost-json ▋
+             cl-json █▋
 com.gigamonkeys.json █▎
             jonathan ███████████████████████████████████████████████████████████
-      com.inuoe.jzon ▋
-            json-lib ██▍
-        json-streams ███▎
+      com.inuoe.jzon ▍
+            json-lib ██▎
+        json-streams ███▏
                jsown ▎
               shasht ▋
-             st-json ▊
-               yason ██▍
+             st-json ▋
+         yason-alist ██▌
+
+
+                                JSON Read Times (CCL 1.12.1 9.8 MB Json Object)
+                     0                     10.630925                    21.26185
+                     ˫----------------------------+----------------------------˧
+          boost-json ██▎
+             cl-json ███▊
+com.gigamonkeys.json ███▍
+            jonathan ███████████████████████████████████████████████████████████
+      com.inuoe.jzon ▉
+            json-lib ███████████▎
+        json-streams ████████▏
+               jsown █▍
+              shasht █▏
+             st-json ██▏
+
+
+
+                                JSON Read Times (ECL 21.2.1 9.8 MB Json Object)
+                     0                         19.5                         39.0
+                     ˫----------------------------+----------------------------˧
+          boost-json █▌
+             cl-json ███▏
+com.gigamonkeys.json ██▎
+            jonathan ███████████████████████████████████████████████████████████
+      com.inuoe.jzon █▌
+            json-lib ██████▏
+        json-streams ████████████▏
+               jsown ███▏
+              shasht █▌
+             st-json █▌
+         yason-alist ███▏
+
+#+end_src
+*Without Jonathan*
+#+begin_src ascii
+                                JSON Read Times (SBCL 2.3.2 9.8 MB JSON object)
+                     0                    0.4027305                     0.805461
+                     ˫----------------------------+----------------------------˧
+          boost-json ████████████▋
+             cl-json ████████████████████████████████▍
+com.gigamonkeys.json ███████████████████████▎
+      com.inuoe.jzon █████▉
+            json-lib ████████████████████████████████████████████▊
+        json-streams ███████████████████████████████████████████████████████████
+               jsown ████▍
+              shasht █████████████▏
+             st-json ████████████▊
+         yason-alist ███████████████████████████████████████████████████▋
+
 
                                 JSON Read Times (CCL 9.8MB JSON object)
-                     0                    11.320626                    22.641253
+                     0                     2.043566                     4.087132
                      ˫----------------------------+----------------------------˧
-          boost-json ██▏
-             cl-json ███▋
-com.gigamonkeys.json ███▏
-            jonathan ███████████████████████████████████████████████████████████
-      com.inuoe.jzon █▎
-            json-lib ██████████▊
-        json-streams ███████▊
-               jsown █▎
-              shasht ▉
-             st-json █▉
-               yason ███▋
+          boost-json ███████████▊
+             cl-json ███████████████████▉
+com.gigamonkeys.json ████████████████▉
+      com.inuoe.jzon █████▏
+            json-lib ███████████████████████████████████████████████████████████
+        json-streams ██████████████████████████████████████████▉
+               jsown ██████▉
+              shasht █████▍
+             st-json ██████████▉
+         yason-alist █████████████████████████▋
+
 
                                 JSON Read Times (ECL 9.8 MB JSON object)
-                     0                         11.0                         22.0
+                     0                          4.5                          9.0
                      ˫----------------------------+----------------------------˧
-          boost-json ██▋
-             cl-json ████▏
-com.gigamonkeys.json ██▋
-            jonathan ███████████████████████████████████████████████████████████
-      com.inuoe.jzon ██▋
-            json-lib █████▍
-        json-streams ████████████████▏
-               jsown ██▋
-              shasht █▍
-             st-json ██▋
-               yason █████▍
+          boost-json ██████▌
+             cl-json █████████████▏
+com.gigamonkeys.json █████████████▏
+      com.inuoe.jzon ██████▌
+            json-lib ███████████████████▋
+        json-streams ███████████████████████████████████████████████████████████
+               jsown █████████████▏
+              shasht █████▊
+             st-json ██████▌
+         yason-alist █████████████▏
+
+
 #+end_src
 
 *** Read Times From Stream (SBCL)
@@ -2134,17 +2226,17 @@ The following charts are reading from stream rather than from string (so a sligh
 #+begin_src ascii
 
                                 JSON Read Times (SBCL) 1.2 MB Countries File
-               0                     0.045713887                      0.09142777
+               0                      0.04425004                      0.08850008
                ˫-------------------------------+-------------------------------˧
-    boost-json █████████████▏
-       cl-json █████████████████████████████████▍
-com.inuoe.jzon █████████████████████████████████████████████████████████████████
-  json-streams █████████████████████████████████████████████████████████████▊
-        shasht ████████████████▊
-       st-json █████████████████████▏
-         yason █████████████████████████████████▋
-   yason-plist ████████████████████████████████▊
-   yason-plist █████████████████████████████████▋
+    boost-json ██████████▋
+       cl-json ████████████████████████████▌
+com.inuoe.jzon ████████████████▉
+  json-streams █████████████████████████████████████████████████████████████████
+        shasht █████████████▋
+       st-json ████████████████▎
+         yason ████████████████████████████████▏
+   yason-alist ██████████████████████████████
+   yason-plist ███████████████████████████████▏
 
 #+end_src
 
@@ -2153,18 +2245,16 @@ com.inuoe.jzon █████████████████████�
 :CUSTOM_ID: benchmarking-read-stream-historical-events
 :END:
 #+begin_src ascii
-                                JSON Read Times (SBCL) 9.8 MB Historical Events File
-               0                       3.6496155                        7.299231
+                      JSON Read Times (SBCL) 9.8 MB Historical Events File
+               0                      0.39376867                      0.78753734
                ˫-------------------------------+-------------------------------˧
-    boost-json █▊
-       cl-json ████▊
-com.inuoe.jzon ██▋
-  json-streams ███████▌
-        shasht █▊
-       st-json █▉
-         yason ████▉
-   yason-plist ████████████████████████████████████████████████████████████████▊
-   yason-plist █████████████████████████████████████████████████████████████████
+    boost-json ████████████▋
+       cl-json ██████████████████████████████████▌
+com.inuoe.jzon █████████████████▉
+  json-streams █████████████████████████████████████████████████████████████████
+        shasht █████████████▏
+       st-json █████████████▎
+   yason-alist ██████████████████████████████████████████▏
 
 #+end_src
 
@@ -2172,75 +2262,68 @@ com.inuoe.jzon ██▋
 :PROPERTIES:
 :CUSTOM_ID: write-times
 :END:
-Unlike the read times with Jonathan, writing times did not show any surprising differences between tiny bits of data and longer nested data. First writing tiny bits of data. We are skipping trivial-json-codec because of its inability to deliver valid JSON from lists.
+Unlike the read times with Jonathan, writing times did not show any surprising differences between tiny bits of data and longer nested data. First writing tiny bits of data. We are skipping trivial-json-codec because of its inability to deliver valid JSON from lists and gigamonkeys had some difficulties with some of the data as well, so it was dropped. The data used is the same data as the reading benchmarks, but encoded by yason. Due to time constraints, I did not run the write times benchmarks for CCL and ECL.
 #+begin_src ascii
-
-                                JSON Write Times
-               0                    5.904379e-6                     1.1808758e-5
+                             JSON Write Times (SBCL trivial sized list)
+               0                    5.3087347e-6                    1.0617469e-5
                ˫-------------------------------+-------------------------------˧
-    boost-json █████████████████████████████████████▋
-       cl-json █████████████████████████████████████████████████████████████████
-com.inuoe.jzon ████████████████████████████████████▏
-      jonathan ██████████████████████████████████▊
-      json-lib ██████████████████████████████████████████████▋
-  json-streams ████████████████████████████▌
-         jsown ███████████████████████████████████████▌
-        shasht ████████████▊
-       st-json ███████▊
-         yason ██████████████████████████████████▉
+    boost-json █████████████████████████████████████████████████████████████████
+       cl-json ███████████████████████████████████████▍
+com.inuoe.jzon ████████████▊
+      json-lib ████████████████████████████████████████████████▊
+      jonathan ██████████████████████████████████████████████████████▌
+         jsown ███████████████████████████████████████████████▏
+        shasht █████████████████▌
+       st-json █████████████████████████████▍
+         yason ██████████████████████████████████████▊
+
 #+end_src
 Now the lisp data equivalent to the JSON 2.7k data string:
 #+begin_src ascii
-                                JSON Write Times 2.7k data
-                     0                 1.1808636e-4                 2.3617272e-4
-                     ˫----------------------------+----------------------------˧
-          boost-json ███████████████████████████████████████████████████████████
-             cl-json ██████████████████████████████████████████████▌
-com.gigamonkeys.json █████████▏
-      com.inuoe.jzon ████████▉
-            jonathan █████████▊
-            json-lib ██████████████████████████████████▌
-        json-streams ███████████████████████████████████████▎
-               jsown ██████████████████████▉
-              shasht ████████████▎
-             st-json ███████▋
-               yason ███████████████████▊
+                                JSON Write Times 2.7k data (SBCL)
+               0                    1.1911893e-4                    2.3823786e-4
+               ˫-------------------------------+-------------------------------˧
+    boost-json █████████████████████████████████████████████████████████████████
+       cl-json ███████████████████▍
+com.inuoe.jzon ██████████▌
+      json-lib ███████████████████████████████████▉
+      jonathan ██████████▌
+         jsown ████████████████████████████▌
+        shasht ███████████▎
+       st-json ████████▉
+         yason ██████████████████████▏
 
 #+end_src
 Now the lisp data equivalent to the JSON 12.9k data string
 #+begin_src ascii
-                                JSON Write Times 12.9k data
-                     0                 5.776428e-4                  0.0011552856
-                     ˫----------------------------+----------------------------˧
-          boost-json ███████████████████████████████████████████████████████████
-             cl-json ██████████████████████████████████████████████▍
-com.gigamonkeys.json ████████▌
-      com.inuoe.jzon ████████▊
-            jonathan █████████▊
-            json-lib ██████████████████████████████████▏
-        json-streams ██████████████████████████████████████▋
-               jsown ██████████████████████▌
-              shasht ████████████▏
-             st-json ███████▏
-               yason ███████████████████▏
+                                JSON Write Times 12.9k data (SBCL)
+               0                    5.9223245e-4                    0.0011844649
+               ˫-------------------------------+-------------------------------˧
+    boost-json █████████████████████████████████████████████████████████████████
+       cl-json ██████████████████▉
+com.inuoe.jzon ██████████▎
+      json-lib ██████████████████████████████████▊
+      jonathan ██████████▌
+         jsown ███████████████████████████▍
+        shasht ██████████▊
+       st-json ████████▌
+         yason █████████████████████▏
 
 #+end_src
 Now the lisp data equivalent to a JSON 221.6k data string
 #+begin_src ascii
-                          JSON Write Times 221.6k data
-                     0                  0.014210499                  0.028420998
-                     ˫----------------------------+----------------------------˧
-          boost-json ███████████████████████████████████████████████████████████
-             cl-json ███████████████████████████████▋
-com.gigamonkeys.json █████▉
-      com.inuoe.jzon █████▊
-            jonathan ██████▋
-            json-lib ████████████████████████▉
-        json-streams ██████████████████████████▉
-               jsown ███████████████▌
-              shasht ████████▏
-             st-json ████▊
-               yason █████████████▍
+                          JSON Write Times 221.6k data (SBCL)
+               0                     0.014435494                     0.028870989
+               ˫-------------------------------+-------------------------------˧
+    boost-json █████████████████████████████████████████████████████████████████
+       cl-json ████████████▌
+com.inuoe.jzon ██████▉
+      json-lib ████████████████████████▎
+      jonathan ██████▊
+         jsown ███████████████████▌
+        shasht ███████▎
+       st-json █████▋
+         yason ██████████████▋
 
 #+end_src
 
@@ -2685,7 +2768,6 @@ On the "slightly additional work" side:
 - Encoding structures, pathnames and timestamps would require writing a specialized method
 On the not-so-plus side:
 - It encodes nil as null. You can use the helper library cl-json-helper to encode nil as "false".
-
 **** Incremental Encoding
 :PROPERTIES:
 :CUSTOM_ID: cl-json-incremental
@@ -2990,9 +3072,9 @@ It accepted 14 of the 17 test cases considered to be part of the gray area of th
 
  | Library        | Author                       | License | Website                            | Comments         |
  |----------------+------------------------------+---------+------------------------------------+------------------|
- | [[#com.inuoe.jzon][com.inuoe.jzon]] | Wilfredo Velázquez-Rodríguez | MIT     | [[https://github.com/Zulu-Inuoe/jzon][https://github.com/Zulu-Inuoe/jzon]] | Not in Quicklisp |
+ | [[#com.inuoe.jzon][com.inuoe.jzon]] | Wilfredo Velázquez-Rodríguez | MIT     | [[https://github.com/Zulu-Inuoe/jzon][https://github.com/Zulu-Inuoe/jzon]] |                  |
 
-Com.inuoe.jzon is my new overall favorite. Unfortunately it is not in Quicklisp (if that matters to you).  It is fast, it handles null correctly, it encodes all kinds of lists, CLOS objects, structures and hash-tables. The one improvement I would request is the ability to do incremental coding and that is being worked on.
+Com.inuoe.jzon is my new overall favorite. It is fast, it handles null correctly, it encodes all kinds of lists, CLOS objects, structures and hash-tables.
 
 *** Default Mapping
 :PROPERTIES:
@@ -3027,7 +3109,6 @@ Using the stringify function, com.inuoe.jzon will map the following CL data type
 | CLOS objects     | object (using bound slots as keys)                                     |
 | structures       | object                                                                 |
 
-Com.inuoe.jzon looks at lists/alists/plists and tries to determine what is an alist or plist by looking at the key values.
 
 *** Decoding
 :PROPERTIES:
@@ -3094,9 +3175,42 @@ and this particular sample works because it does not try to make an integer into
 #+end_src
 This may or may not have been what you wanted.
 
-On the downside,
-- Attempting to encode a pathname resulted in an empty JSON object.
 
+**** Encoding Objects
+com.inuoe.jzon actually uses the :type of each slot to determine what to do with nil. Consider the following where two slots have no specified type, two have a list type and two have an array type. Specifically, consider the resulting difference between value-list0 and value-array0 when writing the object out:
+#+begin_src lisp
+  (defclass my-class ()
+  ((name :initarg :name)
+   (value0 :initarg :value0)
+   (value-list0 :initarg :value-list0
+               :type list)
+   (value-array0 :initarg :value-array0
+               :type array)
+   (value1 :initarg :value1)
+   (value-list1 :initarg :value-list1
+               :type list)
+   (value-array1 :initarg :value-array1
+               :type array)))
+
+(let ((obj (make-instance 'my-class
+                          :name "Name"
+                          :value0 nil
+                          :value-list0 nil
+                          :value-array0 nil
+                          :value1 1
+                          :value-list1 '(1 2 3)
+                          :value-array1 #("a" "b" "c"))))
+  (stringify obj))
+"{
+  \"name\":\"Name\",
+  \"value0\":null,
+  \"value-list0\":[],
+  \"value-array0\":null,
+  \"value1\":1,
+  \"value-list1\":[1,2,3],
+  \"value-array1\":[\"a\",\"b\",\"c\"]
+}"
+#+end_src
 **** Specialize Serialization
 :PROPERTIES:
 :CUSTOM_ID: jzon-decoding-specialize-serialization
@@ -3107,7 +3221,52 @@ com.inuoe.jzon allows you to specialize the coerced-fields method to handle CL d
 :PROPERTIES:
 :CUSTOM_ID: jzon-incremental
 :END:
-jzon incremental encoding is actively being worked on.
+The first simple example is just incrementally writing an array. We will set :pretty to nil.
+#+begin_src lisp
+  (com.inuoe.jzon:with-writer* (:stream *standard-output* :pretty nil)
+    (com.inuoe.jzon:begin-array*)
+    (dotimes (i 3)
+      (com.inuoe.jzon:write-value* i))
+    (com.inuoe.jzon:end-array*))
+  [0,1,2]
+#+end_src
+The second example borrows from the readme documentation and incrementally writes a JSON object:
+#+begin_src lisp
+  (com.inuoe.jzon:with-writer* (:stream *standard-output* :pretty t)
+  (com.inuoe.jzon:with-object*
+    (com.inuoe.jzon:write-key* :age)
+    (com.inuoe.jzon:write-value* 24)
+
+    (com.inuoe.jzon:write-property* :colour :blue)
+
+    (com.inuoe.jzon:write-properties* :outside nil
+                            :interests #()
+                            :talent 'null)
+
+    (com.inuoe.jzon:write-key* "an-array")
+    (com.inuoe.jzon:with-array*
+      (com.inuoe.jzon:write-values* :these :are :elements))
+
+    (com.inuoe.jzon:write-key* "another array")
+    (com.inuoe.jzon:write-array* :or "you" "can use this")))
+{
+  "age": 24,
+  "colour": "BLUE",
+  "outside": false,
+  "interests": [],
+  "talent": null,
+  "an-array": [
+    "THESE",
+    "ARE",
+    "ELEMENTS"
+  ],
+  "another array": [
+    "OR",
+    "you",
+    "can use this"
+  ]
+}
+#+end_src
 *** Symmetry
 :PROPERTIES:
 :CUSTOM_ID: jzon-symmetry
@@ -4072,7 +4231,7 @@ Issue 27 on GitHub claims an unhandled memory fault on the following bad JSON st
  |---------+----------------+---------+------------------------------------|
  | [[#shasht][shasht]]  | Tarn W. Burton | MIT     | [[https://github.com/yitzchak/shasht][https://github.com/yitzchak/shasht]] |
 
- Shasht is one of the two new libraries that I particularly like and is already in Quicklisp. It is fast, it handles null correctly, it encodes CLOS objects, structures and hash-tables. It can also do incremental encoding.
+ Shasht is one of the two new libraries that I particularly like. It is fast, it handles null correctly, it encodes CLOS objects, structures and hash-tables. It can also do incremental encoding.
 
 *** Default Mappping
 :PROPERTIES:
@@ -4317,7 +4476,52 @@ In order to facilitate extending the serialization facilities of shasht there ar
 (write-json-string value output-stream)
 #+end_src
 In order to ease the serialization of objects and arrays there is with-json-object and with-json-array. Both of these macros take an output stream as the first argument then enable indentation and automatic handling of all delimiter tokens. Inside the body of with-json-object the function (print-json-key-value key value output-stream) should be used to output a key value pair. Inside the body of with-json-array the function (print-json-value value output-stream) should be used to output a single value. Example usage can be seen in the source code.
+**** Encoding Objects
+Shasht actually uses the :type of each slot to determine what to do with nil. Consider the following where two slots have no specified type, two have a list type and two have an array type:
+#+begin_src lisp
+  (defclass my-class ()
+  ((name :initarg :name)
+   (value0 :initarg :value0)
+   (value-list0 :initarg :value-list0
+               :type list)
+   (value-array0 :initarg :value-array0
+               :type array)
+   (value1 :initarg :value1)
+   (value-list1 :initarg :value-list1
+               :type list)
+   (value-array1 :initarg :value-array1
+               :type array)))
 
+(let ((obj (make-instance 'my-class
+                          :name "Name"
+                          :value0 nil
+                          :value-list0 nil
+                          :value-array0 nil
+                          :value1 1
+                          :value-list1 '(1 2 3)
+                          :value-array1 #("a" "b" "c")))
+      (cl:*print-pretty* t)
+      (shasht:*write-false-values* '(:false))
+      (shasht:*write-empty-array-values* '(:empty-array nil)))
+  (shasht:write-json obj nil))
+  "{
+  \"NAME\": \"Name\",
+  \"VALUE0\": false,
+  \"VALUE-LIST0\": [],
+  \"VALUE-ARRAY0\": false,
+  \"VALUE1\": 1,
+  \"VALUE-LIST1\": [
+    1,
+    2,
+    3
+  ],
+  \"VALUE-ARRAY1\": [
+    \"a\",
+    \"b\",
+    \"c\"
+  ]
+}"
+#+end_src
 **** Incremental Encoding
 :PROPERTIES:
 :CUSTOM_ID: shasht-incremental
@@ -4382,6 +4586,8 @@ There were two general security issues we considered: (1) interning keywords and
 
 With respect to the second issue, shasht rejected 159 out of 173 malformed test cases. While it did not trigger the stack exhaustion issue exhibited by most of the other packages, some of the malformed JSON data strings did trigger recoverable error situations.
 
+Shasht has also added read-level and read-length limits but these are set to nil by default.
+
 *** Conformity with JSON Standard
 :PROPERTIES:
 :CUSTOM_ID: shasht-conformity
@@ -4404,6 +4610,8 @@ It accepted 9 of the 17 test cases considered to be part of the gray area of the
 - *\star{}read-default-null-value** - The default value to return when reading a null token. Initially set to :null
 - *\star{}read-default-object-format** - The default format to use when reading an object. Current supported formats are :hash-table, :alist or :plist. Initially set to :hash-table
 - *\star{}read-default-true-value** - The default value to return when reading a true token. Initially set to t
+- *\star{}read-length** - The maximum number of values in an array or object. Initially set to nil, which disables length checking.
+- *\star{}read-level** - The maximum number of levels to allow during reading for arrays and objects. Initially set to nil, which disables level checking.
 - *\star{}symbol-name-function**
 - *\star{}write-alist-as-object** - If true then assocation lists will be written as an object. Initially set to nil
 - *\star{}write-array-tags*  -  Indicators in the CAR of a list that indicate that the CDR or the list should be written as an array.
@@ -5703,41 +5911,41 @@ If you wanted to validate the JSON objects, you would need a schema which you co
 :CUSTOM_ID: decoding-benchmark-detail
 :END:
 
-The following summary table was generated by trivial-benchmarks from the libraries parsing the countries.json file (small 1.2 MB file) downloaded from [[https://github.com/mledoze/countries/blob/master/countries.json][https://github.com/mledoze/countries/blob/master/countries.json]], over a cumulated 100 runs.
-#+CAPTION: Parsing a 1.2 MB JSON File
+The following summary table was generated by trivial-benchmarks from the libraries parsing the countries.json file (small 1.2 MB file) downloaded from [[https://github.com/mledoze/countries/blob/master/countries.json][https://github.com/mledoze/countries/blob/master/countries.json]], over a cumulated 100 runs using SBCL version 2.3.2.
+#+CAPTION: Parsing a 1.2 MB JSON File, 100 iterations
 #+ATTR_HTML: :border 2 :rules all :frame border
 #+ATTR_LATEX: :float multicolumn
 | Library              | Function                            | User Run Time (Sec) |  Bytes Consed |
 |----------------------+-------------------------------------+---------------------+---------------|
-| boost-json           | parse                               |            4.419011 |    2893418496 |
-| cl-json              | decode-json-from-string             |            4.493974 |    2893418880 |
-| com.gigamonkeys.json | parse-json                          |            2.959515 |    1343528080 |
-| com.inuoe.jzon       | parse                               |            8.542783 |     789266144 |
-| jonathan             | decode-json-from-string             |           214.78308 | 1569003877056 |
-| json-lib             | parse                               |            6.463969 |    3588339072 |
-| json-streams         | json-parse :duplicate-key-check nil |            9.426854 |    1879613408 |
-| jsown                | parse                               |            1.166661 |     564075440 |
-| shasht               | read-json                           |            2.232487 |    1597571088 |
-| st-json              | read-json                           |            2.995316 |     429072000 |
-| yason                | parse                               |            5.954201 |    1454553056 |
+| boost-json           | parse                               |            1.657614         |    418080864 |
+| cl-json              | decode-json-from-string             |            4.077347         |    2893155200           |
+| com.gigamonkeys.json | parse-json                          |            2.768985         |    1336311024           |
+| com.inuoe.jzon       | parse                               |            1.330737         |     782284512          |
+| jonathan             | decode-json-from-string             |     194.9456                |  1568784712704             |
+| json-lib             | parse                               |            5.738711         |    3438749120 |
+| json-streams         | json-parse :duplicate-key-check nil |            10.231434         |    1850713696           |
+| jsown                | parse                               |            1.123939         | 564034448              |
+| shasht               | read-json                           |            1.993802         |    1586599792           |
+| st-json              | read-json                           |            2.662635         |  429030832    |
+| yason                | parse                               |            5.155174         |    1127308544 |
 
 
-#+CAPTION: Parsing a 9.8 MB JSON File
+#+CAPTION: Parsing a 9.8 MB JSON File, 100 iterations
 #+ATTR_HTML: :border 2 :rules all :frame border
 #+ATTR_LATEX: :float multicolumn
 | Library             | Function                            | User Run Time (Sec) |  Bytes Consed |
 |---------------------+-------------------------------------+---------------------+---------------|
-| boost-json          | parse                               |             47.6092 |   28504785264 |
-| cl-json             | decode-json-from-string             |             47.9664 |   28504799776 |
-| com.gigamonkeysjson | parse-json                          |             33.7283 |   16456969856 |
-| com.inuoe.jzon      | parse                               |             20.2055 |    5946667616 |
-| jonathan            | decode-json-from-string             |           1478.3938 | 8950991326592 |
-| json-lib            | parse                               |             68.3475 |   37769586576 |
-| json-streams        | json-parse :duplicate-key-check nil |             84.3768 |   24939253568 |
-| jsown               | parse                               |              5.4876 |    4919788560 |
-| shasht              | read-json                           |             19.5069 |   16092328544 |
-| st-json             | read-json                           |             21.9684 |    7806199792 |
-| yason               | parse                               |             68.2322 |   14313634192 |
+| boost-json          | parse                               |           15.844047 |    8121764192 |
+| cl-json             | decode-json-from-string             |           40.892357 |   28502164224 |
+| com.gigamonkeysjson | parse-json                          |           30.002583 |   16455712480 |
+| com.inuoe.jzon      | parse                               |            7.821162 |    4366975664 |
+| jonathan            | parse                               |           1325.759500 | 8950139810080 |
+| json-lib            | parse                               |           58.481285 |   36938784784 |
+| json-streams        | json-parse :duplicate-key-check nil |            80.72323 |   24938589616 |
+| jsown               | parse                               |            4.989549 |    4919389104 |
+| shasht              | read-json                           |            17.84457 |   16028649184 |
+| st-json             | read-json                           |           17.739523 |    7805457392 |
+| yason               | parse                               |            67.30084 |   13795069104 |
 
 ** Decoding Trivial-Benchmark Detail By Library
 :PROPERTIES:
@@ -5747,375 +5955,329 @@ The following summary table was generated by trivial-benchmarks from the librari
 :PROPERTIES:
 :CUSTOM_ID: decoding-benchmark-detail-by-library12
 :END:
-**** Boost-Json
-:PROPERTIES:
-:CUSTOM_ID: decoding-benchmark-detail-by-library12-boost-json
-:END:
-#+CAPTION: json Parsing a 1.2 MB JSON File
-#+ATTR_HTML: :border 2 :rules all :frame border
-#+ATTR_LATEX: :float multicolumn
-|                 | SAMPLES |     TOTAL |  MINIMUM |  MAXIMUM |   MEDIAN | DEVIATION |
-| REAL-TIME       |     100 |  1.803323 | 0.016666 | 0.023333 | 0.016667 |  0.001832 |
-| RUN-TIME        |     100 |  1.804574 |  0.01772 | 0.025428 | 0.017829 |  0.001108 |
-| USER-RUN-TIME   |     100 |  1.804623 | 0.017721 |  0.02543 | 0.017829 |  0.001108 |
-| SYSTEM-RUN-TIME |     100 |  0.000015 |        0 | 0.000007 |        0 |  0.000001 |
-| PAGE-FAULTS     |     100 |         0 |        0 |        0 |        0 |       0.0 |
-| GC-RUN-TIME     |     100 |    17.386 |        0 |    6.855 |        0 |  1.008626 |
-| BYTES-CONSED    |     100 | 418195312 |  4170304 |  4205280 |  4188976 |  8412.935 |
-| EVAL-CALLS      |     100 |         0 |        0 |        0 |        0 |       0.0 |
+**** Boost-json
+#+begin_src ascii
+-               SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE    DEVIATION
+REAL-TIME        100      1.619998   0.013333  0.033334  0.016667  0.0162     0.002539
+RUN-TIME         100      1.619314   0.015628  0.033694  0.015754  0.016193   0.002224
+USER-RUN-TIME    100      1.619338   0.015629  0.033679  0.015754  0.016193   0.002223
+SYSTEM-RUN-TIME  100      0.000049   0         0.000013  0         0.0        0.000002
+PAGE-FAULTS      100      0          0         0         0         0          0.0
+GC-RUN-TIME      100      11.174     0         6.546     0         0.11174    0.793851
+BYTES-CONSED     100      418099808  4117712   4216192   4182816   4180998.0  22944.854
+EVAL-CALLS       100      0          0         0         0         0          0.0
+
+#+end_src
 
 **** Cl-json
-:PROPERTIES:
-:CUSTOM_ID: decoding-benchmark-detail-by-library12-cl-json
-:END:
-#+CAPTION: cl-json Parsing a 1.2 MB JSON File
-#+ATTR_HTML: :border 2 :rules all :frame border
-#+ATTR_LATEX: :float multicolumn
-|                 | SAMPLES |      TOTAL |  MINIMUM |  MAXIMUM |   MEDIAN | DEVIATION |
-|-----------------+---------+------------+----------+----------+----------+-----------|
-| REAL-TIME       |     100 |   4.543314 | 0.039999 | 0.106666 | 0.043333 |  0.006987 |
-| RUN-TIME        |     100 |   4.541149 | 0.042466 | 0.106167 | 0.043373 |   0.00693 |
-| USER-RUN-TIME   |     100 |   4.493974 | 0.037929 | 0.089708 | 0.043293 |  0.005491 |
-| SYSTEM-RUN-TIME |     100 |   0.047482 |        0 | 0.016466 |        0 |  0.002092 |
-| PAGE-FAULTS     |     100 |          0 |        0 |        0 |        0 |       0.0 |
-| GC-RUN-TIME     |     100 |    160.947 |        0 |   59.966 |        0 |  6.378449 |
-| BYTES-CONSED    |     100 | 2893418880 | 28926752 | 28943680 | 28931936 | 7004.0913 |
-| EVAL-CALLS      |     100 |          0 |        0 |        0 |        0 |       0.0 |
+#+begin_src ascii
+-                SAMPLES  TOTAL       MINIMUM   MAXIMUM   MEDIAN    AVERAGE     DEVIATION
+REAL-TIME        100      4.063327    0.036666  0.05      0.04      0.040633    0.003007
+RUN-TIME         100      4.063163    0.039048  0.049219  0.039521  0.040632    0.002733
+USER-RUN-TIME    100      4.046636    0.039002  0.0482    0.039525  0.040466    0.002406
+SYSTEM-RUN-TIME  100      0.016857    0         0.003338  0         0.000169    0.000722
+PAGE-FAULTS      100      0           0         0         0         0           0.0
+GC-RUN-TIME      100      107.753     0         8.268     0         1.07753     2.532335
+BYTES-CONSED     100      2893124064  28892784  28960032  28927472  28931240.0  16630.285
+EVAL-CALLS       100      0           0         0         0         0           0.0
+
+#+end_src
 
 **** Com.gigamonkeys.json
-:PROPERTIES:
-:CUSTOM_ID: decoding-benchmark-detail-by-library12-com-gigamonkeys-json
-:END:
-#+CAPTION: com.gigamonkeys.json Parsing a 1.2 MB JSON File
-#+ATTR_HTML: :border 2 :rules all :frame border
-#+ATTR_LATEX: :float multicolumn
-|                 | SAMPLES |      TOTAL |  MINIMUM |  MAXIMUM |   MEDIAN | DEVIATION |
-| REAL-TIME       |     100 |    2.99332 | 0.026666 | 0.083333 |     0.03 |  0.006055 |
-| RUN-TIME        |     100 |   2.996168 | 0.027761 | 0.083301 | 0.028399 |  0.005998 |
-| USER-RUN-TIME   |     100 |   2.959515 | 0.023301 |  0.07341 | 0.028338 |  0.005142 |
-| SYSTEM-RUN-TIME |     100 |   0.036928 |        0 | 0.009893 |        0 |  0.001397 |
-| PAGE-FAULTS     |     100 |          0 |        0 |        0 |        0 |       0.0 |
-| GC-RUN-TIME     |     100 |    116.258 |        0 |   54.453 |        0 |  5.885685 |
-| BYTES-CONSED    |     100 | 1343528080 | 13383008 | 17653728 | 13392608 | 423975.53 |
-| EVAL-CALLS      |     100 |          0 |        0 |        0 |        0 |       0.0 |
+#+begin_src ascii
+-                SAMPLES  TOTAL       MINIMUM   MAXIMUM   MEDIAN    AVERAGE     DEVIATION
+REAL-TIME        100      2.81333     0.026665  0.06      0.026667  0.028133    0.004277
+RUN-TIME         100      2.810417    0.026351  0.060089  0.026769  0.028104    0.004258
+USER-RUN-TIME    100      2.727645    0.019766  0.046832  0.026694  0.027276    0.003144
+SYSTEM-RUN-TIME  100      0.083058    0         0.013258  0         0.000831    0.002216
+PAGE-FAULTS      100      0           0         0         0         0           0.0
+GC-RUN-TIME      100      102.407     0         32.956    0         1.02407     4.182565
+BYTES-CONSED     100      1336330880  13308192  13407152  13374576  13363309.0  18525.904
+EVAL-CALLS       100      0           0         0         0         0           0.0
+
+#+end_src
+
 **** Com.inuoe.jzon
-:PROPERTIES:
-:CUSTOM_ID: decoding-benchmark-detail-by-library12-com-inuoe-jzon
-:END:
-#+CAPTION: com.inuoe.jzon Parsing a 1.2 MB JSON File
-#+ATTR_HTML: :border 2 :rules all :frame border
-#+ATTR_LATEX: :float multicolumn
-|                 | SAMPLES |     TOTAL |  MINIMUM |  MAXIMUM |   MEDIAN | DEVIATION |
-| REAL-TIME       |     100 |  8.556628 | 0.083332 | 0.103333 | 0.086666 |  0.002791 |
-| RUN-TIME        |     100 |  8.552521 | 0.084413 | 0.104917 | 0.084938 |  0.002441 |
-| USER-RUN-TIME   |     100 |  8.542783 | 0.084415 | 0.094946 | 0.084942 |  0.001753 |
-| SYSTEM-RUN-TIME |     100 |       0.0 |      100 |       22 |   0.0001 |  0.000992 |
-| PAGE-FAULTS     |     100 |         0 |        0 |        0 |        0 |       0.0 |
-| GC-RUN-TIME     |     100 |    45.106 |        0 |   18.975 |        0 |  2.299594 |
-| BYTES-CONSED    |     100 | 789266144 |  7884976 |  7903872 |  7887792 |  8024.648 |
-| EVAL-CALLS      |     100 |         0 |        0 |        0 |        0 |       0.0 |
+#+begin_src ascii
+-                SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE    DEVIATION
+REAL-TIME        100      1.326664   0.009999  0.023334  0.013333  0.013267   0.00221
+RUN-TIME         100      1.331578   0.012838  0.024069  0.012932  0.013316   0.001832
+USER-RUN-TIME    100      1.331617   0.012839  0.024071  0.012933  0.013316   0.001832
+SYSTEM-RUN-TIME  100      0.000039   0         0.000012  0         0.0        0.000002
+PAGE-FAULTS      100      0          0         0         0         0          0.0
+GC-RUN-TIME      100      35.118     0         10.7      0         0.35118    1.748899
+BYTES-CONSED     100      782314080  7777888   7846992   7814368   7823141.0  20710.158
+EVAL-CALLS       100      0          0         0         0         0          0.0
+
+#+end_src
+
 **** Jonathan
-:PROPERTIES:
-:CUSTOM_ID: decoding-benchmark-detail-by-library12-jonathan
-:END:
-HUH??? In both decoding this real world file and the next, Jonathan is orders of magnitude slower than the other libraries.
-#+CAPTION: jonathan Parsing a 1.2 MB JSON File
-#+ATTR_HTML: :border 2 :rules all :frame border
-#+ATTR_LATEX: :float multicolumn
-|                 | SAMPLES |         TOTAL |     MINIMUM |     MAXIMUM |      MEDIAN | DEVIATION |
-|-----------------+---------+---------------+-------------+-------------+-------------+-----------|
-| REAL-TIME       |     100 |     243.45543 |    2.393321 |    2.566654 |    2.429988 |   0.03203 |
-| RUN-TIME        |     100 |     244.48048 |    2.403443 |    2.575086 |     2.44082 |  0.032173 |
-| USER-RUN-TIME   |     100 |     214.78308 |    2.078124 |    2.291118 |    2.145707 |  0.034326 |
-| SYSTEM-RUN-TIME |     100 |     29.697786 |    0.240362 |    0.368743 |    0.290953 |  0.031794 |
-| PAGE-FAULTS     |     100 |             0 |           0 |           0 |           0 |       0.0 |
-| GC-RUN-TIME     |     100 |     31995.117 |      306.53 |     400.945 |     316.783 |   13.0481 |
-| BYTES-CONSED    |     100 | 1569003877056 | 15689986304 | 15690142992 | 15690009472 |  48889.26 |
-| EVAL-CALLS      |     100 |             0 |           0 |           0 |           0 |       0.0 |
+#+begin_src ascii
+-                SAMPLES  TOTAL          MINIMUM      MAXIMUM      MEDIAN       AVERAGE        DEVIATION
+REAL-TIME        100      227.00395      2.186708     2.359995     2.260044     2.27004        0.039442
+RUN-TIME         100      227.33931      2.19705      2.351574     2.263612     2.273393       0.034106
+USER-RUN-TIME    100      194.9456       1.876474     2.028554     1.948056     1.949456       0.034681
+SYSTEM-RUN-TIME  100      32.394077      0.238007     0.417066     0.32814      0.323941       0.038221
+PAGE-FAULTS      100      0              0            0            0            0              0.0
+GC-RUN-TIME      100      25044.62       227.701      292.919      246.914      250.4462       12.838325
+BYTES-CONSED     100      1568784712704  15687690976  15688001344  15687838672  15687847000.0  92185.85
+EVAL-CALLS       100      0              0            0            0            0              0.0
+
+#+end_src
 
 **** Json-lib
-:PROPERTIES:
-:CUSTOM_ID: decoding-benchmark-detail-by-library12-json-lib
-:END:
-#+CAPTION: json-lib Parsing a 1.2 MB JSON File
-#+ATTR_HTML: :border 2 :rules all :frame border
-#+ATTR_LATEX: :float multicolumn
-|                 | SAMPLES |      TOTAL |  MINIMUM |  MAXIMUM |   MEDIAN | DEVIATION |
-| REAL-TIME       |     100 |   6.586635 | 0.059998 |     0.09 | 0.063333 |  0.005871 |
-| RUN-TIME        |     100 |   6.582603 | 0.061952 | 0.090146 | 0.063047 |  0.005646 |
-| USER-RUN-TIME   |     100 |   6.463969 | 0.055334 | 0.088421 | 0.063019 |  0.004434 |
-| SYSTEM-RUN-TIME |     100 |   0.119001 |        0 | 0.019625 |        0 |  0.003254 |
-| PAGE-FAULTS     |     100 |          0 |        0 |        0 |        0 |       0.0 |
-| GC-RUN-TIME     |     100 |    204.444 |        0 |   25.049 |        0 |   4.62796 |
-| BYTES-CONSED    |     100 | 3588339072 | 35872896 | 35893952 | 35883440 | 2640.1985 |
-| EVAL-CALLS      |     100 |          0 |        0 |        0 |        0 |       0.0 |
+#+begin_src ascii
+-                SAMPLES  TOTAL       MINIMUM   MAXIMUM   MEDIAN    AVERAGE     DEVIATION
+REAL-TIME        100      5.79335     0.053333  0.08      0.056667  0.057934    0.004157
+RUN-TIME         100      5.785923    0.055158  0.078339  0.056172  0.057859    0.003757
+USER-RUN-TIME    100      5.696394    0.050573  0.068746  0.056031  0.056964    0.002951
+SYSTEM-RUN-TIME  100      0.089889    0         0.016569  0         0.000899    0.002956
+PAGE-FAULTS      100      0           0         0         0         0           0.0
+GC-RUN-TIME      100      131.514     0         18.926    0         1.31514     3.159485
+BYTES-CONSED     100      3438649392  34298176  34431824  34395536  34386492.0  30572.027
+EVAL-CALLS       100      0           0         0         0         0           0.0
+
+#+end_src
+
 **** Json-streams
-:PROPERTIES:
-:CUSTOM_ID: decoding-benchmark-detail-by-library12-json-streams
-:END:
-#+CAPTION: json-streams Parsing a 1.2 MB JSON File
-#+ATTR_HTML: :border 2 :rules all :frame border
-#+ATTR_LATEX: :float multicolumn
-|                 | SAMPLES |      TOTAL |  MINIMUM |  MAXIMUM |   MEDIAN | DEVIATION |
-| REAL-TIME       |     100 |   9.456621 | 0.089999 | 0.123333 | 0.093333 |  0.003962 |
-| RUN-TIME        |     100 |   9.454452 | 0.092222 | 0.122918 | 0.093099 |  0.003993 |
-| USER-RUN-TIME   |     100 |   9.426854 | 0.086571 | 0.122918 | 0.093097 |   0.00398 |
-| SYSTEM-RUN-TIME |     100 |   0.027914 |        0 | 0.014832 |        0 |  0.001649 |
-| PAGE-FAULTS     |     100 |          0 |        0 |        0 |        0 |       0.0 |
-| GC-RUN-TIME     |     100 |     78.426 |        0 |    9.447 |        0 |  2.269145 |
-| BYTES-CONSED    |     100 | 1879613408 | 18766656 | 20651648 | 18777280 | 186493.95 |
-| EVAL-CALLS      |     100 |          0 |        0 |        0 |        0 |       0.0 |
+#+begin_src ascii
+-                SAMPLES  TOTAL       MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
+REAL-TIME        100      9.97336     0.093333  0.12      0.1       0.099734  0.00358
+RUN-TIME         100      9.966192    0.094767  0.120993  0.099149  0.099662  0.003443
+USER-RUN-TIME    100      9.893029    0.091745  0.111065  0.099069  0.09893   0.00257
+SYSTEM-RUN-TIME  100      0.073451    0         0.010093  0         0.000735  0.002128
+PAGE-FAULTS      100      0           0         0         0         0         0.0
+GC-RUN-TIME      100      65.955      0         21.973    0         0.65955   2.640409
+BYTES-CONSED     100      1850613600  18431904  18564096  18497264  18506136  22893.922
+EVAL-CALLS       100      0           0         0         0         0         0.0
+
+#+end_src
+
 **** Jsown
-:PROPERTIES:
-:CUSTOM_ID: decoding-benchmark-detail-by-library12-jsown
-:END:
-#+CAPTION: jsown Parsing a 1.2 MB JSON File
-#+ATTR_HTML: :border 2 :rules all :frame border
-#+ATTR_LATEX: :float multicolumn
-|                 | SAMPLES |     TOTAL |  MINIMUM |  MAXIMUM |   MEDIAN | DEVIATION |
-| REAL-TIME       |     100 |  1.166661 | 0.009999 | 0.023333 |     0.01 |  0.002517 |
-| RUN-TIME        |     100 |  1.163073 | 0.011116 | 0.023445 | 0.011194 |  0.001859 |
-| USER-RUN-TIME   |     100 |  1.159894 | 0.011075 | 0.023436 | 0.011195 |  0.001822 |
-| SYSTEM-RUN-TIME |     100 |  0.003364 |        0 | 0.003139 |        0 |  0.000312 |
-| PAGE-FAULTS     |     100 |         0 |        0 |        0 |        0 |       0.0 |
-| GC-RUN-TIME     |     100 |    12.289 |        0 |    4.551 |        0 |  0.701991 |
-| BYTES-CONSED    |     100 | 564075440 |  5630816 |  5648304 |  5647344 |  7997.883 |
-| EVAL-CALLS      |     100 |         0 |        0 |        0 |        0 |       0.0 |
+#+begin_src ascii
+-                SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE    DEVIATION
+REAL-TIME        100      1.203332   0.009999  0.043333  0.01      0.012033   0.004025
+RUN-TIME         100      1.200135   0.011014  0.04474   0.011151  0.012001   0.003781
+USER-RUN-TIME    100      1.123939   0.005928  0.028398  0.011122  0.011239   0.002225
+SYSTEM-RUN-TIME  100      0.076273   0         0.016343  0         0.000763   0.002229
+PAGE-FAULTS      100      0          0         0         0         0          0.0
+GC-RUN-TIME      100      52.572     0         32.378    0         0.52572    3.640431
+BYTES-CONSED     100      564034448  5604656   5658336   5625824   5640344.5  16818.484
+EVAL-CALLS       100      0          0         0         0         0          0.0
+#+end_src
 
 **** Shasht
-:PROPERTIES:
-:CUSTOM_ID: decoding-benchmark-detail-by-library12-shasht
-:END:
-#+CAPTION: shasht Parsing a 1.2 MB JSON File
-#+ATTR_HTML: :border 2 :rules all :frame border
-#+ATTR_LATEX: :float multicolumn
-|                 | SAMPLES |      TOTAL |  MINIMUM |  MAXIMUM |   MEDIAN | DEVIATION |
-| REAL-TIME       |     100 |    2.27999 | 0.019999 |     0.05 | 0.023333 |  0.004339 |
-| RUN-TIME        |     100 |   2.282006 |  0.02094 | 0.050451 | 0.021578 |  0.004173 |
-| USER-RUN-TIME   |     100 |   2.232487 | 0.016563 | 0.043803 | 0.021496 |   0.00336 |
-| SYSTEM-RUN-TIME |     100 |    0.04981 |        0 | 0.006699 |        0 |  0.001575 |
-| PAGE-FAULTS     |     100 |          0 |        0 |        0 |        0 |       0.0 |
-| GC-RUN-TIME     |     100 |    111.285 |        0 |   28.047 |        0 |  4.036195 |
-| BYTES-CONSED    |     100 | 1597571088 | 15962992 | 15984800 | 15971744 |  8653.811 |
-| EVAL-CALLS      |     100 |          0 |        0 |        0 |        0 |       0.0 |
+#+begin_src ascii
+-                SAMPLES  TOTAL       MINIMUM   MAXIMUM   MEDIAN    AVERAGE     DEVIATION
+REAL-TIME        100      2.060005    0.016666  0.046666  0.02      0.0206      0.004253
+RUN-TIME         100      2.05557     0.018955  0.048301  0.01916   0.020556    0.004146
+USER-RUN-TIME    100      1.972519    0.008969  0.031692  0.019143  0.019725    0.00262
+SYSTEM-RUN-TIME  100      0.083304    0         0.016611  0         0.000833    0.002577
+PAGE-FAULTS      100      0           0         0         0         0           0.0
+GC-RUN-TIME      100      105.303     0         28.432    0         1.05303     3.938279
+BYTES-CONSED     100      1586639328  15796880  15930032  15864640  15866393.0  28376.613
+EVAL-CALLS       100      0           0         0         0         0           0.0
+
+#+end_src
+
 **** St-json
-:PROPERTIES:
-:CUSTOM_ID: decoding-benchmark-detail-by-library12-st-json
-:END:
-#+CAPTION: st-json Parsing a 1.2 MB JSON File
-#+ATTR_HTML: :border 2 :rules all :frame border
-#+ATTR_LATEX: :float multicolumn
-|                 | SAMPLES |     TOTAL |  MINIMUM |  MAXIMUM |   MEDIAN | DEVIATION |
-| REAL-TIME       |     100 |   3.00332 | 0.026666 | 0.036667 |     0.03 |  0.001105 |
-| RUN-TIME        |     100 |  3.001743 |  0.02964 | 0.035216 | 0.029852 |  0.000717 |
-| USER-RUN-TIME   |     100 |  2.995316 | 0.027776 | 0.033852 | 0.029826 |  0.000568 |
-| SYSTEM-RUN-TIME |     100 |  0.006622 |        0 | 0.003205 |        0 |  0.000435 |
-| PAGE-FAULTS     |     100 |         0 |        0 |        0 |        0 |       0.0 |
-| GC-RUN-TIME     |     100 |     8.664 |        0 |    5.026 |        0 |   0.61437 |
-| BYTES-CONSED    |     100 | 429072000 |  4287680 |  4304800 |  4288464 |  5829.427 |
-| EVAL-CALLS      |     100 |         0 |        0 |        0 |        0 |       0.0 |
+#+begin_src ascii
+-                SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE    DEVIATION
+REAL-TIME        100      2.720009   0.023333  0.05      0.026667  0.0272     0.002737
+RUN-TIME         100      2.718913   0.026276  0.048607  0.026637  0.027189   0.00243
+USER-RUN-TIME    100      2.672309   0.023864  0.035445  0.026506  0.026723   0.001448
+SYSTEM-RUN-TIME  100      0.046662   0         0.013164  0         0.000467   0.001615
+PAGE-FAULTS      100      0          0         0         0         0          0.0
+GC-RUN-TIME      100      33.976     0         21.379    0         0.33976    2.333153
+BYTES-CONSED     100      428995424  4250288   4316112   4283488   4289954.0  23263.066
+EVAL-CALLS       100      0          0         0         0         0          0.0
+
+#+end_src
+
 **** Yason
-:PROPERTIES:
-:CUSTOM_ID: decoding-benchmark-detail-by-library12-yason
-:END:
-#+CAPTION: yason Parsing a 1.2 MB JSON File
-#+ATTR_HTML: :border 2 :rules all :frame border
-#+ATTR_LATEX: :float multicolumn
-|                 | SAMPLES |      TOTAL |  MINIMUM |  MAXIMUM |   MEDIAN | DEVIATION |
-| REAL-TIME       |     100 |   6.019973 | 0.056666 | 0.129999 | 0.059999 |    0.0077 |
-| RUN-TIME        |     100 |   6.013932 | 0.057522 | 0.130408 | 0.058553 |  0.007594 |
-| USER-RUN-TIME   |     100 |   5.954201 |  0.05142 | 0.120414 | 0.058432 |  0.006634 |
-| SYSTEM-RUN-TIME |     100 |   0.060035 |        0 | 0.009996 |        0 |  0.001779 |
-| PAGE-FAULTS     |     100 |          0 |        0 |        0 |        0 |       0.0 |
-| GC-RUN-TIME     |     100 |    132.346 |        0 |   71.077 |        0 |  7.417082 |
-| BYTES-CONSED    |     100 | 1454553056 | 14519840 | 15860304 | 14537152 | 132363.33 |
-| EVAL-CALLS      |     100 |          0 |        0 |        0 |        0 |       0.0 |
+#+begin_src ascii
+-                SAMPLES  TOTAL       MINIMUM   MAXIMUM   MEDIAN    AVERAGE     DEVIATION
+REAL-TIME        100      5.169989    0.049999  0.08      0.05      0.0517      0.003844
+RUN-TIME         100      5.165566    0.050289  0.079555  0.050581  0.051656    0.00362
+USER-RUN-TIME    100      5.155174    0.05029   0.076295  0.050571  0.051552    0.003197
+SYSTEM-RUN-TIME  100      0.010577    0         0.003258  0         0.000106    0.000532
+PAGE-FAULTS      100      0           0         0         0         0           0.0
+GC-RUN-TIME      100      50.982      0         10.973    0         0.50982     1.959192
+BYTES-CONSED     100      1127308544  11219936  11286160  11284112  11273085.0  16248.54
+EVAL-CALLS       100      0           0         0         0         0           0.0
+#+end_src
 
 *** 9.8 MB File
 :PROPERTIES:
 :CUSTOM_ID: decoding-benchmark-detail-by-library98
 :END:
-**** Boost Json
-:PROPERTIES:
-:CUSTOM_ID: decoding-benchmark-detail-by-library98-boost
-:END:
-#+CAPTION: json Parsing a 9.8 MB JSON File
-#+ATTR_HTML: :border 2 :rules all :frame border
-#+ATTR_LATEX: :float multicolumn
-|                 | SAMPLES |      TOTAL |  MINIMUM |  MAXIMUM |   MEDIAN | DEVIATION |
-| REAL-TIME       |     100 |  20.533205 | 0.176664 | 0.296664 | 0.193332 |  0.030789 |
-| RUN-TIME        |     100 |  20.536613 | 0.177694 | 0.297648 |  0.19184 |   0.03093 |
-| USER-RUN-TIME   |     100 |  19.744255 | 0.171358 | 0.271028 |  0.17994 |  0.024436 |
-| SYSTEM-RUN-TIME |     100 |   0.792737 |        0 | 0.043307 | 0.000011 |  0.011387 |
-| PAGE-FAULTS     |     100 |          0 |        0 |        0 |        0 |       0.0 |
-| GC-RUN-TIME     |     100 |   2342.315 |        0 |  117.524 |        0 | 29.684881 |
-| BYTES-CONSED    |     100 | 8123005392 | 81224960 | 81230800 | 81230272 |  621.9398 |
-| EVAL-CALLS      |     100 |          0 |        0 |        0 |        0 |       0.0 |
-**** Cl-json
-:PROPERTIES:
-:CUSTOM_ID: decoding-benchmark-detail-by-library98-cl-json
-:END:
-#+CAPTION: cl-json Parsing a 9.8 MB JSON File
-#+ATTR_HTML: :border 2 :rules all :frame border
-#+ATTR_LATEX: :float multicolumn
-|                 | SAMPLES |       TOTAL |   MINIMUM |   MAXIMUM |    MEDIAN | DEVIATION |
-| REAL-TIME       |     100 |   50.209743 |  0.449999 |  0.576664 |  0.506664 |  0.031353 |
-| RUN-TIME        |     100 |   50.207718 |  0.449199 |  0.575751 |  0.505171 |  0.031618 |
-| USER-RUN-TIME   |     100 |   47.966446 |  0.434959 |  0.532878 |  0.471581 |  0.022254 |
-| SYSTEM-RUN-TIME |     100 |    2.241677 |         0 |  0.066838 |  0.016578 |  0.019715 |
-| PAGE-FAULTS     |     100 |           0 |         0 |         0 |         0 |       0.0 |
-| GC-RUN-TIME     |     100 |    6780.997 |    23.482 |   136.011 |    70.721 | 26.335197 |
-| BYTES-CONSED    |     100 | 28504799776 | 285044336 | 285064480 | 285047984 | 1734.8457 |
-| EVAL-CALLS      |     100 |           0 |         0 |         0 |         0 |       0.0 |
 
-**** Com.Gigamonkeys.json
-:PROPERTIES:
-:CUSTOM_ID: decoding-benchmark-detail-by-library98-gigamonkeys
-:END:
-#+CAPTION: com.gigamonkeys.json Parsing a 9.8 MB JSON File
-#+ATTR_HTML: :border 2 :rules all :frame border
-#+ATTR_LATEX: :float multicolumn
-|                 | SAMPLES |       TOTAL |   MINIMUM |   MAXIMUM |    MEDIAN | DEVIATION |
-| REAL-TIME       |     100 |   35.636482 |  0.279999 |  0.476665 |  0.353332 |  0.037821 |
-| RUN-TIME        |     100 |   35.659466 |  0.281294 |  0.475776 |  0.354051 |  0.037583 |
-| USER-RUN-TIME   |     100 |   33.728333 |  0.263166 |    0.4192 |  0.343631 |  0.028073 |
-| SYSTEM-RUN-TIME |     100 |    1.931565 |         0 |  0.060133 |  0.016573 |   0.02011 |
-| PAGE-FAULTS     |     100 |           0 |         0 |         0 |         0 |       0.0 |
-| GC-RUN-TIME     |     100 |    7478.528 |         0 |    203.77 |     77.85 |  37.92367 |
-| BYTES-CONSED    |     100 | 16456969856 | 164567360 | 164575008 | 164569936 |  820.5605 |
-| EVAL-CALLS      |     100 |           0 |         0 |         0 |         0 |       0.0 |
+**** Boost-json
+#+begin_src ascii
+-                SAMPLES  TOTAL       MINIMUM   MAXIMUM   MEDIAN    AVERAGE     DEVIATION
+REAL-TIME        100      16.600002   0.143332  0.263332  0.159999  0.166       0.022166
+RUN-TIME         100      16.591812   0.144675  0.262875  0.158953  0.165918    0.022023
+USER-RUN-TIME    100      15.826161   0.132868  0.22961   0.150189  0.158262    0.015996
+SYSTEM-RUN-TIME  100      0.766012    0         0.036679  0.000082  0.00766     0.01054
+PAGE-FAULTS      100      0           0         0         0         0           0.0
+GC-RUN-TIME      100      1628.348    0         116.271   0         16.28348    21.486185
+BYTES-CONSED     100      8121726592  81135040  81310064  81211104  81217260.0  28616.291
+EVAL-CALLS       100      0           0         0         0         0           0.0
+
+#+end_src
+
+**** Cl-json
+#+begin_src ascii
+-                SAMPLES  TOTAL        MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
+REAL-TIME        100      43.343338    0.39       0.500001   0.43       0.433433     0.028302
+RUN-TIME         100      43.318657    0.389881   0.500517   0.430587   0.433187     0.028388
+USER-RUN-TIME    100      40.892357    0.374546   0.457877   0.406374   0.408924     0.017006
+SYSTEM-RUN-TIME  100      2.426699     0          0.083306   0.013432   0.024267     0.023222
+PAGE-FAULTS      100      0            0          0          0          0            0.0
+GC-RUN-TIME      100      5206.639     23.906     110.039    55.065     52.06639     20.941925
+BYTES-CONSED     100      28502164224  284987600  285054944  285020384  285021630.0  18817.63
+EVAL-CALLS       100      0            0          0          0          0            0.0
+
+#+end_src
+
+**** Com.gigamonkeys.json
+#+begin_src ascii
+-                SAMPLES  TOTAL        MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
+REAL-TIME        100      31.760002    0.256665   0.430001   0.316666   0.3176       0.03324
+RUN-TIME         100      31.735737    0.254121   0.429785   0.31501    0.317357     0.033264
+USER-RUN-TIME    100      30.002583    0.248119   0.396469   0.304214   0.300026     0.027704
+SYSTEM-RUN-TIME  100      1.733597     0          0.063267   0.016155   0.017336     0.016309
+PAGE-FAULTS      100      0            0          0          0          0            0.0
+GC-RUN-TIME      100      6202.89      0          177.155    65.725     62.0289      36.170036
+BYTES-CONSED     100      16455712480  164509344  164590064  164557408  164557120.0  16735.898
+EVAL-CALLS       100      0            0          0          0          0            0.0
+
+#+end_src
 
 **** Com.inuoe.jzon
-:PROPERTIES:
-:CUSTOM_ID: decoding-benchmark-detail-by-library98-jzon
-:END:
-#+CAPTION: com.inuoe.jzon Parsing a 9.8 MB JSON File
-#+ATTR_HTML: :border 2 :rules all :frame border
-#+ATTR_LATEX: :float multicolumn
-|                 | SAMPLES |      TOTAL |  MINIMUM |  MAXIMUM |      MEDIAN | DEVIATION |
-| REAL-TIME       |     100 |  20.266563 | 0.199998 | 0.229998 |    0.203332 |  0.003742 |
-| RUN-TIME        |     100 |  20.279003 | 0.199857 | 0.230551 |    0.201254 |  0.003799 |
-| USER-RUN-TIME   |     100 |  20.205465 | 0.189838 |  0.21385 |    0.201131 |  0.002979 |
-| SYSTEM-RUN-TIME |     100 |            | 0.073949 |        0 | 0.019984  0 |  0.003129 |
-| PAGE-FAULTS     |     100 |          0 |        0 |        0 |           0 |       0.0 |
-| GC-RUN-TIME     |     100 |    129.135 |        0 |   26.551 |           0 |   2.92862 |
-| BYTES-CONSED    |     100 | 5946667616 | 59464000 | 59466832 |    59466768 | 373.24005 |
-| EVAL-CALLS      |     100 |          0 |        0 |        0 |           0 |       0.0 |
+#+begin_src ascii
+-                SAMPLES  TOTAL       MINIMUM   MAXIMUM   MEDIAN    AVERAGE     DEVIATION
+REAL-TIME        100      7.853333    0.076665  0.083334  0.076667  0.078533    0.002227
+RUN-TIME         100      7.850083    0.077052  0.083984  0.077664  0.078501    0.001689
+USER-RUN-TIME    100      7.821162    0.064623  0.083986  0.077638  0.078212    0.002059
+SYSTEM-RUN-TIME  100      0.029249    0         0.015565  0         0.000292    0.001729
+PAGE-FAULTS      100      0           0         0         0         0           0.0
+GC-RUN-TIME      100      64.397      0         4.54      0         0.64397     1.149026
+BYTES-CONSED     100      4366975664  43620656  43707264  43666272  43669756.0  20102.645
+EVAL-CALLS       100      0           0         0         0         0           0.0
+
+#+end_src
 
 **** Jonathan
 :PROPERTIES:
 :CUSTOM_ID: decoding-benchmark-detail-by-library98-jonathan
 :END:
-#+CAPTION: jonathan Parsing a 9.8 MB JSON File
-#+ATTR_HTML: :border 2 :rules all :frame border
-#+ATTR_LATEX: :float multicolumn
-|                 | SAMPLES |         TOTAL |     MINIMUM |     MAXIMUM |      MEDIAN | DEVIATION |
-| REAL-TIME       |     100 |     1908.7975 |   18.729918 |   19.469904 |   19.086578 |  0.115386 |
-| RUN-TIME        |     100 |     1913.2931 |   18.778744 |   19.512901 |   19.131992 |  0.114834 |
-| USER-RUN-TIME   |     100 |     1478.3938 |   14.512775 |   15.216936 |   14.779124 |  0.107808 |
-| SYSTEM-RUN-TIME |     100 |     434.89975 |    4.165258 |    4.500475 |    4.347707 |  0.064543 |
-| PAGE-FAULTS     |     100 |             0 |           0 |           0 |           0 |       0.0 |
-| GC-RUN-TIME     |     100 |      228871.9 |    2238.792 |    2364.713 |    2284.703 | 28.799946 |
-| BYTES-CONSED    |     100 | 8950991326592 | 89509910464 | 89509985824 | 89509912576 |  7298.351 |
-| EVAL-CALLS      |     100 |             0 |           0 |           0 |           0 |       0.0 |
+
+#+begin_src ascii
+-                SAMPLES  TOTAL          MINIMUM      MAXIMUM      MEDIAN       AVERAGE        DEVIATION
+REAL-TIME        100      1876.5785      18.566694    19.183428    18.723421    18.765785      0.153013
+RUN-TIME         100      1878.7534      18.609053    19.140911    18.75922     18.787535      0.12626
+USER-RUN-TIME    100      1325.7595      13.067881    13.549653    13.239522    13.257596      0.103736
+SYSTEM-RUN-TIME  100      552.99426      5.264558     5.807163     5.529135     5.529942       0.099494
+PAGE-FAULTS      100      0              0            0            0            0              0.0
+GC-RUN-TIME      100      201864.69      1951.218     2153.499     2010.102     2018.6469      39.038464
+BYTES-CONSED     100      8950139810080  89501170640  89501514624  89501406768  89501400000.0  46350.645
+EVAL-CALLS       100      0              0            0            0            0              0.0
+#+end_src
 
 **** Json-lib
 :PROPERTIES:
 :CUSTOM_ID: decoding-benchmark-detail-by-library98-json-lib
 :END:
-#+CAPTION: json-lib Parsing a 9.8 MB JSON File
-#+ATTR_HTML: :border 2 :rules all :frame border
-#+ATTR_LATEX: :float multicolumn
-|                 | SAMPLES |       TOTAL |   MINIMUM |   MAXIMUM |    MEDIAN | DEVIATION |
-| REAL-TIME       |     100 |   71.676285 |  0.673329 |  0.786663 |   0.71333 |  0.028969 |
-| RUN-TIME        |     100 |    71.70299 |  0.668354 |  0.789122 |  0.713246 |  0.029252 |
-| USER-RUN-TIME   |     100 |    68.34757 |   0.65903 |  0.743143 |  0.679933 |  0.016493 |
-| SYSTEM-RUN-TIME |     100 |    3.355867 |  0.002895 |  0.103614 |  0.026859 |  0.023092 |
-| PAGE-FAULTS     |     100 |           0 |         0 |         0 |         0 |       0.0 |
-| GC-RUN-TIME     |     100 |    8757.628 |    63.089 |   150.257 |     75.73 |  22.03588 |
-| BYTES-CONSED    |     100 | 37769586576 | 377680784 | 377697696 | 377696928 | 2368.0583 |
-| EVAL-CALLS      |     100 |           0 |         0 |         0 |         0 |       0.0 |
 
+#+begin_src ascii
+-                SAMPLES  TOTAL        MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
+REAL-TIME        100      62.49986     0.583331   0.703331   0.616665   0.624999     0.03394
+RUN-TIME         100      62.402306    0.582471   0.703751   0.616243   0.624023     0.034107
+USER-RUN-TIME    100      58.481285    0.546558   0.641697   0.58024    0.584813     0.016765
+SYSTEM-RUN-TIME  100      3.921454     0.00285    0.113307   0.029706   0.039215     0.028473
+PAGE-FAULTS      100      0            0          0          0          0            0.0
+GC-RUN-TIME      100      8449.81      63.201     148.833    69.068     84.4981      23.446356
+BYTES-CONSED     100      36938784784  369336704  369447696  369389248  369387840.0  22078.822
+EVAL-CALLS       100      0            0          0          0          0            0.0
+#+end_src
 **** Json-streams
 :PROPERTIES:
 :CUSTOM_ID: decoding-benchmark-detail-by-library98-json-streams
 :END:
-#+CAPTION: json-streams Parsing a 9.8 MB JSON File
-#+ATTR_HTML: :border 2 :rules all :frame border
-#+ATTR_LATEX: :float multicolumn
-|                 | SAMPLES |       TOTAL |   MINIMUM |   MAXIMUM |    MEDIAN | DEVIATION |
-| REAL-TIME       |     100 |    84.45293 |  0.779997 |  0.943329 |  0.833329 |  0.039585 |
-| RUN-TIME        |     100 |    84.37682 |  0.779965 |  0.944611 |   0.83044 |  0.039825 |
-| USER-RUN-TIME   |     100 |     81.8803 |  0.767179 |  0.911267 |  0.808016 |  0.026314 |
-| SYSTEM-RUN-TIME |     100 |    2.496926 |         0 |  0.099895 |  0.016629 |  0.025798 |
-| PAGE-FAULTS     |     100 |           0 |         0 |         0 |         0 |       0.0 |
-| GC-RUN-TIME     |     100 |    7375.233 |    26.304 |   178.178 |     63.66 |   32.3792 |
-| BYTES-CONSED    |     100 | 24939253568 | 249389696 | 249401168 | 249392656 |  984.2861 |
-| EVAL-CALLS      |     100 |           0 |         0 |         0 |         0 |       0.0 |
 
+#+begin_src ascii
+-                SAMPLES  TOTAL        MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
+REAL-TIME        100      83.553085    0.773331   0.91333    0.833331   0.835531     0.03647
+RUN-TIME         100      83.30883     0.770919   0.913009   0.832009   0.833088     0.036665
+USER-RUN-TIME    100      80.72323     0.756486   0.8762     0.803182   0.807232     0.020206
+SYSTEM-RUN-TIME  100      2.586007     0          0.092613   0.016669   0.02586      0.024769
+PAGE-FAULTS      100      0            0          0          0          0            0.0
+GC-RUN-TIME      100      6292.337     21.019     155.018    54.529     62.92337     29.172997
+BYTES-CONSED     100      24938589616  249331392  249428080  249386576  249385890.0  18607.875
+EVAL-CALLS       100      0            0          0          0          0            0.0
+#+end_src
 **** Jsown
 :PROPERTIES:
 :CUSTOM_ID: decoding-benchmark-detail-by-library98-jsown
 :END:
-#+CAPTION: jsown Parsing a 9.8 MB JSON File
-#+ATTR_HTML: :border 2 :rules all :frame border
-#+ATTR_LATEX: :float multicolumn
-|                 | SAMPLES |      TOTAL |  MINIMUM |  MAXIMUM |      MEDIAN | DEVIATION |
-| REAL-TIME       |     100 |   5.916637 | 0.043332 | 0.123332 |    0.046667 |  0.021926 |
-| RUN-TIME        |     100 |   5.923252 | 0.046274 | 0.121666 |    0.046463 |   0.02184 |
-| USER-RUN-TIME   |     100 |   5.487612 | 0.030406 | 0.108614 |    0.046446 |  0.017627 |
-| SYSTEM-RUN-TIME |     100 |            | 0.436004 |        0 | 0.049775  0 |  0.008856 |
-| PAGE-FAULTS     |     100 |          0 |        0 |        0 |           0 |       0.0 |
-| GC-RUN-TIME     |     100 |   1151.569 |        0 |   71.668 |           0 | 21.207699 |
-| BYTES-CONSED    |     100 | 4919788560 | 49191344 | 49213856 |    49197856 | 1753.3816 |
-| EVAL-CALLS      |     100 |          0 |        0 |        0 |           0 |       0.0 |
+
+#+begin_src ascii
+-                SAMPLES  TOTAL       MINIMUM   MAXIMUM   MEDIAN    AVERAGE     DEVIATION
+REAL-TIME        100      5.59332     0.043332  0.126666  0.046667  0.055933    0.01773
+RUN-TIME         100      5.569105    0.044441  0.126507  0.045026  0.055691    0.017726
+USER-RUN-TIME    100      4.989549    0.031232  0.100324  0.044751  0.049895    0.011466
+SYSTEM-RUN-TIME  100      0.579924    0         0.03667   0.000061  0.005799    0.009229
+PAGE-FAULTS      100      0           0         0         0         0           0.0
+GC-RUN-TIME      100      855.405     0         78.454    0         8.55405     16.65085
+BYTES-CONSED     100      4919389104  49168080  49204912  49204848  49193892.0  14703.879
+EVAL-CALLS       100      0           0         0         0         0           0.0
+#+end_src
 **** Shasht
 :PROPERTIES:
 :CUSTOM_ID: decoding-benchmark-detail-by-library98-shasht
 :END:
-#+CAPTION: shasht Parsing a 9.8 MB JSON File
-#+ATTR_HTML: :border 2 :rules all :frame border
-#+ATTR_LATEX: :float multicolumn
-|                 | SAMPLES |       TOTAL |   MINIMUM |   MAXIMUM |    MEDIAN | DEVIATION |
-| REAL-TIME       |     100 |   19.533234 |  0.189999 |  0.216666 |  0.193333 |  0.004643 |
-| RUN-TIME        |     100 |   19.535679 |  0.189569 |  0.217319 |  0.193956 |  0.004622 |
-| USER-RUN-TIME   |     100 |   19.506966 |   0.18178 |  0.217326 |  0.193623 |  0.004849 |
-| SYSTEM-RUN-TIME |     100 |             |   0.02914 |         0 |  0.012187 |  0.001376 |
-| PAGE-FAULTS     |     100 |           0 |         0 |         0 |         0 |       0.0 |
-| GC-RUN-TIME     |     100 |     290.639 |         0 |    18.918 |     2.986 |  1.857263 |
-| BYTES-CONSED    |     100 | 16092328544 | 160919648 | 160923776 | 160923616 |  861.9954 |
-| EVAL-CALLS      |     100 |           0 |         0 |         0 |         0 |       0.0 |
 
+#+begin_src ascii
+-                SAMPLES  TOTAL        MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
+REAL-TIME        100      17.919956    0.173333   0.19       0.179999   0.1792       0.002911
+RUN-TIME         100      17.912256    0.173717   0.191011   0.178996   0.179123     0.002458
+USER-RUN-TIME    100      17.84457     0.169846   0.18917    0.178604   0.178446     0.002719
+SYSTEM-RUN-TIME  100      0.068081     0          0.00844    0.000001   0.000681     0.001528
+PAGE-FAULTS      100      0            0          0          0          0            0.0
+GC-RUN-TIME      100      365.91       0          10.242     3.984      3.6591       1.36922
+BYTES-CONSED     100      16028649184  160244432  160334912  160286432  160286500.0  21336.906
+EVAL-CALLS       100      0            0          0          0          0            0.0
+#+end_src
 **** St-json
 :PROPERTIES:
 :CUSTOM_ID: decoding-benchmark-detail-by-library98-st-json
 :END:
-#+CAPTION: st-json Parsing a 9.8 MB JSON File
-#+ATTR_HTML: :border 2 :rules all :frame border
-#+ATTR_LATEX: :float multicolumn
-|                 | SAMPLES |      TOTAL |  MINIMUM |  MAXIMUM |   MEDIAN | DEVIATION |
-| REAL-TIME       |     100 |  22.603218 | 0.199999 | 0.306665 | 0.213332 |  0.028007 |
-| RUN-TIME        |     100 |  22.606417 | 0.200335 | 0.307404 | 0.212905 |  0.028388 |
-| USER-RUN-TIME   |     100 |  21.968456 | 0.191959 | 0.284119 | 0.205496 |  0.023547 |
-| SYSTEM-RUN-TIME |     100 |   0.638355 |        0 | 0.046407 | 0.000023 |  0.009977 |
-| PAGE-FAULTS     |     100 |          0 |        0 |        0 |        0 |       0.0 |
-| GC-RUN-TIME     |     100 |   2180.432 |        0 |  107.748 |        0 | 28.770987 |
-| BYTES-CONSED    |     100 | 7806199792 | 78059632 | 78065344 | 78062176 | 572.11426 |
-| EVAL-CALLS      |     100 |          0 |        0 |        0 |        0 |       0.0 |
 
+#+begin_src ascii
+-                SAMPLES  TOTAL       MINIMUM   MAXIMUM   MEDIAN    AVERAGE     DEVIATION
+REAL-TIME        100      18.69662    0.163331  0.279999  0.176667  0.186966    0.027689
+RUN-TIME         100      18.646624   0.162164  0.277236  0.177811  0.186466    0.027531
+USER-RUN-TIME    100      17.739523   0.146125  0.251218  0.167254  0.177395    0.018997
+SYSTEM-RUN-TIME  100      0.907483    0         0.073193  0.000403  0.009075    0.013883
+PAGE-FAULTS      100      0           0         0         0         0           0.0
+GC-RUN-TIME      100      1844.771    0         106.111   0         18.44771    25.936756
+BYTES-CONSED     100      7805457392  78012704  78078784  78046272  78054580.0  19326.176
+EVAL-CALLS       100      0           0         0         0         0           0.0
+#+end_src
 **** Yason
 :PROPERTIES:
 :CUSTOM_ID: decoding-benchmark-detail-by-library98-yason
 :END:
-#+CAPTION: yason Parsing a 9.8 MB JSON File
-#+ATTR_HTML: :border 2 :rules all :frame border
-#+ATTR_LATEX: :float multicolumn
-|                 | SAMPLES |       TOTAL |   MINIMUM |      MAXIMUM |    MEDIAN | DEVIATION |
-| REAL-TIME       |     100 |    68.23965 |  0.666663 |     0.709996 |  0.679997 |  0.009673 |
-| RUN-TIME        |     100 |    68.24949 |  0.665376 |     0.707559 |  0.682328 |  0.009683 |
-| USER-RUN-TIME   |     100 |    68.23221 |   0.65959 |     0.707563 |  0.681629 |  0.009905 |
-| SYSTEM-RUN-TIME |     100 |    0.017674 |         0 | 0.011396   0 |  0.000177 |           |
-| PAGE-FAULTS     |     100 |           0 |         0 |            0 |         0 |       0.0 |
-| GC-RUN-TIME     |     100 |     250.379 |         0 |        3.624 |     3.037 |  1.261508 |
-| BYTES-CONSED    |     100 | 14313634192 | 143132624 |    143136768 | 143136656 |  731.3266 |
-| EVAL-CALLS      |     100 |           0 |         0 |            0 |         0 |       0.0 |
+
+#+begin_src ascii
+-                SAMPLES  TOTAL        MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
+REAL-TIME        100      69.51981     0.619999   0.796665   0.713333   0.695198     0.048038
+RUN-TIME         100      69.38795     0.62071    0.794521   0.710142   0.693879     0.047837
+USER-RUN-TIME    100      67.30084     0.620458   0.756178   0.674462   0.673008     0.033042
+SYSTEM-RUN-TIME  100      2.087528     0          0.069886   0.01291    0.020875     0.022515
+PAGE-FAULTS      100      0            0          0          0          0            0.0
+GC-RUN-TIME      100      6011.343     0          156.623    77.148     60.11343     44.679024
+BYTES-CONSED     100      13795069104  137923120  137990768  137958112  137950690.0  15643.376
+EVAL-CALLS       100      0            0          0          0          0            0.0
+#+end_src
