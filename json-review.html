@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2023-04-12 Wed 13:16 -->
+<!-- 2023-05-15 Mon 08:22 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Review of CL JSON Libraries UPDATED 12 Apr 2023</title>
+<title>Review of CL JSON Libraries UPDATED 15 May 2023</title>
 <meta name="author" content="Sabra Crolleton" />
 <meta name="description" content="This is a tutorial chapter for the sc-webapp-tutorial" />
 <meta name="keywords" content="common-lisp, postmodern, postgresql, webapp, easy-routes, djula, hunchentoot" />
@@ -40,18 +40,19 @@
 <body>
 <div id="content" class="content">
 <header>
-<h1 class="title">Review of CL JSON Libraries UPDATED 12 Apr 2023</h1>
+<h1 class="title">Review of CL JSON Libraries UPDATED 15 May 2023</h1>
 </header><nav id="table-of-contents" role="doc-toc">
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
 <li><a href="#changelog">Changelog</a>
 <ul>
-<li><a href="#orgf37f0fc">12 Apr 2023</a></li>
-<li><a href="#org8f7a722">1 Feb 2022</a></li>
-<li><a href="#org58d5d83">19 Jan 2022</a></li>
-<li><a href="#orga26faf9">18 Jan 2022</a></li>
-<li><a href="#org7fcfb18">15 Jan 2022</a></li>
+<li><a href="#org16dc0f5">15 May 2023</a></li>
+<li><a href="#org618b58a">12 Apr 2023</a></li>
+<li><a href="#org04592be">1 Feb 2022</a></li>
+<li><a href="#orgf90c510">19 Jan 2022</a></li>
+<li><a href="#org2a05bb0">18 Jan 2022</a></li>
+<li><a href="#org5277fba">15 Jan 2022</a></li>
 </ul>
 </li>
 <li><a href="#introduction">Introduction</a>
@@ -361,9 +362,17 @@
 <h2 id="changelog">Changelog</h2>
 <div class="outline-text-2" id="text-changelog">
 </div>
-<div id="outline-container-orgf37f0fc" class="outline-3">
-<h3 id="orgf37f0fc">12 Apr 2023</h3>
-<div class="outline-text-3" id="text-orgf37f0fc">
+<div id="outline-container-org16dc0f5" class="outline-3">
+<h3 id="org16dc0f5">15 May 2023</h3>
+<div class="outline-text-3" id="text-org16dc0f5">
+<p>
+Picks up regressions in com.inuoe.jzon. It has dropped its heuristics for handling lists. This can change the resulting data type and co-incidentally has dropped the ability to handle dotted lists. This last is likely to be corrected in the future.
+</p>
+</div>
+</div>
+<div id="outline-container-org618b58a" class="outline-3">
+<h3 id="org618b58a">12 Apr 2023</h3>
+<div class="outline-text-3" id="text-org618b58a">
 <p>
 com.inuoe.jzon (aka jzon) is now in quicklisp. Both jzon and shasht have had active development. The versions used are the github repositories as of 11 Apr 2023. Benchmarking has been updated.
 </p>
@@ -388,36 +397,36 @@ Changes in shasht include adding read-level and read-length limits to address po
 </div>
 </div>
 
-<div id="outline-container-org8f7a722" class="outline-3">
-<h3 id="org8f7a722">1 Feb 2022</h3>
-<div class="outline-text-3" id="text-org8f7a722">
+<div id="outline-container-org04592be" class="outline-3">
+<h3 id="org04592be">1 Feb 2022</h3>
+<div class="outline-text-3" id="text-org04592be">
 <p>
 Picks up updates in shasht and now includes warnings on libraries with safety 0 (<code>jsown</code>, <code>jonathan</code>, <code>st-json</code>).
 </p>
 </div>
 </div>
 
-<div id="outline-container-org58d5d83" class="outline-3">
-<h3 id="org58d5d83">19 Jan 2022</h3>
-<div class="outline-text-3" id="text-org58d5d83">
+<div id="outline-container-orgf90c510" class="outline-3">
+<h3 id="orgf90c510">19 Jan 2022</h3>
+<div class="outline-text-3" id="text-orgf90c510">
 <p>
 Updated shasht for fixes in character, 2D arrays, and nil handling. Fixed some typos, including a missing earmuff.
 </p>
 </div>
 </div>
 
-<div id="outline-container-orga26faf9" class="outline-3">
-<h3 id="orga26faf9">18 Jan 2022</h3>
-<div class="outline-text-3" id="text-orga26faf9">
+<div id="outline-container-org2a05bb0" class="outline-3">
+<h3 id="org2a05bb0">18 Jan 2022</h3>
+<div class="outline-text-3" id="text-org2a05bb0">
 <p>
 Corrected JSON conformity tests on <code>boost-json</code>, <code>cl-json</code>, <code>json-lib</code>, <code>shasht</code>, <code>st-json</code>, <code>trivial-json-codec</code> and <code>yason</code>. If <code>*read-default-float-format*</code> is set to <code>'single-float</code>, those libraries would refuse to accept:  <code>"[123e65]"</code>, <code>"[123e45]"</code> and <code>"[123.456e78]"</code>. If <code>*read-default-float-format*</code> is set to <code>'double-float</code>, then those JSON strings would be correctly accepted. Net result: with that caveat, <a href="#boost-json">boost-json</a>, <a href="#cl-json">cl-json</a>, <a href="#com.gigamonkeys.json">com.gigamonkeys.json</a>, <a href="#com.inuoe.jzon">com.inuoe.jzon</a>, <a href="#json-lib">json-lib</a>, <a href="#shasht">shasht</a>, <a href="#st-json">st-json</a> and <a href="#yason">yason</a> all score 95/95 on the JSON strings that must be accepted. See <a href="#must-accept">Standard Conformity - Must Accept</a>.
 </p>
 </div>
 </div>
 
-<div id="outline-container-org7fcfb18" class="outline-3">
-<h3 id="org7fcfb18">15 Jan 2022</h3>
-<div class="outline-text-3" id="text-org7fcfb18">
+<div id="outline-container-org5277fba" class="outline-3">
+<h3 id="org5277fba">15 Jan 2022</h3>
+<div class="outline-text-3" id="text-org5277fba">
 <p>
 Complete rewrite of 1st edition.
 </p>
@@ -3646,7 +3655,7 @@ In general, plain lists and plists are returned as JSON arrays unless some other
 <td class="org-left">com.inuoe.jzon</td>
 <td class="org-left">stringify</td>
 <td class="org-left">YES</td>
-<td class="org-left">YES</td>
+<td class="org-left">YES (15)</td>
 <td class="org-left">YES</td>
 </tr>
 
@@ -3748,6 +3757,7 @@ In general, plain lists and plists are returned as JSON arrays unless some other
 <li>(12) com.gigamonkeys.json will assume a plain list is a plist, returning a JSON object with key-value pairs. If the length of the list is odd, the final value in the list will be treated as a key and an empty set will be inserted as the value.</li>
 <li>(13) For jonathan to properly handle alists, you need to add the additional keyword parameters :from :alist</li>
 <li>(14) Trivial-json-codec is going to give us invalid JSON from now on with respect to tests involving lists - e.g. '(a b c)) becomes "&lt;A,B,C&gt;", so we will drop it from the rest of the encoding tests involving lists.</li>
+<li>(15) Recent changes in jzon mean that it currently does not accept dotted lists.</li>
 </ul>
 </div>
 </div>
@@ -3882,7 +3892,7 @@ I discovered that many libraries have problems if the alist components are dotte
 
 <ul class="org-ul">
 <li>cl-json provides a function to encode the alist properly as key:value,</li>
-<li>com.inuoe.jzon correctly guesses this is a alist which should be encoded as key:value,</li>
+<li>com.inuoe.jzon has dropped its heuristics and currently does not handle dotted pairs</li>
 <li>shasht:*write-alist-as-object* provides the ability to write an undotted alist as a JSON object rather than an array.</li>
 <li>yason provides a specific function to encode the alist properly as key:value,</li>
 <li>If the alist has dotted cons cells, jsown and st-json triggered unhandled memory faults with SBCL 2.1.11-x86-64-linux, CCL version 1.12.1 LinuxX8664 and ecl-version 21.2.1. This appears to be because jsown and st-json have optimized the code and assumed that all lists will be proper lists. The assumption obviously fails in the context of dotted cons cells.</li>
@@ -3950,9 +3960,9 @@ Using '(("A" . 1) ("B" . 2) ("C" . 3)) as the sample data
 </tr>
 
 <tr>
-<td class="org-left">com.inuoe.jzon</td>
+<td class="org-left">com.inuoe.jzon  (6)</td>
 <td class="org-left">stringify</td>
-<td class="org-left">"{\"A\":1,\"B\":2,\"C\":3}"</td>
+<td class="org-left">Error: value 1 is not of type list</td>
 </tr>
 
 <tr>
@@ -4010,6 +4020,7 @@ Using '(("A" . 1) ("B" . 2) ("C" . 3)) as the sample data
 <li>(3) Only if (setf shasht:*write-alist-as-object* t), which is not the default. Otherwise it generates an error.</li>
 <li>(4) If the alist has dotted cons cells, jsown and st-json triggered unhandled memory faults with SBCL 2.1.11-x86-64-linux, CCL version 1.12.1 LinuxX8664 and ecl-version 21.2.1. This appears to be because jsown and st-json have optimized the code and assumed that all lists will be proper lists. The assumption obviously fails in the context of dotted cons cells.</li>
 <li>(5) You would need to use lower level components of json-streams. See <a href="#json-streams-encoding">json-streams-encoding</a>.</li>
+<li>(6) This is a regression</li>
 </ul>
 
 <p>
@@ -4071,9 +4082,9 @@ Now we change the data slightly, still using dotted pairs, but with a nested lis
 </tr>
 
 <tr>
-<td class="org-left">com.inuoe.jzon</td>
+<td class="org-left">com.inuoe.jzon  (6)</td>
 <td class="org-left">stringify</td>
-<td class="org-left">{"foo":"bar","baz":[[1,2,3],[4,5,6]]}</td>
+<td class="org-left">Error: value "bar" is not a list</td>
 </tr>
 
 <tr>
@@ -4144,28 +4155,11 @@ Now we change the data slightly, still using dotted pairs, but with a nested lis
 <li>(3a) If shasht:*write-alist-as-object* is t (not the default).</li>
 <li>(4) If the alist has dotted cons cells, jsown and st-json triggered unhandled memory faults with SBCL 2.1.11-x86-64-linux, CCL version 1.12.1 LinuxX8664 and ecl-version 21.2.1. This appears to be because jsown and st-json have optimized the code and assumed that all lists will be proper lists. The assumption obviously fails in the context of dotted cons cells.</li>
 <li>(5) You would need to use lower level components of json-streams. See <a href="#json-streams-encoding">json-streams-encoding</a>.</li>
+<li>(6) This is a regression</li>
 </ul>
 
 <p>
 Notice the difference in the successful results. cl-json and yason's result of {"foo":"bar","baz":[[1,2,3],[4,5,6]]} is what I would have expected. jonathan tried to force a key value pair into the second alist value. {"foo":"bar","baz":{"1":[2,3],"4":[5,6]}}.
-</p>
-
-<p>
-com.inuoe.jzon is a special case here. It uses heuristics to predict what data structure it is using and this particular sample works because it does not try to make an integer into a key. if the sample data had been something like
-</p>
-<div class="org-src-container">
-<pre class="src src-lisp">'((<span class="org-string">"foo"</span> . <span class="org-string">"bar"</span>) (<span class="org-string">"baz"</span> . ((<span class="org-string">"A"</span> 2 3) (<span class="org-string">"B"</span> 5 6))))
-</pre>
-</div>
-<p>
-it would have predicated that the "A" and "B" should be keys and would have returned
-</p>
-<div class="org-src-container">
-<pre class="src src-lisp"><span class="org-string">"{\"foo\":\"bar\",\"baz\":{\"A\":[2,3],\"B\":[5,6]}}"</span>
-</pre>
-</div>
-<p>
-which may or may not have been what you wanted.
 </p>
 </div>
 </div>
@@ -4236,9 +4230,9 @@ Note difference in results. Some libraries return arrays, others return objects.
 </tr>
 
 <tr>
-<td class="org-left">com.inuoe.jzon</td>
+<td class="org-left">com.inuoe.jzon (2)</td>
 <td class="org-left">stringify</td>
-<td class="org-left">{"A":[1],"B":[2],"C":[3]}</td>
+<td class="org-left">[["A",1],["B",2],["C",3]]</td>
 </tr>
 
 <tr>
@@ -4293,6 +4287,7 @@ Note difference in results. Some libraries return arrays, others return objects.
 
 <ul class="org-ul">
 <li>(1) Using json-stringify caused the alist used as data to fall through etypecase expression demanding a json-streams:json-array. That means that you have to fall back to more complicated calls. See <a href="#json-streams-encoding">json-streams-encoding</a>.</li>
+<li>(2) Before recent changes, com.inuoe.jzon would have returned {"A":[1],"B":[2],"C":[3]}</li>
 </ul>
 
 <p>
@@ -4356,7 +4351,7 @@ Let's make the value portion of the alist another alist. Now using '(("foo" "bar
 <tr>
 <td class="org-left">com.inuoe.jzon</td>
 <td class="org-left">stringify</td>
-<td class="org-left">{"foo":["bar"],"baz":[[[1,2,3],[4,5,6]]]}</td>
+<td class="org-left">[["foo","bar"],["baz",[[1,2,3],[4,5,6]]]]</td>
 </tr>
 
 <tr>
@@ -4410,10 +4405,11 @@ Let's make the value portion of the alist another alist. Now using '(("foo" "bar
 </table>
 <ul class="org-ul">
 <li>(1) You would need to use lower level components of json-streams. See <a href="#json-streams-encoding">json-streams-encoding</a>.</li>
+<li>(2) Before recent changes, com.inuoe.jzon would have returned {"foo":["bar"],"baz":[[[1,2,3],[4,5,6]]]}</li>
 </ul>
 
 <p>
-Yason:encode-alist, com.inuoe.jzon and jonathan return JSON objects with key pairs; the rest try to return arrays. jonathan seem to be trying to force a key value pair into the baz values when I do not think this is probably what you want. Yason and com.inuoe.jzon's heuristics return the same result. Let's change the data slightly and just look at these two libraries again.
+Yason:encode-alist and jonathan return JSON objects with key pairs; the rest try to return arrays. jonathan seem to be trying to force a key value pair into the baz values when I do not think this is probably what you want. Yason's heuristics return the same result. Let's change the data slightly and just look at these two libraries again.
 </p>
 
 <table border="2" rules="all" frame="border">
@@ -4447,12 +4443,6 @@ Yason:encode-alist, com.inuoe.jzon and jonathan return JSON objects with key pai
 </tr>
 
 <tr>
-<td class="org-left">com.inuoe.jzon</td>
-<td class="org-left">stringify</td>
-<td class="org-left">{"foo":["bar"],"baz":[[[1,2,3],["A",5,6]]]}</td>
-</tr>
-
-<tr>
 <td class="org-left">yason</td>
 <td class="org-left">encode</td>
 <td class="org-left">[["foo","bar"],["baz",[[1,2,3],["A",5,6]]]]</td>
@@ -4474,12 +4464,6 @@ Yason:encode-alist, com.inuoe.jzon and jonathan return JSON objects with key pai
 <td class="org-left">New data</td>
 <td class="org-left">&#xa0;</td>
 <td class="org-left">'(("foo" "bar") ("baz" (("B" 2 3) ("A" 5 6))))</td>
-</tr>
-
-<tr>
-<td class="org-left">com.inuoe.jzon</td>
-<td class="org-left">stringify</td>
-<td class="org-left">{"foo":["bar"],"baz":[{"B":[2,3],"A":[5,6]}]}</td>
 </tr>
 
 <tr>
@@ -4578,21 +4562,21 @@ Using '("a" 1 "b" 2 "c" 3) as the sample data
 <tr>
 <td class="org-left">com.inuoe.jzon</td>
 <td class="org-left">stringify</td>
-<td class="org-left">"{\"a\":1,\"b\":2,\"c\":3}"</td>
-<td class="org-left">&#xa0;</td>
+<td class="org-left">["a",1,"b",2,"c",3]</td>
+<td class="org-left">(3)</td>
 </tr>
 
 <tr>
 <td class="org-left">jonathan</td>
 <td class="org-left">to-json</td>
-<td class="org-left">"[\"a\",1,\"b\",2,\"c\",3]"</td>
+<td class="org-left">["a",1,"b",2,"c",3]"</td>
 <td class="org-left">(1)</td>
 </tr>
 
 <tr>
 <td class="org-left">json-lib</td>
 <td class="org-left">stringify</td>
-<td class="org-left">"[\"a\", 1, \"b\", 2, \"c\", 3]"</td>
+<td class="org-left">["a", 1, "b", 2, "c", 3]</td>
 <td class="org-left">&#xa0;</td>
 </tr>
 
@@ -4606,7 +4590,7 @@ Using '("a" 1 "b" 2 "c" 3) as the sample data
 <tr>
 <td class="org-left">jsown</td>
 <td class="org-left">to-json</td>
-<td class="org-left">"[\"a\",1,\"b\",2,\"c\",3]"</td>
+<td class="org-left">["a",1,"b",2,"c",3]</td>
 <td class="org-left">(1)</td>
 </tr>
 
@@ -4620,7 +4604,7 @@ Using '("a" 1 "b" 2 "c" 3) as the sample data
 <tr>
 <td class="org-left">st-json</td>
 <td class="org-left">write-json</td>
-<td class="org-left">"[\"a\",1,\"b\",2,\"c\",3]"</td>
+<td class="org-left">["a",1,"b",2,"c",3]</td>
 <td class="org-left">(1)</td>
 </tr>
 
@@ -4643,10 +4627,10 @@ Using '("a" 1 "b" 2 "c" 3) as the sample data
 <ul class="org-ul">
 <li>(1) Encoding to array but loses the obvious key-value connection.</li>
 <li>(2) You would need to use lower level components of json-streams. See <a href="#json-streams-encoding">json-streams-encoding</a>.</li>
+<li>(3) Before recent changes, jzon would have returned {"a":1,"b":2,"c":3}</li>
 </ul>
 </div>
 </div>
-
 <div id="outline-container-encoding-arrays" class="outline-3">
 <h3 id="encoding-arrays">Encoding Arrays</h3>
 <div class="outline-text-3" id="text-encoding-arrays">
@@ -4755,7 +4739,7 @@ Using #("A" 1 2.3) as sample data.
 <tr>
 <td class="org-left">trivial-json-codec</td>
 <td class="org-left">serialize-json</td>
-<td class="org-left">"[\"A\",1,2.3]"</td>
+<td class="org-left">["A",1,2.3]</td>
 </tr>
 
 <tr>
@@ -5025,7 +5009,7 @@ The following example uses a very simple nested array:
 
 <tr>
 <td class="org-left">trivial-json-codec</td>
-<td class="org-left">"[[\"Dublin\",\"Cork\",\"Limerick\"],[\"Berlin\",\"Frankfurt\",\"Munich\"]]"</td>
+<td class="org-left">[["Dublin","Cork","Limerick"],["Berlin","Frankfurt","Munich"]]"</td>
 <td class="org-left">&#xa0;</td>
 </tr>
 
@@ -9538,48 +9522,13 @@ On the plus side,
 
 <p>
 On the "pay attention to your data structures" side:
-com.inuoe.jzon:stringify will encode an alist as a JSON object. It uses heuristics to predict what data structure it is using. Consider the difference between giving it an alist with dotted pairs and an alist without dotted pairs:
-</p>
-<div class="org-src-container">
-<pre class="src src-lisp">(com.inuoe.jzon:stringify '((<span class="org-string">"A"</span> . 1) (<span class="org-string">"B"</span> . 2) (<span class="org-string">"C"</span> . 3)) <span class="org-builtin">:stream</span> *standard-output*)
-{<span class="org-string">"A"</span><span class="org-builtin">:1</span>,<span class="org-string">"B"</span><span class="org-builtin">:2</span>,<span class="org-string">"C"</span><span class="org-builtin">:3}</span>
-
-(com.inuoe.jzon:stringify '((<span class="org-string">"A"</span> 1) (<span class="org-string">"B"</span> 2) (<span class="org-string">"C"</span> 3)) <span class="org-builtin">:stream</span> *standard-output*)
-{<span class="org-string">"A"</span><span class="org-builtin">:[1]</span>,<span class="org-string">"B"</span><span class="org-builtin">:[2]</span>,<span class="org-string">"C"</span><span class="org-builtin">:[3]}</span>
-</pre>
-</div>
-<p>
-Both are returned as JSON objects, but in the case of the undotted pairs, each value is embedded in its own array.
-    It is pretty good at correctly guessing when something is a alist which should be encoded as key:value. Consider the following:
-</p>
-<div class="org-src-container">
-<pre class="src src-lisp">(com.inuoe.jzon:stringify '((<span class="org-string">"foo"</span> . <span class="org-string">"bar"</span>) (<span class="org-string">"baz"</span> . ((1 2 3) (4 5 6))))
-                    <span class="org-builtin">:stream</span> *standard-output*)
-{<span class="org-string">"foo"</span>:<span class="org-string">"bar"</span>,<span class="org-string">"baz"</span><span class="org-builtin">:[[1</span>,2,3],[4,5,6]]}
-</pre>
-</div>
-<p>
-and this particular sample works because it does not try to make an integer into a key. However, if you change the sample data slightly so that the first value in eash list in the embedded alist was a string, it would have predicated that the "A" and "B" should be keys. The next two examples show the differences between its interpretation depending on whether you provided dotted pairs or not:
-</p>
-<div class="org-src-container">
-<pre class="src src-lisp">  (com.inuoe.jzon:stringify '((<span class="org-string">"foo"</span> . <span class="org-string">"bar"</span>) (<span class="org-string">"baz"</span> . ((<span class="org-string">"A"</span> 2 3) (<span class="org-string">"B"</span> 5 6))))
-                            <span class="org-builtin">:stream</span> *standard-output*)
-  {<span class="org-string">"foo"</span>:<span class="org-string">"bar"</span>,<span class="org-string">"baz"</span><span class="org-builtin">:{</span><span class="org-string">"A"</span><span class="org-builtin">:[2</span>,3],<span class="org-string">"B"</span><span class="org-builtin">:[5</span>,6]}}
-
-(com.inuoe.jzon:stringify '((<span class="org-string">"foo"</span>  <span class="org-string">"bar"</span>) (<span class="org-string">"baz"</span> ((<span class="org-string">"A"</span> 2 3) (<span class="org-string">"B"</span> 5 6))))
-                            <span class="org-builtin">:stream</span> *standard-output*)
-{<span class="org-string">"foo"</span><span class="org-builtin">:[</span><span class="org-string">"bar"</span>],<span class="org-string">"baz"</span><span class="org-builtin">:[{</span><span class="org-string">"A"</span><span class="org-builtin">:[2</span>,3],<span class="org-string">"B"</span><span class="org-builtin">:[5</span>,6]}]}
-</pre>
-</div>
-<p>
-This may or may not have been what you wanted.
+Recent change: com.inuoe.jzon:stringify will no longer encode an alist as a JSON object. In dropping its heuristics, com.inuoe.jzon has, at least temporarily, lost the ability to handle dotted pairs.
 </p>
 </div>
 
-
-<div id="outline-container-org05790f2" class="outline-5">
-<h5 id="org05790f2">Encoding Objects</h5>
-<div class="outline-text-5" id="text-org05790f2">
+<div id="outline-container-org9bb7183" class="outline-5">
+<h5 id="org9bb7183">Encoding Objects</h5>
+<div class="outline-text-5" id="text-org9bb7183">
 <p>
 com.inuoe.jzon actually uses the :type of each slot to determine what to do with nil. Consider the following where two slots have no specified type, two have a list type and two have an array type. Specifically, consider the resulting difference between value-list0 and value-array0 when writing the object out:
 </p>
@@ -12084,9 +12033,9 @@ In order to facilitate extending the serialization facilities of shasht there ar
 In order to ease the serialization of objects and arrays there is with-json-object and with-json-array. Both of these macros take an output stream as the first argument then enable indentation and automatic handling of all delimiter tokens. Inside the body of with-json-object the function (print-json-key-value key value output-stream) should be used to output a key value pair. Inside the body of with-json-array the function (print-json-value value output-stream) should be used to output a single value. Example usage can be seen in the source code.
 </p>
 </div>
-<div id="outline-container-orgb13671d" class="outline-5">
-<h5 id="orgb13671d">Encoding Objects</h5>
-<div class="outline-text-5" id="text-orgb13671d">
+<div id="outline-container-org114c102" class="outline-5">
+<h5 id="org114c102">Encoding Objects</h5>
+<div class="outline-text-5" id="text-org114c102">
 <p>
 Shasht actually uses the :type of each slot to determine what to do with nil. Consider the following where two slots have no specified type, two have a list type and two have an array type:
 </p>
@@ -14784,9 +14733,9 @@ The following summary table was generated by trivial-benchmarks from the librari
 <h4 id="decoding-benchmark-detail-by-library12">1.2 MB JSON File</h4>
 <div class="outline-text-4" id="text-decoding-benchmark-detail-by-library12">
 </div>
-<div id="outline-container-orgecae93f" class="outline-5">
-<h5 id="orgecae93f">Boost-json</h5>
-<div class="outline-text-5" id="text-orgecae93f">
+<div id="outline-container-orgc3a7801" class="outline-5">
+<h5 id="orgc3a7801">Boost-json</h5>
+<div class="outline-text-5" id="text-orgc3a7801">
 <div class="org-src-container">
 <pre class="src src-ascii">-               SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE    DEVIATION
 REAL-TIME        100      1.619998   0.013333  0.033334  0.016667  0.0162     0.002539
@@ -14803,9 +14752,9 @@ EVAL-CALLS       100      0          0         0         0         0          0.
 </div>
 </div>
 
-<div id="outline-container-orga45d4ec" class="outline-5">
-<h5 id="orga45d4ec">Cl-json</h5>
-<div class="outline-text-5" id="text-orga45d4ec">
+<div id="outline-container-org8445585" class="outline-5">
+<h5 id="org8445585">Cl-json</h5>
+<div class="outline-text-5" id="text-org8445585">
 <div class="org-src-container">
 <pre class="src src-ascii">-                SAMPLES  TOTAL       MINIMUM   MAXIMUM   MEDIAN    AVERAGE     DEVIATION
 REAL-TIME        100      4.063327    0.036666  0.05      0.04      0.040633    0.003007
@@ -14822,9 +14771,9 @@ EVAL-CALLS       100      0           0         0         0         0           
 </div>
 </div>
 
-<div id="outline-container-org153c86e" class="outline-5">
-<h5 id="org153c86e">Com.gigamonkeys.json</h5>
-<div class="outline-text-5" id="text-org153c86e">
+<div id="outline-container-orgbe43359" class="outline-5">
+<h5 id="orgbe43359">Com.gigamonkeys.json</h5>
+<div class="outline-text-5" id="text-orgbe43359">
 <div class="org-src-container">
 <pre class="src src-ascii">-                SAMPLES  TOTAL       MINIMUM   MAXIMUM   MEDIAN    AVERAGE     DEVIATION
 REAL-TIME        100      2.81333     0.026665  0.06      0.026667  0.028133    0.004277
@@ -14841,9 +14790,9 @@ EVAL-CALLS       100      0           0         0         0         0           
 </div>
 </div>
 
-<div id="outline-container-orga339043" class="outline-5">
-<h5 id="orga339043">Com.inuoe.jzon</h5>
-<div class="outline-text-5" id="text-orga339043">
+<div id="outline-container-orgaac74e9" class="outline-5">
+<h5 id="orgaac74e9">Com.inuoe.jzon</h5>
+<div class="outline-text-5" id="text-orgaac74e9">
 <div class="org-src-container">
 <pre class="src src-ascii">-                SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE    DEVIATION
 REAL-TIME        100      1.326664   0.009999  0.023334  0.013333  0.013267   0.00221
@@ -14860,9 +14809,9 @@ EVAL-CALLS       100      0          0         0         0         0          0.
 </div>
 </div>
 
-<div id="outline-container-org9a86640" class="outline-5">
-<h5 id="org9a86640">Jonathan</h5>
-<div class="outline-text-5" id="text-org9a86640">
+<div id="outline-container-orgdee0556" class="outline-5">
+<h5 id="orgdee0556">Jonathan</h5>
+<div class="outline-text-5" id="text-orgdee0556">
 <div class="org-src-container">
 <pre class="src src-ascii">-                SAMPLES  TOTAL          MINIMUM      MAXIMUM      MEDIAN       AVERAGE        DEVIATION
 REAL-TIME        100      227.00395      2.186708     2.359995     2.260044     2.27004        0.039442
@@ -14879,9 +14828,9 @@ EVAL-CALLS       100      0              0            0            0            
 </div>
 </div>
 
-<div id="outline-container-org7c8ba7e" class="outline-5">
-<h5 id="org7c8ba7e">Json-lib</h5>
-<div class="outline-text-5" id="text-org7c8ba7e">
+<div id="outline-container-orgffe171f" class="outline-5">
+<h5 id="orgffe171f">Json-lib</h5>
+<div class="outline-text-5" id="text-orgffe171f">
 <div class="org-src-container">
 <pre class="src src-ascii">-                SAMPLES  TOTAL       MINIMUM   MAXIMUM   MEDIAN    AVERAGE     DEVIATION
 REAL-TIME        100      5.79335     0.053333  0.08      0.056667  0.057934    0.004157
@@ -14898,9 +14847,9 @@ EVAL-CALLS       100      0           0         0         0         0           
 </div>
 </div>
 
-<div id="outline-container-orgacde426" class="outline-5">
-<h5 id="orgacde426">Json-streams</h5>
-<div class="outline-text-5" id="text-orgacde426">
+<div id="outline-container-org27819b2" class="outline-5">
+<h5 id="org27819b2">Json-streams</h5>
+<div class="outline-text-5" id="text-org27819b2">
 <div class="org-src-container">
 <pre class="src src-ascii">-                SAMPLES  TOTAL       MINIMUM   MAXIMUM   MEDIAN    AVERAGE   DEVIATION
 REAL-TIME        100      9.97336     0.093333  0.12      0.1       0.099734  0.00358
@@ -14917,9 +14866,9 @@ EVAL-CALLS       100      0           0         0         0         0         0.
 </div>
 </div>
 
-<div id="outline-container-orgc17aff3" class="outline-5">
-<h5 id="orgc17aff3">Jsown</h5>
-<div class="outline-text-5" id="text-orgc17aff3">
+<div id="outline-container-org202a9e2" class="outline-5">
+<h5 id="org202a9e2">Jsown</h5>
+<div class="outline-text-5" id="text-org202a9e2">
 <div class="org-src-container">
 <pre class="src src-ascii">-                SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE    DEVIATION
 REAL-TIME        100      1.203332   0.009999  0.043333  0.01      0.012033   0.004025
@@ -14935,9 +14884,9 @@ EVAL-CALLS       100      0          0         0         0         0          0.
 </div>
 </div>
 
-<div id="outline-container-orgb0675a3" class="outline-5">
-<h5 id="orgb0675a3">Shasht</h5>
-<div class="outline-text-5" id="text-orgb0675a3">
+<div id="outline-container-org915c481" class="outline-5">
+<h5 id="org915c481">Shasht</h5>
+<div class="outline-text-5" id="text-org915c481">
 <div class="org-src-container">
 <pre class="src src-ascii">-                SAMPLES  TOTAL       MINIMUM   MAXIMUM   MEDIAN    AVERAGE     DEVIATION
 REAL-TIME        100      2.060005    0.016666  0.046666  0.02      0.0206      0.004253
@@ -14954,9 +14903,9 @@ EVAL-CALLS       100      0           0         0         0         0           
 </div>
 </div>
 
-<div id="outline-container-orgf211ed0" class="outline-5">
-<h5 id="orgf211ed0">St-json</h5>
-<div class="outline-text-5" id="text-orgf211ed0">
+<div id="outline-container-org3d8f9f9" class="outline-5">
+<h5 id="org3d8f9f9">St-json</h5>
+<div class="outline-text-5" id="text-org3d8f9f9">
 <div class="org-src-container">
 <pre class="src src-ascii">-                SAMPLES  TOTAL      MINIMUM   MAXIMUM   MEDIAN    AVERAGE    DEVIATION
 REAL-TIME        100      2.720009   0.023333  0.05      0.026667  0.0272     0.002737
@@ -14973,9 +14922,9 @@ EVAL-CALLS       100      0          0         0         0         0          0.
 </div>
 </div>
 
-<div id="outline-container-orgbd26c82" class="outline-5">
-<h5 id="orgbd26c82">Yason</h5>
-<div class="outline-text-5" id="text-orgbd26c82">
+<div id="outline-container-orga0bc607" class="outline-5">
+<h5 id="orga0bc607">Yason</h5>
+<div class="outline-text-5" id="text-orga0bc607">
 <div class="org-src-container">
 <pre class="src src-ascii">-                SAMPLES  TOTAL       MINIMUM   MAXIMUM   MEDIAN    AVERAGE     DEVIATION
 REAL-TIME        100      5.169989    0.049999  0.08      0.05      0.0517      0.003844
@@ -14997,9 +14946,9 @@ EVAL-CALLS       100      0           0         0         0         0           
 <div class="outline-text-4" id="text-decoding-benchmark-detail-by-library98">
 </div>
 
-<div id="outline-container-orgc71daa3" class="outline-5">
-<h5 id="orgc71daa3">Boost-json</h5>
-<div class="outline-text-5" id="text-orgc71daa3">
+<div id="outline-container-org4742327" class="outline-5">
+<h5 id="org4742327">Boost-json</h5>
+<div class="outline-text-5" id="text-org4742327">
 <div class="org-src-container">
 <pre class="src src-ascii">-                SAMPLES  TOTAL       MINIMUM   MAXIMUM   MEDIAN    AVERAGE     DEVIATION
 REAL-TIME        100      16.600002   0.143332  0.263332  0.159999  0.166       0.022166
@@ -15016,9 +14965,9 @@ EVAL-CALLS       100      0           0         0         0         0           
 </div>
 </div>
 
-<div id="outline-container-org9fbf92f" class="outline-5">
-<h5 id="org9fbf92f">Cl-json</h5>
-<div class="outline-text-5" id="text-org9fbf92f">
+<div id="outline-container-orgc718d79" class="outline-5">
+<h5 id="orgc718d79">Cl-json</h5>
+<div class="outline-text-5" id="text-orgc718d79">
 <div class="org-src-container">
 <pre class="src src-ascii">-                SAMPLES  TOTAL        MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
 REAL-TIME        100      43.343338    0.39       0.500001   0.43       0.433433     0.028302
@@ -15035,9 +14984,9 @@ EVAL-CALLS       100      0            0          0          0          0       
 </div>
 </div>
 
-<div id="outline-container-org245b59b" class="outline-5">
-<h5 id="org245b59b">Com.gigamonkeys.json</h5>
-<div class="outline-text-5" id="text-org245b59b">
+<div id="outline-container-org11fb654" class="outline-5">
+<h5 id="org11fb654">Com.gigamonkeys.json</h5>
+<div class="outline-text-5" id="text-org11fb654">
 <div class="org-src-container">
 <pre class="src src-ascii">-                SAMPLES  TOTAL        MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
 REAL-TIME        100      31.760002    0.256665   0.430001   0.316666   0.3176       0.03324
@@ -15054,9 +15003,9 @@ EVAL-CALLS       100      0            0          0          0          0       
 </div>
 </div>
 
-<div id="outline-container-orgfd1901f" class="outline-5">
-<h5 id="orgfd1901f">Com.inuoe.jzon</h5>
-<div class="outline-text-5" id="text-orgfd1901f">
+<div id="outline-container-orgcd6ef94" class="outline-5">
+<h5 id="orgcd6ef94">Com.inuoe.jzon</h5>
+<div class="outline-text-5" id="text-orgcd6ef94">
 <div class="org-src-container">
 <pre class="src src-ascii">-                SAMPLES  TOTAL       MINIMUM   MAXIMUM   MEDIAN    AVERAGE     DEVIATION
 REAL-TIME        100      7.853333    0.076665  0.083334  0.076667  0.078533    0.002227

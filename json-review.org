@@ -1,5 +1,5 @@
 #+AUTHOR: Sabra Crolleton
-#+TITLE: Review of CL JSON Libraries UPDATED 12 Apr 2023
+#+TITLE: Review of CL JSON Libraries UPDATED 15 May 2023
 
 #+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
 
@@ -18,6 +18,8 @@
 :PROPERTIES:
 :CUSTOM_ID: changelog
 :END:
+** 15 May 2023
+Picks up regressions in com.inuoe.jzon. It has dropped its heuristics for handling lists. This can change the resulting data type and co-incidentally has dropped the ability to handle dotted lists. This last is likely to be corrected in the future.
 ** 12 Apr 2023
 com.inuoe.jzon (aka jzon) is now in quicklisp. Both jzon and shasht have had active development. The versions used are the github repositories as of 11 Apr 2023. Benchmarking has been updated.
 
@@ -886,7 +888,7 @@ In general, plain lists and plists are returned as JSON arrays unless some other
 | cl-json              | encode-json-alist | YES     | YES      | (11)   |
 | cl-json              | encode-json-plist | YES     | (9)      | YES    |
 | com.gigamonkeys.json | write-json        | (2)(12) | (1)      | (2)    |
-| com.inuoe.jzon       | stringify         | YES     | YES      | YES    |
+| com.inuoe.jzon       | stringify         | YES     | YES (15) | YES    |
 | jonathan             | to-json           | YES     | YES (13) | YES    |
 | json-lib             | stringify         | (4)     | (1)      | YES    |
 | json-streams         | json-stringify    | (6)     | (6)      | (6)    |
@@ -913,6 +915,7 @@ In general, plain lists and plists are returned as JSON arrays unless some other
 - (12) com.gigamonkeys.json will assume a plain list is a plist, returning a JSON object with key-value pairs. If the length of the list is odd, the final value in the list will be treated as a key and an empty set will be inserted as the value.
 - (13) For jonathan to properly handle alists, you need to add the additional keyword parameters :from :alist
 - (14) Trivial-json-codec is going to give us invalid JSON from now on with respect to tests involving lists - e.g. '(a b c)) becomes "<A,B,C>", so we will drop it from the rest of the encoding tests involving lists.
+- (15) Recent changes in jzon mean that it currently does not accept dotted lists.
 
 ** Encoding Plain Lists
 :PROPERTIES:
@@ -951,7 +954,7 @@ Using '("A" "b" 4 3.2 9/4) as the sample data
 I discovered that many libraries have problems if the alist components are dotted pairs (improper lists). So we break alists down between alists with dotted pairs and alists without dotted pairs. We will keep symbols out of the sample data because we already know from [[#encoding-symbols][encoding-symbols]] that some libraries will have issues with alists containing symbols as keys. Of note:
 
 - cl-json provides a function to encode the alist properly as key:value,
-- com.inuoe.jzon correctly guesses this is a alist which should be encoded as key:value,
+- com.inuoe.jzon has dropped its heuristics and currently does not handle dotted pairs
 - shasht:*write-alist-as-object* provides the ability to write an undotted alist as a JSON object rather than an array.
 - yason provides a specific function to encode the alist properly as key:value,
 - If the alist has dotted cons cells, jsown and st-json triggered unhandled memory faults with SBCL 2.1.11-x86-64-linux, CCL version 1.12.1 LinuxX8664 and ecl-version 21.2.1. This appears to be because jsown and st-json have optimized the code and assumed that all lists will be proper lists. The assumption obviously fails in the context of dotted cons cells.
@@ -972,7 +975,7 @@ Using '(("A" . 1) ("B" . 2) ("C" . 3)) as the sample data
 | cl-json              | encode-json              | {"A":1,"B":2,"C":3}                |
 | cl-json              | encode-json-alist        | {"A":1,"B":2,"C":3}                |
 | com.gigamonkeys.json | write-json               | Error:Can't stringify (A . 1)      |
-| com.inuoe.jzon       | stringify                | "{\"A\":1,\"B\":2,\"C\":3}"        |
+| com.inuoe.jzon  (6)  | stringify                | Error: value 1 is not of type list |
 | jonathan             | to-json                  | Error: value 1 is not of type list |
 | jonathan             | to-json XXX :from :alist | "{\"A\":1,\"B\":2,\"C\":3}"        |
 | json-lib  (2)        | stringify                | Error value 1 is not of type list  |
@@ -986,6 +989,7 @@ Using '(("A" . 1) ("B" . 2) ("C" . 3)) as the sample data
 - (3) Only if (setf shasht:*write-alist-as-object* t), which is not the default. Otherwise it generates an error.
 - (4) If the alist has dotted cons cells, jsown and st-json triggered unhandled memory faults with SBCL 2.1.11-x86-64-linux, CCL version 1.12.1 LinuxX8664 and ecl-version 21.2.1. This appears to be because jsown and st-json have optimized the code and assumed that all lists will be proper lists. The assumption obviously fails in the context of dotted cons cells.
 - (5) You would need to use lower level components of json-streams. See [[#json-streams-encoding][json-streams-encoding]].
+- (6) This is a regression
 
 Now we change the data slightly, still using dotted pairs, but with a nested list as the value in one pair: Using '(("foo" . "bar") ("baz" . ((1 2 3) (4 5 6)))) as the sample data.
 
@@ -1000,7 +1004,7 @@ Now we change the data slightly, still using dotted pairs, but with a nested lis
 | cl-json              | encode-json              | {"foo":"bar","baz":[[1,2,3],[4,5,6]]}          |
 | cl-json              | encode-json-alist        | {"foo":"bar","baz":[[1,2,3],[4,5,6]]}          |
 | com.gigamonkeys.json | write-json               | Error:Can't stringify (foo . bar)              |
-| com.inuoe.jzon       | stringify                | {"foo":"bar","baz":[[1,2,3],[4,5,6]]}  |
+| com.inuoe.jzon  (6)  | stringify                | Error: value "bar" is not a list |
 | jonathan             | to-json                  | Error: value 1 is not of type list             |
 | jonathan             | to-json XXX :from :alist | {"foo":"bar","baz":{"1":[2,3],"4":[5,6]}}      |
 | json-lib  (2)        | stringify                | Error value "bar" is not of type list          |
@@ -1017,18 +1021,9 @@ Now we change the data slightly, still using dotted pairs, but with a nested lis
 - (3a) If shasht:*write-alist-as-object* is t (not the default).
 - (4) If the alist has dotted cons cells, jsown and st-json triggered unhandled memory faults with SBCL 2.1.11-x86-64-linux, CCL version 1.12.1 LinuxX8664 and ecl-version 21.2.1. This appears to be because jsown and st-json have optimized the code and assumed that all lists will be proper lists. The assumption obviously fails in the context of dotted cons cells.
 - (5) You would need to use lower level components of json-streams. See [[#json-streams-encoding][json-streams-encoding]].
+- (6) This is a regression
 
 Notice the difference in the successful results. cl-json and yason's result of {"foo":"bar","baz":[[1,2,3],[4,5,6]]} is what I would have expected. jonathan tried to force a key value pair into the second alist value. {"foo":"bar","baz":{"1":[2,3],"4":[5,6]}}.
-
-com.inuoe.jzon is a special case here. It uses heuristics to predict what data structure it is using and this particular sample works because it does not try to make an integer into a key. if the sample data had been something like
-#+begin_src lisp
-'(("foo" . "bar") ("baz" . (("A" 2 3) ("B" 5 6))))
-#+end_src
-it would have predicated that the "A" and "B" should be keys and would have returned
-#+begin_src lisp
-"{\"foo\":\"bar\",\"baz\":{\"A\":[2,3],\"B\":[5,6]}}"
-#+end_src
-which may or may not have been what you wanted.
 
 **** Without dotted cons cells
 :PROPERTIES:
@@ -1049,7 +1044,7 @@ Note difference in results. Some libraries return arrays, others return objects.
 | cl-json              | encode-json                 | [["A",1],["B",2],["C",3]]   |
 | cl-json              | encode-json-alist           | {"A":[1],"B":[2],"C":[3]}   |
 | com.gigamonkeys.json | gigamonkeys-write-to-string | Can't stringify (A 1)       |
-| com.inuoe.jzon       | stringify                   | {"A":[1],"B":[2],"C":[3]}   |
+| com.inuoe.jzon (2)   | stringify                   | [["A",1],["B",2],["C",3]]   |
 | jonathan             | jonathan-to-json-alist      | {"A":[1],"B":[2],"C":[3]}   |
 | json-lib             | stringify                   | [["A",1],["B",2],["C",3]]   |
 | json-streams         | json-stringify              | Error (1)                   |
@@ -1060,6 +1055,7 @@ Note difference in results. Some libraries return arrays, others return objects.
 | yason                | encode-alist                | {"A":[1],"B":[2],"C":[3]}   |
 
 - (1) Using json-stringify caused the alist used as data to fall through etypecase expression demanding a json-streams:json-array. That means that you have to fall back to more complicated calls. See [[#json-streams-encoding][json-streams-encoding]].
+- (2) Before recent changes, com.inuoe.jzon would have returned {"A":[1],"B":[2],"C":[3]}
 
 Let's make the value portion of the alist another alist. Now using '(("foo" "bar") ("baz" ((1 2 3) (4 5 6)))) as the sample data. The results may or may not be what you want, so look at them carefully.
 
@@ -1074,7 +1070,7 @@ Let's make the value portion of the alist another alist. Now using '(("foo" "bar
 | cl-json              | encode-json             | [["foo","bar"],["baz",[[1,2,3],[4,5,6]]]]     |
 | cl-json              | encode-json-alist       | [["foo","bar"],["baz",[[1,2,3],[4,5,6]]]]     |
 | com.gigamonkeys.json | write-json              | Can't stringify (foo bar)                     |
-| com.inuoe.jzon       | stringify               | {"foo":["bar"],"baz":[[[1,2,3],[4,5,6]]]}     |
+| com.inuoe.jzon       | stringify               | [["foo","bar"],["baz",[[1,2,3],[4,5,6]]]]       |
 | jonathan             | to-json XX :from :alist | {"foo":["bar"],"baz":[{"1":[2,3],"4":[5,6]}]} |
 | json-lib             | stringify               | [["foo", "bar"], ["baz",[[1,2,3],[4,5,6]]]]   |
 | json-streams         | json-stringify          | Error (1)                                     |
@@ -1084,8 +1080,9 @@ Let's make the value portion of the alist another alist. Now using '(("foo" "bar
 | yason                | encode                  | [["foo","bar"],["baz",[[1,2,3],[4,5,6]]]]     |
 | yason                | encode-alist            | {"foo":["bar"],"baz":[[[1,2,3],[4,5,6]]]}     |
 - (1) You would need to use lower level components of json-streams. See [[#json-streams-encoding][json-streams-encoding]].
+- (2) Before recent changes, com.inuoe.jzon would have returned {"foo":["bar"],"baz":[[[1,2,3],[4,5,6]]]}
 
-Yason:encode-alist, com.inuoe.jzon and jonathan return JSON objects with key pairs; the rest try to return arrays. jonathan seem to be trying to force a key value pair into the baz values when I do not think this is probably what you want. Yason and com.inuoe.jzon's heuristics return the same result. Let's change the data slightly and just look at these two libraries again.
+Yason:encode-alist and jonathan return JSON objects with key pairs; the rest try to return arrays. jonathan seem to be trying to force a key value pair into the baz values when I do not think this is probably what you want. Yason's heuristics return the same result. Let's change the data slightly and just look at these two libraries again.
 
 #+CAPTION: Encoding Undotted Alists with more complex values (2)
 #+ATTR_HTML: :border 2 :rules all :frame border
@@ -1094,12 +1091,10 @@ Yason:encode-alist, com.inuoe.jzon and jonathan return JSON objects with key pai
 |----------------+--------------+------------------------------------------------|
 | New data       |              | '(("foo" "bar") ("baz" ((1 2 3) ("A" 5 6))))   |
 |                |              |                                                |
-| com.inuoe.jzon | stringify    | {"foo":["bar"],"baz":[[[1,2,3],["A",5,6]]]}    |
 | yason          | encode       | [["foo","bar"],["baz",[[1,2,3],["A",5,6]]]]    |
 | yason          | encode-alist | {"foo":["bar"],"baz":[[[1,2,3],["A",5,6]]]}    |
 |                |              |                                                |
 | New data       |              | '(("foo" "bar") ("baz" (("B" 2 3) ("A" 5 6)))) |
-| com.inuoe.jzon | stringify    | {"foo":["bar"],"baz":[{"B":[2,3],"A":[5,6]}]}  |
 | yason          | encode       | [["foo","bar"],["baz",[["B",2,3],["A",5,6]]]]  |
 | yason          | encode-alist | {"foo":["bar"],"baz":[[["B",2,3],["A",5,6]]]}  |
 
@@ -1116,27 +1111,27 @@ Using '("a" 1 "b" 2 "c" 3) as the sample data
 #+CAPTION: Encoding Plists
 #+ATTR_HTML: :border 2 :rules all :frame border
 #+ATTR_LATEX: :float multicolumn
-| Library              | Function          | Result                           | Comment   |
-|----------------------+-------------------+----------------------------------+-----------|
-| Original data        |                   | '("a" 1 "b" 2 "c" 3)             |           |
-|                      |                   |                                  |           |
-| boost-json           | json-encode       | ["a",1,"b",2,"c",3]              | (1)       |
-| cl-json              | encode-json       | ["a",1,"b",2,"c",3]              | (1)       |
-| cl-json              | encode-json-plist | {"a":1,"b":2,"c":3}              |           |
-| com.gigamonkeys.json | write-json        | {"a":1,"b":2,"c":3}              |           |
-| com.inuoe.jzon       | stringify         | "{\"a\":1,\"b\":2,\"c\":3}"      |           |
-| jonathan             | to-json           | "[\"a\",1,\"b\",2,\"c\",3]"      | (1)       |
-| json-lib             | stringify         | "[\"a\", 1, \"b\", 2, \"c\", 3]" |           |
-| json-streams         | json-stringify    |                                  | Fail: (2) |
-| jsown                | to-json           | "[\"a\",1,\"b\",2,\"c\",3]"      | (1)       |
-| shasht               | write-json        | ["a",1,"b",2,"c",3]              | (1)       |
-| st-json              | write-json        | "[\"a\",1,\"b\",2,\"c\",3]"      | (1)       |
-| yason                | encode            | ["a",1,"b",2,"c",3]              | (1)       |
-| yason                | encode-plist      | {"a":1,"b":2,"c":3}              |           |
+| Library              | Function          | Result                   | Comment   |
+|----------------------+-------------------+--------------------------+-----------|
+| Original data        |                   | '("a" 1 "b" 2 "c" 3)     |           |
+|                      |                   |                          |           |
+| boost-json           | json-encode       | ["a",1,"b",2,"c",3]      | (1)       |
+| cl-json              | encode-json       | ["a",1,"b",2,"c",3]      | (1)       |
+| cl-json              | encode-json-plist | {"a":1,"b":2,"c":3}      |           |
+| com.gigamonkeys.json | write-json        | {"a":1,"b":2,"c":3}      |           |
+| com.inuoe.jzon       | stringify         | ["a",1,"b",2,"c",3]      | (3)       |
+| jonathan             | to-json           | ["a",1,"b",2,"c",3]"     | (1)       |
+| json-lib             | stringify         | ["a", 1, "b", 2, "c", 3] |           |
+| json-streams         | json-stringify    |                          | Fail: (2) |
+| jsown                | to-json           | ["a",1,"b",2,"c",3]      | (1)       |
+| shasht               | write-json        | ["a",1,"b",2,"c",3]      | (1)       |
+| st-json              | write-json        | ["a",1,"b",2,"c",3]      | (1)       |
+| yason                | encode            | ["a",1,"b",2,"c",3]      | (1)       |
+| yason                | encode-plist      | {"a":1,"b":2,"c":3}      |           |
 
 - (1) Encoding to array but loses the obvious key-value connection.
 - (2) You would need to use lower level components of json-streams. See [[#json-streams-encoding][json-streams-encoding]].
-
+- (3) Before recent changes, jzon would have returned {"a":1,"b":2,"c":3}
 ** Encoding Arrays
 :PROPERTIES:
 :CUSTOM_ID: encoding-arrays
@@ -1166,7 +1161,7 @@ Using #("A" 1 2.3) as sample data.
 | jsown                | to-json        | ["A",1,2.3]                                            |
 | shasht               | write-json     | ["A",1,2.2999999e+0]                                   |
 | st-json (2)          | write-json     | Cannot write object of type (SIMPLE-VECTOR 3) as JSON. |
-| trivial-json-codec   | serialize-json | "[\"A\",1,2.3]"                                        |
+| trivial-json-codec   | serialize-json | ["A",1,2.3]                                        |
 | yason                | encode         | ["A",1,2.299999952316284]                              |
 - (1) You would need to use lower level components of json-streams. See [[#json-streams-encoding][json-streams-encoding]].
 - (2) You need to write your own st-json::write-json-element function for arrays. Possibly something like:
@@ -1236,7 +1231,7 @@ The following example uses a very simple nested array:
 | jsown              | [["Dublin","Cork","Limerick"],["Berlin","Frankfurt","Munich"]]               |         |
 | shasht             | [["Dublin","Cork","Limerick"], ["Berlin","Frankfurt","Munich"]]              |         |
 | [[#st-json][st-json]]            |                                                                              | (2)     |
-| trivial-json-codec | "[[\"Dublin\",\"Cork\",\"Limerick\"],[\"Berlin\",\"Frankfurt\",\"Munich\"]]" |         |
+| trivial-json-codec | [["Dublin","Cork","Limerick"],["Berlin","Frankfurt","Munich"]]" |         |
 | yason              | [["Dublin","Cork","Limerick"],["Berlin","Frankfurt","Munich"]]               |         |
 - (1) You would need to use lower level components of json-streams. See [[#json-streams-encoding][json-streams-encoding]].
 - (2) Error: Can not write object of type (SIMPLE-BIT-VECTOR 5) as JSON. You can resolve this by writing your own method for handling symbols. See [[#st-json-encoding][st-json-encoding]].
@@ -3150,33 +3145,7 @@ On the plus side,
 - It is one of only two libraries which can encode a structure
 
 On the "pay attention to your data structures" side:
-com.inuoe.jzon:stringify will encode an alist as a JSON object. It uses heuristics to predict what data structure it is using. Consider the difference between giving it an alist with dotted pairs and an alist without dotted pairs:
-#+begin_src lisp
-  (com.inuoe.jzon:stringify '(("A" . 1) ("B" . 2) ("C" . 3)) :stream *standard-output*)
-  {"A":1,"B":2,"C":3}
-
-  (com.inuoe.jzon:stringify '(("A" 1) ("B" 2) ("C" 3)) :stream *standard-output*)
-  {"A":[1],"B":[2],"C":[3]}
-#+end_src
-Both are returned as JSON objects, but in the case of the undotted pairs, each value is embedded in its own array.
-    It is pretty good at correctly guessing when something is a alist which should be encoded as key:value. Consider the following:
-    #+begin_src lisp
-      (com.inuoe.jzon:stringify '(("foo" . "bar") ("baz" . ((1 2 3) (4 5 6))))
-                          :stream *standard-output*)
-      {"foo":"bar","baz":[[1,2,3],[4,5,6]]}
-    #+end_src
-and this particular sample works because it does not try to make an integer into a key. However, if you change the sample data slightly so that the first value in eash list in the embedded alist was a string, it would have predicated that the "A" and "B" should be keys. The next two examples show the differences between its interpretation depending on whether you provided dotted pairs or not:
-#+begin_src lisp
-  (com.inuoe.jzon:stringify '(("foo" . "bar") ("baz" . (("A" 2 3) ("B" 5 6))))
-                            :stream *standard-output*)
-  {"foo":"bar","baz":{"A":[2,3],"B":[5,6]}}
-
-(com.inuoe.jzon:stringify '(("foo"  "bar") ("baz" (("A" 2 3) ("B" 5 6))))
-                            :stream *standard-output*)
-{"foo":["bar"],"baz":[{"A":[2,3],"B":[5,6]}]}
-#+end_src
-This may or may not have been what you wanted.
-
+Recent change: com.inuoe.jzon:stringify will no longer encode an alist as a JSON object. In dropping its heuristics, com.inuoe.jzon has, at least temporarily, lost the ability to handle dotted pairs.
 
 **** Encoding Objects
 com.inuoe.jzon actually uses the :type of each slot to determine what to do with nil. Consider the following where two slots have no specified type, two have a list type and two have an array type. Specifically, consider the resulting difference between value-list0 and value-array0 when writing the object out:
