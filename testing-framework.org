@@ -228,11 +228,11 @@ For those who want the opinionated quick summary. The awards are -
 
 - Best General Purpose Fixtures (Suite/Tag and test level): *Lisp-Unit2 and Lift*
 
-- Ability to reuse tests in multiple suites: *Lisp-Unit2* (because of composable tags)
+- Ability to reuse tests in multiple suites: *Lisp-Unit2* (because of composable tags), *Try*
 
-- If you need tests to take parameters: *Fiasco* and *Confidence*
+- If you need tests to take parameters: *Fiasco*, *Confidence* and *Try*
 
-- If you need progress reporting to be optional: *Parachute, Lisp-Unit2, Fiasco, or Clunit2*
+- If you need progress reporting to be optional: *Parachute, Lisp-Unit2, Fiasco, Clunit2, or Try*
 
 - Favorite Hierarchy Setup (nestable suites): *Parachute* and *Lisp-Unit2* (which has a different setup using tags)
 
@@ -240,18 +240,18 @@ For those who want the opinionated quick summary. The awards are -
 
   Honorable mentions - *2am and Lift*
 
-- Assertions that take diagnostic comments with variables: *Parachute, Fiasco, 2am, Fiveam, Lift, Clunit2, Confidence* This is something that I like for debugging purposes along with whatever reporting comes built in with the framework. See [[error-reporting][error-reporting]]
+- Assertions that take diagnostic comments with variables: *Parachute, Fiasco, 2am, Fiveam, Lift, Clunit2, Confidence, Try* This is something that I like for debugging purposes along with whatever reporting comes built in with the framework. See [[error-reporting][error-reporting]]
 
-- Values expression testing: *Lisp-Unit2, Lisp-Unit, Parachute*, (*Update* *Clunit2* as well)
+- Values expression testing: *Lisp-Unit2, Lisp-Unit, Parachute*, (*Update* *Clunit2* and *Try* as well)
 
 - I want to track if my functions changed results: *Checkl*
 - Tests that specify suite or tags (does not rely on location in file): *Parachute, Lisp-Unit (tags), Lisp-Unit2(tags), Lift, Clunit2*
 - Heavy duty complex fixtures: *NST* (but there are trade-offs in the shape of the learning curve and performance)
-- Ability to define new assertions: *Confidence, NST* (but they have their issues in other areas)
-- Ability to rerun failures only: *Fiasco, Lisp-Unit2* (you can extend Parachute and Fiveam to get this, but it is not there now)
+- Ability to define new assertions: *Confidence, NST, Try* (but they have their issues in other areas)
+- Ability to rerun failures only: *Fiasco, Lisp-Unit2, Try* (you can extend Parachute and Fiveam to get this, but it is not there now)
 
 - Favorite Random Data Generator: *Check-it*
-- Can redirect output to a different stream (a): *Clunit2, Confidence, Fiasco, Lift, Lisp-Unit, Lisp-Unit2 and RT*
+- Can redirect output to a different stream (a): *Clunit2, Confidence, Fiasco, Lift, Lisp-Unit, Lisp-Unit2, RT and Try*
 
 - Randomized Property Tests: *Check-it with any framework*
 - Choice of [[debugging][Interactive Debugging or Reporting]]: Most frameworks at this point
@@ -430,7 +430,7 @@ There are multiple benefits to tests being funcallable. One of them being that y
 | [[rt][rt]]                     | N              | N                      |
 | [[should-test][should-test]]            | N              | N                      |
 | [[tap-unit-test][tap-unit-test]]          | N              | N                      |
-| [[try][try]]                    | N              | Y                      |
+| [[try][try]]                    | T(4)           | Y                      |
 | [[unit-test][unit-test]]              | N              | N                      |
 | [[xlunit][xlunit]]                 | T(2)           | N                      |
 | [[xptest][xptest]]                 | N              | N                      |
@@ -438,6 +438,7 @@ There are multiple benefits to tests being funcallable. One of them being that y
 - (1) if compiled at REPL
 - (2) Optional by test, specified at definition: =(def-test-method t1 ((test tf-xlunit) :run nil) body)=
 - (3) =*run-test-when-defined*= controls this option
+- (4) =*run-deftest-when* controls this option
 
 ** Fixtures
 <<fixtures>>
@@ -505,7 +506,7 @@ Does a failure (not error) trigger the debugger, is it optional, and do assertio
 | [[should-test][should-test]]   | (never)                   | Y                                |
 | [[simplet][simplet]]       | (never)                   | N                                |
 | [[tap-unit-test][tap-unit-test]] | (optional)                | Y                                |
-| [[try][try]]           | optional                  | Y                                |
+| [[try][try]]           | (optional)                | Y                                |
 | [[unit-test][unit-test]]     | (never)                   | Y                                |
 | [[xlunit][xlunit]]        | (never)                   | Y                                |
 | [[xptest][xptest]]        | (never)                   | N                                |
@@ -553,34 +554,35 @@ Does the framework provide a progress report, is it optional, and does it run ju
 <<progress-reports>>
 #+CAPTION: Overview - Progress Reports
 #+ATTR_HTML: :border 2 :rules all :frame border
-| Library       | Progress Reports                                                           |
-|---------------+----------------------------------------------------------------------------|
-| [[1am][1am]]           | Every assert                                                               |
-| [[2am][2am]]           | Every assert                                                               |
-| [[cacau][cacau]]         | optional                                                                   |
-| [[clunit][clunit]]        | optional                                                                   |
-| [[clunit2][clunit2]]       | optional                                                                   |
-| [[confidence][confidence]]    | never                                                                      |
-| [[gigamonkeys][gigamonkeys]]   | never                                                                      |
-| [[fiasco][fiasco]]        | optional                                                                   |
-| [[fiveam][fiveam]]        | optional (1)                                                               |
-| [[lift][lift]]          | never                                                                      |
-| [[lisp-unit][lisp-unit]]     | never                                                                      |
-| [[lisp-unit2][lisp-unit2]]    | optional                                                                   |
-| [[nst][nst]]           | Every test                                                                 |
-| [[parachute][parachute]]     | optional                                                                   |
-| [[prove][prove]]         | Every assert                                                               |
-| [[ptester][ptester]]       | Every assert                                                               |
-| [[rove][rove]]          | Optional                                                                   |
-| [[rt][rt]]            | Every test                                                                 |
-| [[should-test][should-test]]   | Every assert                                                               |
-| [[simplet][simplet]]       | Every test                                                                 |
-| [[tap-unit-test][tap-unit-test]] | never                                                                      |
-| [[try][try]]           | Optional (Every assert, every assert having an unexpected result, or none) |
-| [[unit-test][unit-test]]     | Every test                                                                 |
-| [[xlunit][xlunit]]        | never                                                                      |
-| [[xptest][xptest]]        | never                                                                      |
+| Library       | Progress Reports |
+|---------------+------------------|
+| [[1am][1am]]           | Every assert     |
+| [[2am][2am]]           | Every assert     |
+| [[cacau][cacau]]         | optional         |
+| [[clunit][clunit]]        | optional         |
+| [[clunit2][clunit2]]       | optional         |
+| [[confidence][confidence]]    | never            |
+| [[gigamonkeys][gigamonkeys]]   | never            |
+| [[fiasco][fiasco]]        | optional         |
+| [[fiveam][fiveam]]        | optional (1)     |
+| [[lift][lift]]          | never            |
+| [[lisp-unit][lisp-unit]]     | never            |
+| [[lisp-unit2][lisp-unit2]]    | optional         |
+| [[nst][nst]]           | Every test       |
+| [[parachute][parachute]]     | optional         |
+| [[prove][prove]]         | Every assert     |
+| [[ptester][ptester]]       | Every assert     |
+| [[rove][rove]]          | Optional         |
+| [[rt][rt]]            | Every test       |
+| [[should-test][should-test]]   | Every assert     |
+| [[simplet][simplet]]       | Every test       |
+| [[tap-unit-test][tap-unit-test]] | never            |
+| [[try][try]]           | optional (2)     |
+| [[unit-test][unit-test]]     | Every test       |
+| [[xlunit][xlunit]]        | never            |
+| [[xptest][xptest]]        | never            |
 (1) The following will allow fiveam to run without output
+(2) What to print is parameterized by event type (e.g.  everything, nothing, =UNEXPECTED-FAILURE=, etc).
 #+begin_src lisp
   (let ((fiveam:*test-dribble*
           (make-broadcast-stream)))
@@ -615,7 +617,7 @@ Does the framework provide a progress report, is it optional, and does it run ju
 | [[should-test][should-test]]   |                           | N        | Y                        |
 | [[simplet][simplet]]       | P                         |          |                          |
 | [[tap-unit-test][tap-unit-test]] |                           |          |                          |
-| [[try][try]]           | S,T.A                     | Y        | Y                        |
+| [[try][try]]           | S,T.A                     | Y        | Y (5)                    |
 | [[unit-test][unit-test]]     |                           |          |                          |
 | [[xlunit][xlunit]]        |                           |          |                          |
 | [[xptest][xptest]]        |                           |          |                          |
@@ -624,6 +626,7 @@ D - failing dependencies, C - children, P - pending, S - suites, T - tests, A - 
 2) skip when specified
 3) run! returns a list of failed-test-results that you could save and use for this purpose
 4) Prove can skip a specified number of tests using the skip function. Unfortunately it marks them as passed rather than skipped.
+5) What to re-rerun is parameterized by event type.
 <<timing>>
 
 ** Timing Reporting and Time Limits
@@ -652,7 +655,7 @@ D - failing dependencies, C - children, P - pending, S - suites, T - tests, A - 
 | [[rt][rt]]                     | N              | N           |
 | [[should-test][should-test]]            | N              | N           |
 | [[tap-unit-test][tap-unit-test]]          | Y              | N           |
-| [[try][try]]                    | Y              | N           |
+| [[try][try]]                    | Y              | Y           |
 | [[unit-test][unit-test]]              | N              | N           |
 | [[xlunit][xlunit]]                 | N              | N           |
 | [[xptest][xptest]]                 | N              | N           |
@@ -719,7 +722,7 @@ This table is looking at whether the framework provides [[bounded-equality][floa
 | [[rt][rt]]            |             | N                         | N                     |
 | [[should-test][should-test]]   |             | First value only          | N                     |
 | [[tap-unit-test][tap-unit-test]] |             | Y                         | N                     |
-| [[try][[try]]          | Y           | Y                         | Y                     |
+| [[try][try]]           | Y           | Y                         | Y                     |
 | [[unit-test][unit-test]]     |             | First value only          | Y                     |
 | [[xlunit][xlunit]]        |             | First value only          | Y                     |
 | [[xptest][xptest]]        |             | relies on CL predicates   | Y                     |
@@ -754,7 +757,7 @@ This table is looking at whether the framework uses define- and assert- which pr
 | [[rt][rt]]            |                 |                                                                                                                                                                           |
 | [[should-test][should-test]]   |                 |                                                                                                                                                                           |
 | [[tap-unit-test][tap-unit-test]] | define-test     | assert-true, assert-error                                                                                                                                                 |
-| [[try][[try]]          |                 |                                                                                                                                                                           |
+| [[try][try]]           |                 |                                                                                                                                                                           |
 | [[unit-test][unit-test]]     |                 |                                                                                                                                                                           |
 | [[xlunit][xlunit]]        |                 | assert-true, assert-condition                                                                                                                                             |
 | [[xptest][xptest]]        | defmethod       |                                                                                                                                                                           |
@@ -1577,7 +1580,7 @@ The CCL version:
   RUN-TIME   10       13.228476  1.309399  1.364858  1.319752  1.322848  0.014998
 #+end_src
 
-** try
+** [[try][try]]
 First the SBCL version
 #+begin_src lisp
   -                SAMPLES  TOTAL       MINIMUM    MAXIMUM    MEDIAN     AVERAGE      DEVIATION
@@ -1894,6 +1897,7 @@ Note to self: Per [[http://clhs.lisp.se/Body/f_null.htm]], null is an empty list
 | [[lisp-unit2][lisp-unit2]]    | assert-no-error, assert-no-signal, assert-no-warning,   assert-warning, assert-fail, assert-no-warning,	assert-passes?, assert-signal, check-type                                                                                                                                                                                                                                                                                                                                                                                   |
 | [[nst][nst]]           | assert-criterion                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
 | [[prove][prove]]         | ok, is-values, is-type, like, is-print, is-error,                                                                                                                                                                                                                                                                                                                                                                                                                |
+| [[try][try]]           | invokes-debugger, invokes-debugger-not, in-time
 | [[unit-test][unit-test]]     | test-assert                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
 
 (a) Every test succeeds iff the form produces the same number of results as the values and each result is equal to the corresponding value
@@ -1927,7 +1931,7 @@ Note to self: Per [[http://clhs.lisp.se/Body/f_null.htm]], null is an empty list
 | [[should-test][should-test]]   | (deftest name body)                                                             |
 | [[simplet][simplet]]       | (test string body)                                                              |
 | [[tap-unit-test][tap-unit-test]] | (define-test test-name docstring body)                                          |
-| [[try][try]]           | (deftest test-name parameters body                                              |
+| [[try][try]]           | (deftest test-name parameters body)                                             |
 | [[unit-test][unit-test]]     | (deftest :unit unit-name :name test-name body)                                  |
 | [[xlunit][xlunit]]        | (def-test-method method-name ((class-name) run-on-compilation) body)            |
 | [[xptest][xptest]]        | (defmethod method-name ((suite-name fixture-name)) body)                        |
@@ -2053,7 +2057,7 @@ If the framework allows to programmatically run an individual test, then it's po
 | [[should-test][should-test]]   | the package is the only unit above tests                      |
 | [[simplet][simplet]]       | (suite string body)                                           |
 | [[tap-unit-test][tap-unit-test]] | the package is the only unit above tests                      |
-| [[try][try]]           | just include subtests in a deftest form                       |
+| [[try][try]]           | just call other tests (they are normal functions)             |
 | [[unit-test][unit-test]]     | [effectively tags in the deftest macro before the test-name]  |
 | [[xlunit][xlunit]]        | (defclass test-case-name (test-case)(body))                   |
 | [[xptest][xptest]]        | (make-test-suite suite-name docstring body)                   |
@@ -8211,7 +8215,7 @@ Try's self description is:
 ** Usage
 *** Basics and Report Format
 **** Interactive
-The default format is interactive and throws you into the debugger. Each defined test is a lisp function that records its execution in "trial" objects.
+Each defined test is a lisp function that records its execution in "trial" objects. There are different defaults intended for interactive and non-interactive modes. When a test is called as a Lisp function, the interactive defaults are used and unexpected failures invoke the debugger. When a test is called with =TRY=, the non-interactive defaults are used and the debugger is not invoked. In more detail, when the debugger is to invoked is determined by =*DEBUG*= and =*TRY-DEBUG*=, which are both event types.
 
 ***** Basic Passing Test
 Here we define a test that takes one parameter and then call the test with a parameter we know will pass and see the results.
@@ -8397,7 +8401,7 @@ The Try function allows you to report only the trial object summary (by passing 
   (try 't1-fail :print nil)
 #<TRIAL (T1-FAIL) UNEXPECTED-FAILURE 0.000s ⊠2>
 #+end_src
-or only the unexpected events (by passing :print unexpected).
+or only the unexpected events (by passing =:print 'unexpected=).
 #+begin_src lisp
   (try 'test9-pass-and-fail :print 'unexpected)
 
@@ -8419,7 +8423,9 @@ TEST9-PASS-AND-FAIL
 ⊠ TEST9-PASS-AND-FAIL ⊠2 ⋅6
 #<TRIAL (TEST9-PASS-AND-FAIL) UNEXPECTED-FAILURE 0.000s ⊠2 ⋅6>
 #+end_src
-The try function does not allow you to pass parameters to the tests, so you would need to wrap those tests inside another test. For example:
+In general, what to print is parameterized as event types, of which =nil= and =unexpected= are two instances.
+
+The =try= function does not allow you to pass parameters to the tests, so you would need to wrap those tests inside another test or a =lambda=, or call the test directly. For example:
 #+begin_src lisp
   (deftest test6-pass (x y)
     (is (= x 1))
@@ -8431,11 +8437,17 @@ The try function does not allow you to pass parameters to the tests, so you woul
     (test1-pass 1))
 
   (try 'test7 :print 'unexpected)
-#<TRIAL (TEST7) EXPECTED-SUCCESS 0.000s ⋅4>
+  ==> #<TRIAL (TEST7) EXPECTED-SUCCESS 0.000s ⋅4>
+
+  (try (lambda () (test6-pass 1 2)))
+  ==> #<TRIAL (TRY #<FUNCTION (LAMBDA ()) {100689750B}>) EXPECTED-SUCCESS 0.000s ⋅3>
+
+  (test6-pass 1 2)
+  ==> #<TRIAL (TEST6-PASS 1 2) EXPECTED-SUCCESS 0.000s ⋅3>
 #+end_src
 As you can see from the result, it indicated that there were 4 expected successes in the total combination of tests.
 
-If we had not used :print 'unexpected the result would have looked like:
+If we had not used =:print 'unexpected=, the result would have looked like:
 #+begin_src lisp
   (try 'test7)
 
@@ -8459,7 +8471,7 @@ Running try on its version of the uax-15 test suite would (a) have printed 34333
 ..... 343332 lines later ...
 #<TRIAL (UAX-SUITE) EXPECTED-SUCCESS 10.887s ⋅343332>
 #+end_src
-You can see the time discrepancy: Almost 32 seconds in the REPL to run the test and print every assertion and almost 11 seconds in the terminal. Now with :print 'unexpected, we get the following (first in the emacs REPL and then in a terminal:
+You can see the time discrepancy: Almost 32 seconds in the REPL to run the test and print every assertion and almost 11 seconds in the terminal. Now with =:print 'unexpected=, we get the following (first in the emacs REPL and then in a terminal:
 #+begin_src lisp
   (try 'uax-suite :print 'unexpected)
 
@@ -8469,7 +8481,7 @@ You can see the time discrepancy: Almost 32 seconds in the REPL to run the test 
 #+end_src
 And the test run is down from 32 secs to 1.5 seconds.
 ***** Print Compactly
-If we set the \*print-compactly* variable to t, and run try without the :print 'unexpected, try would have printed out a single dot for each assertion and the result for the running the uax-15 suite would have been (again, first in the emacs REPL and then running in a terminal):
+If we set the =*print-compactly*= variable to t, and run try without the =:print 'unexpected=, try would have printed out a single dot for each assertion and the result for the running the uax-15 suite would have been (again, first in the emacs REPL and then running in a terminal):
 #+begin_src lisp
   ..... name of test ... lots of dots representing passing assertions, concluding in
 
@@ -8499,7 +8511,7 @@ Lets create a test which calls tests we know will fail and tests we know will no
                     (test7)
                     (t1a-unexpected-fail))
 #+end_src
-Now we call try with test8-pass-and-fail with the :print 'unexpected parameters
+Now we call try with =test8-pass-and-fail= with the =:print 'unexpected= parameters
 #+begin_src lisp
   (try 'test8-pass-and-fail :print 'unexpected)
 TEST8-PASS-AND-FAIL
@@ -8520,10 +8532,10 @@ TEST8-PASS-AND-FAIL
 ⊠ TEST8-PASS-AND-FAIL ⊠2 ⋅6
 #<TRIAL (TEST8-PASS-AND-FAIL) UNEXPECTED-FAILURE 0.003s ⊠2 ⋅6>
 #+end_src
-As expected the net result (last line) is 2 unexpected failures and 6 expected successes. We do not get thrown into the debugger and we only get details of the unexpected failures.
+As expected the net result (last line) is 2 unexpected failures and 6 expected successes. We do not get thrown into the debugger, and we only get details of the unexpected failures.
 
 **** Streams and Printer
-The try function acceptsa key parameters :stream and :printer to redirect the report printing.
+The try function accepts key parameters =:stream= and =:printer= to redirect the report printing.
 **** Other Reports
 The following shows the condition classes of events which can be signaled and printed:
 #+begin_src lisp
@@ -8574,7 +8586,7 @@ The following shows the condition classes of events which can be signaled and pr
 ==> #<TRIAL (WITH-TEST (VERDICT-ABORT*)) ABORT* 0.004s ⊟3 ⊠1 ⊡1 -1 ×1 ⋅1>
 #+end_src
 **** Duration
-The try global variable \*print-duration* defaults to nil. If set to true, the number of second spent during execution on each assertion is also printed. E.g.
+The try global variable =*print-duration*= defaults to nil. If set to true, the number of second spent during execution on each assertion is also printed. E.g.
 #+begin_src lisp
   (let ((*print-duration* t)
       (*debug* nil)
@@ -8655,7 +8667,7 @@ Try has an extensive library of float comparisons. I will just quote from the do
 
 *** Suites, tags and other multiple test abilities
 **** Lists of tests
-Try can handle lists of tests and the function list-package-tests will return a list of the try tests in a package.
+Try can handle lists of tests and the function =list-package-tests= will return a list of the try tests in a package.
 #+begin_src lisp
   (test '(t1 t2))
 
@@ -8690,14 +8702,22 @@ TEST7
 #+end_src
 
 *** Replay Events and Defer Descriptions
-Try has a replay-events function which reprocesses the events wich where collected in a trial object. It does not re-run the tests, it just signals the events collected in the trial object for further processing. For example, you ran a large test without :print 'unexpected and need to winnow through the output to find just the failing tests. You can replay and just get the unexpected results:
+Try has a =replay-events= function which reprocesses the events which where collected in a trial object. It does not re-run the tests, it just signals the events collected in the trial object for further processing. For example, you ran a large test without :print 'unexpected and need to winnow through the output to find just the failing tests. You can replay and just get the unexpected results:
 #+begin_src lisp
   (replay-events ! :print 'unexpected)
 #+end_src
-As you might expect, the variable ! passed in is the most recent trial. !! or !!! would be second or third most recent respectively.
+As you might expect, the variable =!= passed in is the most recent trial. =!!= or =!!!= would be second or third most recent respectively.
 
-The function (recent-trial &optional (n 0)) will return the Nth most recent trial or NIL if there are not enough trials recorded. Every TRIAL returned by TRY gets pushed onto a list of trials, but only \*N-RECENT-TRIALS* are kept.
+The function =(recent-trial &optional (n 0))= will return the Nth most recent trial or NIL if there are not enough trials recorded. Every TRIAL returned by TRY gets pushed onto a list of trials, but only =*n-recent-trials*= are kept.
 
+
+[[top][top]]
+*** Rerunning Tests
+Rerun only the tests with unexpected results from the previous run:
+#+begin_src lisp
+  (try !)
+#+end_src
+Alternatively, one could =(funcall !)= (or any other trial object). What is rerun is controlled by =*rerun*= and =*try-rerun*= (both event types).
 
 [[top][top]]
 *** Fixtures and Freezing Data
@@ -8714,8 +8734,9 @@ Per the documentation, Try has no direct support for fixtures. One suggestion is
            (with-xxx-body)))))
 #+end_src
 
+With Try, fixtures are needed less often because one can rerun only the failing tests from the entire test suite. If the higher level tests establish the dynamic environment and call subtests, then things will just work.
 *** Removing tests
-Try tests can be deleted by FMAKUNBOUND, UNINTERN, or by redefining the function with DEFUN. Tests defined in a given package can be listed with LIST-PACKAGE-TESTS.
+Often, it suffices to remove the call to test function (if it is invoked explicitly by another test). If it is invoked via a package (=list-package-tests= list all tests in a given package), then it needs to be deleted by =fmakunbound=, =unintern=, or by redefining the function with =defun=.
 
 *** Sequencing, Random and Failure Only
 While tests and the forms inside tests normally follow a sequential order, try allows you to shuffle the list of forms inside the body of a test.
@@ -8743,7 +8764,7 @@ None, but the helper libraries can fullfill this well.
 
 
 ** Discussion
-I found try to be easy to use. I was a bit surprised at the lack of additional assertion comparisons other than the float comparisons, but you can easily use the normal CL comparison functions, so that is not an issue.
+I found try to be easy to use. I was a bit surprised at the lack of additional assertion comparisons, but in try, everything is an extension to =is=. You can easily use the normal CL comparison functions and customize reporting for them.
 
 [[top][top]]
 
