@@ -15,6 +15,8 @@
 * Changelog
 28 Aug 2023 - Picked up Shinmera's name change.
 
+14 Aug 2023 - A number of updates for Try
+
 18 Feb 2023 - Added a build-up and tear down example for Parachute fixtures.
 
 30 Jan 2023 - Updated for some new functionality in Parachute with respect to parent fixtures now being inherited by children and added a useful editor customization.
