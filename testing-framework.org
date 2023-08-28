@@ -1,4 +1,4 @@
-#+TITLE: Comparison of Common Lisp Testing Frameworks (18 Feb 2023 Edition)
+#+TITLE: Comparison of Common Lisp Testing Frameworks (28 Aug 2023 Edition)
  #+AUTHOR:      Sabra Crolleton
  #+DATE:        2021-05-28
  #+EMAIL:       sabra.crolleton!gmail.com
@@ -13,6 +13,8 @@
  #+ATTR_LATEX: :float multicolumn :width
 <<top>>
 * Changelog
+28 Aug 2023 - Picked up Shinmera's name change.
+
 18 Feb 2023 - Added a build-up and tear down example for Parachute fixtures.
 
 30 Jan 2023 - Updated for some new functionality in Parachute with respect to parent fixtures now being inherited by children and added a useful editor customization.
@@ -96,7 +98,7 @@ In any event, yes, I will state my opinions, but what you think is important wil
 | [[lisp-unit][lisp-unit]]                      | [[https://github.com/OdonataResearchLLC/lisp-unit][homepage]] | Thomas M. Hermann                               | MIT               |        2017 |
 | [[lisp-unit2][lisp-unit2]]                     | [[https://github.com/AccelerationNet/lisp-unit2][homepage]] | Russ Tyndall                                    | MIT               |        2018 |
 | [[nst][nst]]                            | [[https://github.com/jphmrst/cl-nst][homepage]] | John Maraist                                    | LLGPL3 latest     |        2021 |
-| [[parachute][parachute]]                      | [[https://github.com/Shinmera/parachute][homepage]] | Nicolas Hafner                                  | zlib              |        2021 |
+| [[parachute][parachute]]                      | [[https://github.com/Shinmera/parachute][homepage]] | Yukari Hafner                                   | zlib              |        2021 |
 | [[prove][prove]]  (archived)              | [[https://github.com/fukamachi/prove][homepage]] | Eitaro Fukamachi                                | MIT               |        2020 |
 | [[ptester][ptester]]                        | [[http://git.kpe.io/?p=ptester.git;a=summary][homepage]] | Kevin Layer                                     | LLGPL             |        2016 |
 | [[rove][rove]]                           | [[https://github.com/fukamachi/rove][homepage]] | Eitaro Fukamachi                                | BSD 3 Clause      |        2022 |
@@ -6571,7 +6573,7 @@ Maybe it is just me, but every time I tried to redefine a test, I triggered a ha
 ** Summary
 #+ATTR_HTML: :border 2 :rules all :frame border
 #+ATTR_LATEX: :float multicolumn
- | [[https://github.com/Shinmera/parachute][homepage]]                                      | Nicolas Hafner | zlib          | 2022           |
+ | [[https://github.com/Shinmera/parachute][homepage]]                                      | Yukari Hafner  | zlib          | 2022           |
 
 It hits almost everything on my wish list - optionality on progress reports and debugging, good suite setup and reporting, good default error-reporting and the ability to provide diagnostic strings with variables, skip failing dependencies, set time limits on long running tests and has decent fixture capability. It does not have the built-in ability to re-run just the last failing tests, but that is a relatively easy add-on (see [[parachute-discussion][Discussion]]). While it is not the fastest, it is in the pack as opposed to the also-rans.
 
