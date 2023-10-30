@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<!-- 2023-06-24 Sat 14:35 -->
+<!-- 2023-10-30 Mon 19:30 -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Quicklisp Projects with Short Descriptions From Their ASD files (20 June 2023 Edition)</title>
+<title>Quicklisp Projects with Short Descriptions From Their ASD files (30 Oct 2023 Edition)</title>
 <meta name="author" content="Sabra Crolleton" />
 <meta name="generator" content="Org Mode" />
 <link rel="stylesheet" type="text/css" href="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/css/htmlize.css"/>
@@ -14,32 +14,43 @@
 <script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/lib/js/jquery.stickytableheaders.min.js"></script>
 <script type="text/javascript" src="https://fniessen.github.io/org-html-themes/src/readtheorg_theme/js/readtheorg.js"></script>
 <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
-<script type="text/x-mathjax-config">
-    MathJax.Hub.Config({
-        displayAlign: "center",
-        displayIndent: "0em",
-
-        "HTML-CSS": { scale: 100,
-                        linebreaks: { automatic: "false" },
-                        webFont: "TeX"
-                       },
-        SVG: {scale: 100,
-              linebreaks: { automatic: "false" },
-              font: "TeX"},
-        NativeMML: {scale: 100},
-        TeX: { equationNumbers: {autoNumber: "AMS"},
-               MultLineWidth: "85%",
-               TagSide: "right",
-               TagIndent: ".8em"
-             }
-});
+<script>
+  window.MathJax = {
+    tex: {
+      ams: {
+        multlineWidth: '85%'
+      },
+      tags: 'ams',
+      tagSide: 'right',
+      tagIndent: '.8em'
+    },
+    chtml: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    svg: {
+      scale: 1.0,
+      displayAlign: 'center',
+      displayIndent: '0em'
+    },
+    output: {
+      font: 'mathjax-modern',
+      displayOverflow: 'overflow'
+    }
+  };
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS_HTML"></script>
+
+<script
+  id="MathJax-script"
+  async
+  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+</script>
 </head>
 <body>
 <div id="content" class="content">
 <header>
-<h1 class="title">Quicklisp Projects with Short Descriptions From Their ASD files (20 June 2023 Edition)</h1>
+<h1 class="title">Quicklisp Projects with Short Descriptions From Their ASD files (30 Oct 2023 Edition)</h1>
 </header><table>
 
 
@@ -123,6 +134,11 @@
 <tr>
 <td class="org-left"><a href="https://github.com/3b/3bz">3bz</a></td>
 <td class="org-left">deflate decompressor (MIT)</td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="https://shinmera.github.io/3d-math/">3d-math</a></td>
+<td class="org-left">A library implementing the necessary linear algebra math for 2D and 3D computations (zlib)</td>
 </tr>
 
 <tr>
@@ -338,6 +354,11 @@
 <tr>
 <td class="org-left"><a href="https://github.com/dtqec/anatevka/">anatevka</a></td>
 <td class="org-left">A distributed blossom algorithm for minimum-weight perfect matching. — MIT</td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="https://github.com/yitzchak/ansi-test-harness/">ansi-test-harness</a></td>
+<td class="org-left">A testing harness that fetches ansi-test and allows subsets and extrinsic systems (MIT)</td>
 </tr>
 
 <tr>
@@ -603,6 +624,11 @@
 <tr>
 <td class="org-left"><a href="https://github.com/cl-babel/babel">babel-streams</a></td>
 <td class="org-left">Some useful streams based on Babel's encoding code</td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="https://thephoeron.github.io/babylon/">babylon</a></td>
+<td class="org-left">Jürgen Walther's modular, configurable, hybrid knowledge engineering systems framework for Common Lisp, restored from the CMU AI Repository. (MIT)</td>
 </tr>
 
 <tr>
@@ -986,6 +1012,11 @@
 </tr>
 
 <tr>
+<td class="org-left"><a href="https://github.com/VitoVan/calm/">calm</a></td>
+<td class="org-left">CALM Canvas Aided Lisp Magic  (GPL2)</td>
+</tr>
+
+<tr>
 <td class="org-left"><a href="https://github.com/jwiegley/cambl">cambl</a></td>
 <td class="org-left">A library for working with financial amounts involving multiple commodities.</td>
 </tr>
@@ -1168,6 +1199,16 @@
 <tr>
 <td class="org-left">cffi-libffi</td>
 <td class="org-left">Foreign structures by value</td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="https://github.com/bohonghuang/cffi-object">cffi-object</a></td>
+<td class="org-left">A Common Lisp library that enables fast and convenient interoperation with foreign objects. (Apache-2.0)</td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="https://github.com/bohonghuang/cffi-ops">cffi-ops</a></td>
+<td class="org-left">A library that helps write concise CFFI-related code.  (Apache-2.0)</td>
 </tr>
 
 <tr>
@@ -1786,8 +1827,8 @@
 </tr>
 
 <tr>
-<td class="org-left"><a href="https://github.com/EuAndreh/cl-bson">cl-bson</a></td>
-<td class="org-left">BSON encoder/decoder for Common Lisp.</td>
+<td class="org-left"><a href="https://40ants.com/cl-brewer/">cl-brewer</a></td>
+<td class="org-left">Provides CI settings for cl-brewer. (Unlicense)</td>
 </tr>
 
 <tr>
@@ -2286,8 +2327,8 @@
 </tr>
 
 <tr>
-<td class="org-left"><a href="https://github.com/KDr2/cl-fastcgi">cl-fastcgi</a></td>
-<td class="org-left">FastCGI wrapper for Common Lisp</td>
+<td class="org-left">&#xa0;</td>
+<td class="org-left">&#xa0;</td>
 </tr>
 
 <tr>
@@ -3018,6 +3059,11 @@
 <tr>
 <td class="org-left">cl-junit-xml.lisp-unit2</td>
 <td class="org-left">cl-junit-xml extensions to work with lisp-unit2</td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="https://github.com/dnaeon/cl-jwk">cl-jwk</a></td>
+<td class="org-left">Common Lisp system for decoding public JSON Web Keys (JWK) (BSD 2-Clause)</td>
 </tr>
 
 <tr>
@@ -3856,6 +3902,11 @@
 </tr>
 
 <tr>
+<td class="org-left"><a href="https://40ants.com/cl-plus-ssl-osx-fix/">cl-plus-ssl-osx-fix</a></td>
+<td class="org-left">A fix for CL+SSL library paths on OSX needed when you have Intel and Arm64 Homebrew installations. Should be loaded before CL+SSL. (Unlicense)</td>
+</tr>
+
+<tr>
 <td class="org-left"><a href="https://github.com/takagi/cl-ply">cl-ply</a></td>
 <td class="org-left">Cl-ply is a library to handle PLY format which is also known as the Stanford Triangle Format.</td>
 </tr>
@@ -4201,8 +4252,8 @@
 </tr>
 
 <tr>
-<td class="org-left"><a href="https://github.com/pw4ever/cl-server-manager">cl-server-manager</a></td>
-<td class="org-left">Manage port-based servers (e.g., Swank and Hunchentoot) through a unified interface.  - Removed in Oct 2021 Quicklisp Update</td>
+<td class="org-left"><a href="https://github.com/pw4ever/cl-server-manager/">cl-server-manager</a></td>
+<td class="org-left">Manage port-based servers (e.g., Swank and Hunchentoot) through a unified interface. (MIT)</td>
 </tr>
 
 <tr>
@@ -4648,6 +4699,26 @@
 <tr>
 <td class="org-left"><a href="https://github.com/libre-man/cl-transmission">cl-transmission</a></td>
 <td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="https://git.sr.ht/~fosskers/cl-transducers">cl-transducers</a></td>
+<td class="org-left">Ergonomic, efficient data processing. (LGPL-3.0-only)</td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="http://blog.quicklisp.org/atom.xml">cl-transit</a></td>
+<td class="org-left">Transit library for Common Lisp (MIT)</td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="https://github.com/jingtaozf/clog-collection/">clog-collection</a></td>
+<td class="org-left">A set of CLOG Plugins (MIT)</td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="https://shinmera.github.io/clohost/">clohost</a></td>
+<td class="org-left">A client library for the Cohost API (zlib)</td>
 </tr>
 
 <tr>
@@ -5766,6 +5837,11 @@
 </tr>
 
 <tr>
+<td class="org-left"><a href="https://github.com/varjagg/deptree/">deptree</a></td>
+<td class="org-left">ASDF systems dependency listing and archiving tool for Common Lisp (MIT)</td>
+</tr>
+
+<tr>
 <td class="org-left"><a href="https://github.com/mmontone/descriptions">descriptions</a></td>
 <td class="org-left">A domain model meta level description library</td>
 </tr>
@@ -6176,6 +6252,11 @@
 </tr>
 
 <tr>
+<td class="org-left"><a href="https://www.hexstreamsoft.com/libraries/enhanced-unwind-protect/">enhanced-unwind-protect</a></td>
+<td class="org-left">Provides an enhanced UNWIND-PROTECT that makes it easy to detect whether the protected form performed a non-local exit or returned normally. (Unlicense)</td>
+</tr>
+
+<tr>
 <td class="org-left"><a href="https://gitlab.common-lisp.net/cl-enumeration/enumerations">enumerations</a></td>
 <td class="org-left">The CL-ENUMERATIONS project contains a Common LispJava-like enumeration/iteration library and protocol. Most basicCommon Lisp types are handled.The project page can be found athttp://common-lisp.net/project/cl-enumeration.</td>
 </tr>
@@ -6461,6 +6542,11 @@
 </tr>
 
 <tr>
+<td class="org-left"><a href="https://github.com/tdrhq/file-lock/">file-lock</a></td>
+<td class="org-left">File lock library on POSIX systems (MIT)</td>
+</tr>
+
+<tr>
 <td class="org-left"><a href="https://github.com/shinmera/file-notify">file-notify</a></td>
 <td class="org-left">Access to file change and access notification.</td>
 </tr>
@@ -6588,6 +6674,11 @@
 <tr>
 <td class="org-left">fmarshal</td>
 <td class="org-left">dump and load objects</td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="https://thephoeron.github.io/fmcs/">fmcs</a></td>
+<td class="org-left">Flavors Meta-Class System (FMCS) for Demonic Metaprogramming in Common Lisp, an alternative to CLOS+MOP, restored from the CMU AI Repository. (MIT)</td>
 </tr>
 
 <tr>
@@ -6816,6 +6907,11 @@
 </tr>
 
 <tr>
+<td class="org-left"><a href="https://shinmera.github.io/fuzzy-dates/">fuzzy-dates</a></td>
+<td class="org-left">A library to fuzzily parse date strings (zlib)</td>
+</tr>
+
+<tr>
 <td class="org-left"><a href="https://github.com/vindarel/fuzzy-match">fuzzy-match</a></td>
 <td class="org-left">From a string input and a list of candidates, return the most relevant candidates first. (MIT)</td>
 </tr>
@@ -7008,6 +7104,11 @@
 <tr>
 <td class="org-left">glaw-sdl</td>
 <td class="org-left">&#xa0;</td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="https://shirakumo.github.io/glfw/">glfw</a></td>
+<td class="org-left">An up-to-date bindings library to the most recent GLFW OpenGL context management library (zlib)</td>
 </tr>
 
 <tr>
@@ -7731,6 +7832,11 @@
 </tr>
 
 <tr>
+<td class="org-left"><a href="https://thephoeron.github.io/hyperlattices/">hyperlattices</a></td>
+<td class="org-left">Generalized Lattice algebraic datatypes, incl., LATTICE, HYPERLATTICE, PROBABILISTIC-LATTICE, and PROBABILISTIC-HYPERLATTICE. (MIT)</td>
+</tr>
+
+<tr>
 <td class="org-left"><a href="https://github.com/cosmos72/hyperluminal-mem">hyperluminal-mem</a></td>
 <td class="org-left">High-performance serialization library, designed for untrusted data</td>
 </tr>
@@ -8331,6 +8437,11 @@
 </tr>
 
 <tr>
+<td class="org-left"><a href="https://git.sr.ht/~yana/lemmy-api">lemmy-api</a></td>
+<td class="org-left">Most recently generated bindings to the lemmy api (GPLv3)</td>
+</tr>
+
+<tr>
 <td class="org-left"><a href="https://github.com/sirherrbatka/lense">lense</a></td>
 <td class="org-left">Racket style lenses for the Common Lisp. (BSD-2)</td>
 </tr>
@@ -8861,6 +8972,11 @@
 </tr>
 
 <tr>
+<td class="org-left"><a href="https://shirakumo.github.io/manifolds/">manifolds</a></td>
+<td class="org-left">Various manifold mesh algorithms (zlib)</td>
+</tr>
+
+<tr>
 <td class="org-left"><a href="https://tarballs.hexstreamsoft.com/libraries/latest/map-bind_latest.tar.gz">map-bind</a></td>
 <td class="org-left">MAP-BIND is a macro that allows visual grouping of variables with their corresponding values (not necessarily 1:1) in calls to mapping operators when using an inline LAMBDA. It does so in a way that automatically supports virtually every existing and future mapping operator, all lambda keywords and FUNCALL/APPLY/MULTIPLE-VALUE-CALL variations.</td>
 </tr>
@@ -9281,11 +9397,6 @@
 </tr>
 
 <tr>
-<td class="org-left"><a href="https://github.com/Hectarea1996/more-cffi/">more-cffi</a> — Extension of the CFFI project. A facility to wrap C bindings and write documentation. — The Unlicense</td>
-<td class="org-left">&#xa0;</td>
-</tr>
-
-<tr>
 <td class="org-left"><a href="https://github.com/scymtym/more-conditions">more-conditions</a></td>
 <td class="org-left">This system provides some generic condition classes in                conjunction with support functions and macros.</td>
 </tr>
@@ -9371,6 +9482,11 @@
 </tr>
 
 <tr>
+<td class="org-left"><a href="https://github.com/mmontone/mutils">mutils</a></td>
+<td class="org-left">A collection of Common Lisp modules. (MIT)</td>
+</tr>
+
+<tr>
 <td class="org-left"><a href="http://www.foldr.org/~michaelw/projects/mw-equiv/mw-equiv.tar.gz">mw-equiv</a></td>
 <td class="org-left">Extensible object equivalence protocol</td>
 </tr>
@@ -9413,11 +9529,6 @@
 <tr>
 <td class="org-left"><a href="https://github.com/fukamachi/myway">myway</a></td>
 <td class="org-left">Sinatra-compatible routing library.</td>
-</tr>
-
-<tr>
-<td class="org-left"><a href="https://github.com/troydm/myweb">myweb</a></td>
-<td class="org-left">simple web server written in common lisp for educational reasons</td>
 </tr>
 
 <tr>
@@ -9968,11 +10079,6 @@
 <tr>
 <td class="org-left"><a href="https://github.com/sharplispers/parse-number">parse-number</a></td>
 <td class="org-left">Number parsing library</td>
-</tr>
-
-<tr>
-<td class="org-left"><a href="https://tarballs.hexstreamsoft.com/libraries/latest/parse-number-range_latest.tar.gz">parse-number-range</a></td>
-<td class="org-left">Parses LOOP's convenient \</td>
 </tr>
 
 <tr>
@@ -10556,6 +10662,11 @@
 </tr>
 
 <tr>
+<td class="org-left"><a href="https://gitlab.common-lisp.net/frideau/ptc">ptc</a></td>
+<td class="org-left">Proper Tail Calls for CL (MIT)</td>
+</tr>
+
+<tr>
 <td class="org-left"><a href="https://shinmera.github.io/punycode/">punycode</a></td>
 <td class="org-left">Punycode encoding/decoding (zlib)</td>
 </tr>
@@ -10946,11 +11057,6 @@
 </tr>
 
 <tr>
-<td class="org-left"><a href="https://github.com/rigetti/quilc">quilc</a></td>
-<td class="org-left">A CLI front-end for the Quil compiler</td>
-</tr>
-
-<tr>
 <td class="org-left"><a href="https://github.com/fukamachi/quri">quri</a></td>
 <td class="org-left">Yet another URI library for Common Lisp</td>
 </tr>
@@ -10963,11 +11069,6 @@
 <tr>
 <td class="org-left"><a href="https://gitlab.common-lisp.net/qitab/quux-time">quux-time</a></td>
 <td class="org-left">&#xa0;</td>
-</tr>
-
-<tr>
-<td class="org-left"><a href="https://github.com/rigetti/qvm">qvm</a></td>
-<td class="org-left">An implementation of the Quantum Abstract Machine.</td>
 </tr>
 
 <tr>
@@ -13203,6 +13304,11 @@
 <tr>
 <td class="org-left"><a href="https://github.com/guicho271828/type-r">type-r</a></td>
 <td class="org-left">Collections of accessor functions and patterns to access the elements in compound type specifier, e.g. `dimensions' in `(array element-type dimensions)'</td>
+</tr>
+
+<tr>
+<td class="org-left"><a href="https://shinmera.github.io/type-templates/">type-templates</a></td>
+<td class="org-left">A library for defining and expanding templated functions (zlib)</td>
 </tr>
 
 <tr>

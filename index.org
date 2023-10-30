@@ -1,6 +1,6 @@
 #+TITLE: Sabra's Occasional Comments
  #+AUTHOR:      Sabra Crolleton
- #+DATE:        2023-04-12
+ #+DATE:        2023-10-30
  #+EMAIL:       sabra.crolleton!gmail.com
  #+SETUPFILE: https://fniessen.github.io/org-html-themes/org/theme-readtheorg.setup
 #+LANGUAGE:    en
@@ -14,8 +14,8 @@
 #+HTML_HEAD: <link rel="stylesheet" href="https://cdn.datatables.net/1.10.25/css/jquery.dataTables.min.css">
 <<top>>
 
+-  [[https://sabracrolleton.github.io/short-descriptions][Common Lisp Packages with Short Descriptions]] (2023-10-30)
 -  [[https://sabracrolleton.github.io/json-review.html][Common Lisp Json Library Review Updated]] (2023-05-15)
 -  [[https://sabracrolleton.github.io/json-from-postgres][To Json From Postgresql/Postmodern]] (2021-07-17)
--  [[https://sabracrolleton.github.io/short-descriptions][Common Lisp Packages with Short Descriptions]] (2023-06-20)
 -  [[https://sabracrolleton.github.io/testing-framework][Common Lisp Testing Frameworks]] (2023-08-28)
 -  [[https://sabracrolleton.github.io/migrations][Postgresql Schema Migration Considerations]]
