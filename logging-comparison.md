@@ -1514,7 +1514,7 @@ There are some issues listed in the github location that are occassionally resol
 
     The context is a carry-all you can use to specify whatever important is happening in the global environment. If you're writing a web-application; the context might track the current session ID; A planner might track the current agent and so forth. Information from the context is added to the end of each log message sent and so functions as a variable portion in contrast to the fixed structure of the sender's output.
 
-    \### Debugging with log5
+    **Debugging with log5**
 
     You can also use log5 in debugging. The [log-manager][] includes a debug console to which log messages can be sent. Use [debugging][] and [undebugging][] to tell log5 which categories you want to see. Let's use this code for to explain:
 
@@ -1675,7 +1675,7 @@ There are no functions in the library to automatically rotate logs.
 
 ## Config File
 
-You can create a config file for log5. It will look initially in the directory specified by **default-pathname-defaults** for a file named .
+You can create a config file for log5. It will look initially in the directory specified by **default-pathname-defaults** for a file named logging.config.
 
 ```lisp
 (start-sender 'warnings-and-worse (stream-sender :location
