@@ -337,30 +337,37 @@ I am not covering support for asdf package-inferred systems, roswell script supp
 
 I am not including a pie chart describing which library has market share because (a) I do not like pie charts and (b) I do not believe market share is a measure of quality. That being said, because someone asked nicely, I pulled the following info out of quicklisp just based on =who-depends-on=. The actual count in the wild is completely unknown.
 
-#+CAPTION: User Count on Quicklisp
+#+CAPTION: User Count on Quicklisp (distribution from 2026-01-01)
 #+ATTR_HTML: :border 2 :rules all :frame border
-| Name        | Count |
-|-------------+-------|
-| 1am         |    22 |
-| 2am         |     0 |
-| fiveam      |   323 |
-| clunit      |    11 |
-| clunit2     |     4 |
-| confidence  |     2 |
-| fiasco      |    24 |
-| lift        |    54 |
-| lisp-unit   |    42 |
-| lisp-unit2  |    21 |
-| nst         |    10 |
-| parachute   |    49 |
-| prove       |   163 |
-| ptester     |     5 |
-| rove        |    31 |
-| rt          |    29 |
-| should-test |     3 |
-| try         |     7 |
-| xlunit      |     4 |
-| xptest      |     0 |
+| Name                           | Count |
+|--------------------------------+-------|
+| fiveam                         |   414 |
+| prove                          |   131 |
+| parachute                      |   117 |
+| rove                           |    88 |
+| lift                           |    51 |
+| lisp-unit                      |    50 |
+| fiasco                         |    37 |
+| lisp-unit2                     |    33 |
+| 1am                            |    29 |
+| rt                             |    29 |
+| clunit2                        |    17 |
+| unit-test                      |    12 |
+| nst                            |    11 |
+| try                            |     8 |
+| clunit                         |     5 |
+| confidence                     |     5 |
+| ptester                        |     5 |
+| checkl                         |     4 |
+| simplet                        |     4 |
+| xlunit                         |     4 |
+| cacau                          |     3 |
+| should-test                    |     3 |
+| com.gigamonkeys.test-framework |     2 |
+| 2am                            |     0 |
+| cardiogram                     |     0 |
+| tap-unit-test                  |     0 |
+| xptest                         |     0 |
 
 <<functionality-mapping>> <<summary-table>>
 
